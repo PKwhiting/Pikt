@@ -2,17 +2,17 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 import os
+from django.conf import settings
 from django.http import HttpResponse
 from django.views import View
 from dotenv import load_dotenv
 from .models import templateImage
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
-from dashboards.models import image
 import json
 
 context = {
-    'main_logo': image.objects.get(name='main_logo_large_black_text'),
+    'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
     'years' : range(2024, 1969, -1),
     'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
     'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo']
@@ -31,18 +31,8 @@ class MyView(View):
 
 class homeView(View):
     def get(self, request):
-        image_1 = templateImage.objects.get(name='home_image_1') 
-        image_2 = templateImage.objects.get(name='home_image_2')
-        image_3 = templateImage.objects.get(name='home_image_3')
-        image_4 = templateImage.objects.get(name='home_image_4')
-        image_5 = templateImage.objects.get(name='home_image_5')
-        transparent_logo_large_white = templateImage.objects.get(name='logo_transparent_large_white')
+        transparent_logo_large_white  = os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_white.png')
         context = {
-            'image_1': image_1,
-            'image_2': image_2,
-            'image_3': image_3,
-            'image_4': image_4,
-            'image_5': image_5,
             'transparent_logo_large_white': transparent_logo_large_white
         }
         return render(request, 'home.html', context)
