@@ -1,0 +1,93 @@
+{% extends "root.html" %}
+
+{% block content %}
+<form id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post" enctype="multipart/form-data" aria-label="Form">
+    {% csrf_token %}
+    <div class="w-layout-grid form-grid space-bottom-small">
+        <div>
+            <h6>Vehicle Year</h6>
+            <select name="vehicle_year" id="Vehicle-Year" class="text-field w-select" required="">
+                <option value="" selected disabled>Select Year</option>
+                {% for year in years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <h6>Vehicle Make</h6>
+            <select name="vehicle_make" id="vehicle_year-Make" class="text-field w-select" required="">
+                <option value="" selected disabled>Select Make</option>
+                {% for make in makes %}
+                    <option value="{{ make }}">{{ make }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <h6>Vehicle Model</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_model" id="vehicle_make" required="">
+        </div>
+        <div>
+            <h6>Vehicle Trim</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_trim" id="Vehicle-Trim" required="">
+        </div>
+        <div>
+            <h6>Vehicle Engine</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_engine" id="Vehicle-Engine" required="">
+        </div>
+        <div>
+            <h6>Vehicle Color</h6>
+            <select name="vehicle_color" id="Vehicle-Color" class="text-field w-input" required="">
+                <option value="" selected disabled>Select Color</option>
+                {% for color in colors %}
+                    <option value="{{ color }}">{{ color }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <h6>Part Type</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="part_type" id="Part-Type" required="">
+        </div>
+        <div>
+            <h6>Part Fitment Location</h6>
+            <select name="part_fitment_location" id="Vehicle-Year" class="text-field w-select" required="" multiple>
+                <option value="" disabled>Select Part Fitment Location</option>
+                <option value="Left">Left</option>
+                <option value="Right">Right</option>
+                <option value="Top">Top</option>
+                <option value="Bottom">Bottom</option>
+                <option value="Front">Front</option>
+                <option value="Back">Back</option>
+                <option value="Pair">Pair</option>
+            </select>
+        </div>
+        <div>
+            <h6>Part Grade</h6>
+            <select name="part_grade" id="Vehicle-Year" class="text-field w-select" required="">
+                <option value="" selected disabled>Select Part Grade</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+        </div>
+        <div>
+            <h6>Part Interchange Number</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="part_interchange" id="Part-Interchange-Number" required="">
+        </div>
+        <div>
+            <h6>Part Notes</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="part_notes" id="Vehicle-Part-Notes" required="">
+        </div>
+        <div style="grid-column: span 2;">
+            <h6>Vehicle Fitment Information</h6>
+            <input type="text" class="text-field w-input" placeholder="Years - Make - Model - Engine" maxlength="256" name="vehicle_fitment" id="Vehicle-Fitment-Information" required="">
+        </div>
+        <div style="grid-column: span 2;">
+            <h6>Upload Images</h6>
+            <input type="file" id="images" name="images" multiple accept="image/*" class="text-field w-input">
+            <label for="images">Drag and drop your images here, or click to select images.</label>
+        </div>
+        
+    </div>
+    <input type="submit" value="Add Part" data-wait="Please wait..." class="button button-small w-button">
+</form>
+{% endblock %}

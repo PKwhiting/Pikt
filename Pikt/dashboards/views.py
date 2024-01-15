@@ -1,0 +1,68 @@
+from django.shortcuts import render, redirect
+from django.views import View
+from .models import image
+from .models import part
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PartForm
+from django.core.paginator import Paginator
+import json
+
+
+context = {
+    'main_logo': image.objects.get(name='main_logo_large_black_text'),
+    'years' : range(2024, 1969, -1),
+    'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+    'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo']
+}
+
+class delete_message(View):
+    def post(self, request):
+        if request.method == 'POST':
+            message_to_delete = request.POST.get('message')
+            messages = json.loads(request.user.messages)
+            for message in messages:
+                if message_to_delete == message:
+                    print("HERE")
+                    messages.remove(message_to_delete)
+            request.user.messages = json.dumps(messages)
+            request.user.save()
+            previous_page = request.META.get('HTTP_REFERER')
+            return redirect(previous_page)
+
+class rootView(LoginRequiredMixin,View):
+    def get(self, request):
+        context['messages'] = json.loads(request.user.messages)
+        print(context)
+        return render(request, 'root.html', context)
+ 
+class defaultDashboardView(LoginRequiredMixin,View):
+    def get(self, request):
+        context['parts'] = part.objects.filter(user=request.user)
+        context['messages'] = json.loads(request.user.messages)
+        parts_list = part.objects.filter(user=request.user)
+        paginator = Paginator(parts_list, 20)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['parts'] = page_obj
+        return render(request, 'parts.html', context)
+    
+def add_part(request):
+    if request.method == 'POST':
+        form = PartForm(request.POST, request.FILES)
+        if form.is_valid():
+            part = form.save(commit=False)
+            part.user = request.user
+            images = request.FILES.getlist('images')
+            for i in range(1, min(11, len(images) + 1)):
+                image_field = f'part_image_{i}'
+                setattr(part, image_field, images[i-1])
+            form.save()
+            messages = json.loads(request.user.messages)
+            messages.append('Part added successfully')
+            request.user.messages = json.dumps(messages)
+            request.user.save()
+            return redirect('/dashboards/parts')  # Redirect to a page showing all parts
+    else:
+        form = PartForm()
+    context['form'] = form
+    return render(request, 'add-part.html', context)

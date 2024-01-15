@@ -1,0 +1,253 @@
+{% extends "root.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="w-layout-grid main-grid">
+        <div>
+            <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
+                    class="button button-small w-button"></a>
+        </div>
+        <!-- <div class="w-layout-grid _4-grid">
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882cb46d7bcb205f20f73_bar-chart.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Value</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">2.100</h3>
+                            <div class="positive-value">+5%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831d493c9a126c8c8cbc_users.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-green"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Clients</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">719</h3>
+                            <div class="negative-value">-10%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-orange"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Deliveries</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">10.5K</h3>
+                            <div class="positive-value">+19%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-yellow"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Target&nbsp;Ratio</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">95%</h3>
+                            <div class="positive-value">(+ 10%)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="w-layout-grid _4-grid"><a href="/project-management" class="module-link w-inline-block">
+                <div class="content-storage">
+                    <div>
+                        <div class="storage-square"><img
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d37ee33fcb3f67627f_hard-drive.svg"
+                                loading="lazy" alt="" class="icon">
+                            <div class="light-fill"></div>
+                        </div>
+                        <h4>Drive Storage</h4>
+                    </div>
+                    <div>
+                        <div class="percentage-info">
+                            <div class="small-description">60 GB</div>
+                            <div class="small-description">100&nbsp;GB</div>
+                        </div>
+                        <div class="percentage-bar-wrapper">
+                            <div class="percentage-bar bg-primary-blue"></div>
+                        </div>
+                    </div>
+                </div>
+            </a><a href="/project-management" class="module-link w-inline-block">
+                <div class="content-folder">
+                    <div class="storage-folder-content">
+                        <div class="storage-square"><img
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                loading="lazy" alt="" class="icon">
+                            <div class="light-fill"></div>
+                        </div>
+                        <div class="project-avatars"><img
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                loading="lazy" alt="" class="project-avatar first"><img
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                loading="lazy" alt="" class="project-avatar"></div>
+                    </div>
+                    <div>
+                        <h4>Research</h4>
+                        <div class="folder-info">
+                            <div class="small-description">10 files</div>
+                            <div class="small-description">5 GB</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <div id="w-node-_4d115262-b369-d920-dea6-88878e352a90-cbeb6f31" class="module">
+                <div class="content-percentage">
+                    <div class="content-storage">
+                        <div class="storage-square"><img
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831413ede764f64a258d_pie-chart.svg"
+                                loading="lazy" width="24" alt="" class="icon">
+                            <div class="light-fill bg-primary-green"></div>
+                        </div>
+                        <h4>Used percentage</h4>
+                        <div class="small-description">Check your storage on your dashboard.</div>
+                    </div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac26976322417838e72f4_Dash%20Chart%2003.svg"
+                        loading="lazy" alt="" class="data-visualisation-storage">
+                </div>
+            </div>
+        </div> -->
+        <div class="table-module">
+            <div class="table-header">
+                <h4 class="no-space-bottom">Parts</h4>
+            </div>
+            <div class="table-content">
+                <div class="table-list">
+                    <div class="w-layout-grid table-headers">
+                        <div class="caption-large">Part Name</div>
+                        <div class="caption-large">Status</div>
+                        <div class="caption-large">Part ID</div>
+                        <div class="caption-large">Time Listed</div>
+                    </div>
+                    {% for part in parts %}
+                    <div class="w-layout-grid table-row">
+                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} {{ part.part_type }}</div>
+                        <div class="status">
+                            <div
+                                class="indication-color {% if part.part_status == 'Pending' %}bg-primary-rose{% elif part.part_status == 'Sold' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                            </div> 
+                            <div>{{ part.part_status }}</div>
+                        </div>
+                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title">
+                            {{ part.id }}</div>
+                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.created_at }}</div>
+                    </div>
+                    {% endfor %}
+                    <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end;; margin-bottom: 20px">
+                        <span class="step-links">
+                            {% if parts.has_previous %}
+                            <!-- <a href="?page=1">&laquo; first</a> -->
+                            <a style="width: 50px" href="?page={{ parts.previous_page_number }}"><input type="button"
+                                    value="<" class="button button-small w-button"></a>
+                            {% else %}
+                            <input type="button" value="<" class="button button-small w-button" disabled>
+                            {% endif %}
+
+                            <span class="current" style="width: 50px">
+                                {{ parts.number }} of {{ parts.paginator.num_pages }}
+                            </span>
+
+                            {% if parts.has_next %}
+                            <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
+                                    class="button button-small w-button"></a>
+                            {% else %}
+                            <input type="button" value=">" class="button button-small w-button" disabled>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="table-bottom-caption">
+                <div>Showing all items from Work Performance dataset</div>
+            </div> -->
+        </div>
+        <!-- <div class="w-layout-grid _1-2-grid">
+            <div class="module">
+                <div class="card-header">
+                    <h4>Circle Chart</h4>
+                </div>
+                <div class="child-content-center"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac2d25bb74b5e3d4a6fa3_Dash%20Chart%2001.svg"
+                        loading="lazy" alt="" class="cirlce-chart">
+                    <div class="chart-colors-wrapper">
+                        <div class="label">
+                            <div class="indication-color bg-primary-blue"></div>
+                            <div class="small-text">Running</div>
+                        </div>
+                        <div class="label">
+                            <div class="indication-color bg-primary-rose"></div>
+                            <div class="small-text">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="card-header">
+                    <h4>Projects</h4>
+                </div><a href="/project-management" class="projects-list first w-inline-block">
+                    <div class="project-list-logo"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg"
+                            loading="lazy" sizes="64px"
+                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg 4501w"
+                            alt="" class="project-small-thumbnail">
+                        <div>
+                            <h6 class="no-space-bottom">Dashboard Kit</h6>
+                            <div class="small-text text-grey-2">2 hr ago</div>
+                        </div>
+                    </div>
+                    <div class="small-link">View Project</div>
+                </a><a href="/project-management" class="projects-list w-inline-block">
+                    <div class="project-list-logo"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg"
+                            loading="lazy" sizes="64px"
+                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg 4500w"
+                            alt="" class="project-small-thumbnail">
+                        <div>
+                            <h6 class="no-space-bottom">Sport Website</h6>
+                            <div class="small-text text-grey-2">6 hr ago</div>
+                        </div>
+                    </div>
+                    <div class="small-link">View Project</div>
+                </a><a href="/project-management" class="projects-list last w-inline-block">
+                    <div class="project-list-logo"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg"
+                            loading="lazy" sizes="64px"
+                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg 4501w"
+                            alt="" class="project-small-thumbnail">
+                        <div>
+                            <h6 class="no-space-bottom">Landingpage System</h6>
+                            <div class="small-text text-grey-2">1 week ago</div>
+                        </div>
+                    </div>
+                    <div class="small-link">View Project</div>
+                </a>
+            </div>
+        </div> -->
+    </div>
+</div>
+{% endblock %}

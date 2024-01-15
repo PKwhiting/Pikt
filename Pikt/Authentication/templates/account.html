@@ -1,0 +1,483 @@
+{% extends "root.html" %}
+
+{% block content %}
+
+<div class="utility-container">
+    <div data-duration-in="300" data-duration-out="100" data-current="General" data-easing="ease" class="w-tabs">
+        <!-- <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="General"
+                class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+                href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
+                <div>General</div>
+            </a><a data-w-tab="Billing" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
+                href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false"
+                tabindex="-1">
+                <div>Billing</div>
+            </a><a data-w-tab="Security" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false"
+                tabindex="-1">
+                <div>Security</div>
+            </a></div> -->
+        <div class="tabs-content w-tab-content">
+            <div data-w-tab="General" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
+                <div class="account">
+                    <div class="user-details"><img loading="lazy"
+                            src="{{ user.icon.url }}"
+                            alt="" class="user-avatar">
+                        <div>
+                            <h5 class="no-space-bottom">{{ user.first_name }} {{ user.last_name }}</h5>
+                            <!-- <div class="small-text text-grey-3">Profile picture size: 400px x 400px</div> -->
+                        </div>
+                    </div>
+                    <form action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
+                        {% csrf_token %}
+                        <input type="file" name="icon" accept="image/*" style="margin-bottom: 5px; width: 103px; height: 30px; border: 1px solid #ccc; border-radius: 4px;">
+                        <button type="submit" class="button button-small button-outline w-button">Upload new avatar</button>
+                    </form>
+                </div>
+                <div class="w-form">
+                    <form action="/account/" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post" aria-label="Form">
+                        {% csrf_token %}
+                        <div class="w-layout-grid form-grid space-bottom-small">
+                            <div>
+                                <h6>First Name</h6><input placeholder="{{ user.first_name }}" type="text" class="text-field w-input" maxlength="256"
+                                    name="First-name" data-name="First name" placeholder="" id="First-name">
+                            </div>
+                            <div>
+                                <h6>Lastname</h6><input placeholder="{{ user.last_name }}" type="text" class="text-field w-input" maxlength="256"
+                                    name="Last-name" data-name="Last name" placeholder="" id="Last-name">
+                            </div>
+                            <div>
+                                <h6>Email Address</h6>
+                                <div class="form-caption">Verification purposes only</div><input type="email"
+                                    class="text-field w-input" maxlength="256" name="Email-Address"
+                                    data-name="Email Address" placeholder="{{ user.email }}" id="Email-Address">
+                            </div>
+                            <div>
+                                <h6>Phone</h6>
+                                <div class="form-caption">Must be in the format XXX-XXX-XXXX</div><input type="tel"
+                                    class="text-field w-input" maxlength="256" name="Phone" data-name="Phone"
+                                    placeholder="{{ user.phone_number }}" id="Phone" pattern="\d{3}-\d{3}-\d{4}">
+                            </div>
+                        </div><input type="submit" value="Save changes" data-wait="Please wait..."
+                            class="button button-small w-button">
+                    </form>
+                    <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
+                        <div>Thank you! Your submission has been received!</div>
+                    </div>
+                    <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
+                        <div>Oops! Something went wrong while submitting the form.</div>
+                    </div>
+                </div>
+                <!-- <div class="account-divider"></div>
+                <div class="table-module">
+                    <div class="account-table-header">
+                        <h4 class="no-space-bottom">Notifications</h4>
+                    </div>
+                    <div class="full-table-row">
+                        <div>
+                            <h6 class="no-space-bottom">Announcements</h6>
+                            <div class="small-text text-grey-3">Occasional announcements of new features</div>
+                        </div>
+                        <div class="form-block w-form">
+                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                                aria-label="Email Form"><label class="w-checkbox switch-field">
+                                    <div
+                                        class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
+                                    </div><input type="checkbox" id="checkbox-2" name="checkbox-2"
+                                        data-name="Checkbox 2" checked=""
+                                        style="opacity:0;position:absolute;z-index:-1"><span
+                                        class="checkbox-label hidden w-form-label" for="checkbox-2"></span>
+                                </label></form>
+                            <div class="form-success w-form-done" tabindex="-1" role="region"
+                                aria-label="Email Form success">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region"
+                                aria-label="Email Form failure">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full-table-row-divider"></div>
+                    <div class="full-table-row">
+                        <div>
+                            <h6 class="no-space-bottom">Feedback requests</h6>
+                            <div class="small-text text-grey-3">Occasional requests for feedback</div>
+                        </div>
+                        <div class="form-block w-form">
+                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                                aria-label="Email Form"><label class="w-checkbox switch-field">
+                                    <div
+                                        class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
+                                    </div><input type="checkbox" id="checkbox-2" name="checkbox-2"
+                                        data-name="Checkbox 2" checked=""
+                                        style="opacity:0;position:absolute;z-index:-1"><span
+                                        class="checkbox-label hidden w-form-label" for="checkbox-2"></span>
+                                </label></form>
+                            <div class="form-success w-form-done" tabindex="-1" role="region"
+                                aria-label="Email Form success">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region"
+                                aria-label="Email Form failure">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full-table-row-divider"></div>
+                    <div class="full-table-row">
+                        <div>
+                            <h6 class="no-space-bottom">Billing and account</h6>
+                            <div class="small-text text-grey-3">Transactional emails and account notifications</div>
+                        </div>
+                        <div class="small-text text-grey-3">Legally obligated</div>
+                    </div>
+                </div>
+                <div class="account-divider"></div>
+                <div class="w-layout-grid _2-grid">
+                    <div class="content-width-medium">
+                        <h6>Public profile</h6>
+                        <div class="form-caption">When this is on, people on the this platform can find and view
+                            your profile globally.</div>
+                        <div class="form-block w-form">
+                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                                aria-label="Email Form"><label class="w-checkbox switch-field">
+                                    <div class="w-checkbox-input w-checkbox-input--inputType-custom switch-input">
+                                    </div><input type="checkbox" id="checkbox-3" name="checkbox-3"
+                                        data-name="Checkbox 3" style="opacity:0;position:absolute;z-index:-1"><span
+                                        class="checkbox-label w-form-label" for="checkbox-3">You're currently
+                                        invisible</span>
+                                </label></form>
+                            <div class="form-success w-form-done" tabindex="-1" role="region"
+                                aria-label="Email Form success">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region"
+                                aria-label="Email Form failure">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-width-medium">
+                        <h6>Read receipt</h6>
+                        <div class="form-caption">When this is on, people are notified when you have read their
+                            messages.</div>
+                        <div class="form-block w-form">
+                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                                aria-label="Email Form"><label class="w-checkbox switch-field">
+                                    <div
+                                        class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
+                                    </div><input type="checkbox" id="checkbox-2" name="checkbox-2"
+                                        data-name="Checkbox 2" checked=""
+                                        style="opacity:0;position:absolute;z-index:-1"><span
+                                        class="checkbox-label w-form-label" for="checkbox-2">Read receipts are
+                                        on</span>
+                                </label></form>
+                            <div class="form-success w-form-done" tabindex="-1" role="region"
+                                aria-label="Email Form success">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region"
+                                aria-label="Email Form failure">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="account-delete">
+                    <div class="content-width-small space-bottom-small">
+                        <!-- <h6>Logout</h6> -->
+                        <!-- <div class="form-caption">Before deleting your account, please note that if you delete your
+                            account, Dash cannot recover it.</div> -->
+                    </div>
+                    <form action="/logout/" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Logout" class="button button-small bg-primary-rose w-button">
+                    </form>
+                </div>
+            </div>
+            <!-- <div data-w-tab="Billing" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-1" style="">
+                <div class="w-layout-grid main-grid">
+                    <div class="w-layout-grid _2-grid">
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="div-block">
+                                    <div class="caption">Monthly Payment</div>
+                                    <div class="billing-wrapper">
+                                        <h2 class="billing-subscription-title">$49/month</h2><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6059f76fc86814f3829da807_Billing%20Analytics.svg"
+                                            alt="" class="billing-storage-anaytic">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831d493c9a126c8c8cbc_users.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-green"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Total Clients</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">200.152</h3>
+                                        <div class="positive-value">+ 25%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-module">
+                        <div class="account-table-header">
+                            <h4 class="no-space-bottom">Payment methods</h4><a href="#" class="small-link">Add
+                                method</a>
+                        </div>
+                        <div class="full-table-row">
+                            <div class="full-table-row-detail"><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6059fb4700a6240b00c775d0_Visa%20Logo.svg"
+                                    alt="" class="payment-method-image">
+                                <div>
+                                    <h6 class="no-space-bottom">Visa ending in 1234</h6>
+                                    <div class="small-text text-grey-3">Expires 1/2025</div>
+                                </div>
+                            </div>
+                            <div class="small-text text-grey-3">Default</div>
+                        </div>
+                        <div class="full-table-row-divider"></div>
+                        <div class="full-table-row">
+                            <div class="full-table-row-detail"><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6059fb47e680f0b031989a36_Mastercard%20Logo.svg"
+                                    alt="" class="payment-method-image">
+                                <div>
+                                    <h6 class="no-space-bottom">Mastercard ending in 1234</h6>
+                                    <div class="small-text text-grey-3">Expires 1/2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert-module" style="opacity: 1; display: flex;">
+                        <div>Invoice #123 is processing and will be billed on the 10th of April</div><a href="#"
+                            class="alert-module-link w-inline-block"><img loading="lazy"
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
+                                alt=""></a>
+                    </div>
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Invoices</h4>
+                        </div>
+                        <div class="table-list">
+                            <div class="w-layout-grid table-headers">
+                                <div class="caption-large">Invoice ID</div>
+                                <div class="caption-large">Amount</div>
+                                <div class="caption-large">Date</div>
+                                <div class="caption-large">Status</div>
+                            </div><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                                <div class="w-layout-grid table-row">
+                                    <div id="w-node-_83c4a0e1-f485-283c-b349-88a7bb253212-52dfa1bd" class="table-title">
+                                        Invoice #123</div>
+                                    <div>$19.00</div>
+                                    <div id="w-node-_83c4a0e1-f485-283c-b349-88a7bb25321c-52dfa1bd">April 10, 2020
+                                    </div>
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-blue"></div>
+                                        <div>Processing</div>
+                                    </div>
+                                </div>
+                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                                <div class="w-layout-grid table-row">
+                                    <div id="w-node-_7554596d-8125-9c6f-6e05-8fc98275bae3-52dfa1bd" class="table-title">
+                                        Invoice #122</div>
+                                    <div>$19.00</div>
+                                    <div id="w-node-_7554596d-8125-9c6f-6e05-8fc98275bae7-52dfa1bd">March 10, 2020
+                                    </div>
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>Paid</div>
+                                    </div>
+                                </div>
+                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                                <div class="w-layout-grid table-row">
+                                    <div id="w-node-d3f5eb17-8347-99ee-a5b7-ab9be5d639d0-52dfa1bd" class="table-title">
+                                        Invoice #121</div>
+                                    <div>$19.00</div>
+                                    <div id="w-node-d3f5eb17-8347-99ee-a5b7-ab9be5d639d4-52dfa1bd">February 10, 2020
+                                    </div>
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>Paid</div>
+                                    </div>
+                                </div>
+                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                                <div class="w-layout-grid table-row">
+                                    <div id="w-node-_05945664-2d52-1320-4747-e61a22e235fa-52dfa1bd" class="table-title">
+                                        Invoice #120</div>
+                                    <div>$19.00</div>
+                                    <div id="w-node-_05945664-2d52-1320-4747-e61a22e235fe-52dfa1bd">January 10, 2020
+                                    </div>
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>Paid</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="w-layout-grid _2-grid">
+                        <div class="content-width-medium">
+                            <h6>Auto renewal</h6>
+                            <div class="form-caption">All subscriptions are set to automatically renew, unless you
+                                cancel before the next renewal date.</div>
+                            <div class="form-block w-form">
+                                <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                                    aria-label="Email Form"><label class="w-checkbox switch-field">
+                                        <div class="w-checkbox-input w-checkbox-input--inputType-custom switch-input">
+                                        </div><input type="checkbox" id="checkbox-3" name="checkbox-3"
+                                            data-name="Checkbox 3" style="opacity:0;position:absolute;z-index:-1"><span
+                                            class="checkbox-label w-form-label" for="checkbox-3">Auto renewal is
+                                            turned off</span>
+                                    </label></form>
+                                <div class="form-success w-form-done" tabindex="-1" role="region"
+                                    aria-label="Email Form success">
+                                    <div>Thank you! Your submission has been received!</div>
+                                </div>
+                                <div class="form-error w-form-fail" tabindex="-1" role="region"
+                                    aria-label="Email Form failure">
+                                    <div>Oops! Something went wrong while submitting the form.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-width-medium">
+                            <h6>Cancel subscription</h6>
+                            <div class="form-caption">You'll lose access to all premium features in your current
+                                subscription plan</div><a href="/utilities/pricing" class="small-link">Cancel your
+                                subscription</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div data-w-tab="Security" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-2" style="">
+                <div class="w-layout-grid main-grid">
+                    <div class="text-button-combo">
+                        <div class="content-width-small">
+                            <h6>Two Factor Authentication</h6>
+                            <div class="form-caption">Two-Factor Authentication (2FA) can be used to help protect
+                                your account</div>
+                        </div><a href="#" class="button button-small w-button">Enable</a>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="w-layout-grid _2-grid">
+                        <div class="content-width-small">
+                            <div class="space-bottom">
+                                <h4>Change password</h4>
+                                <div class="form-caption">You can always change your password for security reasons
+                                    or reset your password in case you forgot it.</div>
+                            </div><a href="/authentication/password-reset"
+                                class="button button-small button-outline w-button">Forgot password?</a>
+                        </div>
+                        <div class="form-wrap w-form">
+                            <form action="/account" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="get" aria-label="Form">
+                                <div class="w-layout-grid password-reset-grid">
+                                    <div>
+                                        <h6>Current password</h6><input type="password" class="text-field w-input"
+                                            maxlength="256" name="Current-Password" data-name="Current Password"
+                                            placeholder="" id="Current-Password" required="">
+                                    </div>
+                                    <div>
+                                        <h6>New pasword</h6><input type="password" class="text-field w-input"
+                                            maxlength="256" name="New-password" data-name="New password" placeholder=""
+                                            id="New-password" required="">
+                                    </div>
+                                    <div>
+                                        <h6>Confirm new password</h6><input type="password" class="text-field w-input"
+                                            maxlength="256" name="Comfirm-Password" data-name="Comfirm Password"
+                                            placeholder="" id="Comfirm-Password" required="">
+                                    </div><input type="submit" value="Update password" data-wait="Please wait..."
+                                        class="button button-small w-button">
+                                </div>
+                            </form>
+                            <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
+                                <div>Password was succesfully changed.</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
+                                <div>Oops! Something went wrong.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="table-module">
+                        <div class="account-table-header">
+                            <h4 class="no-space-bottom">Additional security</h4>
+                        </div>
+                        <div class="full-table-row">
+                            <div>
+                                <h6 class="no-space-bottom">SMS&nbsp;recovery</h6>
+                                <div class="small-text text-grey-3">Number ending with 1234</div>
+                            </div><a href="#" class="button button-small w-button">Disable SMS</a>
+                        </div>
+                        <div class="full-table-row-divider"></div>
+                        <div class="full-table-row">
+                            <div>
+                                <h6 class="no-space-bottom">Autheticator app</h6>
+                                <div class="small-text text-grey-3">Google Authenticator</div>
+                            </div><a href="#" class="button button-small button-outline w-button">Configure</a>
+                        </div>
+                        <div class="full-table-row-divider"></div>
+                        <div class="full-table-row">
+                            <div>
+                                <h6 class="no-space-bottom">SSL Certificate</h6>
+                                <div class="small-text text-grey-3">Secure Sockets Layer</div>
+                            </div><a href="#" class="button button-small button-outline w-button">Configure</a>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="table-module">
+                        <div class="account-table-header">
+                            <h4 class="no-space-bottom">Your devices</h4><a href="/authentication/sign-in"
+                                class="small-link">Log out on all devices</a>
+                        </div>
+                        <div class="full-table-row">
+                            <div class="full-table-row-detail"><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882dd8cc75eb4709689d1_smartphone.svg"
+                                    alt="" class="device-image">
+                                <div>
+                                    <h6 class="no-space-bottom">Iphone 13 Pro Max</h6>
+                                    <div class="small-text text-grey-3">New York City · June 20 at 14:00</div>
+                                </div>
+                            </div><a href="#" class="small-text">Log out</a>
+                        </div>
+                        <div class="full-table-row-divider"></div>
+                        <div class="full-table-row">
+                            <div class="full-table-row-detail"><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882dedf921f637c3b30c7_tablet.svg"
+                                    alt="" class="device-image">
+                                <div>
+                                    <h6 class="no-space-bottom">iPad Pro</h6>
+                                    <div class="small-text text-grey-3">New York City · June 20 at 14:00</div>
+                                </div>
+                            </div><a href="#" class="small-text">Log out</a>
+                        </div>
+                        <div class="full-table-row-divider"></div>
+                        <div class="full-table-row">
+                            <div class="full-table-row-detail"><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d74878131025891d2f_monitor.svg"
+                                    alt="" class="device-image">
+                                <div>
+                                    <h6 class="no-space-bottom">iMac OSX</h6>
+                                    <div class="small-text text-grey-3">New York City · June 20 at 14:00</div>
+                                </div>
+                            </div><a href="#" class="small-text">Log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
