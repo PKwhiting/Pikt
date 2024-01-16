@@ -38,6 +38,8 @@ class rootView(LoginRequiredMixin,View):
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
+        if request.user.is_authenticated:
+            parts = part.objects.filter(user=request.user)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
