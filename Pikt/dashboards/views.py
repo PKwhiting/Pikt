@@ -38,7 +38,6 @@ class rootView(LoginRequiredMixin,View):
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        messages = json.loads(request.user.messages)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
