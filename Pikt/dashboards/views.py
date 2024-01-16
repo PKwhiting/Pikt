@@ -38,9 +38,9 @@ class rootView(LoginRequiredMixin,View):
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        context['parts'] = part.objects.filter(user=request.user)
-        context['messages'] = json.loads(request.user.messages)
-        print(context['parts'].count())
+        # context['parts'] = part.objects.filter(user=request.user)
+        # context['messages'] = json.loads(request.user.messages)
+        # print(context['parts'].count())
         # if context['parts'].count() > 0:
         #     parts_list = part.objects.filter(user=request.user)
         #     paginator = Paginator(parts_list, 20)
