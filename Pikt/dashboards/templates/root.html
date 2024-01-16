@@ -281,17 +281,19 @@
             </div>
         </div>
         <div class="dashboard-content">
-            {% for message in messages %}
-                <form action="{% url 'delete_message' %}" method="post" class="alert-module" style="opacity: 1; display: flex; margin-bottom: 10px">
-                    {% csrf_token %}
-                    <input type="hidden" name="message" value="{{ message }}">
-                    <div>{{ message }}</div>
-                    <button type="submit" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer; outline: none; color: #000; font-size: 20px; margin-left: 10px; margin-top: -5px;"
-                        class="alert-module-link w-inline-block"><img loading="lazy"
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
-                            alt=""></button>
-                </form>
-            {% endfor %}
+            {% if messages %}
+                {% for message in messages %}
+                    <form action="{% url 'delete_message' %}" method="post" class="alert-module" style="opacity: 1; display: flex; margin-bottom: 10px">
+                        {% csrf_token %}
+                        <input type="hidden" name="message" value="{{ message }}">
+                        <div>{{ message }}</div>
+                        <button type="submit" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer; outline: none; color: #000; font-size: 20px; margin-left: 10px; margin-top: -5px;"
+                            class="alert-module-link w-inline-block"><img loading="lazy"
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
+                                alt=""></button>
+                    </form>
+                {% endfor %}
+            {% endif %}
             {% block content %}
             {% endblock %}
             <div class="footer">PIKT<a href="/" target="_blank"
