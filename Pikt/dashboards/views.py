@@ -41,12 +41,12 @@ class defaultDashboardView(LoginRequiredMixin,View):
         context['parts'] = part.objects.filter(user=request.user)
         context['messages'] = json.loads(request.user.messages)
         print(context['parts'].count())
-        if context['parts'].count() > 0:
-            parts_list = part.objects.filter(user=request.user)
-            paginator = Paginator(parts_list, 20)
-            page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-            context['parts'] = page_obj
+        # if context['parts'].count() > 0:
+        #     parts_list = part.objects.filter(user=request.user)
+        #     paginator = Paginator(parts_list, 20)
+        #     page_number = request.GET.get('page')
+        #     page_obj = paginator.get_page(page_number)
+        #     context['parts'] = page_obj
         return render(request, 'parts.html', context)
     
 def add_part(request):
