@@ -38,9 +38,14 @@ class rootView(LoginRequiredMixin,View):
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        # context['parts'] = part.objects.filter(user=request.user)
-        # context['messages'] = json.loads(request.user.messages)
-        print(context['parts'].count())
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'parts': part.objects.filter(user=request.user),
+            'messages': json.loads(request.user.messages)
+        }
         if context['parts'].count() > 0:
             parts_list = part.objects.filter(user=request.user)
             paginator = Paginator(parts_list, 20)
