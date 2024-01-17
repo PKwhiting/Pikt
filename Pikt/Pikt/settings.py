@@ -52,7 +52,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'Authentication',
     'dashboards',
+    'cloudinary_storage',
+    'cloudinary',
 ]
+os.getenv('DJANGO_SECRET_KEY')
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,8 +152,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mnt/media')
-MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+MEDIA_URL = '/Pikt/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/login'
 
