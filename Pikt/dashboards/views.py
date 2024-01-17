@@ -45,13 +45,14 @@ class defaultDashboardView(LoginRequiredMixin,View):
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'parts': parts,
+            'messages':json.loads(request.user.messages)
         }
-        # if context['parts'].count() > 0:
-        #     parts_list = part.objects.filter(user=request.user)
-        #     paginator = Paginator(parts_list, 20)
-        #     page_number = request.GET.get('page')
-        #     page_obj = paginator.get_page(page_number)
-        #     context['parts'] = page_obj
+        if context['parts'].count() > 0:
+            parts_list = part.objects.filter(user=request.user)
+            paginator = Paginator(parts_list, 20)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            context['parts'] = page_obj
         return render(request, 'parts.html', context)
     
 def add_part(request):
