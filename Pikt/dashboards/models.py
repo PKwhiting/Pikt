@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 PART_GRADES = (
     ('A', 'A'),
@@ -24,7 +24,7 @@ class image(models.Model):
         return self.name
 
 class part(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     vehicle_year = models.IntegerField()
     vehicle_make = models.CharField(max_length=50)
     vehicle_model = models.CharField(max_length=50)

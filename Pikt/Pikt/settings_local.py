@@ -37,7 +37,7 @@ DEBUG = True
 
 SECURE_SSL_REDIRECT = False
 
-
+AUTH_USER_MODEL = 'Authentication.User'
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '0.0.0.0:10000', '127.0.0.1']
 

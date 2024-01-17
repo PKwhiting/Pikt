@@ -35,6 +35,8 @@ SESSION_COOKIE_SECURE = True
 
 SECURE_SSL_REDIRECT = True
 
+AUTH_USER_MODEL = 'Authentication.User'
+
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000', 'saa-frontend-zzoy.onrender.com', 'saa-backend.onrender.com', 'simpli-cars.com']
 
