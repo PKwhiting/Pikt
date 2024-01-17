@@ -38,6 +38,8 @@ class homeView(View):
 
 class loginView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/dashboards/parts')
         return render(request, 'login.html')
 
     def post(self, request):
@@ -66,6 +68,11 @@ class registerView(View):
         login(request, user)
         messages = json.loads(request.user.messages)
         messages.append('Welcome to Pikt! Get started by adding your first part!')
+        messages.append('After you add your first part, it will appear below in the parts table.')
+        messages.append('Once you list your part, our software works with ebay to get it listed under our ebay account.')
+        messages.append('Within 24 hours a link will appear in the part row that will take you to that parts ebay listing. We are working on making the mercari and offerup link available.')
+        messages.append('Once a part is sold we will send you a shipping label and send you payment for the part.')
+        messages.append('If you have any questions, please contact us at pwhiting@simpli-cars.com')
         request.user.messages = json.dumps(messages)
         request.user.save()
         return redirect('/dashboards/parts')
