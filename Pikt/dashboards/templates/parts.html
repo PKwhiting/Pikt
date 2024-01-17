@@ -141,7 +141,7 @@
                     <div class="w-layout-grid table-headers">
                         <div class="caption-large">Part Name</div>
                         <div class="caption-large">Status</div>
-                        <div class="caption-large">Part ID</div>
+                        <div class="caption-large">Ebay Link</div>
                         <div class="caption-large">Time Listed</div>
                     </div>
                     {% if parts %}
@@ -155,7 +155,10 @@
                                     <div>{{ part.part_status }}</div>
                                 </div>
                                 <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title">
-                                    {{ part.id }}</div>
+                                    {% if part.ebay_link %}
+                                        <a href="{{ part.ebay_link }}">Click here</a>
+                                    {% endif %}
+                                </div>
                                 <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.created_at }}</div>
                             </div>
                         {% endfor %}

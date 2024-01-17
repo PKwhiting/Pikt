@@ -21,7 +21,6 @@ context = {
 class MyView(View):
     def get(self, request):
         load_dotenv()
-        print(os.getenv('APPLICATION_TOKEN'))
         context = {
             'APPLICATION_TOKEN': os.getenv('APPLICATION_TOKEN'),
             'USER_TOKEN': os.getenv('USER_TOKEN')

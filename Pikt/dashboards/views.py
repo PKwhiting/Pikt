@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 import json
 import os
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 
 context = {
@@ -23,7 +24,6 @@ class delete_message(View):
             messages = json.loads(request.user.messages)
             for message in messages:
                 if message_to_delete == message:
-                    print("HERE")
                     messages.remove(message_to_delete)
             request.user.messages = json.dumps(messages)
             request.user.save()
@@ -33,7 +33,6 @@ class delete_message(View):
 class rootView(LoginRequiredMixin,View):
     def get(self, request):
         context['messages'] = json.loads(request.user.messages)
-        print(context)
         return render(request, 'root.html', context)
  
 class defaultDashboardView(LoginRequiredMixin,View):
@@ -54,7 +53,8 @@ class defaultDashboardView(LoginRequiredMixin,View):
             page_obj = paginator.get_page(page_number)
             context['parts'] = page_obj
         return render(request, 'parts.html', context)
-    
+
+@login_required  
 def add_part(request):
     if request.method == 'POST':
         form = PartForm(request.POST, request.FILES)
