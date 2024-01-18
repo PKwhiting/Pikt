@@ -3328,6 +3328,11 @@ blockquote {
   padding: 30px 24px 48px;
 }
 
+.banner-logo {
+  max-height: 35px;
+  display: none;
+}
+
 .sidebar-logo {
   max-height: 24px;
   max-width: 200px;
@@ -5909,6 +5914,9 @@ blockquote {
 }
 
 @media screen and (max-width: 991px) {
+  .banner-logo {
+    display: flex;
+  }
   ._4-grid {
     -ms-grid-columns: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
@@ -6285,6 +6293,10 @@ blockquote {
 }
 
 @media screen and (max-width: 479px) {
+  .banner-avatar-wrapper {
+    display: none;
+  }
+
   h3 {
     margin-top: 0px;
     margin-bottom: 18px;
@@ -6543,13 +6555,13 @@ blockquote {
     margin-bottom: 20px;
   }
 
-  .dashboard-banner-header {
+  /* .dashboard-banner-header {
     -webkit-box-orient: vertical;
     -webkit-box-direction: reverse;
     -webkit-flex-direction: column-reverse;
     -ms-flex-direction: column-reverse;
     flex-direction: column-reverse;
-  }
+  } */
 
   .billing-subscription-title {
     font-size: 20px;
