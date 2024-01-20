@@ -1,0 +1,632 @@
+{% extends "root.html" %}
+{% load tags %}
+{% block content %}
+<div class="dashboard-container">
+    <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
+        <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="Overview"
+                class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+                href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
+                <div>Overview</div>
+            </a><a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
+                href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false"
+                tabindex="-1">
+                <div>Tasks</div>
+            </a><a data-w-tab="Files" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false"
+                tabindex="-1">
+                <div>Files</div>
+            </a></div>
+        <div class="tabs-content w-tab-content">
+            <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
+                <div class="w-layout-grid main-grid">
+                    <div class="w-layout-grid _4-grid">
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Price</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">{{ part.price }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-green"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Time Posted</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">{{ part.created_at|days_since }} days</h3>
+                                        <!-- <div class="negative-value">-10%</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-ef2958bf" class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-orange"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Deliveries</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">10.5K</h3>
+                                        <div class="positive-value">+19%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-yellow"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Projected Profit</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">95%</h3>
+                                        <div class="positive-value">+10%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Offers</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers">
+                                    <div class="caption-large">User</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">Team</div>
+                                    <div class="caption-large">Estimated date</div>
+                                </div><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div id="w-node-_5521c124-0f92-8dbc-1ac2-8e7319e308ce-ef2958bf"
+                                            class="table-title">Onboarding Process</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Done</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_615c3cff-330e-8cea-cda9-fd603b82f842-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">SEO Integrations</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Done</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa1a46298c089755f6_Dash%20-%20Avatar%2005-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_8d52655b-0eb4-7429-f7e3-830010cfe86b-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Hosting Configuration</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <div>In progress</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4099af5a7795f_Dash%20-%20Avatar%2003-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_5a2132eb-98f5-072d-febf-0b5bcbbe4a7c-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">CMS&nbsp;Handover</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <div>In progress</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_45f761dc-8fb8-aa22-5ea6-e7824e6bc846-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Content Review</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <div>In progress</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa1a46298c089755f6_Dash%20-%20Avatar%2005-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_4bde5e83-8048-bdde-cd39-e35eabaa3404-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Integrate Analytics</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-blue"></div>
+                                            <div>Next up</div>
+                                        </div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-d955edc1-7166-f220-9e0a-34654071bb2c-ef2958bf">February 10, 2020
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-bottom-caption">
+                            <div>Showing offers from all platforms</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-1" style="">
+                <div class="kanban">
+                    <div class="kanban-wrapper">
+                        <h4>In progress</h4>
+                        <div class="kanban-color-bar in-progress"></div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                            <div class="kanban-details">
+                                <div class="kanban-avatar-row"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                        alt="" class="kanban-avatar first"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                        alt="" class="kanban-avatar"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                        alt="" class="kanban-avatar"></div>
+                                <div>Jun 12</div>
+                            </div>
+                        </div>
+                        <div class="kanban-card"><img
+                                srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg 4500w"
+                                sizes="218px"
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg"
+                                loading="lazy" alt="" class="kanban-image">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                        </div><a href="#" class="kanban-link">Add Card</a>
+                    </div>
+                    <div class="kanban-wrapper">
+                        <h4>Next up</h4>
+                        <div class="kanban-color-bar next-up"></div>
+                        <div class="kanban-card"><img
+                                srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%2520Visual%252002-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%20Visual%2002-min.jpg 4500w"
+                                sizes="218px"
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618293485ae7ec65fa765a9c_Project%20Visual%2002-min.jpg"
+                                loading="lazy" alt="" class="kanban-image">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                            <div class="kanban-details">
+                                <div class="kanban-avatar-row"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                        alt="" class="kanban-avatar first"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da7dc8be9a597d4e84c_Dash%20-%20Avatar%2010-min.jpg"
+                                        alt="" class="kanban-avatar"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa1a46298c089755f6_Dash%20-%20Avatar%2005-min.jpg"
+                                        alt="" class="kanban-avatar"></div>
+                                <div>Jun 12</div>
+                            </div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>⏱ This is an example task that can be used within a Kanban system.</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                            <div class="kanban-details">
+                                <div class="kanban-avatar-row"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                        alt="" class="kanban-avatar first"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                        alt="" class="kanban-avatar"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                        alt="" class="kanban-avatar"></div>
+                                <div>Jun 12</div>
+                            </div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                        </div><a href="#" class="kanban-link">Add Card</a>
+                    </div>
+                    <div class="kanban-wrapper">
+                        <h4>Done</h4>
+                        <div class="kanban-color-bar done"></div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                        </div>
+                        <div class="kanban-card"><img
+                                srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg 4501w"
+                                sizes="218px"
+                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg"
+                                loading="lazy" alt="" class="kanban-image">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                            <div class="kanban-details">
+                                <div class="kanban-avatar-row"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                        alt="" class="kanban-avatar first"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da7dc8be9a597d4e84c_Dash%20-%20Avatar%2010-min.jpg"
+                                        alt="" class="kanban-avatar"><img loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa1a46298c089755f6_Dash%20-%20Avatar%2005-min.jpg"
+                                        alt="" class="kanban-avatar"></div>
+                                <div>Jun 12</div>
+                            </div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>📝 This is an example task that can be used within a Kanban system.</div>
+                        </div><a href="#" class="kanban-link">Add Card</a>
+                    </div>
+                </div>
+            </div>
+            <div data-w-tab="Files" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-2" style="">
+                <div class="w-layout-grid main-grid">
+                    <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
+                            <div class="content-storage">
+                                <div>
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d37ee33fcb3f67627f_hard-drive.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <h4>Drive Storage</h4>
+                                </div>
+                                <div>
+                                    <div class="percentage-info">
+                                        <div class="small-description">60 GB</div>
+                                        <div class="small-description">100&nbsp;GB</div>
+                                    </div>
+                                    <div class="percentage-bar-wrapper">
+                                        <div class="percentage-bar bg-primary-blue"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a><a href="#" class="module-link w-inline-block">
+                            <div class="content-storage">
+                                <div>
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883eff0807bad77363c90_hard-drive.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-rose"></div>
+                                    </div>
+                                    <h4>Cloud Storage</h4>
+                                </div>
+                                <div class="percentage-info">
+                                    <div class="small-description">30 GB</div>
+                                    <div class="small-description">50&nbsp;GB</div>
+                                </div>
+                                <div>
+                                    <div class="percentage-bar-wrapper">
+                                        <div class="percentage-bar bg-primary-rose"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div id="w-node-_75c0a142-7cc7-2dfb-adf6-ae0e4bed8b34-ef2958bf" class="module">
+                            <div class="content-percentage">
+                                <div class="content-storage">
+                                    <div class="storage-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831413ede764f64a258d_pie-chart.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-green"></div>
+                                    </div>
+                                    <h4>User Storage</h4>
+                                    <div class="small-description">Check your storage on your dashboard.</div>
+                                </div><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac26976322417838e72f4_Dash%20Chart%2003.svg"
+                                    alt="" class="data-visualisation-storage">
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="main-grid-title">Folders</h3>
+                    <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
+                            <div class="content-folder">
+                                <div class="storage-folder-content">
+                                    <div class="storage-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="project-avatars"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                            alt="" class="project-avatar first"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
+                                            alt="" class="project-avatar"></div>
+                                </div>
+                                <div>
+                                    <h4>Resources</h4>
+                                    <div class="folder-info">
+                                        <div class="small-description">15 files</div>
+                                        <div class="small-description">15 GB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a><a href="#" class="module-link w-inline-block">
+                            <div class="content-folder">
+                                <div class="storage-folder-content">
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="project-avatars"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                            alt="" class="project-avatar first"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                            alt="" class="project-avatar"></div>
+                                </div>
+                                <div>
+                                    <h4>Research</h4>
+                                    <div class="folder-info">
+                                        <div class="small-description">10 files</div>
+                                        <div class="small-description">5 GB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Price</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">{{ part.price }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-green"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Hours</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">719</h3>
+                                            <div class="negative-value">(- 10%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa7132b-ef2958bf" class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-orange"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Deliveries</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">10.5K</h3>
+                                            <div class="positive-value">(+ 19%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-yellow"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Target&nbsp;Ratio</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">95%</h3>
+                                            <div class="positive-value">(+ 10%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Latest Files</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers">
+                                    <div class="caption-large">File name</div>
+                                    <div class="caption-large">Size</div>
+                                    <div class="caption-large">Members</div>
+                                    <div class="caption-large">Modified</div>
+                                </div><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill"></div>
+                                            </div>
+                                            <div class="table-title">Logo.svg</div>
+                                        </div>
+                                        <div>30&nbsp;KB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f26b-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058830c84df4cc3944f4b5d_file.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill bg-primary-green"></div>
+                                            </div>
+                                            <div class="table-title">Document</div>
+                                        </div>
+                                        <div>25&nbsp;KB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4099af5a7795f_Dash%20-%20Avatar%2003-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f279-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883f1d059b284ac9889e4_image.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill bg-primary-rose"></div>
+                                            </div>
+                                            <div class="table-title">Webflow.svg</div>
+                                        </div>
+                                        <div>159 MB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f287-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60588457470f84dae1576e8d_volume-2.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill bg-primary-purple"></div>
+                                            </div>
+                                            <div class="table-title">podcast.mp4</div>
+                                        </div>
+                                        <div>300 MB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa3d1f8120bfc88c26_Dash%20-%20Avatar%2002-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfa1a46298c089755f6_Dash%20-%20Avatar%2005-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f295-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d9f0807b8fd3363889_pie-chart.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill"></div>
+                                            </div>
+                                            <div class="table-title">Charts.xls</div>
+                                        </div>
+                                        <div>152&nbsp;MB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4099af5a7795f_Dash%20-%20Avatar%2003-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f2a3-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="file-title">
+                                            <div class="file-square"><img width="24" loading="lazy"
+                                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883f1d059b284ac9889e4_image.svg"
+                                                    alt="" class="file-icon">
+                                                <div class="light-fill bg-primary-rose"></div>
+                                            </div>
+                                            <div class="table-title">Logo.svg</div>
+                                        </div>
+                                        <div>291 KB</div>
+                                        <div class="table-avatar-row"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4c9ca97e6dee1e3_Dash%20-%20Avatar%2006-min.jpg"
+                                                alt="" class="in-row-avatar first"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                                alt="" class="project-avatar"><img loading="lazy"
+                                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                                alt="" class="project-avatar"></div>
+                                        <div id="w-node-_47781695-558a-0a06-8b84-c0477457f2b1-ef2958bf">February 10,
+                                            2020</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-bottom-caption">
+                            <div>All files under non-disclosure agreement</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

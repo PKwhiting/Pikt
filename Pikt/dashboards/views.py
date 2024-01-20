@@ -8,6 +8,7 @@ import json
 import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 context = {
@@ -75,3 +76,17 @@ def add_part(request):
         form = PartForm()
     context['form'] = form
     return render(request, 'add-part.html', context)
+
+class single_part(LoginRequiredMixin, View):
+    def get(self, request, pk=None, *args, **kwargs):
+        print(pk)
+        selected_part = get_object_or_404(part, id=pk)
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'part': selected_part
+        }
+        return render(request, 'single-part.html', context)
