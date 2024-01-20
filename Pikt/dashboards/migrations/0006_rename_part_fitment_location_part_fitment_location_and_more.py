@@ -12,36 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_fitment_location',
-            new_name='fitment_location',
-        ),
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_grade',
-            new_name='grade',
-        ),
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_interchange',
-            new_name='hollander_interchange',
-        ),
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_notes',
-            new_name='notes',
-        ),
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_status',
-            new_name='status',
-        ),
-        migrations.RenameField(
-            model_name='part',
-            old_name='part_type',
-            new_name='type',
-        ),
         migrations.AlterField(
             model_name='part',
             name='price',
