@@ -23,6 +23,7 @@ from django.db import IntegrityError
 import requests
 from urllib.parse import urlencode
 from django.http import HttpResponseRedirect
+from datetime import datetime, timedelta
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -187,24 +188,35 @@ class RedirectView(View):
     def get(self, request):
         load_dotenv()
         authorization_code = request.GET.get('code')
-        # authorization_code = "v^1.1#i^1#f^0#r^1#p^3#I^3#t^Ul41Xzg6Qzc5Qzc0ODdCMkEwMkFEODk5RDA4RTM1OTA4QkQ3RDdfMl8xI0VeMTI4NA=="
-        # print(f'Basic {authorization_code}')
         credentials = f'{os.getenv("CLIENT_ID")}:{os.getenv("CLIENT_SECRET")}'
         encoded_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
-
+        
+        #user access token
         url = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': 'PK_Whiting-PKWhitin-Pikt-S-glbjhb'}
 
         response = requests.post(url, headers=headers, data=data)
 
-        response_data = response.json()
-        access_token = response_data['access_token']
-        expires_in = response_data['expires_in']
-        token_type = response_data['token_type']
-        messages = json.loads(request.user.messages)
-        messages.append(f'{access_token} {expires_in} {token_type}')
-        messages.append(response)
-        request.user.messages = json.dumps(messages)
-        request.user.save()
+        if response.status_code == 200:
+            response_data = response.json()
+            request.user.ebay_user_token = response_data['access_token']
+            request.user.ebay_user_refresh_token = response_data['refresh_token']
+            
+            user_token_expires_in = response_data['expires_in']
+            user_refresh_token_expires_in = response_data['refresh_token_expires_in']
+
+            now = datetime.now()
+            request.user.ebay_user_token_expiration = now + timedelta(seconds=user_token_expires_in)
+            request.user.ebay_user_refresh_token_expiration = now + timedelta(seconds=user_refresh_token_expires_in)
+            
+            messages = json.loads(request.user.messages)
+            messages.append("Ebay integration complete")
+            request.user.messages = json.dumps(messages)
+            request.user.save()
+        else:
+            messages = json.loads(request.user.messages)
+            messages.append("Ebay consent failed")
+            request.user.messages = json.dumps(messages)
+            request.user.save()
         return render(request, 'dashboard.html', context)
