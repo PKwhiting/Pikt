@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 import json
 import os
 from django.conf import settings
+from dotenv import load_dotenv
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
@@ -17,6 +18,9 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from .const.const import PARTS_CONST, MAKES_MODELS
 from django.db import IntegrityError
+import requests
+from urllib.parse import urlencode
+from django.http import HttpResponseRedirect
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -171,3 +175,17 @@ class single_part(LoginRequiredMixin, View):
             'roi': round((selected_part.price - selected_part.cost) / selected_part.cost * 100, 2)
         }
         return render(request, 'single-part.html', context)
+
+class ebayConsent(View):
+    def get(self, request):
+        consent_url = "https://auth.sandbox.ebay.com/oauth2/authorize?client_id=PKWhitin-Pikt-SBX-ee5696659-e1c11b44&response_type=code&redirect_uri=PK_Whiting-PKWhitin-Pikt-S-glbjhb&scope=https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.order.readonly https://api.ebay.com/oauth/api_scope/buy.guest.order https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.marketplace.insights.readonly https://api.ebay.com/oauth/api_scope/commerce.catalog.readonly https://api.ebay.com/oauth/api_scope/buy.shopping.cart https://api.ebay.com/oauth/api_scope/buy.offer.auction https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.email.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.phone.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.address.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.name.readonly https://api.ebay.com/oauth/api_scope/commerce.identity.status.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/sell.item.draft https://api.ebay.com/oauth/api_scope/sell.item https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly https://api.ebay.com/oauth/api_scope/sell.stores https://api.ebay.com/oauth/api_scope/sell.stores.readonly"
+        return HttpResponseRedirect(consent_url)
+
+class RedirectView(View):
+    def get(self, request):
+        authorization_code = request.GET.get('code')
+        print(authorization_code)
+        messages = json.loads(request.user.messages)
+        messages.append(f'{authorization_code}')
+        request.user.messages = json.dumps(messages)
+        request.user.save()

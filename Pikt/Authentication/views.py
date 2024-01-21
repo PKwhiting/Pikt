@@ -39,7 +39,7 @@ class homeView(View):
 class loginView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('/dashboards/parts')
+            return redirect('/dashboards/')
         return render(request, 'login.html')
 
     def post(self, request):
