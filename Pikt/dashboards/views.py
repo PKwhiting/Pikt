@@ -192,8 +192,10 @@ class RedirectView(View):
         load_dotenv()
         authorization_code = request.GET.get('code')
         encoded_credentials = self.get_encoded_credentials()
+        print(encoded_credentials)
 
         response = self.get_ebay_user_token(authorization_code, encoded_credentials)
+        print(response.json())
         response_data = response.json()
         messages = json.loads(request.user.messages)
         messages.append(json.dumps(response_data))
@@ -202,6 +204,7 @@ class RedirectView(View):
 
         if response.status_code == 200:
             self.handle_success_response(request, response)
+            self.add_user_message(request, "Ebay consent granted")
         else:
             self.add_user_message(request, "Ebay consent failed")
 
@@ -213,7 +216,7 @@ class RedirectView(View):
 
     def get_ebay_user_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
-        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.getenv("REDIRECT_URI")}
+        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.getenv("EBAY_RUNAME")}
         return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
     
     def get_ebay_application_token(self, authorization_code, encoded_credentials):
