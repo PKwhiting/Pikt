@@ -1,7 +1,28 @@
 {% extends "root.html" %}
 
 {% block content %}
-<form id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post" enctype="multipart/form-data" aria-label="Form">
+{% if form.errors %}
+<div class="alert-module" style="opacity: 1; display: flex; margin-bottom: 10px; background-color: #FF9494">
+    <div>
+        <h4 style="margin-bottom: 0px;">Error</h4>
+        <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit"
+        style="border: none; background: none; padding: 0; margin: 0; cursor: pointer; outline: none; color: #000; font-size: 20px; margin-left: 10px; margin-top: -5px;"
+        class="alert-module-link w-inline-block"><img loading="lazy"
+            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
+            alt=""></button>
+</div>
+{% endif %}
+
+<form id="wf-form-Form" onsubmit="removeDollarSign()" name="wf-form-Form" data-name="Form" method="post"
+    enctype="multipart/form-data" aria-label="Form">
     {% csrf_token %}
     <div class="w-layout-grid form-grid space-bottom-small">
         <div>
@@ -9,48 +30,63 @@
             <select name="vehicle_year" id="Vehicle-Year" class="text-field w-select" required="">
                 <option value="" selected disabled>Select Year</option>
                 {% for year in years %}
-                    <option value="{{ year }}">{{ year }}</option>
+                <option value="{{ year }}">{{ year }}</option>
                 {% endfor %}
             </select>
         </div>
         <div>
             <h6>Vehicle Make</h6>
-            <select name="vehicle_make" id="vehicle_year-Make" class="text-field w-select" required="">
+            <select name="vehicle_make" id="vehicle_make" class="text-field w-select" required="">
                 <option value="" selected disabled>Select Make</option>
-                {% for make in makes %}
-                    <option value="{{ make }}">{{ make }}</option>
+                {% for make in makes_models.keys %}
+                <option value="{{ make }}">{{ make }}</option>
                 {% endfor %}
             </select>
         </div>
         <div>
             <h6>Vehicle Model</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_model" id="vehicle_make" required="">
+            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
+                <option value="" selected disabled>Select Model</option>
+                {% for make, models in makes_models.items %}
+                <optgroup label="{{ make }}">
+                    {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <h6>Vehicle Trim</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_trim" id="Vehicle-Trim" required="">
+            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_trim" id="Vehicle-Trim"
+                required="">
         </div>
         <div>
             <h6>Vehicle Engine</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_engine" id="Vehicle-Engine" required="">
+            <input type="text" class="text-field w-input" maxlength="256" name="vehicle_engine" id="Vehicle-Engine"
+                required="">
         </div>
         <div>
             <h6>Vehicle Color</h6>
             <select name="vehicle_color" id="Vehicle-Color" class="text-field w-input" required="">
                 <option value="" selected disabled>Select Color</option>
                 {% for color in colors %}
-                    <option value="{{ color }}">{{ color }}</option>
+                <option value="{{ color }}">{{ color }}</option>
                 {% endfor %}
             </select>
         </div>
         <div>
             <h6>Part Type</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="part_type" id="Part-Type" required="">
+            <select name="type" id="Part-Type" class="text-field w-input" required>
+                <option value="" selected disabled>Select Part Type</option>
+                {% for part in part_types %}
+                <option value="{{ part }}">{{ part }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <h6>Part Fitment Location</h6>
-            <select name="part_fitment_location" id="Vehicle-Year" class="text-field w-select" required="" multiple>
-                <option value="" disabled>Select Part Fitment Location</option>
+            <select name="fitment_location" id="fitment-location" class="text-field w-select" required="" multiple>
                 <option value="Left">Left</option>
                 <option value="Right">Right</option>
                 <option value="Top">Top</option>
@@ -62,7 +98,7 @@
         </div>
         <div>
             <h6>Part Grade</h6>
-            <select name="part_grade" id="Vehicle-Year" class="text-field w-select" required="">
+            <select name="grade" id="Vehicle-Year" class="text-field w-select" required="">
                 <option value="" selected disabled>Select Part Grade</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
@@ -71,27 +107,75 @@
         </div>
         <div>
             <h6>Part Interchange Number</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="part_interchange" id="Part-Interchange-Number" required="">
+            <input type="text" class="text-field w-input" maxlength="256" name="hollander_interchange"
+                id="Part-Interchange-Number" required="">
         </div>
         <div>
             <h6>Part Notes</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="part_notes" id="Vehicle-Part-Notes" required="">
+            <input type="text" class="text-field w-input" maxlength="256" name="notes" id="Vehicle-Part-Notes"
+                required="">
         </div>
         <div style="grid-column: span 2;">
             <h6>Vehicle Fitment Information</h6>
-            <input type="text" class="text-field w-input" placeholder="Years - Make - Model - Engine" maxlength="256" name="vehicle_fitment" id="Vehicle-Fitment-Information" required="">
+            <input type="text" class="text-field w-input" placeholder="Years - Make - Model - Engine" maxlength="256"
+                name="vehicle_fitment" id="Vehicle-Fitment-Information" required="">
         </div>
         <div>
             <h6>Part Price</h6>
-            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="price" id="Part-Price" required>
+            <div class="caption">How much you are selling the part for</div>
+            <div style="display: flex; align-items: center;">
+                <h3>$</h3>
+                <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="price"
+                    id="Part-Price" required oninput="formatInput(this)">
+            </div>
+        </div>
+        <div>
+            <h6>Part cost</h6>
+            <div class="caption">How much you paid for the part</div>
+            <div style="display: flex; align-items: center;">
+                <h3>$</h3>
+                <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="cost"
+                    id="Part-Price" required oninput="formatInput(this)">
+            </div>
         </div>
         <div style="grid-column: span 2;">
             <h6>Upload Images</h6>
             <input type="file" id="images" name="images" multiple accept="image/*" class="text-field w-input">
             <label for="images">Drag and drop your images here, or click to select images.</label>
         </div>
-        
+
     </div>
     <input type="submit" value="Add Part" data-wait="Please wait..." class="button button-small w-button">
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            $('#fitment-location').select2({
+                placeholder: 'Select Part Fitment Location',
+                allowClear: true
+            });
+        });
+    })(jQuery);
+    function formatInput(input) {
+        let value = input.value.replace(/\D/g, '');
+        value = (value / 100).toFixed(2);
+        input.value = value;
+    }
+    var makesModels = {{ makes_models| safe }};
+    $(document).ready(function () {
+        $('#vehicle_make').change(function () {
+            var selectedMake = $(this).val();
+            var models = makesModels[selectedMake];
+            $('#vehicle_model').empty();
+            $('#vehicle_model').append('<option value="" selected disabled>Select Model</option>');
+            $.each(models, function (index, model) {
+                $('#vehicle_model').append('<option value="' + model + '">' + model + '</option>');
+            });
+        });
+    });
+</script>
 {% endblock %}

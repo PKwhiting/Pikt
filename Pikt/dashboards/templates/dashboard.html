@@ -1,0 +1,233 @@
+{% extends "root.html" %}
+{% block content %}
+{% load static %}
+<script>
+    var chartData = {{ last_12_months|safe }};
+    var revenuedata = {{ inventory_by_month|safe}}
+</script>
+<div class="w-layout-grid main-grid">
+    <div class="w-layout-grid _1-2-grid">
+        <div class="table-module">
+            <div class="table-header">
+                <h4 class="no-space-bottom">Recently Added Parts</h4>
+            </div>
+            <div class="table-content">
+                <div class="table-list">
+                    <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr;">
+                        <div class="caption-large">Part</div>
+                        <div class="caption-large">Created</div>
+                    </div>
+                    {% if parts %}
+                        {% for part in parts %}
+                        <a href="{% url 'single_part' part.id %}" class="table-row-link w-inline-block">
+                            <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr;">
+                                <div class="table-title">{{ part.vehicle_make }} {{ part.type }}</div>
+                                <div id="w-node-_5eeacceb-74e8-a525-4028-d47dafe21121-1de9a152">{{ part.created_at|date:"F j, Y" }}</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="table-module">
+            <div class="row">
+                <div class="chart__container">
+                    <div class="card-header">
+                        <h4>Inventory Value ($)</h4>
+                        <div class="header-detail">Real Time</div>
+                    </div>
+                    <canvas id="chart" width="600" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-layout-grid _4-grid">
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Revenue</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">${{ total_revenue }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class="module-link w-inline-block">
+            <div class="content-chart">
+                <div class="chart-square"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
+                        loading="lazy" width="24" alt="" class="icon">
+                    <div class="light-fill bg-primary-green"></div>
+                </div>
+                <div class="div-block">
+                    <div class="caption">Sold</div>
+                    <div class="numbers-wrapper">
+                        <h3 class="number">{{ sold_parts }}</h3>
+                        <!-- <div class="negative-value">-10%</div> -->
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a class="module-link w-inline-block">
+            <div class="content-chart">
+                <div class="chart-square"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                        loading="lazy" width="24" alt="" class="icon">
+                    <div class="light-fill bg-primary-orange"></div>
+                </div>
+                <div class="div-block">
+                    <div class="caption">Shipped</div>
+                    <div class="numbers-wrapper">
+                        <h3 class="number">{{ shipped_parts }}</h3>
+                        <!-- <div class="positive-value">+19%</div> -->
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a class="module-link w-inline-block">
+            <div class="content-chart">
+                <div class="chart-square"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                        loading="lazy" width="24" alt="" class="icon">
+                    <div class="light-fill bg-primary-yellow"></div>
+                </div>
+                <div class="div-block">
+                    <div class="caption">Average Price</div>
+                    <div class="numbers-wrapper">
+                        <h3 class="number">${{ average_price }}</h3>
+                        <!-- <div class="positive-value">+10%</div> -->
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <!-- <div class="table-module">
+        <div class="table-header">
+            <h4 class="no-space-bottom">Latest orders</h4>
+        </div>
+        <div class="table-content">
+            <div class="table-list">
+                <div class="w-layout-grid table-headers _5-columns">
+                    <div class="caption-large">Order</div>
+                    <div class="caption-large">Status</div>
+                    <div class="caption-large">customer</div>
+                    <div class="caption-large">Total</div>
+                    <div class="caption-large">Date</div>
+                </div><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746807-c8e5d82d" class="table-title">#10423</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-green"></div>
+                            <div>Shipped</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974680d-c8e5d82d">Johan D.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974680f-c8e5d82d">$140.99</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746811-c8e5d82d">05/05/21</div>
+                    </div>
+                </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746815-c8e5d82d" class="table-title">#10422</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-green"></div>
+                            <div>Shipped</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974681b-c8e5d82d">James A.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974681d-c8e5d82d">$220.99</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974681f-c8e5d82d">05/05/21</div>
+                    </div>
+                </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746823-c8e5d82d" class="table-title">#10421</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-green"></div>
+                            <div>Shipped</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746829-c8e5d82d">Rose G.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974682b-c8e5d82d">$109.00</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974682d-c8e5d82d">05/05/21</div>
+                    </div>
+                </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746831-c8e5d82d" class="table-title">#10420</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-green"></div>
+                            <div>Shipped</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746837-c8e5d82d">Michael D.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746839-c8e5d82d">$2,120.00</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974683b-c8e5d82d">05/05/21</div>
+                    </div>
+                </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974683f-c8e5d82d" class="table-title">#10419</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-blue"></div>
+                            <div>Processing</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746845-c8e5d82d">Shane M.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746847-c8e5d82d">$29.00</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746849-c8e5d82d">05/05/21</div>
+                    </div>
+                </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row _5-columns">
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f97974684d-c8e5d82d" class="table-title">#10418</div>
+                        <div class="status">
+                            <div class="indication-color bg-primary-rose"></div>
+                            <div>Cancelled</div>
+                        </div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746853-c8e5d82d">Gerald S.</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746855-c8e5d82d">$210.00</div>
+                        <div id="w-node-_7391f721-85f8-3799-8e13-34f979746857-c8e5d82d">05/05/21</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="table-bottom-caption">
+            <div>All orders are updated every 30 seconds</div>
+        </div>
+    </div> -->
+</div>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        /* background-color: #13222d; */
+        display: table;
+        text-align: center;
+    }
+
+    .chart__container {
+        background-color: #fff;
+        border-radius: 6px;
+        padding: 30px;
+        width: 700px;
+        display: inline-block;
+        box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);
+    }
+
+    .row {
+        display: table-cell;
+        vertical-align: middle;
+    }
+</style>
+
+
+
+{% endblock %}

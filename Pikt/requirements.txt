@@ -10,3 +10,4 @@ whitenoise==6.5.0
 cloudinary
 django-cloudinary-storage
 sentry-sdk[django]
+python-dateutil

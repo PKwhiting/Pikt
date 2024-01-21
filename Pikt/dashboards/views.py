@@ -9,13 +9,20 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+from decimal import Decimal
+from django.db.models import Avg
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from .const.const import PARTS_CONST, MAKES_MODELS
+from django.db import IntegrityError
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
     'years' : range(2024, 1969, -1),
     'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
-    'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo']
+    'makes': ['AMC', 'Acura', 'Alfa', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler','Daewoo', 'Daihatsu', 'Dodge', 'Eagle', 'Fiat', 'Ford', 'GMC', 'Genesis', 'Geo', 'Honda', 'Hummer', 'Hyundai', 'IH', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Lincoln', 'Maserati', 'Mazda', 'McLaren', 'Mercedes', 'Mercury', 'MG', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Pagani', 'Peugeot', 'Plymouth', 'Pontiac', 'Porsche', 'Ram', 'Renault', 'Rivian', 'Rover', 'Saab', 'Saturn', 'Scion', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Triumph', 'Volkswagen', 'Volvo']
 }
 
 class delete_message(View):
@@ -33,8 +40,44 @@ class delete_message(View):
 
 class rootView(LoginRequiredMixin,View):
     def get(self, request):
-        context['messages'] = json.loads(request.user.messages)
-        return render(request, 'root.html', context)
+        parts = part.objects.filter(user=request.user).order_by('-created_at')[:5]
+        # get the price of all parts from the user that have a status of 'sold'
+        sold_parts = part.objects.filter(user=request.user, status='Sold')
+        total_revenue = round(sold_parts.aggregate(Sum('price'))['price__sum'], 2) if sold_parts.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
+        shipped_parts = part.objects.filter(user=request.user, status='Shipped')
+        unsold_parts = part.objects.filter(user=request.user, status__in=['Pending', 'Listed'])
+        average_price = unsold_parts.aggregate(Avg('price'))['price__avg'] if unsold_parts.aggregate(Avg('price'))['price__avg'] is not None else '0.00'
+        last_12_months = []
+        for i in range(7, -1, -1):
+            last_12_months.append((datetime.now() - relativedelta(months=i)).strftime('%B'))
+
+        inventory_by_month = []
+        for i in range(7, -1, -1):
+            date = datetime.now() - relativedelta(months=i)
+            month_name = date.strftime('%B')
+            month_number = date.month
+            inventory_by_month.append({
+                'month': month_name,
+                'total_sales': unsold_parts.filter(created_at__month=month_number).aggregate(total_sales=Coalesce(Sum('price'), Decimal('0.00')))['total_sales']
+            })
+        inventory_by_month = ["{:.2f}".format(float(item['total_sales'])) for item in inventory_by_month]
+
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'messages': json.loads(request.user.messages),
+            'parts': parts,
+            'sold_parts': sold_parts.count(),
+            'shipped_parts': shipped_parts.count(),
+            'total_revenue': total_revenue,
+            'average_price': round(average_price,2) if average_price != '0.00' else '0.00',
+            'last_12_months': json.dumps(last_12_months),
+            'inventory_by_month': inventory_by_month,
+        }
+
+
+        return render(request, 'dashboard.html', context)
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
@@ -58,7 +101,10 @@ class defaultDashboardView(LoginRequiredMixin,View):
 @login_required  
 def add_part(request):
     if request.method == 'POST':
-        form = PartForm(request.POST, request.FILES)
+        post = request.POST.copy()  # Make a mutable copy
+        fitment_location = request.POST.getlist('fitment_location')
+        post['fitment_location'] = json.dumps(fitment_location)
+        form = PartForm(post, request.FILES)
         if form.is_valid():
             part = form.save(commit=False)
             part.user = request.user
@@ -72,21 +118,56 @@ def add_part(request):
             request.user.messages = json.dumps(messages)
             request.user.save()
             return redirect('/dashboards/parts')  # Redirect to a page showing all parts
+        else:
+            context['form'] = form
+            messages = json.loads(request.user.messages)
+            messages.append('Part was not added')
+            request.user.messages = json.dumps(messages)
+            request.user.save()
     else:
         form = PartForm()
+    context = {
+        'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+        'years' : range(2024, 1969, -1),
+        'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+        'makes_models': MAKES_MODELS,
+        'form': form,
+        'messages': json.loads(request.user.messages),
+        'part_types': PARTS_CONST,
+    
+    }
     context['form'] = form
+    context['messages'] = json.loads(request.user.messages)
     return render(request, 'add-part.html', context)
 
+@login_required
+def delete_part(request, part_id):
+    part_to_delete = get_object_or_404(part, id=part_id)
+    try:
+        part_to_delete.delete()
+    except IntegrityError:
+        messages = json.loads(request.user.messages)
+        messages.append('This part cannot be deleted because it is being used elsewhere')
+        request.user.messages = json.dumps(messages)
+        request.user.save()
+        return redirect('single_part', part_id=part_id)
+    messages = json.loads(request.user.messages)
+    messages.append('Part deleted successfully')
+    request.user.messages = json.dumps(messages)
+    request.user.save()
+    return redirect('/dashboards/')
+
 class single_part(LoginRequiredMixin, View):
-    def get(self, request, pk=None, *args, **kwargs):
-        print(pk)
-        selected_part = get_object_or_404(part, id=pk)
+    def get(self, request, part_id=None, *args, **kwargs):
+        selected_part = get_object_or_404(part, id=part_id)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
-            'part': selected_part
+            'part': selected_part,
+            'potential_profit': selected_part.price - selected_part.cost,
+            'roi': round((selected_part.price - selected_part.cost) / selected_part.cost * 100, 2)
         }
         return render(request, 'single-part.html', context)

@@ -48,7 +48,7 @@ class loginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/dashboards/parts')  # replace 'home' with the name of the view you want to redirect to after login
+            return redirect('/dashboards/')  # replace 'home' with the name of the view you want to redirect to after login
         else:
             # Invalid login
             return render(request, 'login.html', {'error': 'Invalid username or password'})
@@ -64,6 +64,9 @@ class registerView(View):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         icon = '../static/images/default-avatar.webp'
+        if User.objects.filter(username=username).exists():
+            # If the user already exists, return an error message
+            return render(request, 'register.html', {'error': 'A user with this username already exists'})
         user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon)
         login(request, user)
         messages = json.loads(request.user.messages)
@@ -75,7 +78,7 @@ class registerView(View):
         messages.append('If you have any questions, please contact us at pwhiting@simpli-cars.com')
         request.user.messages = json.dumps(messages)
         request.user.save()
-        return redirect('/dashboards/parts')
+        return redirect('/dashboards/')
 
 class passwordResetView(View):
     def get(self, request):

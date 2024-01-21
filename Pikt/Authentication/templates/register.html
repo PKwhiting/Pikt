@@ -38,6 +38,11 @@
             <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
                 <div>Oops! Something went wrong while creating your account.</div>
             </div>
+            {% if error %}
+                <div class="form-error" tabindex="-1" role="region" aria-label="Form failure">
+                    <div>{{ error }}</div>
+                </div>
+            {% endif %}
         </div>
     </div><a href="/" class="back-to-home w-inline-block"><img
             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058beecd1bd3048e62f48d8_arrow-left.svg"

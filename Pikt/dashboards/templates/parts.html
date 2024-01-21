@@ -148,12 +148,12 @@
                         {% for part in parts %}
                             <a href="{% url 'single_part' part.id %}">
                                 <div class="w-layout-grid table-row">
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} {{ part.part_type }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} {{ part.type }}</div>
                                     <div class="status">
                                         <div
-                                            class="indication-color {% if part.part_status == 'Pending' %}bg-primary-rose{% elif part.part_status == 'Sold' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                                            class="indication-color {% if part.status == 'Pending' %}bg-primary-rose{% elif part.status == 'Sold' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
                                         </div> 
-                                        <div>{{ part.part_status }}</div>
+                                        <div>{{ part.status }}</div>
                                     </div>
                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title">
                                         {% if part.ebay_link %}
