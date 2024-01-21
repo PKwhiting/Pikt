@@ -8,6 +8,7 @@ import base64
 import json
 import os
 from django.conf import settings
+from django.utils import timezone
 from dotenv import load_dotenv
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -185,38 +186,52 @@ class ebayConsent(View):
         return HttpResponseRedirect(consent_url)
 
 class RedirectView(View):
+    EBAY_TOKEN_URL = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
+    REDIRECT_URI = 'PK_Whiting-PKWhitin-Pikt-S-glbjhb'
+
     def get(self, request):
         load_dotenv()
         authorization_code = request.GET.get('code')
-        credentials = f'{os.getenv("CLIENT_ID")}:{os.getenv("CLIENT_SECRET")}'
-        encoded_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
-        
-        #user access token
-        url = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
-        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
-        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': 'PK_Whiting-PKWhitin-Pikt-S-glbjhb'}
+        encoded_credentials = self.get_encoded_credentials()
 
-        response = requests.post(url, headers=headers, data=data)
+        response = self.get_ebay_user_token(authorization_code, encoded_credentials)
+        response_data = response.json()
+        messages = json.loads(request.user.messages)
+        messages.append(json.dumps(response_data))
+        request.user.messages = json.dumps(messages)
+        request.user.save()
 
         if response.status_code == 200:
-            response_data = response.json()
-            request.user.ebay_user_token = response_data['access_token']
-            request.user.ebay_user_refresh_token = response_data['refresh_token']
-            
-            user_token_expires_in = response_data['expires_in']
-            user_refresh_token_expires_in = response_data['refresh_token_expires_in']
-
-            now = datetime.now()
-            request.user.ebay_user_token_expiration = now + timedelta(seconds=user_token_expires_in)
-            request.user.ebay_user_refresh_token_expiration = now + timedelta(seconds=user_refresh_token_expires_in)
-            
-            messages = json.loads(request.user.messages)
-            messages.append("Ebay integration complete")
-            request.user.messages = json.dumps(messages)
-            request.user.save()
+            self.handle_success_response(request, response)
         else:
-            messages = json.loads(request.user.messages)
-            messages.append("Ebay consent failed")
-            request.user.messages = json.dumps(messages)
-            request.user.save()
+            self.add_user_message(request, "Ebay consent failed")
+
         return render(request, 'dashboard.html', context)
+
+    def get_encoded_credentials(self):
+        credentials = f'{os.getenv("CLIENT_ID")}:{os.getenv("CLIENT_SECRET")}'
+        return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+
+    def get_ebay_user_token(self, authorization_code, encoded_credentials):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
+        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': self.REDIRECT_URI}
+        return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
+
+    def handle_success_response(self, request, response):
+        response_data = response.json()
+        request.user.ebay_user_token = response_data['access_token']
+        request.user.ebay_user_refresh_token = response_data['refresh_token']
+        self.set_token_expiration(request, response_data)
+        self.add_user_message(request, "Ebay integration complete")
+
+    def set_token_expiration(self, request, response_data):
+        now = timezone.now()
+        request.user.ebay_user_token_expiration = now + timedelta(seconds=response_data['expires_in'])
+        request.user.ebay_user_refresh_token_expiration = now + timedelta(seconds=response_data['refresh_token_expires_in'])
+        request.user.save()
+
+    def add_user_message(self, request, message):
+        messages = json.loads(request.user.messages)
+        messages.append(message)
+        request.user.messages = json.dumps(messages)
+        request.user.save()
