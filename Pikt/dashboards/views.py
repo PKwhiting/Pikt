@@ -4,6 +4,7 @@ from .models import part
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
 from django.core.paginator import Paginator
+import base64
 import json
 import os
 from django.conf import settings
@@ -11,6 +12,7 @@ from dotenv import load_dotenv
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from urllib.parse import unquote
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 from django.db.models import Avg
@@ -183,9 +185,26 @@ class ebayConsent(View):
 
 class RedirectView(View):
     def get(self, request):
+        load_dotenv()
         authorization_code = request.GET.get('code')
-        print(authorization_code)
+        # authorization_code = "v^1.1#i^1#f^0#r^1#p^3#I^3#t^Ul41Xzg6Qzc5Qzc0ODdCMkEwMkFEODk5RDA4RTM1OTA4QkQ3RDdfMl8xI0VeMTI4NA=="
+        # print(f'Basic {authorization_code}')
+        credentials = f'{os.getenv("CLIENT_ID")}:{os.getenv("CLIENT_SECRET")}'
+        encoded_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+
+        url = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
+        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
+        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': 'PK_Whiting-PKWhitin-Pikt-S-glbjhb'}
+
+        response = requests.post(url, headers=headers, data=data)
+
+        response_data = response.json()
+        access_token = response_data['access_token']
+        expires_in = response_data['expires_in']
+        token_type = response_data['token_type']
         messages = json.loads(request.user.messages)
-        messages.append(f'{authorization_code}')
+        messages.append(f'{access_token} {expires_in} {token_type}')
+        messages.append(response)
         request.user.messages = json.dumps(messages)
         request.user.save()
+        return render(request, 'dashboard.html', context)
