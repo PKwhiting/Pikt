@@ -1091,6 +1091,14 @@ textarea.w-select {
 }
 
 @media screen and (max-width:479px) {
+  div .mobile-table {
+    display: flex;
+    /* grid-template-columns: 50% 50%; */
+    grid-column-gap: 25%
+  }
+  .mobile {
+    display: none
+  }
   .w-container {
     max-width: none
   }
