@@ -187,7 +187,6 @@ class ebayConsent(View):
 
 class RedirectView(View):
     EBAY_TOKEN_URL = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
-    REDIRECT_URI = 'PK_Whiting-PKWhitin-Pikt-S-glbjhb'
 
     def get(self, request):
         load_dotenv()
@@ -214,7 +213,7 @@ class RedirectView(View):
 
     def get_ebay_user_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
-        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': self.REDIRECT_URI}
+        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.getenv("REDIRECT_URI")}
         return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
     
     def get_ebay_application_token(self, authorization_code, encoded_credentials):
