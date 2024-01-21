@@ -209,13 +209,19 @@ class RedirectView(View):
         return render(request, 'dashboard.html', context)
 
     def get_encoded_credentials(self):
-        credentials = f'{os.getenv("CLIENT_ID")}:{os.getenv("CLIENT_SECRET")}'
+        credentials = f'{os.getenv("EBAY_CLIENT_ID")}:{os.getenv("EBAY_CLIENT_SECRET")}'
         return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
 
     def get_ebay_user_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': self.REDIRECT_URI}
         return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
+    
+    def get_ebay_application_token(self, authorization_code, encoded_credentials):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
+        data = {'grant_type': 'client_credentials'}
+        return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
+
 
     def handle_success_response(self, request, response):
         response_data = response.json()
