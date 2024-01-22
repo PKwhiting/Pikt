@@ -85,8 +85,8 @@
                         </div>
                         <div class="form-block w-form">
                             {% if not user.ebay_user_token %}
-                                <a href="{% url 'redirect' %}">
-                                    <input value="Integrate Ebay" data-wait="Please wait..."
+                                <a href="{% url 'ebay_consent' %}">
+                                    <input type="submit" value="Integrate Ebay" data-wait="Please wait..."
                                         class="button button-small w-button">
                                 </a>
                             {% else %}
@@ -96,7 +96,7 @@
                             {% endif %}
                             <!-- <input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" checked=""
                                     style="opacity:0;position:absolute;z-index:-1"> -->
-                                    
+
                             <!-- <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
                                 aria-label="Email Form"><label class="w-checkbox switch-field">
                                     <div
