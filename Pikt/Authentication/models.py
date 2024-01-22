@@ -10,9 +10,9 @@ class User(AbstractUser):
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=12, blank=True)  # validators should be a list
     messages = models.TextField(blank=True, default='[]')
-    ebay_user_token = models.CharField(max_length=200, blank=True)
-    ebay_user_refresh_token = models.CharField(max_length=200, blank=True)
-    ebay_application_token = models.CharField(max_length=200, blank=True)
+    ebay_user_token = models.CharField(max_length=3000, blank=True)
+    ebay_user_refresh_token = models.CharField(max_length=3000, blank=True)
+    ebay_application_token = models.CharField(max_length=3000, blank=True)
     ebay_user_token_expiration = models.DateTimeField(null=True, blank=True)
     ebay_user_refresh_token_expiration = models.DateTimeField(null=True, blank=True)
     ebay_application_token_expiration = models.DateTimeField(null=True, blank=True)

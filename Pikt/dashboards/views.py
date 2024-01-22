@@ -192,19 +192,14 @@ class RedirectView(View):
         encoded_credentials = self.get_encoded_credentials()
 
         response = self.get_ebay_user_token(authorization_code, encoded_credentials)
-        response_data = response.json()
-        messages = json.loads(request.user.messages)
-        messages.append(json.dumps(response_data))
-        request.user.messages = json.dumps(messages)
-        request.user.save()
 
         if response.status_code == 200:
             self.handle_success_response(request, response)
-            self.add_user_message(request, "Ebay consent granted")
         else:
             self.add_user_message(request, "Ebay consent failed")
 
-        return render(request, 'dashboard.html', context)
+        context['messages'] = json.loads(request.user.messages)
+        return redirect('dashboard')
 
     def get_encoded_credentials(self):
         credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'

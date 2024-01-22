@@ -21,31 +21,35 @@
             <div data-w-tab="General" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
                 <div class="account">
-                    <div class="user-details"><img loading="lazy"
-                            src="{{ user.icon.url }}"
-                            alt="" class="user-avatar">
+                    <div class="user-details"><img loading="lazy" src="{{ user.icon.url }}" alt="" class="user-avatar">
                         <div>
                             <h5 class="no-space-bottom">{{ user.first_name }} {{ user.last_name }}</h5>
                             <!-- <div class="small-text text-grey-3">Profile picture size: 400px x 400px</div> -->
                         </div>
                     </div>
-                    <form action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
+                    <form action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data"
+                        style="display: flex; flex-direction: column; align-items: center;">
                         {% csrf_token %}
-                        <input type="file" name="icon" accept="image/*" style="margin-bottom: 5px; width: 103px; height: 30px; border: 1px solid #ccc; border-radius: 4px;">
-                        <button type="submit" class="button button-small button-outline w-button">Upload new avatar</button>
+                        <input type="file" name="icon" accept="image/*"
+                            style="margin-bottom: 5px; width: 103px; height: 30px; border: 1px solid #ccc; border-radius: 4px;">
+                        <button type="submit" class="button button-small button-outline w-button">Upload new
+                            avatar</button>
                     </form>
                 </div>
                 <div class="w-form">
-                    <form action="/account/" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post" aria-label="Form">
+                    <form action="/account/" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post"
+                        aria-label="Form">
                         {% csrf_token %}
                         <div class="w-layout-grid form-grid space-bottom-small">
                             <div>
-                                <h6>First Name</h6><input placeholder="{{ user.first_name }}" type="text" class="text-field w-input" maxlength="256"
-                                    name="First-name" data-name="First name" placeholder="" id="First-name">
+                                <h6>First Name</h6><input placeholder="{{ user.first_name }}" type="text"
+                                    class="text-field w-input" maxlength="256" name="First-name" data-name="First name"
+                                    placeholder="" id="First-name">
                             </div>
                             <div>
-                                <h6>Lastname</h6><input placeholder="{{ user.last_name }}" type="text" class="text-field w-input" maxlength="256"
-                                    name="Last-name" data-name="Last name" placeholder="" id="Last-name">
+                                <h6>Lastname</h6><input placeholder="{{ user.last_name }}" type="text"
+                                    class="text-field w-input" maxlength="256" name="Last-name" data-name="Last name"
+                                    placeholder="" id="Last-name">
                             </div>
                             <div>
                                 <h6>Email Address</h6>
@@ -69,45 +73,59 @@
                         <div>Oops! Something went wrong while submitting the form.</div>
                     </div>
                 </div>
-                <!-- <div class="account-divider"></div>
+                <div class="account-divider"></div>
                 <div class="table-module">
                     <div class="account-table-header">
-                        <h4 class="no-space-bottom">Notifications</h4>
+                        <h4 class="no-space-bottom">Integrations</h4>
                     </div>
                     <div class="full-table-row">
                         <div>
-                            <h6 class="no-space-bottom">Announcements</h6>
-                            <div class="small-text text-grey-3">Occasional announcements of new features</div>
+                            <h6 class="no-space-bottom">Ebay</h6>
+                            <div class="small-text text-grey-3">Allows auto listing to your ebay account</div>
                         </div>
                         <div class="form-block w-form">
-                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
+                            {% if not user.ebay_user_token %}
+                                <a href="{% url 'redirect' %}">
+                                    <input value="Integrate Ebay" data-wait="Please wait..."
+                                        class="button button-small w-button">
+                                </a>
+                            {% else %}
+                                <div
+                                    class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
+                                </div>
+                            {% endif %}
+                            <!-- <input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" checked=""
+                                    style="opacity:0;position:absolute;z-index:-1"> -->
+                                    
+                            <!-- <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
                                 aria-label="Email Form"><label class="w-checkbox switch-field">
                                     <div
                                         class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
-                                    </div><input type="checkbox" id="checkbox-2" name="checkbox-2"
+                                    </div>
+                                    <input type="checkbox" id="checkbox-2" name="checkbox-2"
                                         data-name="Checkbox 2" checked=""
-                                        style="opacity:0;position:absolute;z-index:-1"><span
-                                        class="checkbox-label hidden w-form-label" for="checkbox-2"></span>
-                                </label></form>
-                            <div class="form-success w-form-done" tabindex="-1" role="region"
+                                        style="opacity:0;position:absolute;z-index:-1">
+                                        <span class="checkbox-label hidden w-form-label" for="checkbox-2"></span>
+                                </label></form> -->
+                            <!-- <div class="form-success w-form-done" tabindex="-1" role="region"
                                 aria-label="Email Form success">
                                 <div>Thank you! Your submission has been received!</div>
                             </div>
                             <div class="form-error w-form-fail" tabindex="-1" role="region"
                                 aria-label="Email Form failure">
                                 <div>Oops! Something went wrong while submitting the form.</div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
-                    <div class="full-table-row-divider"></div>
+                    <!-- <div class="full-table-row-divider"></div>
                     <div class="full-table-row">
                         <div>
                             <h6 class="no-space-bottom">Feedback requests</h6>
                             <div class="small-text text-grey-3">Occasional requests for feedback</div>
                         </div>
                         <div class="form-block w-form">
-                            <form action="/account" id="email-form" name="email-form" data-name="Email Form" method="get"
-                                aria-label="Email Form"><label class="w-checkbox switch-field">
+                            <form action="/account" id="email-form" name="email-form" data-name="Email Form"
+                                method="get" aria-label="Email Form"><label class="w-checkbox switch-field">
                                     <div
                                         class="w-checkbox-input w-checkbox-input--inputType-custom switch-input w--redirected-checked">
                                     </div><input type="checkbox" id="checkbox-2" name="checkbox-2"
@@ -132,9 +150,9 @@
                             <div class="small-text text-grey-3">Transactional emails and account notifications</div>
                         </div>
                         <div class="small-text text-grey-3">Legally obligated</div>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="account-divider"></div>
+                <!-- <div class="account-divider"></div>
                 <div class="w-layout-grid _2-grid">
                     <div class="content-width-medium">
                         <h6>Public profile</h6>
