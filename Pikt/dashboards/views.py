@@ -186,16 +186,12 @@ class ebayConsent(View):
         return HttpResponseRedirect(consent_url)
 
 class RedirectView(View):
-    EBAY_TOKEN_URL = 'https://api.sandbox.ebay.com/identity/v1/oauth2/token'
-
     def get(self, request):
         load_dotenv()
         authorization_code = request.GET.get('code')
-        print(authorization_code)
         encoded_credentials = self.get_encoded_credentials()
 
         response = self.get_ebay_user_token(authorization_code, encoded_credentials)
-        print(response.json())
         response_data = response.json()
         messages = json.loads(request.user.messages)
         messages.append(json.dumps(response_data))
@@ -217,15 +213,12 @@ class RedirectView(View):
     def get_ebay_user_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.environ.get("EBAY_RUNAME")}
-        print(headers)
-        print("--------------------")
-        print(data)
-        return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
+        return requests.post(os.environ.get("EBAY_TOKEN_URL"), headers=headers, data=data)
     
     def get_ebay_application_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'client_credentials'}
-        return requests.post(self.EBAY_TOKEN_URL, headers=headers, data=data)
+        return requests.post(os.environ.get("EBAY_TOKEN_URL"), headers=headers, data=data)
 
 
     def handle_success_response(self, request, response):
