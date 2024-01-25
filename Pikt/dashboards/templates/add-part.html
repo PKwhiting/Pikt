@@ -77,7 +77,7 @@
         </div>
         <div>
             <h6>Part Type</h6>
-            <select name="type" id="Part-Type" class="text-field w-input" required>
+            <select name="type" id="Part-Type" class="text-field w-select" required>
                 <option value="" selected disabled>Select Part Type</option>
                 {% for part in part_types %}
                 <option value="{{ part }}">{{ part }}</option>
@@ -98,7 +98,7 @@
         </div>
         <div>
             <h6>Part Grade</h6>
-            <select name="grade" id="Vehicle-Year" class="text-field w-select" required="">
+            <select name="grade" id="Vehicle-Years" class="text-field w-select" required="">
                 <option value="" selected disabled>Select Part Grade</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
@@ -112,21 +112,23 @@
         </div>
         <div>
             <h6>Part Weight</h6>
+            <div class="caption">Required</div>
             <div style="display: flex; align-items: center;">
-                <input name="lbs" class="text-field w-input" type="number" placeholder="" style="margin-right: 2px;" />
+                <input name="lbs" class="text-field w-input" type="number" placeholder="" required style="margin-right: 2px;" />
                 <label style="font-weight: normal; margin-right: 5px;">lbs</label>
-                <input name="ozs" class="text-field w-input" type="number" placeholder="" style="margin-right: 2px;" />
+                <input name="ozs" class="text-field w-input" type="number" placeholder="" required style="margin-right: 2px;" />
                 <label style="font-weight: normal;">oz</label>
             </div>
         </div>
         <div>
             <h6>Part Dimensions</h6>
+            <div class="caption">Required</div>
             <div style="display: flex; align-items: center;">
-                <input type="number" name="length" placeholder="in." class="text-field w-input" style="margin-right: 2px"/>
+                <input type="number" name="length" placeholder="in." class="text-field w-input" required style="margin-right: 2px"/>
                 <label style="font-weight: normal;">x</label>
-                <input type="number" name="width" placeholder="in." class="text-field w-input" style="margin-right: 2px"/>
+                <input type="number" name="width" placeholder="in." class="text-field w-input" required style="margin-right: 2px"/>
                 <label style="font-weight: normal;">x</label>
-                <input type="number" name="height" placeholder="in." class="text-field w-input"/>
+                <input type="number" name="height" placeholder="in." required class="text-field w-input"/>
             </div>
         </div>
         <div>
@@ -188,16 +190,16 @@
         <div style="grid-column: span 2;">
             <h6>Upload Images</h6>
             <div class="caption">Primary Image</div>
-            <input type="file" id="images" name="part_image_1" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_2" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_3" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_4" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_5" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_6" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_7" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_8" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_9" multiple accept="image/*" class="text-field w-input">
-            <input type="file" id="images" name="part_image_10" multiple accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_1" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_2" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_3" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_4" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_5" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_6" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_7" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_8" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_9" accept="image/*" class="text-field w-input">
+            <input type="file" id="images" name="part_image_10" accept="image/*" class="text-field w-input">
             <label for="images">Drag and drop your images here, or click to select images.</label>
         </div>
 
