@@ -36,8 +36,12 @@ class part(models.Model):
     type = models.CharField(max_length=50)
     fitment_location = models.CharField(max_length=255)
     grade = models.CharField(max_length=1, choices=PART_GRADES)
-    hollander_interchange = models.CharField(max_length=50)
+    hollander_interchange = models.CharField(max_length=5000)
     notes = models.CharField(max_length=255)
+    weight = models.IntegerField(null=True, blank=True) # in ounces
+    height = models.IntegerField(null=True, blank=True) # in inches
+    width = models.IntegerField(null=True, blank=True) # in inches
+    length = models.IntegerField(null=True, blank=True) # in inches
     status = models.CharField(max_length=50, choices=PART_STATUS, default='Pending')
     vehicle_fitment = models.CharField(max_length=500)
     cost = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])

@@ -115,6 +115,8 @@ def add_part(request):
         form = PartForm(post, request.FILES)
         if form.is_valid():
             part = form.save(commit=False)
+            part.vehicle_fitment = form.cleaned_data['vehicle_fitment']
+            part.weight = form.cleaned_data['weight']
             part.user = request.user
             images = request.FILES.getlist('images')
             for i in range(1, min(11, len(images) + 1)):
@@ -127,13 +129,13 @@ def add_part(request):
             request.user.save()
             return redirect('/dashboards/parts')  # Redirect to a page showing all parts
         else:
-            context['form'] = form
             messages = json.loads(request.user.messages)
             messages.append('Part was not added')
             request.user.messages = json.dumps(messages)
             request.user.save()
     else:
         form = PartForm()
+
     context = {
         'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
         'years' : range(2024, 1969, -1),
