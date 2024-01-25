@@ -19,6 +19,7 @@ from decimal import Decimal
 from django.db.models import Avg
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from decimal import Decimal
 from .const.const import PARTS_CONST, MAKES_MODELS
 from django.db import IntegrityError
 import requests
@@ -48,7 +49,7 @@ class delete_message(View):
 
 class rootView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = part.objects.filter(user=request.user).order_by('-created_at')[:5]
+        parts = part.objects.filter(user=request.user).order_by('-created_at')[:3]
         # get the price of all parts from the user that have a status of 'sold'
         sold_parts = part.objects.filter(user=request.user, status='Sold')
         total_revenue = round(sold_parts.aggregate(Sum('price'))['price__sum'], 2) if sold_parts.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
@@ -118,10 +119,7 @@ def add_part(request):
             part.vehicle_fitment = form.cleaned_data['vehicle_fitment']
             part.weight = form.cleaned_data['weight']
             part.user = request.user
-            images = request.FILES.getlist('images')
-            for i in range(1, min(11, len(images) + 1)):
-                image_field = f'part_image_{i}'
-                setattr(part, image_field, images[i-1])
+            part.save()
             form.save()
             messages = json.loads(request.user.messages)
             messages.append('Part added successfully')
@@ -177,8 +175,8 @@ class single_part(LoginRequiredMixin, View):
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
             'part': selected_part,
-            'potential_profit': selected_part.price - selected_part.cost,
-            'roi': round((selected_part.price - selected_part.cost) / selected_part.cost * 100, 2)
+            'potential_profit': (selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01')),
+            'roi': round(((selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01'))) / (selected_part.cost or Decimal('0.01')) * 100, 2)   
         }
         return render(request, 'single-part.html', context)
 
