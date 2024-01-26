@@ -35,8 +35,8 @@ class PartForm(forms.ModelForm):
     def get_weight_in_ounces(self):
         ounces = self.data.get('ozs')
         pounds = self.data.get('lbs')
-        ounces = int(ounces)
-        pounds = int(pounds)
+        ounces = int(ounces) if ounces else 0
+        pounds = int(pounds) if pounds else 0
         ounces += pounds * 16
         return ounces
 
