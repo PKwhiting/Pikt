@@ -59,7 +59,7 @@ class part(models.Model):
     part_image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     ebay_link = models.CharField(max_length=255, null=True, blank=True)
-    sku = models.UUIDField(default=uuid.uuid4, editable=False, null=True, blank=True)
+    sku = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, blank=True)
     def __str__(self):
         return f'{self.vehicle_year} {self.vehicle_make} {self.vehicle_model} {self.vehicle_trim} {self.vehicle_engine} {self.type}'
         
