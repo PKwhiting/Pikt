@@ -214,6 +214,8 @@
                         {% csrf_token %}
                         <input type="submit" value="Delete Part" class="button button-small bg-primary-rose w-button">
                     </form>
+                    <a href="{% url 'create_ebay_listing' part.id %}"><input type="submit" value="Ebay Part" class="button button-small bg-primary-rose w-button">
+                    </a>
                 </div>
             </div>
             <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"

@@ -8,11 +8,15 @@ from django.utils import timezone
 
 
 def handle_user_token(user):
-    if datetime.now() >= user.token_expiration:
-        if user.ebay_user_refresh_token:
+    #if user ebay token is expired 
+    if datetime.now() >= user.ebay_user_token_expiration:
+        # if user refresh token is not expired
+        if datetime.now() >= user.ebay_user_refresh_token_expiration:
             update_user_token(user)
+        # else if user refresh token is expired
         else:
-            add_user_message(user, "Ebay token expired and no refresh token available")
+            user.ebay_user_token == ""
+            add_user_message(user, "Please go to account settings to refresh your ebay token")
 
 # def handle_application_token(user):
 
