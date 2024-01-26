@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'dashboards',
     'cloudinary_storage',
     'cloudinary',
+    'django_extensions',
 ]
 os.getenv('DJANGO_SECRET_KEY')
 CLOUDINARY_STORAGE = {
