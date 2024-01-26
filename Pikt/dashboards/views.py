@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import part
+from .models import part, Order
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
 from django.core.paginator import Paginator
@@ -179,6 +179,37 @@ class single_part(LoginRequiredMixin, View):
             'roi': round(((selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01'))) / (selected_part.cost or Decimal('0.01')) * 100, 2)   
         }
         return render(request, 'single-part.html', context)
+    
+class orders(LoginRequiredMixin, View):
+    def get(self, request):
+        orders = Order.objects.all()
+        shipped_orders = Order.objects.filter(status='Shipped')
+        processing_orders = Order.objects.filter(status='Processing')
+        cancelled_orders = Order.objects.filter(status='Cancelled')
+        total_revenue = round(orders.aggregate(Sum('price'))['price__sum'], 2) if orders.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
+        total_orders = Order.objects.count() or 0
+        deliveries = Order.objects.filter(status='Delivered') or 0
+        unique_customer_count = Order.objects.values_list('customer_name', flat=True).distinct().count() or 0
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'orders': orders,
+            'revenue': total_revenue,
+            'total_orders': total_orders,
+            'deliveries': deliveries,
+            'messages':json.loads(request.user.messages),
+            'unique_customer_count': unique_customer_count,
+            'shipped_orders': shipped_orders,
+            'processing_orders': processing_orders,
+            'cancelled_orders': cancelled_orders,
+        }
+        return render(request, 'orders.html', context)
+
+
+
+
 
 class ebayConsent(View):
     def get(self, request):

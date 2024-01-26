@@ -1,0 +1,247 @@
+{% extends "root.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="w-layout-grid main-grid">
+        <div class="w-layout-grid _4-grid">
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Revenue</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">${{ revenue }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-green"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Orders</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">{{ total_orders }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-a83755f0" class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-orange"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Deliveries</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">{{ deliveries }}</h3>
+                            <!-- <div class="positive-value">+19%</div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884bd2fa05845ae96285f_users.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-yellow"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Audience</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">{{ unique_customer_count }}</h3>
+                            <!-- <div class="positive-value">+10%</div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-duration-in="300" data-duration-out="100" data-current="All Orders" data-easing="ease" class="w-tabs">
+            <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="All Orders"
+                    class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+                    href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0"
+                    aria-selected="true">
+                    <div>All orders</div>
+                </a><a data-w-tab="Shipped" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
+                    <div>Shipped</div>
+                </a><a data-w-tab="Processing" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
+                    <div>Processing</div>
+                </a><a data-w-tab="Cancelled" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-3" href="#w-tabs-0-data-w-pane-3" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-3" aria-selected="false">
+                    <div>Cancelled</div>
+                </a></div>
+            <div class="tabs-content w-tab-content">
+                <div data-w-tab="All Orders" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0"
+                    role="tabpanel" aria-labelledby="w-tabs-0-data-w-tab-0">
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div>
+                                {% if orders %}
+                                    {% for order in orders %}
+                                        <a href="{% url 'single_part' order.part_object.id %}" class="table-row-link w-inline-block">
+                                            <div class="w-layout-grid table-row _5-columns">
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d056152c-a83755f0"
+                                                    class="table-title">{{ order.id }}</div>
+                                                <div class="status">
+                                                    <div
+                                                        class="indication-color {% if order.status == 'Cancelled' %}bg-primary-rose{% elif order.status == 'Shipped' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                                                    </div> 
+                                                    <div>{{ order.status }}</div>
+                                                </div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561532-a83755f0">{{ order.customer_name }}</div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561534-a83755f0">${{ order.price }}</div>
+                                                <div id="a8-4eec-2018-3f07d0561536-a83755f0">{{ order.created_at|date:"m/d/y" }}</div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-w-tab="Shipped" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-1">
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Shipped)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div>
+                                {% if shipped_orders %}
+                                    {% for order in shipped_orders %}
+                                        <a href="{% url 'single_part' order.part_object.id %}" class="table-row-link w-inline-block">
+                                            <div class="w-layout-grid table-row _5-columns">
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d056152c-a83755f0"
+                                                    class="table-title">{{ order.id }}</div>
+                                                <div class="status">
+                                                    <div
+                                                        class="indication-color {% if order.status == 'Cancelled' %}bg-primary-rose{% elif order.status == 'Shipped' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                                                    </div> 
+                                                    <div>{{ order.status }}</div>
+                                                </div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561532-a83755f0">{{ order.customer_name }}</div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561534-a83755f0">${{ order.price }}</div>
+                                                <div id="a8-4eec-2018-3f07d0561536-a83755f0">{{ order.created_at|date:"m/d/y" }}</div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-w-tab="Processing" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Processing)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div>
+                                {% if processing_orders %}
+                                    {% for order in processing_orders %}
+                                        <a href="{% url 'single_part' order.part_object.id %}" class="table-row-link w-inline-block">
+                                            <div class="w-layout-grid table-row _5-columns">
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d056152c-a83755f0"
+                                                    class="table-title">{{ order.id }}</div>
+                                                <div class="status">
+                                                    <div
+                                                        class="indication-color {% if order.status == 'Cancelled' %}bg-primary-rose{% elif order.status == 'Shipped' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                                                    </div> 
+                                                    <div>{{ order.status }}</div>
+                                                </div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561532-a83755f0">{{ order.customer_name }}</div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561534-a83755f0">${{ order.price }}</div>
+                                                <div id="a8-4eec-2018-3f07d0561536-a83755f0">{{ order.created_at|date:"m/d/y" }}</div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-w-tab="Cancelled" class="w-tab-pane" id="w-tabs-0-data-w-pane-3" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-3">
+                    <div class="table-module overflow-auto">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Cancelled)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div>
+                                {% if cancelled_orders %}
+                                    {% for order in cancelled_orders %}
+                                        <a href="{% url 'single_part' order.part_object.id %}" class="table-row-link w-inline-block">
+                                            <div class="w-layout-grid table-row _5-columns">
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d056152c-a83755f0"
+                                                    class="table-title">{{ order.id }}</div>
+                                                <div class="status">
+                                                    <div
+                                                        class="indication-color {% if order.status == 'Cancelled' %}bg-primary-rose{% elif order.status == 'Shipped' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
+                                                    </div> 
+                                                    <div>{{ order.status }}</div>
+                                                </div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561532-a83755f0">{{ order.customer_name }}</div>
+                                                <div id="w-node-_867b4908-d8a8-4eec-2018-3f07d0561534-a83755f0">${{ order.price }}</div>
+                                                <div id="a8-4eec-2018-3f07d0561536-a83755f0">{{ order.created_at|date:"m/d/y" }}</div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
