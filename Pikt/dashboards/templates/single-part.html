@@ -210,10 +210,15 @@
                     </div> -->
                 </div>
                 <div class="account-delete">
+                    <form action="{% url 'edit_part' part.id %}" method="get">
+                        {% csrf_token %}
+                        <input type="submit" value="Edit Part" class="button button-small bg-primary-green w-button">
+                    </form>
                     <form action="{% url 'delete_part' part.id %}" method="post">
                         {% csrf_token %}
                         <input type="submit" value="Delete Part" class="button button-small bg-primary-rose w-button">
                     </form>
+                    
                 </div>
             </div>
             <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"

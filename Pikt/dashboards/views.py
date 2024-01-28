@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 import base64
 import json
 import os
+import ast
 from django.conf import settings
 from django.utils import timezone
 from dotenv import load_dotenv
@@ -33,6 +34,11 @@ context = {
     'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
     'makes': ['AMC', 'Acura', 'Alfa', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler','Daewoo', 'Daihatsu', 'Dodge', 'Eagle', 'Fiat', 'Ford', 'GMC', 'Genesis', 'Geo', 'Honda', 'Hummer', 'Hyundai', 'IH', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Lincoln', 'Maserati', 'Mazda', 'McLaren', 'Mercedes', 'Mercury', 'MG', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Pagani', 'Peugeot', 'Plymouth', 'Pontiac', 'Porsche', 'Ram', 'Renault', 'Rivian', 'Rover', 'Saab', 'Saturn', 'Scion', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Triumph', 'Volkswagen', 'Volvo']
 }
+def add_user_message(request, message):
+    messages = json.loads(request.user.messages)
+    messages.append(message)
+    request.user.messages = json.dumps(messages)
+    request.user.save()
 
 class delete_message(View):
     def post(self, request):
@@ -165,6 +171,62 @@ def delete_part(request, part_id):
     request.user.save()
     return redirect('/dashboards/')
 
+def edit_part(request, part_id):
+    part_instance = get_object_or_404(part, id=part_id)
+
+    # if saving edits toa part
+    if request.method == 'POST':
+        form = PartForm(request.POST, request.FILES, instance=part_instance)
+        if form.is_valid():
+            part_instance = form.save(commit=False)
+
+            # converting python object string to python object
+            current_fitments = ast.literal_eval(part_instance.vehicle_fitment)
+            current_key = int(list(current_fitments.keys())[-1])
+
+            # if there are existing fitments add to existing object else set fitment equal to new fitment(s)
+            if len(part_instance.vehicle_fitment) > 2:
+                for key, new_fitment in form.cleaned_data['vehicle_fitment'].items():
+                    current_key += 1
+                    current_fitments[f'{current_key}'] = new_fitment
+                part_instance.vehicle_fitment = current_fitments
+            else:
+                part_instance.vehicle_fitment = form.cleaned_data['vehicle_fitment']
+
+            # set part weight and user
+            part_instance.weight = form.cleaned_data['weight']
+            part_instance.user = request.user
+            part_instance.save()
+            form.save()
+            add_user_message(request, 'Part updated successfully')
+            return redirect('/dashboards/parts')  # Redirect to the parts list
+        else:
+            add_user_message(request, 'Part was not updated')
+    else:
+        form = PartForm(instance=part_instance)
+
+    if part_instance.vehicle_fitment:
+        vehicle_fitments = ast.literal_eval(part_instance.vehicle_fitment)
+    else:
+        vehicle_fitments = {}
+    fitment_list = [(index, fitment) for index, fitment in vehicle_fitments.items()]
+    context = {
+        'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+        'years' : range(2024, 1969, -1),
+        'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+        'makes_models': MAKES_MODELS,
+        'form': form,
+        'part': part_instance,
+        'messages': json.loads(request.user.messages),
+        'part_types': PARTS_CONST,
+        'form': form,
+        'messages': json.loads(request.user.messages),
+        'part_lbs' : part_instance.weight // 16 if part_instance.weight is not None else None,
+        'part_ozs' : part_instance.weight % 16 if part_instance.weight is not None else None,
+        'vehicle_fitments': fitment_list,
+    }
+    return render(request, 'edit-part.html', context)
+
 class single_part(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
         selected_part = get_object_or_404(part, id=part_id)
@@ -227,7 +289,7 @@ class RedirectView(View):
         if response.status_code == 200:
             self.handle_success_response(request, response)
         else:
-            self.add_user_message(request, "Ebay consent failed")
+            add_user_message(request, "Ebay consent failed")
 
         context['messages'] = json.loads(request.user.messages)
         return redirect('dashboard')
@@ -252,7 +314,7 @@ class RedirectView(View):
         request.user.ebay_user_token = response_data['access_token']
         request.user.ebay_user_refresh_token = response_data['refresh_token']
         self.set_token_expiration(request, response_data)
-        self.add_user_message(request, "Ebay integration complete")
+        add_user_message(request, "Ebay integration complete")
 
     def set_token_expiration(self, request, response_data):
         now = timezone.now()

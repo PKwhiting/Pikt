@@ -58,8 +58,8 @@ class part(models.Model):
     length = models.IntegerField(null=True, blank=True) # in inches
     status = models.CharField(max_length=50, choices=PART_STATUS, default='Pending')
     vehicle_fitment = models.CharField(max_length=500)
-    cost = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
-    price = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
+    cost = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
+    price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
     part_image_1 = models.ImageField(upload_to='images/', null=True, blank=True)
     part_image_2 = models.ImageField(upload_to='images/', null=True, blank=True)
     part_image_3 = models.ImageField(upload_to='images/', null=True, blank=True)

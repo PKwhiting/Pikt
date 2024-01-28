@@ -7,3 +7,7 @@ register = template.Library()
 def days_since(value):
     diff = timezone.now() - value
     return int(diff.days)
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
