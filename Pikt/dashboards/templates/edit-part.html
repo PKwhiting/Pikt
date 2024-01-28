@@ -227,46 +227,86 @@
             <div class="caption">Primary Image</div>
             <!-- Repeat this block for each image field -->
             <div style="display: flex; align-items: center !important; margin-bottom: 10px">
-                <img id="part_image_1_preview" src="{{ part.part_image_1.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_1 %}
+                    <img id="part_image_1_preview" src="{{ part.part_image_1.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_1_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_1" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_2_preview" src="{{ part.part_image_2.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_2 %}
+                    <img id="part_image_2_preview" src="{{ part.part_image_2.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_2_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_2" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_3_preview" src="{{ part.part_image_3.url }}" style="width: 50px; height: 50px; margin-right: 10px">
-                <input type="file" id="images" name="part_image_3" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
+                {% if part.part_image_3 %}
+                    <img id="part_image_3_preview" src="{{ part.part_image_3.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_3_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
+                    <input type="file" id="images" name="part_image_3" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_4_preview" src="{{ part.part_image_4.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_4 %}
+                    <img id="part_image_4_preview" src="{{ part.part_image_4.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_4_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_4" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_5_preview" src="{{ part.part_image_5.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_5 %}
+                    <img id="part_image_5_preview" src="{{ part.part_image_5.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_5_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_5" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_6_preview" src="{{ part.part_image_6.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_6 %}
+                    <img id="part_image_6_preview" src="{{ part.part_image_6.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_6_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_6" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_7_preview" src="{{ part.part_image_7.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_7 %}
+                    <img id="part_image_7_preview" src="{{ part.part_image_7.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_7_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_7" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_8_preview" src="{{ part.part_image_8.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_8 %}
+                    <img id="part_image_8_preview" src="{{ part.part_image_8.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_8_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_8" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_9_preview" src="{{ part.part_image_9.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_9 %}
+                    <img id="part_image_9_preview" src="{{ part.part_image_9.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_9_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="images" name="part_image_9" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
             <div style="display: flex; align-items: center; margin-bottom: 10px">
-                <img id="part_image_10_preview" src="{{ part.part_image_10.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% if part.part_image_10 %}
+                    <img id="part_image_10_preview" src="{{ part.part_image_10.url }}" style="width: 50px; height: 50px; margin-right: 10px">
+                {% else %}
+                    <img id="part_image_10_preview" src="" style="width: 50px; height: 50px; margin-right: 10px">
+                {% endif %}
                 <input type="file" id="part_image_10" name="part_image_10" accept="image/*" class="text-field w-input" style="margin-bottom: 0px">
             </div>
-            <!-- End of block -->
+            End of block
             <label for="images">Drag and drop your images here, or click to select images.</label>
         </div>
 

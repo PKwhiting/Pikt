@@ -212,11 +212,11 @@
                 <div class="account-delete">
                     <form action="{% url 'edit_part' part.id %}" method="get">
                         {% csrf_token %}
-                        <input type="submit" value="Edit Part" class="button button-small bg-primary-green w-button">
+                        <input type="submit" value="Edit Part" style="margin-top: 5px;" class="button button-small bg-primary-green w-button">
                     </form>
                     <form action="{% url 'delete_part' part.id %}" method="post">
                         {% csrf_token %}
-                        <input type="submit" value="Delete Part" class="button button-small bg-primary-rose w-button">
+                        <input type="submit" value="Delete Part" style="margin-top: 5px;" class="button button-small bg-primary-rose w-button">
                     </form>
                     
                 </div>
