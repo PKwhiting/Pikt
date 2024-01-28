@@ -33,6 +33,7 @@ urlpatterns = [
     path('password-reset/', views.passwordResetView.as_view()),
     path('account/', views.accountView.as_view(), name='account'),
     path('dashboards/', include('dashboards.urls')),
+    path('company/', include('company.urls')),
     path('account/upload_avatar/', views.uploadAvatarView.as_view(), name='upload_avatar'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

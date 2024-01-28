@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import RegexValidator
 
+ROLE_CHOICES = (
+    ('Admin', 'Admin'),
+    ('Manager', 'Manager'),
+    ('Employee', 'Employee'),
+)
+
 class User(AbstractUser):
     icon = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     phone_regex = RegexValidator(
@@ -16,6 +22,9 @@ class User(AbstractUser):
     ebay_user_token_expiration = models.DateTimeField(null=True, blank=True)
     ebay_user_refresh_token_expiration = models.DateTimeField(null=True, blank=True)
     ebay_application_token_expiration = models.DateTimeField(null=True, blank=True)
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='users')
+    is_main_company_contact = models.BooleanField(default=False)
+    role = models.CharField(choices=ROLE_CHOICES, max_length=10, default='Employee')
 
 class templateImage(models.Model):
     image = models.ImageField(upload_to='images/')
