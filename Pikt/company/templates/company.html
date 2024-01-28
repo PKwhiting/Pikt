@@ -460,9 +460,12 @@
             <div class="w-layout-grid _2-1-grid">
                 <div class="w-layout-grid stacked-modules">
                     <a class="module module-link w-inline-block">
-                        <div class="members-overview-list-item"><img loading="lazy"
-                                src="{{ user.icon.url }}"
-                                alt="" class="members-overview-avatar">
+                        <div class="members-overview-list-item">
+                            {% if user.icon %}
+                                <img loading="lazy"
+                                    src="{{ user.icon.url }}"
+                                    alt="" class="members-overview-avatar">
+                            {% endif %}
                             <div>
                                 <h4 class="no-space-bottom">{{ user.first_name}} {{ user.last_name }}</h4>
                                 <div class="small-text">{{ user.role }}</div>
@@ -476,9 +479,12 @@
                     {% if users %}
                         {% for user in users %}
                             <a class="module module-link w-inline-block">
-                                <div class="members-overview-list-item"><img loading="lazy"
-                                        src="{{ user.icon.url }}"
-                                        alt="" class="members-overview-avatar">
+                                <div class="members-overview-list-item">
+                                    {% if user.icon %}
+                                        <img loading="lazy"
+                                            src="{{ user.icon.url }}"
+                                            alt="" class="members-overview-avatar">
+                                    {% endif %}
                                     <div>
                                         <h4 class="no-space-bottom">{{ user.first_name }} {{ user.last_name }}</h4>
                                         <div class="small-text">{{ user.role }}</div>
