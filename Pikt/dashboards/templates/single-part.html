@@ -22,25 +22,26 @@
         <div class="tabs-content w-tab-content">
             <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
+                {% if part.part_image_1 and part.part_image_2 %}
                 <div class="w-layout-grid main-grid">
                     <div class="w-layout-grid _4-grid">
                         {% if part.part_image_1 %}
                         <img src="{{ part.part_image_1.url }}"
-                            style="width: 100%; height: 100%; object-fit: cover; padding: 0px" alt=""
+                            style="width: 100%; object-fit: cover; padding: 0px" alt=""
                             class="module-link w-inline-block">
                         {% else %}
                         <img src="{% static 'images/landing_page_hero_image.jpg' %}"
-                            style="width: 100%; height: 100%; object-fit: cover; padding: 0px" alt=""
+                            style="width: 100%; object-fit: cover; padding: 0px" alt=""
                             class="module-link w-inline-block">
                         {% endif %}
 
-                        {% if part.part_image_1 %}
-                        <img src="{{ part.part_image_1.url }}"
-                            style="width: 100%; height: 100%; object-fit: cover; padding: 0px" alt=""
+                        {% if part.part_image_2 %}
+                        <img src="{{ part.part_image_2.url }}"
+                            style="width: 100%; object-fit: cover; padding: 0px" alt=""
                             class="module-link w-inline-block">
                         {% else %}
                         <img src="{% static 'images/landing_page_hero_image.jpg' %}"
-                            style="width: 100%; height: 100%; object-fit: cover; padding: 0px" alt=""
+                            style="width: 100%; object-fit: cover; padding: 0px" alt=""
                             class="module-link w-inline-block">
                         {% endif %}
                         <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
@@ -111,6 +112,136 @@
                         </div>
                     </div>
                 </div>
+                <div style="margin-top: 30px;" class="w-layout-grid _2-grid">
+                    <div id="w-node-_0142e09c-36b4-1f47-8c05-1fada5f2b37c-db888956" class="module">
+                        <div class="profile-details">
+                            <div class="weight-500">Interchange</div>
+                            <div class="text-grey-3">{{ part.hollander_interchange }}</div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="weight-500">Location</div>
+                            <div class="text-grey-3">Part Location</div>
+                        </div>
+                        <div class="profile-details bottom">
+                            <div class="weight-500">Grade</div>
+                            <div class="text-grey-3">{{ part.grade}}</div>
+                        </div>
+                    </div>
+                    <div id="w-node-_0142e09c-36b4-1f47-8c05-1fada5f2b37c-db888956" class="module">
+                        <div class="profile-details">
+                            <div class="weight-500">Retail</div>
+                            <div class="text-grey-3">{{ part.price }}</div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="weight-500">Location</div>
+                            <div class="text-grey-3">Part Location</div>
+                        </div>
+                        <div class="profile-details bottom">
+                            <div class="weight-500">Grade</div>
+                            <div class="text-grey-3">{{ part.grade}}</div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="w-layout-grid main-grid">
+                    <div class="w-layout-grid _4-grid">
+                        <div id="w-node-_0142e09c-36b4-1f47-8c05-1fada5f2b37c-db888956" class="module">
+                            <div class="profile-details">
+                                <div class="weight-500">Interchange</div>
+                                <div class="text-grey-3">{{ part.hollander_interchange }}</div>
+                            </div>
+                            <div class="profile-details">
+                                <div class="weight-500">Location</div>
+                                <div class="text-grey-3">Part Location</div>
+                            </div>
+                            <div class="profile-details bottom">
+                                <div class="weight-500">Grade</div>
+                                <div class="text-grey-3">{{ part.grade}}</div>
+                            </div>
+                        </div>
+                        <div id="w-node-_0142e09c-36b4-1f47-8c05-1fada5f2b37c-db888956" class="module">
+                            <div class="profile-details">
+                                <div class="weight-500">Retail</div>
+                                <div class="text-grey-3">{{ part.price }}</div>
+                            </div>
+                            <div class="profile-details">
+                                <div class="weight-500">Location</div>
+                                <div class="text-grey-3">Part Location</div>
+                            </div>
+                            <div class="profile-details bottom">
+                                <div class="weight-500">Grade</div>
+                                <div class="text-grey-3">{{ part.grade}}</div>
+                            </div>
+                        </div>
+                        <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
+                            <a class="module-link">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Price</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">{{ part.price }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="module-link">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-green"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Time on Market</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">{{ part.created_at|days_since }} days</h3>
+                                            <!-- <div class="negative-value">-10%</div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="module-link">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-orange"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">ROI</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">{{ roi }}%</h3>
+                                            <!-- <div class="positive-value">+19%</div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="module-link">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-yellow"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Potential Profit</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">${{ potential_profit }}</h3>
+                                            <!-- <div class="positive-value">+10%</div> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
                 <div class="account-delete">
                     <form action="{% url 'edit_part' part.id %}" method="get">
                         {% csrf_token %}
