@@ -120,7 +120,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
             part_type = request.GET.get('part_type')
             part_grade = request.GET.get('grade')
             print(year_start, year_end, vehicle_make, vehicle_model, part_type, part_grade)
-            parts = part.objects.all()
+            parts = part.objects.filter(user=request.user)
             if year_start:
                 parts = parts.filter(vehicle_year__gte=year_start)
             if year_end:
