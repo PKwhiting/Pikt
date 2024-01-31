@@ -3,164 +3,212 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
-        <div>
-            <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
-                    class="button button-small w-button"></a>
+        <div style="display: flex;">
+            <div style="margin-right: 15px">
+                <input id="filter-button" type="button" value="Filter Parts"
+                        class="button button-small w-button filter-button" style="display: none;">
+            </div>
+            <div style="margin-right: 15px">
+                <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
+                        class="button button-small w-button bg-primary-green"></a>
+            </div>
         </div>
-        <!-- <div class="w-layout-grid _4-grid">
-            <div class="module">
-                <div class="content-chart">
-                    <div class="chart-square"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882cb46d7bcb205f20f73_bar-chart.svg"
-                            loading="lazy" alt="" class="icon">
-                        <div class="light-fill"></div>
-                    </div>
-                    <div class="div-block">
-                        <div class="caption">Value</div>
-                        <div class="numbers-wrapper">
-                            <h3 class="number">2.100</h3>
-                            <div class="positive-value">+5%</div>
+        <div class="w-layout-grid grid">
+            <div class="style-guide-padding">
+                <h6>Filters</h6>
+                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                            <div style="display: flex;">
+                                <div style="margin-right: 10px; width: 50%">
+                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                        <option value="" selected disabled>Select Year</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div style="width: 50%;">
+                                    <!-- <h6>Year End</h6> -->
+                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                        <option value="" selected disabled>Select Year</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                            <div>
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make"
+                                    required="" onkeyup="submitFilterForm()">
+                            </div>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                            <div>
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model"
+                                    required="" onkeyup="submitFilterForm()">
+                            </div>
+                        </div>
+                        <!-- <div>
+                            <div>
+                                <h6>Vehicle Model</h6>
+                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
+                                    <option value="" selected disabled>Select Model</option>
+                                    {% for make, models in makes_models.items %}
+                                    <optgroup label="{{ make }}">
+                                        {% for model in models %}
+                                        <option value="{{ model }}">{{ model }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div> -->
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                            <div>
+                                <!-- <h6>Part Type</h6> -->
+                                <select name="part_type" id="Part-Type" class="text-field w-select" required onchange="submitFilterForm()">
+                                    <option value="" selected disabled>Select Part Type</option>
+                                    {% for part in part_types %}
+                                    {% ifequal part form.type.value %}
+                                    <option value="{{ part }}" selected>{{ part }}</option>
+                                    {% else %}
+                                    <option value="{{ part }}">{{ part }}</option>
+                                    {% endifequal %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- <h6>Part Grade</h6> -->
+                            <select name="grade" id="Parts-Grade" class="text-field w-select" required onchange="submitFilterForm()">
+                                <option value="" selected disabled>Select Part Grade</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </div>
+                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                            <div>Clear</div>
+                        </a>
+                </form>
+            </div>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h6>Filters</h6>
+                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();">
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                        <div style="display: flex;">
+                            <div style="margin-right: 10px; width: 50%">
+                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
+                                    <option value="" selected disabled>Select Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="width: 50%;">
+                                <!-- <h6>Year End</h6> -->
+                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                    <option value="" selected disabled>Select Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="module">
-                <div class="content-chart">
-                    <div class="chart-square"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831d493c9a126c8c8cbc_users.svg"
-                            loading="lazy" width="24" alt="" class="icon">
-                        <div class="light-fill bg-primary-green"></div>
-                    </div>
-                    <div class="div-block">
-                        <div class="caption">Clients</div>
-                        <div class="numbers-wrapper">
-                            <h3 class="number">719</h3>
-                            <div class="negative-value">-10%</div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <!-- <h6>Vehicle Model</h6> -->
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
+                                required="" onkeyup="submitFilterModalForm()">
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="module">
-                <div class="content-chart">
-                    <div class="chart-square"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
-                            loading="lazy" width="24" alt="" class="icon">
-                        <div class="light-fill bg-primary-orange"></div>
-                    </div>
-                    <div class="div-block">
-                        <div class="caption">Deliveries</div>
-                        <div class="numbers-wrapper">
-                            <h3 class="number">10.5K</h3>
-                            <div class="positive-value">+19%</div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <!-- <h6>Vehicle Model</h6> -->
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
+                                required="" onkeyup="submitFilterModalForm()">
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="module">
-                <div class="content-chart">
-                    <div class="chart-square"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
-                            loading="lazy" width="24" alt="" class="icon">
-                        <div class="light-fill bg-primary-yellow"></div>
-                    </div>
-                    <div class="div-block">
-                        <div class="caption">Target&nbsp;Ratio</div>
-                        <div class="numbers-wrapper">
-                            <h3 class="number">95%</h3>
-                            <div class="positive-value">(+ 10%)</div>
+                    <!-- <div>
+                        <div>
+                            <h6>Vehicle Model</h6>
+                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
+                                <option value="" selected disabled>Select Model</option>
+                                {% for make, models in makes_models.items %}
+                                <optgroup label="{{ make }}">
+                                    {% for model in models %}
+                                    <option value="{{ model }}">{{ model }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div> -->
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                        <div>
+                            <!-- <h6>Part Type</h6> -->
+                            <select name="part_type" id="Part-Type-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
+                                <option value="" selected disabled>Select Part Type</option>
+                                {% for part in part_types %}
+                                {% ifequal part form.type.value %}
+                                <option value="{{ part }}" selected>{{ part }}</option>
+                                {% else %}
+                                <option value="{{ part }}">{{ part }}</option>
+                                {% endifequal %}
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div> -->
-        <!-- <div class="w-layout-grid _4-grid"><a href="/project-management" class="module-link w-inline-block">
-                <div class="content-storage">
                     <div>
-                        <div class="storage-square"><img
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d37ee33fcb3f67627f_hard-drive.svg"
-                                loading="lazy" alt="" class="icon">
-                            <div class="light-fill"></div>
-                        </div>
-                        <h4>Drive Storage</h4>
+                        <!-- <h6>Part Grade</h6> -->
+                        <select name="grade" id="Parts-Grade-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
+                            <option value="" selected disabled>Select Part Grade</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
                     </div>
-                    <div>
-                        <div class="percentage-info">
-                            <div class="small-description">60 GB</div>
-                            <div class="small-description">100&nbsp;GB</div>
-                        </div>
-                        <div class="percentage-bar-wrapper">
-                            <div class="percentage-bar bg-primary-blue"></div>
-                        </div>
-                    </div>
-                </div>
-            </a><a href="/project-management" class="module-link w-inline-block">
-                <div class="content-folder">
-                    <div class="storage-folder-content">
-                        <div class="storage-square"><img
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
-                                loading="lazy" alt="" class="icon">
-                            <div class="light-fill"></div>
-                        </div>
-                        <div class="project-avatars"><img
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
-                                loading="lazy" alt="" class="project-avatar first"><img
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
-                                loading="lazy" alt="" class="project-avatar"></div>
-                    </div>
-                    <div>
-                        <h4>Research</h4>
-                        <div class="folder-info">
-                            <div class="small-description">10 files</div>
-                            <div class="small-description">5 GB</div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <div id="w-node-_4d115262-b369-d920-dea6-88878e352a90-cbeb6f31" class="module">
-                <div class="content-percentage">
-                    <div class="content-storage">
-                        <div class="storage-square"><img
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831413ede764f64a258d_pie-chart.svg"
-                                loading="lazy" width="24" alt="" class="icon">
-                            <div class="light-fill bg-primary-green"></div>
-                        </div>
-                        <h4>Used percentage</h4>
-                        <div class="small-description">Check your storage on your dashboard.</div>
-                    </div><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac26976322417838e72f4_Dash%20Chart%2003.svg"
-                        loading="lazy" alt="" class="data-visualisation-storage">
-                </div>
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                        <div>Clear</div>
+                    </a>
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
+                        <div>Filter</div>
+                    </a>
+            </form>
             </div>
-        </div> -->
-        <div class="table-module">
-            <div class="table-header">
-                <h4 class="no-space-bottom">Parts</h4>
-            </div>
-            <div class="table-content">
+          
+          </div>
+       <div class="table-module" id="table-container">
+            <div class="table-content" style="margin-top: 15px;">
                 <div class="table-list">
                     <div class="w-layout-grid table-headers mobile-table">
-                        <div class="caption-large">Part Name</div>
-                        <div class="caption-large">Status</div>
-                        <div class="caption-large mobile">Ebay Link</div>
-                        <div class="caption-large mobile">Time Listed</div>
+                        <div class="caption-large mobile">Year</div>
+                        <div class="caption-large mobile">Make</div>
+                        <div class="caption-large">Model</div>
+                        <div class="caption-large">Part</div>
+                        <div class="caption-large mobile">Grade</div>
+                        <div class="caption-large mobile">Part</div>
                     </div>
                     {% if parts %}
                         {% for part in parts %}
-                            <a href="{% url 'single_part' part.id %}">
+                            <a href="{% url 'single_part' part.id %}" target="_blank" >
                                 <div class="w-layout-grid table-row">
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} {{ part.type }}</div>
-                                    <div class="status">
-                                        <div
-                                            class="indication-color {% if part.status == 'Pending' %}bg-primary-rose{% elif part.status == 'Sold' %}bg-primary-green{% else %}bg-primary-yellow{% endif %}">
-                                        </div> 
-                                        <div>{{ part.status }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.vehicle_year }}</div>
+                                    <div class="mobile">{{ part.vehicle_make }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
+                                        {{ part.vehicle_model }}
                                     </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile" style="display: block">
-                                        {% if part.ebay_link %}
-                                            <a href="{{ part.ebay_link }}">Click here</a>
-                                        {% endif %}
-                                    </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.created_at }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.type }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.grade }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.type }}</div>
                                 </div>
                             </a>
                         {% endfor %}
@@ -175,11 +223,11 @@
                         {% else %}
                         <input type="button" value="<" class="button button-small w-button" disabled>
                         {% endif %}
-
+        
                         <span class="current" style="width: 50px">
                             {{ parts.number }} of {{ parts.paginator.num_pages }}
                         </span>
-
+        
                         {% if parts.has_next %}
                         <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
                                 class="button button-small w-button"></a>
@@ -257,4 +305,232 @@
         </div> -->
     </div>
 </div>
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("filter-button");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+
+    function clearFilters() {
+        // Clear select elements
+        document.getElementById('Year-Start').selectedIndex = 0;
+        document.getElementById('Year-Start').selectedIndex = 0;
+        document.getElementById('Part-Type').selectedIndex = 0;
+        document.getElementById('Parts-Grade').selectedIndex = 0;
+        document.getElementById('Vehicle-Model').value = '';
+        document.getElementById('Vehicle-Make').value = '';
+
+        document.getElementById('Year-Start-Modal').selectedIndex = 0;
+        document.getElementById('Year-Start-Modal').selectedIndex = 0;
+        document.getElementById('Part-Type-Modal').selectedIndex = 0;
+        document.getElementById('Parts-Grade-Modal').selectedIndex = 0;
+        document.getElementById('Vehicle-Model-Modal').value = '';
+        document.getElementById('Vehicle-Make-Modal').value = '';
+
+        // If you are using any plugins like Select2, you may need to trigger a change event
+        // so that the visual component updates correctly.
+        $('#Year-Start').val(null).trigger('change');
+        $('#Year-End').val(null).trigger('change');
+        $('#Part-Type').val(null).trigger('change');
+        $('#Parts-Grade').val(null).trigger('change');
+        $('#Year-Start-Modal').val(null).trigger('change');
+        $('#Year-End-Modal').val(null).trigger('change');
+        $('#Part-Type-Modal').val(null).trigger('change');
+        $('#Parts-Grade-Modal').val(null).trigger('change');
+        // Trigger the filter form submission to refresh the results
+        submitFilterForm();
+        submitFilterModalForm();
+    }
+
+
+    function submitFilterForm() {
+        var formData = new FormData(document.forms[0]);
+        var queryParams = new URLSearchParams();
+
+        for (var pair of formData.entries()) {
+            queryParams.append(pair[0], pair[1]);
+        }
+
+        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('table-container').innerHTML = html;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    function submitFilterModalForm() {
+        var formData = new FormData(document.forms[1]);
+        var queryParams = new URLSearchParams();
+
+        for (var pair of formData.entries()) {
+            queryParams.append(pair[0], pair[1]);
+        }
+
+        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('table-container').innerHTML = html;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+
+
+</script>
+<style>
+    .table-row {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+    .mobile-table {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    @media screen and (max-width: 1000px) {
+        .modal-content {
+            width: 90% !important;
+            /* Could be more or less, depending on screen size */
+        }
+    }
+    @media screen and (max-width: 730px) {
+        .table-row{
+            grid-template-columns: 1fr 1fr 1fr;
+
+        } 
+        .mobile-table {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+    @media screen and (max-width: 479px) {
+        .table-row{
+            grid-template-columns: 1fr 1fr;
+
+        } 
+        .mobile-table {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    @media screen and (max-width: 991px) {
+        #filter-button{
+            display: block !important;
+        }
+    }
+    .form-row {
+        margin-bottom: 10px;
+    }
+
+    .selection span {
+        border-style: none !important;
+    }
+
+    .select2 {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 38px !important;
+    }
+
+    .select2-selection__arrow {
+        margin-right: 5px !important;
+    }
+
+    .select2-selection {
+        height: 38px !important;
+        border: 1px solid #e3e3e3 !important;
+    }
+
+    span.select2-selection.select2-selection--single {
+        border: 1px solid #e1e6f0 !important;
+        margin-right: 5px !important;
+    }
+
+    span.select2-selection.select2-selection--multiple {
+        border: 1px solid #e1e6f0 !important;
+        max-height: 100px;
+        max-width: 28.75vw !important;
+        overflow-y: auto;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1000;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border-radius: 16px;
+        width: 60%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
 {% endblock %}

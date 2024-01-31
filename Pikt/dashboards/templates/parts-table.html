@@ -1,0 +1,55 @@
+<div class="table-module" id="table-container">
+    <div class="table-content" style="margin-top: 15px;">
+        <div class="table-list">
+            <div class="w-layout-grid table-headers mobile-table">
+                <div class="caption-large mobile">Year</div>
+                <div class="caption-large mobile">Make</div>
+                <div class="caption-large">Model</div>
+                <div class="caption-large">Part</div>
+                <div class="caption-large mobile">Grade</div>
+                <div class="caption-large mobile">Part</div>
+            </div>
+            {% if parts %}
+                {% for part in parts %}
+                    <a href="{% url 'single_part' part.id %}" target="_blank" >
+                        <div class="w-layout-grid table-row">
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.vehicle_year }}</div>
+                            <div class="mobile">{{ part.vehicle_make }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
+                                {{ part.vehicle_model }}
+                            </div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.type }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.grade }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.type }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
+            <span class="step-links" style="margin-right: 20px">
+                {% if parts.has_previous %}
+                <!-- <a href="?page=1">&laquo; first</a> -->
+                <a style="width: 50px" href="?page={{ parts.previous_page_number }}"><input type="button"
+                        value="<" class="button button-small w-button"></a>
+                {% else %}
+                <input type="button" value="<" class="button button-small w-button" disabled>
+                {% endif %}
+
+                <span class="current" style="width: 50px">
+                    {{ parts.number }} of {{ parts.paginator.num_pages }}
+                </span>
+
+                {% if parts.has_next %}
+                <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
+                        class="button button-small w-button"></a>
+                {% else %}
+                <input type="button" value=">" class="button button-small w-button" disabled>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <!-- <div class="table-bottom-caption">
+        <div>Showing all items from Work Performance dataset</div>
+    </div> -->
+</div>

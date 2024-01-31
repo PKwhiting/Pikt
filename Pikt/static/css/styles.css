@@ -949,6 +949,10 @@ textarea.w-select {
 }
 
 @media screen and (max-width:991px) {
+  .style-guide-padding {
+    display: none;
+  }
+  
   .w-container {
     max-width: 728px
   }
@@ -1017,6 +1021,7 @@ textarea.w-select {
 }
 
 @media screen and (max-width:767px) {
+
   .w-hidden-main {
     display: inherit !important
   }

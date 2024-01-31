@@ -6,7 +6,9 @@ from .forms import PartForm
 from django.core.paginator import Paginator
 import base64
 import json
+from django.template.loader import render_to_string
 import os
+from django.http import HttpResponse
 import ast
 from django.conf import settings
 from django.utils import timezone
@@ -27,6 +29,8 @@ import requests
 from urllib.parse import urlencode
 from django.http import HttpResponseRedirect
 from datetime import datetime, timedelta
+from django.template.loader import render_to_string
+from django.db.models import Q
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -99,12 +103,38 @@ class defaultDashboardView(LoginRequiredMixin,View):
         parts = part.objects.filter(user=request.user) if request.user.is_authenticated else []
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
-            'years' : range(2024, 1969, -1),
+            'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'parts': parts,
-            'messages':json.loads(request.user.messages)
+            'messages': json.loads(request.user.messages),
+            'makes_models': MAKES_MODELS,
+            'part_types': PARTS_CONST,
         }
+        if request.is_ajax():
+            print(request.GET.get)
+            year_start = request.GET.get('year_start')
+            year_end = request.GET.get('year_end')
+            vehicle_make = request.GET.get('vehicle_make')
+            vehicle_model = request.GET.get('vehicle_model')
+            part_type = request.GET.get('part_type')
+            part_grade = request.GET.get('grade')
+            print(year_start, year_end, vehicle_make, vehicle_model, part_type, part_grade)
+            parts = part.objects.all()
+            if year_start:
+                parts = parts.filter(vehicle_year__gte=year_start)
+            if year_end:
+                parts = parts.filter(vehicle_year__lte=year_end)
+            if vehicle_model:
+                parts = parts.filter(vehicle_model__icontains=vehicle_model)
+            if vehicle_make:
+                parts = parts.filter(vehicle_make__icontains=vehicle_make)
+            if part_type:
+                parts = parts.filter(type__iexact=part_type)
+            if part_grade:
+                parts = parts.filter(grade__iexact=part_grade)
+            context['parts'] = parts
+            return HttpResponse(render_to_string('parts-table.html', context))
         if context['parts'].count() > 0:
             parts_list = part.objects.filter(user=request.user)
             paginator = Paginator(parts_list, 20)
