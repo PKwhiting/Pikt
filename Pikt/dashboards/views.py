@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import part, Order
+from .models import part, Order, Vehicle
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
+from .forms import VehicleForm
 from django.core.paginator import Paginator
 import base64
 import json
@@ -23,7 +24,7 @@ from django.db.models import Avg
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
-from .const.const import PARTS_CONST, MAKES_MODELS
+from .const.const import PARTS_CONST, MAKES_MODELS, DAMAGE_TYPE_CONST, CATEGORY_CONST, TRANSMISSION_CONST, COLORS_CONST
 from django.db import IntegrityError
 import requests
 from urllib.parse import urlencode
@@ -143,6 +144,51 @@ class defaultDashboardView(LoginRequiredMixin,View):
             context['parts'] = page_obj
         return render(request, 'parts.html', context)
 
+class vehiclesView(LoginRequiredMixin,View):
+    def get(self, request):
+        vehicles = Vehicle.objects.filter(user=request.user) if request.user.is_authenticated else []
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years': range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'vehicles': vehicles,
+            'messages': json.loads(request.user.messages),
+            'makes_models': MAKES_MODELS,
+            'part_types': PARTS_CONST,
+        }
+        if request.is_ajax():
+            print(request.GET.get)
+            year_start = request.GET.get('year_start')
+            year_end = request.GET.get('year_end')
+            vehicle_make = request.GET.get('vehicle_make')
+            vehicle_model = request.GET.get('vehicle_model')
+            part_type = request.GET.get('part_type')
+            part_grade = request.GET.get('grade')
+            print(year_start, year_end, vehicle_make, vehicle_model, part_type, part_grade)
+            parts = part.objects.filter(user=request.user)
+            if year_start:
+                parts = parts.filter(vehicle_year__gte=year_start)
+            if year_end:
+                parts = parts.filter(vehicle_year__lte=year_end)
+            if vehicle_model:
+                parts = parts.filter(vehicle_model__icontains=vehicle_model)
+            if vehicle_make:
+                parts = parts.filter(vehicle_make__icontains=vehicle_make)
+            if part_type:
+                parts = parts.filter(type__iexact=part_type)
+            if part_grade:
+                parts = parts.filter(grade__iexact=part_grade)
+            context['parts'] = parts
+            return HttpResponse(render_to_string('parts-table.html', context))
+        # if context['parts'].count() > 0:
+        #     parts_list = part.objects.filter(user=request.user)
+        #     paginator = Paginator(parts_list, 20)
+        #     page_number = request.GET.get('page')
+        #     page_obj = paginator.get_page(page_number)
+        #     context['parts'] = page_obj
+        return render(request, 'vehicles.html', context)
+
 @login_required  
 def add_part(request):
     if request.method == 'POST':
@@ -184,6 +230,42 @@ def add_part(request):
     context['messages'] = json.loads(request.user.messages)
     return render(request, 'add-part.html', context)
 
+@login_required  
+def add_vehicle(request):
+    if request.method == 'POST':
+        print(request.POST)
+        post = request.POST.copy()  # Make a mutable copy
+        form = VehicleForm(post, request.FILES)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.user = request.user
+            vehicle.save()
+            form.save()
+            add_user_message(request, 'Vehicle added successfully')
+            return redirect('/dashboards/vehicles')  # Redirect to a page showing all parts
+        else:
+            messages = json.loads(request.user.messages)
+            messages.append('Vehicle was not added, try again')
+            request.user.messages = json.dumps(messages)
+            request.user.save()
+    else:
+        form = VehicleForm()
+
+    context = {
+        'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+        'years' : range(2024, 1969, -1),
+        'colors': COLORS_CONST,
+        'makes_models': MAKES_MODELS,
+        'form': form,
+        'messages': json.loads(request.user.messages),
+        'damage_types': DAMAGE_TYPE_CONST,
+        'vehicles': Vehicle.objects.filter(user=request.user),
+    
+    }
+    context['form'] = form
+    context['messages'] = json.loads(request.user.messages)
+    return render(request, 'add-vehicle.html', context)
+
 @login_required
 def delete_part(request, part_id):
     part_to_delete = get_object_or_404(part, id=part_id)
@@ -199,6 +281,17 @@ def delete_part(request, part_id):
     messages.append('Part deleted successfully')
     request.user.messages = json.dumps(messages)
     request.user.save()
+    return redirect('/dashboards/')
+
+@login_required
+def delete_vehicle(request, vehicle_id):
+    vehicle_to_delete = get_object_or_404(Vehicle, id=vehicle_id)
+    try:
+        vehicle_to_delete.delete()
+    except IntegrityError:
+        add_user_message(request, 'This vehicle cannot be deleted because it is being used elsewhere')
+        return redirect('single_part', vehicle_id=vehicle_id)
+    add_user_message(request, 'Vehicle deleted successfully')
     return redirect('/dashboards/')
 
 def edit_part(request, part_id):
@@ -257,6 +350,39 @@ def edit_part(request, part_id):
     }
     return render(request, 'edit-part.html', context)
 
+def edit_vehicle(request, vehicle_id):
+    vehicle_instance = get_object_or_404(Vehicle, id=vehicle_id)
+    print(vehicle_instance.drivetrain)
+
+    # if saving edits toa part
+    if request.method == 'POST':
+        form = VehicleForm(request.POST, request.FILES, instance=vehicle_instance)
+        if form.is_valid():
+            vehicle_instance = form.save(commit=False)
+            vehicle_instance.user = request.user
+            vehicle_instance.save()
+            form.save()
+            add_user_message(request, 'Vehicle updated successfully')
+            return redirect('/dashboards/vehicles')  # Redirect to the parts list
+        else:
+            add_user_message(request, 'Vehicle was not updated')
+    else:
+        form = VehicleForm(instance=vehicle_instance)
+    context = {
+        'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+        'years' : range(2024, 1969, -1),
+        'colors': COLORS_CONST,
+        'makes': ['AMC', 'Acura', 'Alfa', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler','Daewoo', 'Daihatsu', 'Dodge', 'Eagle', 'Fiat', 'Ford', 'GMC', 'Genesis', 'Geo', 'Honda', 'Hummer', 'Hyundai', 'IH', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Lincoln', 'Maserati', 'Mazda', 'McLaren', 'Mercedes', 'Mercury', 'MG', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Pagani', 'Peugeot', 'Plymouth', 'Pontiac', 'Porsche', 'Ram', 'Renault', 'Rivian', 'Rover', 'Saab', 'Saturn', 'Scion', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Triumph', 'Volkswagen', 'Volvo'],
+        'makes_models': MAKES_MODELS,
+        'form': form,
+        'vehicle': vehicle_instance,
+        'damage_types': DAMAGE_TYPE_CONST,
+        'categories': CATEGORY_CONST,
+        'transmissions': TRANSMISSION_CONST,
+    }
+    
+    return render(request, 'edit-vehicle.html', context)
+
 class single_part(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
         selected_part = get_object_or_404(part, id=part_id)
@@ -271,6 +397,21 @@ class single_part(LoginRequiredMixin, View):
             'roi': round(((selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01'))) / (selected_part.cost or Decimal('0.01')) * 100, 2)   
         }
         return render(request, 'single-part.html', context)
+
+class single_vehicle(LoginRequiredMixin, View):
+    def get(self, request, vehicle_id=None, *args, **kwargs):
+        selected_vehicle = get_object_or_404(Vehicle, id=vehicle_id)
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'vehicle': selected_vehicle,
+            'potential_profit': 0,
+            'roi': 0
+        }
+        return render(request, 'single-vehicle.html', context)
     
 class orders(LoginRequiredMixin, View):
     def get(self, request):
@@ -298,10 +439,6 @@ class orders(LoginRequiredMixin, View):
             'cancelled_orders': cancelled_orders,
         }
         return render(request, 'orders.html', context)
-
-
-
-
 
 class ebayConsent(View):
     def get(self, request):

@@ -967,3 +967,69 @@ PARTS_CONST = [
     "Wiring Harness (Transmission)",
     "Yoke/U-Joint"
 ]
+
+DAMAGE_TYPE_CONST = [
+    "All Over",
+    "Biohazard/Chemical",
+    "Burn",
+    "Burn - Engine",
+    "Burn - Interior",
+    "Damage History",
+    "Frame Damage",
+    "Front End",
+    "Hail",
+    "Mechanical",
+    "Minor Dents/Scratches",
+    "Missing/Altered VIN",
+    "Normal Wear",
+    "Partial Repair",
+    "Rear End",
+    "Rejected Repair",
+    "Replaced VIN",
+    "Rollover",
+    "Side",
+    "Stripped",
+    "Top/Roof",
+    "Undercarriage"
+    "Unknown",
+    "Vandalism",
+    "Water/Flood"
+]
+
+CATEGORY_CONST = [
+    "Storage",
+    "Dismantled",
+    "Crushed"
+]
+
+TRANSMISSION_CONST = [
+    "Automatic",
+    "Manual",
+    "CVT",
+    "DCT",
+    "Automated-Manual",
+    "Other"
+]
+
+COLORS_CONST = [
+    "Beige",
+    "Black",
+    "Blue",
+    "Brown",
+    "Burgundy",
+    "Charcoal",
+    "Gold",
+    "Grey",
+    "Green",
+    "Maroon",
+    "Orange",
+    "Pink",
+    "Purple",
+    "Red",
+    "Silver",
+    "Tan",
+    "Teal",
+    "White",
+    "Yellow",
+    "Other"
+]

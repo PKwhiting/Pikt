@@ -1,5 +1,16 @@
 from django import forms
 from .models import part
+from .models import Vehicle
+
+
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = '__all__'  # Assuming you want to include all fields from the model
+
+    def __init__(self, *args, **kwargs):
+        super(VehicleForm, self).__init__(*args, **kwargs)
+        self.fields['user'].required = False
 
 
 class PartForm(forms.ModelForm):

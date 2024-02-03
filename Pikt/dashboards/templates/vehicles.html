@@ -4,188 +4,16 @@
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
         <div style="display: flex;">
-            <div style="margin-right: 15px">
-                <input id="filter-button" type="button" value="Filter Parts"
+            <!-- <div style="margin-right: 15px">
+                <input id="filter-button" type="button" value="Filter Vehicles"
                         class="button button-small w-button filter-button" style="display: none;">
-            </div>
+            </div> -->
             <div style="margin-right: 15px">
-                <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
+                <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
                         class="button button-small w-button bg-primary-green"></a>
             </div>
         </div>
-        <div class="w-layout-grid grid">
-            <div class="style-guide-padding">
-                <h6>Filters</h6>
-                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                            <div style="display: flex;">
-                                <div style="margin-right: 10px; width: 50%">
-                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div style="width: 50%;">
-                                    <!-- <h6>Year End</h6> -->
-                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make"
-                                    required="" onkeyup="submitFilterForm()">
-                            </div>
-                        </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model"
-                                    required="" onkeyup="submitFilterForm()">
-                            </div>
-                        </div>
-                        <!-- <div>
-                            <div>
-                                <h6>Vehicle Model</h6>
-                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                    <option value="" selected disabled>Select Model</option>
-                                    {% for make, models in makes_models.items %}
-                                    <optgroup label="{{ make }}">
-                                        {% for model in models %}
-                                        <option value="{{ model }}">{{ model }}</option>
-                                        {% endfor %}
-                                    </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div> -->
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                            <div>
-                                <!-- <h6>Part Type</h6> -->
-                                <select name="part_type" id="Part-Type" class="text-field w-select" required onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Part Type</option>
-                                    {% for part in part_types %}
-                                    {% ifequal part form.type.value %}
-                                    <option value="{{ part }}" selected>{{ part }}</option>
-                                    {% else %}
-                                    <option value="{{ part }}">{{ part }}</option>
-                                    {% endifequal %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <!-- <h6>Part Grade</h6> -->
-                            <select name="grade" id="Parts-Grade" class="text-field w-select" required onchange="submitFilterForm()">
-                                <option value="" selected disabled>Select Part Grade</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                            </select>
-                        </div>
-                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                            <div>Clear</div>
-                        </a>
-                </form>
-            </div>
-        </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h6>Filters</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                        <div style="display: flex;">
-                            <div style="margin-right: 10px; width: 50%">
-                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div style="width: 50%;">
-                                <!-- <h6>Year End</h6> -->
-                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <!-- <div>
-                        <div>
-                            <h6>Vehicle Model</h6>
-                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                <option value="" selected disabled>Select Model</option>
-                                {% for make, models in makes_models.items %}
-                                <optgroup label="{{ make }}">
-                                    {% for model in models %}
-                                    <option value="{{ model }}">{{ model }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div> -->
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                        <div>
-                            <!-- <h6>Part Type</h6> -->
-                            <select name="part_type" id="Part-Type-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                                <option value="" selected disabled>Select Part Type</option>
-                                {% for part in part_types %}
-                                {% ifequal part form.type.value %}
-                                <option value="{{ part }}" selected>{{ part }}</option>
-                                {% else %}
-                                <option value="{{ part }}">{{ part }}</option>
-                                {% endifequal %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <!-- <h6>Part Grade</h6> -->
-                        <select name="grade" id="Parts-Grade-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                            <option value="" selected disabled>Select Part Grade</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                        </select>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                        <div>Clear</div>
-                    </a>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
-                        <div>Filter</div>
-                    </a>
-            </form>
-            </div>
-          
-          </div>
+
        <div class="table-module" id="table-container">
             <div class="table-content" style="margin-top: 15px;">
                 <div class="table-list">
@@ -193,24 +21,24 @@
                         <div class="caption-large mobile">Year</div>
                         <div class="caption-large mobile">Make</div>
                         <div class="caption-large">Model</div>
-                        <div class="caption-large">Part</div>
-                        <div class="caption-large mobile">Grade</div>
-                        <div class="caption-large mobile">Part</div>
+                        <div class="caption-large">Yard</div>
+                        <div class="caption-large mobile">Location</div>
+                        <div class="caption-large mobile">Category</div>
                     </div>
-                    {% if parts %}
-                        {% for part in parts %}
-                            <a href="{% url 'single_part' part.id %}" target="_blank">
+                    {% if vehicles %}
+                        {% for vehicle in vehicles %}
+                            <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
                                 <div class="w-layout-grid table-row">
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.vehicle_year }}</div>
-                                    <div class="mobile">{{ part.vehicle_make }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.year }}</div>
+                                    <div class="mobile">{{ vehicle.make }}</div>
                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
-                                        {{ part.vehicle_model }}
+                                        {{ vehicle.model }}
                                     </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.type }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.grade }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.type }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.yard }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.location }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.category }}</div>
                                 </div>
-                            </a>
+                            </a> 
                         {% endfor %}
                     {% endif %}
                 </div>
