@@ -4,16 +4,180 @@
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
         <div style="display: flex;">
-            <!-- <div style="margin-right: 15px">
+            <div style="margin-right: 15px">
                 <input id="filter-button" type="button" value="Filter Vehicles"
                         class="button button-small w-button filter-button" style="display: none;">
-            </div> -->
+            </div>
             <div style="margin-right: 15px">
                 <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
                         class="button button-small w-button bg-primary-green"></a>
             </div>
         </div>
-
+        <div class="w-layout-grid grid">
+            <div class="style-guide-padding">
+                <h6>Filters</h6>
+                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                            <div style="display: flex;">
+                                <div style="margin-right: 10px; width: 50%">
+                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                        <option value="" selected disabled>Select Year</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div style="width: 50%;">
+                                    <!-- <h6>Year End</h6> -->
+                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                        <option value="" selected disabled>Select Year</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                            <div>
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make"
+                                    required="" onkeyup="submitFilterForm()">
+                            </div>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                            <div>
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model"
+                                    required="" onkeyup="submitFilterForm()">
+                            </div>
+                        </div>
+                        <!-- <div>
+                            <div>
+                                <h6>Vehicle Model</h6>
+                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
+                                    <option value="" selected disabled>Select Model</option>
+                                    {% for make, models in makes_models.items %}
+                                    <optgroup label="{{ make }}">
+                                        {% for model in models %}
+                                        <option value="{{ model }}">{{ model }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div> -->
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                            <div>
+                                <!-- <h6>Part Type</h6> -->
+                                <select name="category" id="category" class="text-field w-select" required onchange="submitFilterForm()">
+                                    <option value="" selected disabled>Select Category</option>
+                                    {% for category in categories %}
+                                    {% ifequal category vehicle.category %}
+                                    <option value="{{ category }}" selected>{{ category }}</option>
+                                    {% else %}
+                                    <option value="{{ category }}">{{ category }}</option>
+                                    {% endifequal %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                            <div>
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location"
+                                    required="" onkeyup="submitFilterForm()">
+                            </div>
+                        </div>
+                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                            <div>Clear</div>
+                        </a>
+                </form>
+            </div>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h6>Filters</h6>
+                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();">
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                        <div style="display: flex;">
+                            <div style="margin-right: 10px; width: 50%">
+                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
+                                    <option value="" selected disabled>Select Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="width: 50%;">
+                                <!-- <h6>Year End</h6> -->
+                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
+                                    <option value="" selected disabled>Select Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <!-- <h6>Vehicle Model</h6> -->
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
+                                required="" onkeyup="submitFilterModalForm()">
+                        </div>
+                    </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <!-- <h6>Vehicle Model</h6> -->
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
+                                required="" onkeyup="submitFilterModalForm()">
+                        </div>
+                    </div>
+                    <!-- <div>
+                        <div>
+                            <h6>Vehicle Model</h6>
+                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
+                                <option value="" selected disabled>Select Model</option>
+                                {% for make, models in makes_models.items %}
+                                <optgroup label="{{ make }}">
+                                    {% for model in models %}
+                                    <option value="{{ model }}">{{ model }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div> -->
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                        <div>
+                            <!-- <h6>Part Type</h6> -->
+                            <select name="category" id="category-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
+                                <option value="" selected disabled>Select Part Type</option>
+                                {% for category in categories %}
+                                <option value="{{ category }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <!-- <h6>Vehicle Model</h6> -->
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-Modal"
+                                required="" onkeyup="submitFilterModalForm()">
+                        </div>
+                    </div>
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                        <div>Clear</div>
+                    </a>
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
+                        <div>Filter</div>
+                    </a>
+            </form>
+            </div>
+          
+        </div>
        <div class="table-module" id="table-container">
             <div class="table-content" style="margin-top: 15px;">
                 <div class="table-list">
@@ -44,20 +208,20 @@
                 </div>
                 <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
                     <span class="step-links" style="margin-right: 20px">
-                        {% if parts.has_previous %}
+                        {% if vehicles.has_previous %}
                         <!-- <a href="?page=1">&laquo; first</a> -->
-                        <a style="width: 50px" href="?page={{ parts.previous_page_number }}"><input type="button"
+                        <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
                                 value="<" class="button button-small w-button"></a>
                         {% else %}
                         <input type="button" value="<" class="button button-small w-button" disabled>
                         {% endif %}
         
                         <span class="current" style="width: 50px">
-                            {{ parts.number }} of {{ parts.paginator.num_pages }}
+                            {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
                         </span>
         
-                        {% if parts.has_next %}
-                        <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
+                        {% if vehicles.has_next %}
+                        <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
                                 class="button button-small w-button"></a>
                         {% else %}
                         <input type="button" value=">" class="button button-small w-button" disabled>
@@ -169,15 +333,15 @@
         // Clear select elements
         document.getElementById('Year-Start').selectedIndex = 0;
         document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Part-Type').selectedIndex = 0;
-        document.getElementById('Parts-Grade').selectedIndex = 0;
+        document.getElementById('category').selectedIndex = 0;
+        document.getElementById('location').selectedIndex = 0;
         document.getElementById('Vehicle-Model').value = '';
         document.getElementById('Vehicle-Make').value = '';
 
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Part-Type-Modal').selectedIndex = 0;
-        document.getElementById('Parts-Grade-Modal').selectedIndex = 0;
+        document.getElementById('location-Modal').selectedIndex = 0;
+        document.getElementById('category-Modal').selectedIndex = 0;
         document.getElementById('Vehicle-Model-Modal').value = '';
         document.getElementById('Vehicle-Make-Modal').value = '';
 
@@ -185,12 +349,12 @@
         // so that the visual component updates correctly.
         $('#Year-Start').val(null).trigger('change');
         $('#Year-End').val(null).trigger('change');
-        $('#Part-Type').val(null).trigger('change');
-        $('#Parts-Grade').val(null).trigger('change');
+        $('#category').val(null).trigger('change');
+        $('#location').val(null).trigger('change');
         $('#Year-Start-Modal').val(null).trigger('change');
         $('#Year-End-Modal').val(null).trigger('change');
-        $('#Part-Type-Modal').val(null).trigger('change');
-        $('#Parts-Grade-Modal').val(null).trigger('change');
+        $('#category-Modal').val(null).trigger('change');
+        $('#location-Modal').val(null).trigger('change');
         // Trigger the filter form submission to refresh the results
         submitFilterForm();
         submitFilterModalForm();
@@ -200,12 +364,11 @@
     function submitFilterForm() {
         var formData = new FormData(document.forms[0]);
         var queryParams = new URLSearchParams();
-
         for (var pair of formData.entries()) {
             queryParams.append(pair[0], pair[1]);
         }
 
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -225,7 +388,7 @@
             queryParams.append(pair[0], pair[1]);
         }
 
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'

@@ -113,14 +113,12 @@ class defaultDashboardView(LoginRequiredMixin,View):
             'part_types': PARTS_CONST,
         }
         if request.is_ajax():
-            print(request.GET.get)
             year_start = request.GET.get('year_start')
             year_end = request.GET.get('year_end')
             vehicle_make = request.GET.get('vehicle_make')
             vehicle_model = request.GET.get('vehicle_model')
             part_type = request.GET.get('part_type')
             part_grade = request.GET.get('grade')
-            print(year_start, year_end, vehicle_make, vehicle_model, part_type, part_grade)
             parts = part.objects.filter(user=request.user)
             if year_start:
                 parts = parts.filter(vehicle_year__gte=year_start)
@@ -137,7 +135,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
             context['parts'] = parts
             return HttpResponse(render_to_string('parts-table.html', context))
         if context['parts'].count() > 0:
-            parts_list = part.objects.filter(user=request.user)
+            parts_list = part.objects.filter(user=request.user).order_by('id')
             paginator = Paginator(parts_list, 20)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -156,37 +154,50 @@ class vehiclesView(LoginRequiredMixin,View):
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
+            'categories': CATEGORY_CONST,
         }
         if request.is_ajax():
-            print(request.GET.get)
             year_start = request.GET.get('year_start')
             year_end = request.GET.get('year_end')
             vehicle_make = request.GET.get('vehicle_make')
             vehicle_model = request.GET.get('vehicle_model')
-            part_type = request.GET.get('part_type')
-            part_grade = request.GET.get('grade')
-            print(year_start, year_end, vehicle_make, vehicle_model, part_type, part_grade)
-            parts = part.objects.filter(user=request.user)
+            category = request.GET.get('category')
+            location = request.GET.get('location')
+            print(year_start, year_end, vehicle_make, vehicle_model, category, location)
+            print(location)
+            vehicles = Vehicle.objects.filter(user=request.user)
             if year_start:
-                parts = parts.filter(vehicle_year__gte=year_start)
+                vehicles = vehicles.filter(year__gte=year_start)
             if year_end:
-                parts = parts.filter(vehicle_year__lte=year_end)
+                vehicles = vehicles.filter(year__lte=year_end)
             if vehicle_model:
-                parts = parts.filter(vehicle_model__icontains=vehicle_model)
+                vehicles = vehicles.filter(model__icontains=vehicle_model)
             if vehicle_make:
-                parts = parts.filter(vehicle_make__icontains=vehicle_make)
-            if part_type:
-                parts = parts.filter(type__iexact=part_type)
-            if part_grade:
-                parts = parts.filter(grade__iexact=part_grade)
-            context['parts'] = parts
-            return HttpResponse(render_to_string('parts-table.html', context))
-        # if context['parts'].count() > 0:
-        #     parts_list = part.objects.filter(user=request.user)
-        #     paginator = Paginator(parts_list, 20)
-        #     page_number = request.GET.get('page')
-        #     page_obj = paginator.get_page(page_number)
-        #     context['parts'] = page_obj
+                vehicles = vehicles.filter(make__icontains=vehicle_make)
+            if category:
+                vehicles = vehicles.filter(category__iexact=category)
+            if location:
+                vehicles = vehicles.filter(location__iexact=location)
+            context['vehicles'] = vehicles
+            if context['vehicles'].count() > 0:
+                vehicles = vehicles.order_by('id')
+                paginator = Paginator(vehicles, 20)
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
+                context['vehicles'] = page_obj
+                context['year_start_filter'] = year_start
+                context['year_end_filter'] = year_end
+                context['vehicle_make_filter'] = vehicle_make
+                context['vehicle_model_filter'] = vehicle_model
+                context['category_filter'] = category
+                context['location_filter'] = location
+            return HttpResponse(render_to_string('vehicles-table.html', context))
+        if context['vehicles'].count() > 0:
+            vehicles = Vehicle.objects.filter(user=request.user).order_by('id')
+            paginator = Paginator(vehicles, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            context['vehicles'] = page_obj
         return render(request, 'vehicles.html', context)
 
 @login_required  
