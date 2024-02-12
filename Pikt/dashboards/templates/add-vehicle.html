@@ -32,7 +32,7 @@
         </div>
         <div>
             <h6>Stock Number</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="stock_number" id="stock_number" required>
+            <input type="text" class="text-field w-input" maxlength="256" name="stock_number" id="stock_number" value="{{ stock_number }}" required>
         </div>
         <div>
             <h6>Year</h6>
@@ -95,9 +95,13 @@
             <h6>Category</h6>
             <select name="category" id="category" class="text-field w-input">
                 <option value="" selected disabled>Select Category</option>
-                <option value="Storage">Storage</option>
-                <option value="Dismantled">Dismantled</option>
-                <option value="Crushed">Crushed</option>
+                {% for category in categories %}
+                {% if category in vehicle.category %}
+                <option value="{{ category }}" selected>{{ category }}</option>
+                {% else %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endif %}
+                {% endfor %}
             </select>
         </div>
         <div style="grid-column: span 2;">
@@ -442,6 +446,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
                 <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
                     style="background-color: rgb(132, 173, 199, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
@@ -501,7 +506,7 @@
                     </div>
                 </div>
             </div>
-        {% endif %}
+        
 
     </div>
     <input type="submit" value="Add Vehicle" data-wait="Please wait..." class="button button-small w-button">

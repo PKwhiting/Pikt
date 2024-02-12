@@ -997,6 +997,8 @@ DAMAGE_TYPE_CONST = [
 ]
 
 CATEGORY_CONST = [
+    "Pending",
+    "Finalized",
     "Storage",
     "Dismantled",
     "Crushed"

@@ -10,6 +10,7 @@ import json
 from django.template.loader import render_to_string
 import os
 from django.http import HttpResponse
+from django.db.models import Max
 import ast
 from django.conf import settings
 from django.utils import timezone
@@ -282,7 +283,9 @@ def add_vehicle(request):
             request.user.save()
     else:
         form = VehicleForm()
-
+    next_vehicle_id = Vehicle.objects.all().aggregate(Max('id'))['id__max'] + 1 if Vehicle.objects.all().exists() else 1
+    while Vehicle.objects.filter(stock_number=next_vehicle_id).exists():
+        next_vehicle_id += 1
     context = {
         'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
         'years' : range(2024, 1969, -1),
@@ -292,6 +295,9 @@ def add_vehicle(request):
         'messages': json.loads(request.user.messages),
         'damage_types': DAMAGE_TYPE_CONST,
         'vehicles': Vehicle.objects.filter(user=request.user),
+        'categories': CATEGORY_CONST,
+        'stock_number': next_vehicle_id
+
     
     }
     context['form'] = form
