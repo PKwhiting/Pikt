@@ -25,6 +25,7 @@ class User(AbstractUser):
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='users')
     is_main_company_contact = models.BooleanField(default=False)
     role = models.CharField(choices=ROLE_CHOICES, max_length=10, default='Employee')
+    u_pull_it_account = models.BooleanField(default=False)
 
 class templateImage(models.Model):
     image = models.ImageField(upload_to='images/')

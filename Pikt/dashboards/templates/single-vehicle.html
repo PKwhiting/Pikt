@@ -243,19 +243,21 @@
                     </div>
                 </div>
                 {% endif %}
-                <div class="account-delete">
-                    <form action="{% url 'edit_vehicle' vehicle.id %}" method="get">
-                        {% csrf_token %}
-                        <input type="submit" value="Edit Vehicle" style="margin-top: 5px;"
-                            class="button button-small bg-primary-green w-button">
-                    </form>
-                    <form action="{% url 'delete_vehicle' vehicle.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Delete Vehicle" style="margin-top: 5px;"
-                            class="button button-small bg-primary-rose w-button">
-                    </form>
+                {% if not user.u_pull_it_account %}
+                    <div class="account-delete">
+                        <form action="{% url 'edit_vehicle' vehicle.id %}" method="get">
+                            {% csrf_token %}
+                            <input type="submit" value="Edit Vehicle" style="margin-top: 5px;"
+                                class="button button-small bg-primary-green w-button">
+                        </form>
+                        <form action="{% url 'delete_vehicle' vehicle.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete Vehicle" style="margin-top: 5px;"
+                                class="button button-small bg-primary-rose w-button">
+                        </form>
 
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

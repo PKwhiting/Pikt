@@ -8,10 +8,17 @@
                 <input id="filter-button" type="button" value="Filter Vehicles"
                         class="button button-small w-button filter-button" style="display: none;">
             </div>
-            <div style="margin-right: 15px">
-                <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
-                        class="button button-small w-button bg-primary-green"></a>
-            </div>
+            {% if user.u_pull_it_account %}
+                <div style="margin-right: 15px">
+                    <a href="/dashboards/add-vehicle/"><input type="button" value="Purchase Vehicle"
+                            class="button button-small w-button bg-primary-green"></a>
+                </div>
+            {% else %}
+                <div style="margin-right: 15px">
+                    <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
+                            class="button button-small w-button bg-primary-green"></a>
+                </div>
+            {% endif %}
         </div>
         <div class="w-layout-grid grid">
             <div class="style-guide-padding">
@@ -21,7 +28,7 @@
                             <div style="display: flex;">
                                 <div style="margin-right: 10px; width: 50%">
                                     <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
+                                        <option value="" selected disabled>Select Min Year</option>
                                         {% for year in years %}
                                         <option value="{{ year }}">{{ year }}</option>
                                         {% endfor %}
@@ -30,7 +37,7 @@
                                 <div style="width: 50%;">
                                     <!-- <h6>Year End</h6> -->
                                     <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
+                                        <option value="" selected disabled>Select Max Year</option>
                                         {% for year in years %}
                                         <option value="{{ year }}">{{ year }}</option>
                                         {% endfor %}
@@ -38,46 +45,36 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e"  style="display: flex;">
+                            <div style="margin-right: 12px">
+                                <!-- <h6>Vehicle Model</h6> -->
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Make" name="vehicle_make" id="Vehicle-Make"
+                                    required="" onkeyup="submitFilterForm()"">
+                            </div>
                             <div>
                                 <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make"
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Model" name="vehicle_model" id="Vehicle-Model"
                                     required="" onkeyup="submitFilterForm()">
                             </div>
                         </div>
                         <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
                             <div>
                                 <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model"
+                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number"
                                     required="" onkeyup="submitFilterForm()">
                             </div>
                         </div>
-                        <!-- <div>
-                            <div>
-                                <h6>Vehicle Model</h6>
-                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                    <option value="" selected disabled>Select Model</option>
-                                    {% for make, models in makes_models.items %}
-                                    <optgroup label="{{ make }}">
-                                        {% for model in models %}
-                                        <option value="{{ model }}">{{ model }}</option>
-                                        {% endfor %}
-                                    </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div> -->
                         <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
                             <div>
                                 <!-- <h6>Part Type</h6> -->
                                 <select name="category" id="category" class="text-field w-select" required onchange="submitFilterForm()">
                                     <option value="" selected disabled>Select Category</option>
                                     {% for category in categories %}
-                                    {% ifequal category vehicle.category %}
+                                    {% if category in vehicle.category %}
                                     <option value="{{ category }}" selected>{{ category }}</option>
                                     {% else %}
                                     <option value="{{ category }}">{{ category }}</option>
-                                    {% endifequal %}
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -89,7 +86,7 @@
                                     required="" onkeyup="submitFilterForm()">
                             </div>
                         </div>
-                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
                             <div>Clear</div>
                         </a>
                 </form>
@@ -99,7 +96,7 @@
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h6>Filters</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();">
+                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();" style="width: 100%">
                     <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
                         <div style="display: flex;">
                             <div style="margin-right: 10px; width: 50%">
@@ -121,35 +118,20 @@
                             </div>
                         </div>
                     </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: flex;">
+                        <div style="margin-right: 12px;">
                             <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
                                 required="" onkeyup="submitFilterModalForm()">
                         </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
                         <div>
-                            <!-- <h6>Vehicle Model</h6> -->
                             <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
                                 required="" onkeyup="submitFilterModalForm()">
                         </div>
                     </div>
-                    <!-- <div>
-                        <div>
-                            <h6>Vehicle Model</h6>
-                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                <option value="" selected disabled>Select Model</option>
-                                {% for make, models in makes_models.items %}
-                                <optgroup label="{{ make }}">
-                                    {% for model in models %}
-                                    <option value="{{ model }}">{{ model }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div> -->
+                    <div>
+                        <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number-Modal"
+                            required="" onkeyup="submitFilterForm()">
+                    </div>
                     <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
                         <div>
                             <!-- <h6>Part Type</h6> -->
@@ -168,7 +150,7 @@
                                 required="" onkeyup="submitFilterModalForm()">
                         </div>
                     </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
                         <div>Clear</div>
                     </a>
                     <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
@@ -176,151 +158,177 @@
                     </a>
             </form>
             </div>
-          
+        
         </div>
-       <div class="table-module" id="table-container">
-            <div class="table-content" style="margin-top: 15px;">
-                <div class="table-list">
-                    <div class="w-layout-grid table-headers mobile-table">
-                        <div class="caption-large mobile">Year</div>
-                        <div class="caption-large mobile">Make</div>
-                        <div class="caption-large">Model</div>
-                        <div class="caption-large">Yard</div>
-                        <div class="caption-large mobile">Location</div>
-                        <div class="caption-large mobile">Category</div>
+        <div id="vehicleEditModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="editVehicleClose">&times;</span>
+                <h6>Edit Vehicles</h6>
+                <form id="filter-form-modal" class="w-layout-grid _3-grid" style="width: 100%">
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-edit"
+                                required>
+                        </div>
                     </div>
-                    {% if vehicles %}
-                        {% for vehicle in vehicles %}
-                            <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
-                                <div class="w-layout-grid table-row">
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.year }}</div>
-                                    <div class="mobile">{{ vehicle.make }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
-                                        {{ vehicle.model }}
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
+                            <select name="category" id="category-edit" class="text-field w-select">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for category in categories %}
+                                {% if category in vehicle.category %}
+                                <option value="{{ category }}" selected>{{ category }}</option>
+                                {% else %}
+                                <option value="{{ category }}">{{ category }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="saveVehicleChanges()">
+                        <div>Save Change</div>
+                    </a>
+            </form>
+            </div>
+        
+        </div>
+        <div class="module" style="padding: 0">
+            <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: end;">
+                <div id="edit-button">
+                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                        <img style="height: 25px; margin-right: 0px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+                    </a>
+                </div>
+                
+                
+            </div>
+            <div class="table-module" id="table-container">
+                <div class="table-content" style="margin-top: 15px;">
+                    <div class="table-list">
+                        <div class="w-layout-grid table-headers mobile-table">
+                            <div class="caption-large select-column"></div>
+                            <div class="caption-large">Year</div>
+                            <div class="caption-large mobile tablet">Make</div>
+                            <div class="caption-large">Model</div>
+                            <div class="caption-large tablet mobile">Yard</div>
+                            <div class="caption-large mobile">Location</div>
+                            <div class="caption-large">Category</div>
+                        </div>
+                        {% if vehicles %}
+                            {% for vehicle in vehicles %}
+                                <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
+                                    <div class="w-layout-grid table-row">
+                                        <td><input type="checkbox" name="vehicle"  style="width: 20px; height: 20px;" value="{{ vehicle.id }}"></td>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.year }}</div>
+                                        <div class="tablet mobile">{{ vehicle.make }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title tablet mobile" style="display: block">
+                                            {{ vehicle.model }}
+                                        </div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.yard }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.location }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.category }}</div>
                                     </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.yard }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.location }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.category }}</div>
-                                </div>
-                            </a> 
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
-                    <span class="step-links" style="margin-right: 20px">
-                        {% if vehicles.has_previous %}
-                        <!-- <a href="?page=1">&laquo; first</a> -->
-                        <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
-                                value="<" class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value="<" class="button button-small w-button" disabled>
+                                </a> 
+                            {% endfor %}
                         {% endif %}
-        
-                        <span class="current" style="width: 50px">
-                            {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
+                    </div>
+                    <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
+                        <span class="step-links" style="margin-right: 20px">
+                            {% if vehicles.has_previous %}
+                            <!-- <a href="?page=1">&laquo; first</a> -->
+                            <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
+                                    value="<" class="button button-small w-button"></a>
+                            {% else %}
+                            <input type="button" value="<" class="button button-small w-button" disabled>
+                            {% endif %}
+            
+                            <span class="current" style="width: 50px">
+                                {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
+                            </span>
+            
+                            {% if vehicles.has_next %}
+                            <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
+                                    class="button button-small w-button"></a>
+                            {% else %}
+                            <input type="button" value=">" class="button button-small w-button" disabled>
+                            {% endif %}
                         </span>
-        
-                        {% if vehicles.has_next %}
-                        <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
-                                class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value=">" class="button button-small w-button" disabled>
-                        {% endif %}
-                    </span>
+                    </div>
                 </div>
             </div>
-            <!-- <div class="table-bottom-caption">
-                <div>Showing all items from Work Performance dataset</div>
-            </div> -->
         </div>
-        <!-- <div class="w-layout-grid _1-2-grid">
-            <div class="module">
-                <div class="card-header">
-                    <h4>Circle Chart</h4>
-                </div>
-                <div class="child-content-center"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac2d25bb74b5e3d4a6fa3_Dash%20Chart%2001.svg"
-                        loading="lazy" alt="" class="cirlce-chart">
-                    <div class="chart-colors-wrapper">
-                        <div class="label">
-                            <div class="indication-color bg-primary-blue"></div>
-                            <div class="small-text">Running</div>
-                        </div>
-                        <div class="label">
-                            <div class="indication-color bg-primary-rose"></div>
-                            <div class="small-text">Delivered</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="module">
-                <div class="card-header">
-                    <h4>Projects</h4>
-                </div><a href="/project-management" class="projects-list first w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg 4501w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Dashboard Kit</h6>
-                            <div class="small-text text-grey-2">2 hr ago</div>
-                        </div>
-                    </div>
-                    <div class="small-link">View Project</div>
-                </a><a href="/project-management" class="projects-list w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg 4500w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Sport Website</h6>
-                            <div class="small-text text-grey-2">6 hr ago</div>
-                        </div>
-                    </div>
-                    <div class="small-link">View Project</div>
-                </a><a href="/project-management" class="projects-list last w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg 4501w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Landingpage System</h6>
-                            <div class="small-text text-grey-2">1 week ago</div>
-                        </div>
-                    </div>
-                    <div class="small-link">View Project</div>
-                </a>
-            </div>
-        </div> -->
     </div>
 </div>
 <script>
-    // Get the modal
+    var editVehicleModal = document.getElementById("vehicleEditModal");
+    var editVehicleBtn = document.getElementById("edit-button");
+    editVehicleBtn.onclick = function () {
+        editVehicleModal.style.display = "block";
+    }
+    var editVehicleModalSpan = document.getElementById("editVehicleClose");
+    editVehicleModalSpan.onclick = function () {
+        editVehicleModal.style.display = "none";
+    }
+    function clearVehicleCheckboxes() {
+        // Select all checkboxes with the name 'part' and loop through them
+        document.querySelectorAll('input[type="checkbox"][name="vehicle"]').forEach(function(checkbox) {
+            checkbox.checked = false; // Uncheck the checkbox
+        });
+    }
+    function saveVehicleChanges() {
+        var selectedVehicleIds = [];
+        $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
+            selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
+        });
+        var location = document.getElementById('location-edit').value;
+        var category = document.getElementById('category-edit').value;
+        if (!location && category === "") {
+            alert("Please fill out at least one field before saving changes.");
+            return false; // Stop the form submission
+        }
+        var data = {
+            vehicleIds: selectedVehicleIds,
+            location: location,
+            category: category
+        };
+        let params = new URLSearchParams(data).toString();
+        fetch("{% url 'vehicles' %}?" + params, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'vehicleEdit'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            clearVehicleCheckboxes();
+            editVehicleModal.style.display = "none";
+            window.location.reload();
+
+
+        })
+        .catch(error => console.error('Error:', error));
+
+
+    }
     var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
     var btn = document.getElementById("filter-button");
-
-    // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-    // When the user clicks the button, open the modal 
     btn.onclick = function () {
         modal.style.display = "block";
     }
-
-    // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
         modal.style.display = "none";
     }
 
+    
+
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        if (event.target == modal) {
+        if (event.target == modal || event.target == editVehicleModal) {
             modal.style.display = "none";
+            editVehicleModal.style.display = "none";
         }
     }
     function closeModal() {
@@ -330,13 +338,13 @@
 
 
     function clearFilters() {
-        // Clear select elements
         document.getElementById('Year-Start').selectedIndex = 0;
         document.getElementById('Year-Start').selectedIndex = 0;
         document.getElementById('category').selectedIndex = 0;
         document.getElementById('location').selectedIndex = 0;
         document.getElementById('Vehicle-Model').value = '';
         document.getElementById('Vehicle-Make').value = '';
+        document.getElementById('Vehicle-Stock-Number').value = '';
 
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
@@ -344,6 +352,8 @@
         document.getElementById('category-Modal').selectedIndex = 0;
         document.getElementById('Vehicle-Model-Modal').value = '';
         document.getElementById('Vehicle-Make-Modal').value = '';
+        document.getElementById('Vehicle-Stock-Number-Modal').value = '';
+        
 
         // If you are using any plugins like Select2, you may need to trigger a change event
         // so that the visual component updates correctly.
@@ -355,6 +365,7 @@
         $('#Year-End-Modal').val(null).trigger('change');
         $('#category-Modal').val(null).trigger('change');
         $('#location-Modal').val(null).trigger('change');
+        $('#Vehicle-Stock-Number').val(null).trigger('change');
         // Trigger the filter form submission to refresh the results
         submitFilterForm();
         submitFilterModalForm();
@@ -371,7 +382,8 @@
         fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'vehicleFilter'
             }
         })
         .then(response => response.text())
@@ -391,7 +403,8 @@
         fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'clearVehicleFilter'
             }
         })
         .then(response => response.text())
@@ -406,10 +419,10 @@
 </script>
 <style>
     .table-row {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: .35fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     .mobile-table {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: .35fr 1fr 1fr 1fr 1fr 1fr  1fr;
     }
 
     @media screen and (max-width: 1000px) {
@@ -420,20 +433,25 @@
     }
     @media screen and (max-width: 730px) {
         .table-row{
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
 
         } 
         .mobile-table {
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
+        }
+        .tablet {
+            display: none;
         }
     }
     @media screen and (max-width: 479px) {
         .table-row{
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr;
 
         } 
         .mobile-table {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr;
+            grid-column-gap: 0% !important;
+            display: inline-grid !important;
         }
     }
     @media screen and (max-width: 991px) {
@@ -513,8 +531,10 @@
     .close {
         color: #aaa;
         float: right;
-        font-size: 28px;
+        font-size: 50px;
         font-weight: bold;
+        margin-bottom: 15px;
+        margin-right: 5px;
     }
 
     .close:hover,

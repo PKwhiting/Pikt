@@ -104,301 +104,404 @@
             <h6>Description</h6>
             <textarea class="text-field w-input" maxlength="256" name="description" id="description" rows="4" style="resize: none;"></textarea>
         </div>
-        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
-            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
-                style="background-color: rgb(255, 1, 116, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
-                    style="height: 26px"
-                    src="{% static 'icons/car-red.svg' %}"
-                    loading="lazy" alt="" class="nav-icon">
-                <div style="color: black">Vehicle Details</div><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                    loading="lazy" alt="" class="nav-dropdown-icon"
-                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-            </div>
-            <div class="dropdown-list w-dropdown-list"
-                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
-                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                    
-                    <div>
-                        <h6>Vehicle Engine</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="engine" id="engine">
-                    </div>
-                    <div>
-                        <h6>Mileage</h6>
-                        <input type="number" class="text-field w-input" maxlength="256" name="mileage" id="mileage">
-                    </div>
-                    <div>
-                        <h6>Trim</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="trim" id="trim">
-                    </div>
-                    <div>
-                        <h6>Transmission</h6>
-                        <select name="transmission" id="transmission" class="text-field w-input">
-                            <option value="" selected disabled>Select Category</option>
-                            <option value="Automatic">Automatic</option>
-                            <option value="Manual">Manual</option>
-                            <option value="CVT">CVT</option>
-                            <option value="DCT">DCT</option>
-                        </select>
-                    </div>
-                    <div>
-                        <h6>Body Type</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="body_type" id="body_type">
-                    </div>
-                    <div>
-                        <h6>Drivetrain</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="drivetrain" id="drivetrain">
+        {% if user.u_pull_it_account %}
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgb(255, 1, 116, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        style="height: 26px"
+                        src="{% static 'icons/car-red.svg' %}"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Seller Details</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        
+                        <div>
+                            <h6>Seller First Name</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="seller_first_name" id="seller_first_name">
+                        </div>
+                        <div>
+                            <h6>Seller Last Name</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="seller_last_name" id="seller_last_name">
+                        </div>
+                        <div>
+                            <h6>Seller Phone Number</h6>
+                            <input type="number" class="text-field w-input" maxlength="256" name="seller_phone" id="seller_phone">
+                        </div>
+                        <div>
+                            <h6>Seller Email Address</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="seller_email" id="seller_email">
+                        </div>
+                        <div>
+                            <h6>Seller Street Address</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="seller_address" id="seller_address">
+                        </div>
+                        <div>
+                            <h6>City</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="seller_city" id="seller_city">
+                        </div>
+                        <div>
+                            <h6>State</h6>
+                            <select class="text-field w-input" name="seller_state" id="seller_state">
+                                <option value="">Select a state</option>
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska">Alaska</option>
+                                <option value="Arizona">Arizona</option>
+                                <option value="Arkansas">Arkansas</option>
+                                <option value="California">California</option>
+                                <option value="Colorado">Colorado</option>
+                                <option value="Connecticut">Connecticut</option>
+                                <option value="Delaware">Delaware</option>
+                                <option value="Florida">Florida</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Hawaii">Hawaii</option>
+                                <option value="Idaho">Idaho</option>
+                                <option value="Illinois">Illinois</option>
+                                <option value="Indiana">Indiana</option>
+                                <option value="Iowa">Iowa</option>
+                                <option value="Kansas">Kansas</option>
+                                <option value="Kentucky">Kentucky</option>
+                                <option value="Louisiana">Louisiana</option>
+                                <option value="Maine">Maine</option>
+                                <option value="Maryland">Maryland</option>
+                                <option value="Massachusetts">Massachusetts</option>
+                                <option value="Michigan">Michigan</option>
+                                <option value="Minnesota">Minnesota</option>
+                                <option value="Mississippi">Mississippi</option>
+                                <option value="Missouri">Missouri</option>
+                                <option value="Montana">Montana</option>
+                                <option value="Nebraska">Nebraska</option>
+                                <option value="Nevada">Nevada</option>
+                                <option value="New Hampshire">New Hampshire</option>
+                                <option value="New Jersey">New Jersey</option>
+                                <option value="New Mexico">New Mexico</option>
+                                <option value="New York">New York</option>
+                                <option value="North Carolina">North Carolina</option>
+                                <option value="North Dakota">North Dakota</option>
+                                <option value="Ohio">Ohio</option>
+                                <option value="Oklahoma">Oklahoma</option>
+                                <option value="Oregon">Oregon</option>
+                                <option value="Pennsylvania">Pennsylvania</option>
+                                <option value="Rhode Island">Rhode Island</option>
+                                <option value="South Carolina">South Carolina</option>
+                                <option value="South Dakota">South Dakota</option>
+                                <option value="Tennessee">Tennessee</option>
+                                <option value="Texas">Texas</option>
+                                <option value="Utah">Utah</option>
+                                <option value="Vermont">Vermont</option>
+                                <option value="Virginia">Virginia</option>
+                                <option value="Washington">Washington</option>
+                                <option value="West Virginia">West Virginia</option>
+                                <option value="Wisconsin">Wisconsin</option>
+                                <option value="Wyoming">Wyoming</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
-            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
-                style="background-color: rgba(255, 183, 49, 0.15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
-                    loading="lazy" alt="" class="nav-icon">
-                <div style="color: black">Interior & Exterior Colors</div><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                    loading="lazy" alt="" class="nav-dropdown-icon"
-                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-            </div>
-            <div class="dropdown-list w-dropdown-list"
-                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
-                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                    <div>
-                        <h6>Exterior Primary</h6>
-                        <select name="exterior_primary_color" id="exterior_primary_color" class="text-field w-input">
-                            <option value="" selected disabled>Select Color</option>
-                            {% for color in colors %}
-                            <option value="{{ color }}">{{ color }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <h6>Paint Code</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="exterior_primary_paint_code" id="exterior_primary_paint_code">
-                    </div>
-                    <div>
-                        <h6>Exterior Secondary</h6>
-                        <select name="exterior_secondary_color" id="exterior_secondary_color" class="text-field w-input">
-                            <option value="" selected disabled>Select Color</option>
-                            {% for color in colors %}
-                            <option value="{{ color }}">{{ color }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <h6>Paint Code</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="exterior_secondary_paint_code" id="exterior_secondary_paint_code">
-                    </div>
-                    <div>
-                        <h6>Interior Primary</h6>
-                        <select name="interior_primary_color" id="interior_primary_color" class="text-field w-input">
-                            <option value="" selected disabled>Select Color</option>
-                            {% for color in colors %}
-                            <option value="{{ color }}">{{ color }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <h6>Paint Code</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="interior_primary_paint_code" id="interior_primary_paint_code">
-                    </div>
-                    <div>
-                        <h6>Interior Secondary</h6>
-                        <select name="interior_secondary_color" id="interior_secondary_color" class="text-field w-input">
-                            <option value="" selected disabled>Select Color</option>
-                            {% for color in colors %}
-                            <option value="{{ color }}">{{ color }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <h6>Paint Code</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="interior_secondary_paint_code" id="interior_secondary_paint_code">
+        {% else %}
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgb(255, 1, 116, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        style="height: 26px"
+                        src="{% static 'icons/car-red.svg' %}"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Vehicle Details</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        
+                        <div>
+                            <h6>Vehicle Engine</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="engine" id="engine">
+                        </div>
+                        <div>
+                            <h6>Mileage</h6>
+                            <input type="number" class="text-field w-input" maxlength="256" name="mileage" id="mileage">
+                        </div>
+                        <div>
+                            <h6>Trim</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="trim" id="trim">
+                        </div>
+                        <div>
+                            <h6>Transmission</h6>
+                            <select name="transmission" id="transmission" class="text-field w-input">
+                                <option value="" selected disabled>Select Category</option>
+                                <option value="Automatic">Automatic</option>
+                                <option value="Manual">Manual</option>
+                                <option value="CVT">CVT</option>
+                                <option value="DCT">DCT</option>
+                            </select>
+                        </div>
+                        <div>
+                            <h6>Body Type</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="body_type" id="body_type">
+                        </div>
+                        <div>
+                            <h6>Drivetrain</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="drivetrain" id="drivetrain">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
-            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
-                style="background-color: rgb(118, 63, 249, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
-                    loading="lazy" alt="" class="nav-icon">
-                <div style="color: black">Costs & Fees</div><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                    loading="lazy" alt="" class="nav-dropdown-icon"
-                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-            </div>
-            <div class="dropdown-list w-dropdown-list"
-                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
-                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                    <div>
-                        <h6>Total Cost</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="total_cost" id="total_cost" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Bid Amount</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="bid_amount" id="bid_amount" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Auction Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="auction_fee" id="auction_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Buyer Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="buyer_fee" id="buyer_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Internet Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="internet_fee" id="internet_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Tow Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="tow_fee" id="tow_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Dismantler Cost</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="dismantler_cost" id="dismantler_cost" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Storage Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="storage_fee" id="storage_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Pullout Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="pullout_fee" id="pullout_fee" oninput="formatInput(this)">
-                    </div>
-                    <div>
-                        <h6>Misc Fee</h6>
-                        <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="misc_fee" id="misc_fee" oninput="formatInput(this)">
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgba(255, 183, 49, 0.15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Interior & Exterior Colors</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        <div>
+                            <h6>Exterior Primary</h6>
+                            <select name="exterior_primary_color" id="exterior_primary_color" class="text-field w-input">
+                                <option value="" selected disabled>Select Color</option>
+                                {% for color in colors %}
+                                <option value="{{ color }}">{{ color }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <h6>Paint Code</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="exterior_primary_paint_code" id="exterior_primary_paint_code">
+                        </div>
+                        <div>
+                            <h6>Exterior Secondary</h6>
+                            <select name="exterior_secondary_color" id="exterior_secondary_color" class="text-field w-input">
+                                <option value="" selected disabled>Select Color</option>
+                                {% for color in colors %}
+                                <option value="{{ color }}">{{ color }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <h6>Paint Code</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="exterior_secondary_paint_code" id="exterior_secondary_paint_code">
+                        </div>
+                        <div>
+                            <h6>Interior Primary</h6>
+                            <select name="interior_primary_color" id="interior_primary_color" class="text-field w-input">
+                                <option value="" selected disabled>Select Color</option>
+                                {% for color in colors %}
+                                <option value="{{ color }}">{{ color }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <h6>Paint Code</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="interior_primary_paint_code" id="interior_primary_paint_code">
+                        </div>
+                        <div>
+                            <h6>Interior Secondary</h6>
+                            <select name="interior_secondary_color" id="interior_secondary_color" class="text-field w-input">
+                                <option value="" selected disabled>Select Color</option>
+                                {% for color in colors %}
+                                <option value="{{ color }}">{{ color }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <h6>Paint Code</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="interior_secondary_paint_code" id="interior_secondary_paint_code">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
-            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
-                style="background-color: rgb(1, 221, 165, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
-                    loading="lazy" alt="" class="nav-icon">
-                <div style="color: black">Acquisition & Disposal Details</div><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                    loading="lazy" alt="" class="nav-dropdown-icon"
-                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-            </div>
-            <div class="dropdown-list w-dropdown-list"
-                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
-                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                    <div>
-                        <h6>Buyer</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="buyer" id="buyer">
-                    </div>
-                    <div>
-                        <h6>Purchase Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="purchase_date" id="purchase_date">
-                    </div>
-                    <div>
-                        <h6>Possession Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="possession_date" id="possession_date">
-                    </div>
-                    <div>
-                        <h6>Cleared Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="cleared_date" id="cleared_date">
-                    </div>
-                    <div>
-                        <h6>Towed By</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="towed_by" id="towed_by">
-                    </div>
-                    <div>
-                        <h6>Inventoried Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="inventoried_date" id="inventoried_date">
-                    </div>
-                    <div>
-                        <h6>Dismantled By</h6>
-                        <input type="text" class="text-field w-input" maxlength="256" name="dismantled_by" id="dismantled_by">
-                    </div>
-                    <div>
-                        <h6>Dismanted Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="dismantled_date" id="dismantled_date">
-                    </div>
-                    <div>
-                        <h6>Crush Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="crush_date" id="crush_date">
-                    </div>
-                    <div>
-                        <h6>Sold Date</h6>
-                        <input type="date" class="text-field w-input" maxlength="256" name="sold_date" id="sold_date">
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgb(118, 63, 249, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Costs & Fees</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        <div>
+                            <h6>Total Cost</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="total_cost" id="total_cost" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Bid Amount</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="bid_amount" id="bid_amount" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Auction Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="auction_fee" id="auction_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Buyer Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="buyer_fee" id="buyer_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Internet Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="internet_fee" id="internet_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Tow Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="tow_fee" id="tow_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Dismantler Cost</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="dismantler_cost" id="dismantler_cost" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Storage Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="storage_fee" id="storage_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Pullout Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="pullout_fee" id="pullout_fee" oninput="formatInput(this)">
+                        </div>
+                        <div>
+                            <h6>Misc Fee</h6>
+                            <input type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="misc_fee" id="misc_fee" oninput="formatInput(this)">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
-            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
-                style="background-color: rgb(132, 173, 199, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
-                    style="height: 26px"
-                    src="{% static 'icons/camera.svg' %}"
-                    loading="lazy" alt="" class="nav-icon">
-                <div style="color: black">Vehicle Images</div><img
-                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                    loading="lazy" alt="" class="nav-dropdown-icon"
-                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-            </div>
-            <div class="dropdown-list w-dropdown-list"
-                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
-                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                    <div>
-                        <h6>Image 1</h6>
-                        <input type="file" id="images" name="image_1" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 2</h6>
-                        <input type="file" id="images" name="image_2" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 3</h6>
-                        <input type="file" id="images" name="image_3" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 4</h6>
-                        <input type="file" id="images" name="image_4" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 5</h6>
-                        <input type="file" id="images" name="image_5" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 6</h6>
-                        <input type="file" id="images" name="image_6" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 7</h6>
-                        <input type="file" id="images" name="image_7" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 8</h6>
-                        <input type="file" id="images" name="image_8" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div> 
-                        <h6>Image 9</h6>
-                        <input type="file" id="images" name="image_9" accept="image/*" class="text-field w-input">
-                    </div>
-                    <div>
-                        <h6>Image 10</h6>
-                        <input type="file" id="images" name="image_10" accept="image/*" class="text-field w-input">
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgb(1, 221, 165, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Acquisition & Disposal Details</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        <div>
+                            <h6>Buyer</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="buyer" id="buyer">
+                        </div>
+                        <div>
+                            <h6>Purchase Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="purchase_date" id="purchase_date">
+                        </div>
+                        <div>
+                            <h6>Possession Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="possession_date" id="possession_date">
+                        </div>
+                        <div>
+                            <h6>Cleared Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="cleared_date" id="cleared_date">
+                        </div>
+                        <div>
+                            <h6>Towed By</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="towed_by" id="towed_by">
+                        </div>
+                        <div>
+                            <h6>Inventoried Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="inventoried_date" id="inventoried_date">
+                        </div>
+                        <div>
+                            <h6>Dismantled By</h6>
+                            <input type="text" class="text-field w-input" maxlength="256" name="dismantled_by" id="dismantled_by">
+                        </div>
+                        <div>
+                            <h6>Dismanted Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="dismantled_date" id="dismantled_date">
+                        </div>
+                        <div>
+                            <h6>Crush Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="crush_date" id="crush_date">
+                        </div>
+                        <div>
+                            <h6>Sold Date</h6>
+                            <input type="date" class="text-field w-input" maxlength="256" name="sold_date" id="sold_date">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                    style="background-color: rgb(132, 173, 199, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                    aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                        style="height: 26px"
+                        src="{% static 'icons/camera.svg' %}"
+                        loading="lazy" alt="" class="nav-icon">
+                    <div style="color: black">Vehicle Images</div><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                        loading="lazy" alt="" class="nav-dropdown-icon"
+                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+                <div class="dropdown-list w-dropdown-list"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                    <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                        <div>
+                            <h6>Image 1</h6>
+                            <input type="file" id="images" name="image_1" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 2</h6>
+                            <input type="file" id="images" name="image_2" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 3</h6>
+                            <input type="file" id="images" name="image_3" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 4</h6>
+                            <input type="file" id="images" name="image_4" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 5</h6>
+                            <input type="file" id="images" name="image_5" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 6</h6>
+                            <input type="file" id="images" name="image_6" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 7</h6>
+                            <input type="file" id="images" name="image_7" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 8</h6>
+                            <input type="file" id="images" name="image_8" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div> 
+                            <h6>Image 9</h6>
+                            <input type="file" id="images" name="image_9" accept="image/*" class="text-field w-input">
+                        </div>
+                        <div>
+                            <h6>Image 10</h6>
+                            <input type="file" id="images" name="image_10" accept="image/*" class="text-field w-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
     </div>
     <input type="submit" value="Add Vehicle" data-wait="Please wait..." class="button button-small w-button">

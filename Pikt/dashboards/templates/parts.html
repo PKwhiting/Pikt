@@ -73,11 +73,11 @@
                                 <select name="part_type" id="Part-Type" class="text-field w-select" required onchange="submitFilterForm()">
                                     <option value="" selected disabled>Select Part Type</option>
                                     {% for part in part_types %}
-                                    {% ifequal part form.type.value %}
+                                    {% if part in form.type.value %}
                                     <option value="{{ part }}" selected>{{ part }}</option>
                                     {% else %}
                                     <option value="{{ part }}">{{ part }}</option>
-                                    {% endifequal %}
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -91,7 +91,7 @@
                                 <option value="C">C</option>
                             </select>
                         </div>
-                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
                             <div>Clear</div>
                         </a>
                 </form>
@@ -158,11 +158,11 @@
                             <select name="part_type" id="Part-Type-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
                                 <option value="" selected disabled>Select Part Type</option>
                                 {% for part in part_types %}
-                                {% ifequal part form.type.value %}
+                                {% if part in form.type.value %}
                                 <option value="{{ part }}" selected>{{ part }}</option>
                                 {% else %}
                                 <option value="{{ part }}">{{ part }}</option>
-                                {% endifequal %}
+                                {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -190,25 +190,25 @@
             <div class="table-content" style="margin-top: 15px;">
                 <div class="table-list">
                     <div class="w-layout-grid table-headers mobile-table">
-                        <div class="caption-large mobile">Year</div>
-                        <div class="caption-large mobile">Make</div>
+                        <div class="caption-large select-column"></div>
+                        <div class="caption-large mobile tablet">Year</div>
+                        <div class="caption-large mobile tablet">Make</div>
                         <div class="caption-large">Model</div>
-                        <div class="caption-large">Part</div>
                         <div class="caption-large mobile">Grade</div>
-                        <div class="caption-large mobile">Part</div>
+                        <div class="caption-large">Part</div>
                     </div>
                     {% if parts %}
                         {% for part in parts %}
                             <a href="{% url 'single_part' part.id %}" target="_blank">
                                 <div class="w-layout-grid table-row">
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.vehicle_year }}</div>
-                                    <div class="mobile">{{ part.vehicle_make }}</div>
+                                    <td><input type="checkbox" name="part"  style="width: 20px; height: 20px;" value="{{ part.id }}"></td>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile tablet">{{ part.vehicle_year }}</div>
+                                    <div class="mobile tablet">{{ part.vehicle_make }}</div>
                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
                                         {{ part.vehicle_model }}
                                     </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ part.type }}</div>
                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.grade }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.type }}</div>
+                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ part.type }}</div>
                                 </div>
                             </a>
                         {% endfor %}
@@ -415,10 +415,10 @@
 </script>
 <style>
     .table-row {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
     }
     .mobile-table {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
     }
 
     @media screen and (max-width: 1000px) {
@@ -429,20 +429,25 @@
     }
     @media screen and (max-width: 730px) {
         .table-row{
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: .25fr 1fr 1fr 1fr;
 
         } 
         .mobile-table {
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: .25fr 1fr 1fr 1fr;
+        }
+        .tablet {
+            display: none;
         }
     }
     @media screen and (max-width: 479px) {
         .table-row{
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: .25fr 1fr 1fr;
 
         } 
         .mobile-table {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: .25fr 1fr 1fr;
+            grid-column-gap: 0% !important;
+            display: inline-grid !important;
         }
     }
     @media screen and (max-width: 991px) {

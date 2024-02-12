@@ -6,107 +6,133 @@
     var revenuedata = {{ inventory_by_month|safe}}
 </script>
 <div class="w-layout-grid main-grid">
-    <div class="w-layout-grid _1-2-grid">
-        <div class="table-module">
-            <div class="table-header">
-                <h4 class="no-space-bottom">Recently Added Parts</h4>
-            </div>
-            <div class="table-content">
-                <div class="table-list">
-                    <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr;">
-                        <div class="caption-large">Part</div>
-                        <div class="caption-large">Created</div>
-                    </div>
-                    {% if parts %}
-                    {% for part in parts %}
-                    <a href="{% url 'single_part' part.id %}" class="table-row-link w-inline-block">
-                        <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr;">
-                            <div class="table-title">{{ part.vehicle_make }} {{ part.type }}</div>
-                            <div id="w-node-_5eeacceb-74e8-a525-4028-d47dafe21121-1de9a152">{{ part.created_at|date:"F j, Y" }}</div>
+    {% if user.u_pull_it_account %}
+        <div class="w-layout-grid grid">
+            <div class="style-guide-padding" style="display: block;">
+                <div class="table-content">
+                    <div class="table-list">
+                        <h6>Recently Purchased Vehicles</h6>
+                        <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="caption-large">Year</div>
+                            <div class="caption-large">Make</div>
+                            <div class="caption-large">Model</div>
                         </div>
-                    </a>
-                    {% endfor %}
-                    {% endif %}
+                        {% if recent_vehicles %}
+                        {% for vehicle in recent_vehicles %}
+                            <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr 1fr;">
+                                <div class="table-title">{{ vehicle.year }}</div>
+                                <div class="table-title">{{ vehicle.make }}</div>
+                                <div id="w-node-_5eeacceb-74e8-a525-4028-d47dafe21121-1de9a152">{{ vehicle.model }}</div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="table-module">
-            <div class="row">
-                <div class="chart__container" style="overflow-x: hidden;">
-                    <div class="card-header">
-                        <h4>Inventory Value ($)</h4>
-                        <div class="header-detail">Real Time</div>
+    {% else %}
+        <div class="w-layout-grid _1-2-grid">
+            <div class="table-module">
+                <div class="table-header">
+                    <h4 class="no-space-bottom">Recently Added Parts</h4>
+                </div>
+                <div class="table-content">
+                    <div class="table-list">
+                        <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr;">
+                            <div class="caption-large">Part</div>
+                            <div class="caption-large">Created</div>
+                        </div>
+                        {% if parts %}
+                        {% for part in parts %}
+                        <a href="{% url 'single_part' part.id %}" class="table-row-link w-inline-block">
+                            <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr;">
+                                <div class="table-title">{{ part.vehicle_make }} {{ part.type }}</div>
+                                <div id="w-node-_5eeacceb-74e8-a525-4028-d47dafe21121-1de9a152">{{ part.created_at|date:"F j, Y" }}</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                        {% endif %}
                     </div>
-                    <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
+                </div>
+            </div>
+            <div class="table-module">
+                <div class="row">
+                    <div class="chart__container" style="overflow-x: hidden;">
+                        <div class="card-header">
+                            <h4>Inventory Value ($)</h4>
+                            <div class="header-detail">Real Time</div>
+                        </div>
+                        <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="w-layout-grid _4-grid">
-        <a class="module-link w-inline-block">
-            <div class="content-chart">
-                <div class="chart-square"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
-                        loading="lazy" alt="" class="icon">
-                    <div class="light-fill"></div>
-                </div>
-                <div class="div-block">
-                    <div class="caption">Revenue</div>
-                    <div class="numbers-wrapper">
-                        <h3 class="number">${{ total_revenue }}</h3>
+        <div class="w-layout-grid _4-grid">
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Revenue</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">${{ total_revenue }}</h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-        <a class="module-link w-inline-block">
-            <div class="content-chart">
-                <div class="chart-square"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
-                        loading="lazy" width="24" alt="" class="icon">
-                    <div class="light-fill bg-primary-green"></div>
-                </div>
-                <div class="div-block">
-                    <div class="caption">Sold</div>
-                    <div class="numbers-wrapper">
-                        <h3 class="number">{{ sold_parts }}</h3>
-                        <!-- <div class="negative-value">-10%</div> -->
+            </a>
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-green"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Sold</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">{{ sold_parts }}</h3>
+                            <!-- <div class="negative-value">-10%</div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-        <a class="module-link w-inline-block">
-            <div class="content-chart">
-                <div class="chart-square"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
-                        loading="lazy" width="24" alt="" class="icon">
-                    <div class="light-fill bg-primary-orange"></div>
-                </div>
-                <div class="div-block">
-                    <div class="caption">Shipped</div>
-                    <div class="numbers-wrapper">
-                        <h3 class="number">{{ shipped_parts }}</h3>
-                        <!-- <div class="positive-value">+19%</div> -->
+            </a>
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-orange"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Shipped</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">{{ shipped_parts }}</h3>
+                            <!-- <div class="positive-value">+19%</div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-        <a class="module-link w-inline-block">
-            <div class="content-chart">
-                <div class="chart-square"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
-                        loading="lazy" width="24" alt="" class="icon">
-                    <div class="light-fill bg-primary-yellow"></div>
-                </div>
-                <div class="div-block">
-                    <div class="caption">Average Price</div>
-                    <div class="numbers-wrapper">
-                        <h3 class="number">${{ average_price }}</h3>
-                        <!-- <div class="positive-value">+10%</div> -->
+            </a>
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-yellow"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Average Price</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">${{ average_price }}</h3>
+                            <!-- <div class="positive-value">+10%</div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
+    {% endif %}
     <!-- <div class="table-module">
         <div class="table-header">
             <h4 class="no-space-bottom">Latest orders</h4>

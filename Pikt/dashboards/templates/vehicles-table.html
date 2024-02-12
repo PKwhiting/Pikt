@@ -2,25 +2,27 @@
     <div class="table-content" style="margin-top: 15px;">
         <div class="table-list">
             <div class="w-layout-grid table-headers mobile-table">
-                <div class="caption-large mobile">Year</div>
-                <div class="caption-large mobile">Make</div>
+                <div class="caption-large select-column"></div>
+                <div class="caption-large">Year</div>
+                <div class="caption-large mobile tablet">Make</div>
                 <div class="caption-large">Model</div>
-                <div class="caption-large">Yard</div>
+                <div class="caption-large tablet mobile">Yard</div>
                 <div class="caption-large mobile">Location</div>
-                <div class="caption-large mobile">Category</div>
+                <div class="caption-large">Category</div>
             </div>
             {% if vehicles %}
                 {% for vehicle in vehicles %}
                     <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
                         <div class="w-layout-grid table-row">
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.year }}</div>
-                            <div class="mobile">{{ vehicle.make }}</div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
+                            <td><input type="checkbox" name="vehicle"  style="width: 20px; height: 20px;" value="{{ vehicle.id }}"></td>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.year }}</div>
+                            <div class="tablet mobile">{{ vehicle.make }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title tablet mobile" style="display: block">
                                 {{ vehicle.model }}
                             </div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.yard }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.yard }}</div>
                             <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.location }}</div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.category }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.category }}</div>
                         </div>
                     </a> 
                 {% endfor %}
@@ -49,7 +51,4 @@
             </span>
         </div>
     </div>
-    <!-- <div class="table-bottom-caption">
-        <div>Showing all items from Work Performance dataset</div>
-    </div> -->
 </div>
