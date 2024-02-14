@@ -3,7 +3,7 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
-        <div style="display: flex;">
+        <div style="display: flex; justify-content: flex-end;">
             <div style="margin-right: 15px">
                 <input id="filter-button" type="button" value="Filter Vehicles"
                         class="button button-small w-button filter-button" style="display: none;">
@@ -167,6 +167,12 @@
                 <form id="filter-form-modal" class="w-layout-grid _3-grid" style="width: 100%">
                     <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
                         <div>
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Row" name="row" id="row-edit"
+                                required>
+                        </div>
+                    </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                        <div>
                             <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-edit"
                                 required>
                         </div>
@@ -196,7 +202,7 @@
             <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: end;">
                 <div id="edit-button">
                     <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                        <img style="height: 25px; margin-right: 0px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit Vehicles
                     </a>
                 </div>
                 
@@ -210,23 +216,23 @@
                             <div class="caption-large">Year</div>
                             <div class="caption-large mobile tablet">Make</div>
                             <div class="caption-large">Model</div>
-                            <div class="caption-large tablet mobile">Yard</div>
-                            <div class="caption-large mobile">Location</div>
-                            <div class="caption-large">Category</div>
+                            <div class="caption-large tablet mobile">Location</div>
+                            <div class="caption-large">Row</div>
+                            <div class="caption-large mobile">Category</div>
                         </div>
                         {% if vehicles %}
                             {% for vehicle in vehicles %}
                                 <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
                                     <div class="w-layout-grid table-row">
-                                        <td><input type="checkbox" name="vehicle"  style="width: 20px; height: 20px;" value="{{ vehicle.id }}"></td>
+                                        <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
                                         <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.year }}</div>
                                         <div class="tablet mobile">{{ vehicle.make }}</div>
                                         <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title tablet mobile" style="display: block">
                                             {{ vehicle.model }}
                                         </div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.yard }}</div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.location }}</div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.category }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.location|default:"" }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.row|default:"" }}</div>
+                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.category|default:"" }}</div>
                                     </div>
                                 </a> 
                             {% endfor %}
@@ -280,16 +286,19 @@
         $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
             selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
         });
+        var row = document.getElementById('row-edit').value;
         var location = document.getElementById('location-edit').value;
         var category = document.getElementById('category-edit').value;
-        if (!location && category === "") {
+        console.log(row)
+        if (!location && !row && category === "") {
             alert("Please fill out at least one field before saving changes.");
             return false; // Stop the form submission
         }
         var data = {
             vehicleIds: selectedVehicleIds,
             location: location,
-            category: category
+            category: category,
+            row: row
         };
         let params = new URLSearchParams(data).toString();
         fetch("{% url 'vehicles' %}?" + params, {

@@ -84,14 +84,6 @@
             </select>
         </div>
         <div>
-            <h6>Yard</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="yard" id="yard" required>
-        </div>
-        <div>
-            <h6>Location</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="location" id="location">
-        </div>
-        <div>
             <h6>Category</h6>
             <select name="category" id="category" class="text-field w-input">
                 <option value="" selected disabled>Select Category</option>
@@ -104,6 +96,19 @@
                 {% endfor %}
             </select>
         </div>
+        <div>
+            <h6>Yard</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="yard" id="yard" required>
+        </div>
+        <div>
+            <h6>Location</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="location" id="location">
+        </div>
+        <div>
+            <h6>Row</h6>
+            <input type="text" class="text-field w-input" maxlength="256" name="row" id="row">
+        </div>
+        
         <div style="grid-column: span 2;">
             <h6>Description</h6>
             <textarea class="text-field w-input" maxlength="256" name="description" id="description" rows="4" style="resize: none;"></textarea>
@@ -125,7 +130,19 @@
                     style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
                     id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
                     <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
-                        
+                        <div>
+                            <h6>Seller Type</h6>
+                            <select name="seller_type" id="seller_type" class="text-field w-input">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for seller_type in seller_types %}
+                                {% if seller_type in vehicle.seller_type %}
+                                <option value="{{ seller_type }}" selected>{{ seller_type }}</option>
+                                {% else %}
+                                <option value="{{ seller_type }}">{{ seller_type }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div>
                             <h6>Seller First Name</h6>
                             <input type="text" class="text-field w-input" maxlength="256" name="seller_first_name" id="seller_first_name">

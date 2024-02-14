@@ -25,7 +25,7 @@ from django.db.models import Avg
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
-from .const.const import PARTS_CONST, MAKES_MODELS, DAMAGE_TYPE_CONST, CATEGORY_CONST, TRANSMISSION_CONST, COLORS_CONST
+from .const.const import PARTS_CONST, MAKES_MODELS, DAMAGE_TYPE_CONST, CATEGORY_CONST, TRANSMISSION_CONST, COLORS_CONST, SELLER_TYPE_CONST, STATE_CHOICES
 from django.db import IntegrityError
 import requests
 from urllib.parse import urlencode
@@ -33,6 +33,13 @@ from django.http import HttpResponseRedirect
 from datetime import datetime, timedelta
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum, DecimalField
+from decimal import Decimal
+from django.db.models.functions import Coalesce
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -86,6 +93,30 @@ class rootView(LoginRequiredMixin,View):
             })
         inventory_by_month = ["{:.2f}".format(float(item['total_sales'])) for item in inventory_by_month]
 
+        last_8_months = datetime.now() - relativedelta(months=7)
+        vehicles_sold_by_month = Vehicle.objects.filter(
+            user=request.user,
+            purchase_date__gte=last_8_months
+        ).annotate(
+            month=TruncMonth('purchase_date')
+        ).values(
+            'month'
+        ).annotate(
+            total_purchase_volume=Sum('bid_amount')
+        ).order_by('month')
+
+        # Convert QuerySet to a format suitable for the graph
+        vehicles_sold_by_month_data = []
+        for i in range(7, -1, -1):
+            date = datetime.now() - relativedelta(months=i)
+            month_name = date.strftime('%B')
+            # Try to find a match in our query results
+            match = next((item for item in vehicles_sold_by_month if item['month'].month == date.month and item['month'].year == date.year), None)
+            total_purchase_volume = match['total_purchase_volume'] if match else 0
+            vehicles_sold_by_month_data.append(
+                float(total_purchase_volume),
+            )
+
         recent_vehicles = Vehicle.objects.filter(user=request.user).order_by('-created_at')[:5]
 
         context = {
@@ -98,8 +129,9 @@ class rootView(LoginRequiredMixin,View):
             'shipped_parts': shipped_parts.count(),
             'total_revenue': total_revenue,
             'average_price': round(average_price,2) if average_price != '0.00' else '0.00',
-            'last_12_months': json.dumps(last_12_months),
-            'inventory_by_month': inventory_by_month,
+            'parts_last_12_months': json.dumps(last_12_months),
+            'parts_inventory_by_month': inventory_by_month,
+            'vehicles_purchase_volume_by_month': json.dumps(vehicles_sold_by_month_data),
             'recent_vehicles': recent_vehicles,
         }
 
@@ -170,12 +202,16 @@ class vehiclesView(LoginRequiredMixin,View):
                 vehicle_ids_list = vehicle_ids_string.split(',')
                 location = request.GET.get('location')
                 category = request.GET.get('category')
+                row = request.GET.get('row')
+                print(row)
                 for vehicle_id in vehicle_ids_list:
                     vehicle = Vehicle.objects.get(id=vehicle_id)
                     if location != '':
                         vehicle.location = location
                     if category != '':
                         vehicle.category = category
+                    if row != '':
+                        vehicle.row = row
                     vehicle.save()
             else:
                 year_start = request.GET.get('year_start')
@@ -296,7 +332,8 @@ def add_vehicle(request):
         'damage_types': DAMAGE_TYPE_CONST,
         'vehicles': Vehicle.objects.filter(user=request.user),
         'categories': CATEGORY_CONST,
-        'stock_number': next_vehicle_id
+        'stock_number': next_vehicle_id,
+        'seller_types': SELLER_TYPE_CONST
 
     
     }
@@ -416,6 +453,8 @@ def edit_vehicle(request, vehicle_id):
         'damage_types': DAMAGE_TYPE_CONST,
         'categories': CATEGORY_CONST,
         'transmissions': TRANSMISSION_CONST,
+        'seller_types': SELLER_TYPE_CONST,
+        'states': STATE_CHOICES,
     }
     
     return render(request, 'edit-vehicle.html', context)

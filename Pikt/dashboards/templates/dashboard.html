@@ -2,8 +2,12 @@
 {% block content %}
 {% load static %}
 <script>
-    var chartData = {{ last_12_months|safe }};
-    var revenuedata = {{ inventory_by_month|safe}}
+    var chartData = {{ parts_last_12_months|safe }};
+    {% if user.u_pull_it_account %}
+        var revenuedata = {{ vehicles_purchase_volume_by_month|safe}}
+    {% else %}
+        var revenuedata = {{ parts_inventory_by_month|safe}}
+    {% endif %}
 </script>
 <div class="w-layout-grid main-grid">
     {% if user.u_pull_it_account %}
@@ -12,7 +16,11 @@
                 <div class="row">
                     <div class="chart__container" style="overflow-x: hidden;">
                         <div class="card-header">
-                            <h4>Inventory Value ($)</h4>
+                            {% if user.u_pull_it_account %}
+                                <h4>Purchase Volume ($)</h4>
+                            {% else %}
+                                <h4>Inventory Value ($)</h4>
+                            {% endif %}
                             <div class="header-detail">Real Time</div>
                         </div>
                         <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>

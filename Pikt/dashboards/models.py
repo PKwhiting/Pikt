@@ -32,6 +32,14 @@ ORDER_STATUS_CHOICES = [
         ('Cancelled', 'Cancelled'),
     ]
 
+SELLER_TYPE = [
+        ('COPART', 'COPART'),
+        ('IAA', 'IAA'),
+        ('Street', 'Street'),
+        ('Charity', 'Charity'),
+        ('Vendor', 'Vendor'),
+    ]
+
 # Create your models here.
 class image(models.Model):
     image = models.ImageField(upload_to='images/')
@@ -109,6 +117,7 @@ class Vehicle(models.Model):
     secondary_damage = models.CharField(max_length=256, blank=True, null=True)
     yard = models.CharField(max_length=256)
     location = models.CharField(max_length=256, blank=True, null=True)
+    row = models.CharField(max_length=256, blank=True, null=True)
     category = models.CharField(max_length=256, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     engine = models.CharField(max_length=256, blank=True, null=True)
@@ -136,6 +145,7 @@ class Vehicle(models.Model):
     misc_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     buyer = models.CharField(max_length=256, blank=True, null=True)
     purchase_date = models.DateField(blank=True, null=True)
+    seller_type = models.CharField(max_length=256, choices=SELLER_TYPE, blank=True, null=True)
     seller_first_name = models.CharField(max_length=256, blank=True, null=True)
     seller_last_name = models.CharField(max_length=256, blank=True, null=True)
     seller_phone = models.CharField(max_length=256, blank=True, null=True)

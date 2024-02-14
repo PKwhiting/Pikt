@@ -2,8 +2,29 @@
 {% load tags %}
 {% load static %}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
 <div class="dashboard-container">
-    <h1>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
+    <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: space-between;">
+        <h1>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
+        <div style="display: flex;">
+            <div id="print-button">
+                <a title="Print Barcode" onclick="printBarcode('{{ vehicle.stock_number }}');" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; margin-right: 10px">
+                    <img style="height: 25px; margin-right: 0px" src="/static/icons/print.svg" loading="lazy" alt="" class="nav-icon print-icon"> Print Barcode
+                </a>
+            </div>
+            <div>
+                <form action="{% url 'edit_vehicle' vehicle.id %}" method="get" >
+                    {% csrf_token %}
+                    <button type="submit" style="display: flex; padding: 12px; height: 37px" class="button bg-primary-green w-button">
+                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon"> Edit Vehicle
+                    </button>
+                </form>
+            </div>
+        </div> 
+        
+        
+    </div>
+    
     <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
         <!-- <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="Overview"
                 class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
@@ -160,19 +181,33 @@
                             </div>
                         </div>
                         <div id="w-node-_0142e09c-36b4-1f47-8c05-1fada5f2b37c-db888956" class="module">
-                            
-                            <div class="profile-details">
-                                <div class="weight-500">Primary Damage</div>
-                                <div class="text-grey-3">{{ vehicle.primary_damage }}</div>
-                            </div>
-                            <div class="profile-details">
-                                <div class="weight-500">Secondary Damage</div>
-                                <div class="text-grey-3">{{ vehicle.secondary_damage }}</div>
-                            </div>
-                            <div class="profile-details bottom">
-                                <div class="weight-500">Category</div>
-                                <div class="text-grey-3">{{ vehicle.category }}</div>
-                            </div>
+                            {% if user.u_pull_it_account %}
+                                <div class="profile-details">
+                                    <div class="weight-500">Row</div>
+                                    <div class="text-grey-3">{{ vehicle.row }}</div>
+                                </div>
+                                <div class="profile-details">
+                                    <div class="weight-500">Seller Type</div>
+                                    <div class="text-grey-3">{{ vehicle.seller_type }}</div>
+                                </div>
+                                <div class="profile-details bottom">
+                                    <div class="weight-500">Category</div>
+                                    <div class="text-grey-3">{{ vehicle.category }}</div>
+                                </div>
+                            {% else %}
+                                <div class="profile-details">
+                                    <div class="weight-500">Primary Damage</div>
+                                    <div class="text-grey-3">{{ vehicle.primary_damage }}</div>
+                                </div>
+                                <div class="profile-details">
+                                    <div class="weight-500">Secondary Damage</div>
+                                    <div class="text-grey-3">{{ vehicle.secondary_damage }}</div>
+                                </div>
+                                <div class="profile-details bottom">
+                                    <div class="weight-500">Category</div>
+                                    <div class="text-grey-3">{{ vehicle.category }}</div>
+                                </div>
+                            {% endif %}
                         </div>
                         <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
                             <a class="module-link">
@@ -245,11 +280,6 @@
                 {% endif %}
                 {% if not user.u_pull_it_account %}
                     <div class="account-delete">
-                        <form action="{% url 'edit_vehicle' vehicle.id %}" method="get">
-                            {% csrf_token %}
-                            <input type="submit" value="Edit Vehicle" style="margin-top: 5px;"
-                                class="button button-small bg-primary-green w-button">
-                        </form>
                         <form action="{% url 'delete_vehicle' vehicle.id %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Delete Vehicle" style="margin-top: 5px;"
@@ -261,6 +291,45 @@
             </div>
         </div>
     </div>
+    <svg id="barcode-container" style="display:none;"></svg>
+
 </div>
+<script>
+    function printBarcode(stockNumber) {
+        // Generate the barcode
+        JsBarcode("#barcode-container", stockNumber, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 18
+        });
+
+        // Convert the barcode SVG or Canvas to a data URL
+        var barcodeData;
+        var barcodeElement = document.getElementById('barcode-container');
+        if (barcodeElement.tagName.toLowerCase() === 'svg') {
+            // If the barcode is an SVG, serialize it and encode as a data URL
+            var serializer = new XMLSerializer();
+            var svgBlob = new Blob([serializer.serializeToString(barcodeElement)], {type: 'image/svg+xml'});
+            barcodeData = URL.createObjectURL(svgBlob);
+        } else if (barcodeElement.tagName.toLowerCase() === 'canvas') {
+            // If the barcode is in a canvas, get its data URL directly
+            barcodeData = barcodeElement.toDataURL("image/png");
+        } else {
+            console.error('Barcode element is not SVG or Canvas.');
+            return;
+        }
+
+        // Open a new window for the barcode image
+        var printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write('<html><head><title>Print Barcode</title></head><body style="text-align: center;">');
+        printWindow.document.write('<img src="' + barcodeData + '" onload="window.print();window.close()">'); // Print the image and close the window after printing
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        document.getElementById('barcode-container').style.display = 'none';
+    }
+    
+
+</script>
 
 {% endblock %}

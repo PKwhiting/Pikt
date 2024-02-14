@@ -39,11 +39,11 @@
             <select name="year" id="year" class="text-field w-select" required>
                 <option value="" selected disabled>Select Year</option>
                 {% for year in years %}
-                    {% ifequal year vehicle.year %}
+                    {% if year == vehicle.year %}
                     <option value="{{ year }}" selected>{{ year }}</option>
                     {% else %}
                     <option value="{{ year }}">{{ year }}</option>
-                    {% endifequal %}
+                    {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -52,11 +52,11 @@
             <select name="make" id="make" class="text-field w-select">
                 <option value="{{ vehicle.make }}" selected>Select Make</option>
                 {% for make in makes_models.keys %}
-                    {% ifequal make vehicle.make %}
+                    {% if make == vehicle.make %}
                     <option value="{{ make }}" selected>{{ make }}</option>
                     {% else %}
                     <option value="{{ make }}">{{ make }}</option>
-                    {% endifequal %}
+                    {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -67,11 +67,11 @@
                 {% for make, models in makes_models.items %}
                 <optgroup label="{{ make }}">
                     {% for model in models %}
-                    {% ifequal model vehicle.model %}
+                    {% if model == vehicle.model %}
                     <option value="{{ model }}" selected>{{ model }}</option>
                     {% else %}
                     <option value="{{ model }}">{{ model }}</option>
-                    {% endifequal %}
+                    {% endif %}
                     {% endfor %}
                 </optgroup>
                 {% endfor %}
@@ -82,11 +82,11 @@
             <select name="primary_damage" id="primary-damage" class="text-field w-input">
                 <option value="" selected disabled>Select Damage</option>
                 {% for damage in damage_types %}
-                {% ifequal damage vehicle.primary_damage %}
+                {% if damage in vehicle.primary_damage %}
                 <option value="{{ damage }}" selected>{{ damage }}</option>
                 {% else %}
                 <option value="{{ damage }}">{{ damage }}</option>
-                {% endifequal %}
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -95,11 +95,11 @@
             <select name="secondary_damage" id="secondary-damage" class="text-field w-input">
                 <option value="" selected disabled>Select Damage</option>
                 {% for damage in damage_types %}
-                {% ifequal damage vehicle.secondary_damage %}
+                {% if damage in vehicle.secondary_damage %}
                 <option value="{{ damage }}" selected>{{ damage }}</option>
                 {% else %}
                 <option value="{{ damage }}">{{ damage }}</option>
-                {% endifequal %}
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -112,15 +112,19 @@
             <input value="{{ vehicle.location}}" type="text" class="text-field w-input" maxlength="256" name="location" id="location">
         </div>
         <div>
+            <h6>Row</h6>
+            <input value="{{ vehicle.row }}" type="text" class="text-field w-input" maxlength="256" name="row" id="row">
+        </div>
+        <div>
             <h6>Category</h6>
             <select name="category" id="category" class="text-field w-input">
                 <option value="" selected disabled>Select Category</option>
                 {% for category in categories %}
-                {% ifequal category vehicle.category %}
+                {% if category in vehicle.category %}
                 <option value="{{ category }}" selected>{{ category }}</option>
                 {% else %}
                 <option value="{{ category }}">{{ category }}</option>
-                {% endifequal %}
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -128,6 +132,77 @@
             <h6>Description</h6>
             <textarea class="text-field w-input" maxlength="256" name="description" id="description" rows="4" style="resize: none;">{{ vehicle.description }}</textarea>
         </div>
+        {% if user.u_pull_it_account %}
+        <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
+            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
+                style="background-color: rgb(255, 1, 116, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                aria-haspopup="menu" aria-expanded="true" role="button" tabindex="0"><img
+                    style="height: 26px"
+                    src="{% static 'icons/car-red.svg' %}"
+                    loading="lazy" alt="" class="nav-icon">
+                <div style="color: black">Seller Details</div><img
+                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                    loading="lazy" alt="" class="nav-dropdown-icon"
+                    style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(180deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+            </div>
+            <div class="dropdown-list w-dropdown-list"
+                style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 1;"
+                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                <div class="w-layout-grid _2-grid" style="grid-template-columns: 1fr 1fr; padding: 10px;">
+                    <div>
+                        <h6>Seller Type</h6>
+                        <select name="seller_type" id="seller_type" class="text-field w-input">
+                            <option value="" selected disabled>Select Category</option>
+                            {% for seller_type in seller_types %}
+                            {% if seller_type in vehicle.seller_type %}
+                            <option value="{{ seller_type }}" selected>{{ seller_type }}</option>
+                            {% else %}
+                            <option value="{{ seller_type }}">{{ seller_type }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <h6>Seller First Name</h6>
+                        <input value="{{ vehicle.seller_first_name|default:'' }}" type="text" class="text-field w-input" maxlength="256" name="seller_first_name" id="seller_first_name">
+                    </div>
+                    <div>
+                        <h6>Seller Last Name</h6>
+                        <input value="{{ vehicle.seller_last_name|default:'' }}" type="text" class="text-field w-input" maxlength="256" name="seller_last_name" id="seller_last_name">
+                    </div>
+                    <div>
+                        <h6>Seller Phone Number</h6>
+                        <input value="{{ vehicle.seller_phone|default:'' }}" type="number" class="text-field w-input" maxlength="256" name="seller_phone" id="seller_phone">
+                    </div>
+                    <div>
+                        <h6>Seller Email Address</h6>
+                        <input value="{{ vehicle.seller_email|default:'' }}" type="text" class="text-field w-input" maxlength="256" name="seller_email" id="seller_email">
+                    </div>
+                    <div>
+                        <h6>Seller Street Address</h6>
+                        <input value="{{ vehicle.seller_address|default:'' }}" type="text" class="text-field w-input" maxlength="256" name="seller_address" id="seller_address">
+                    </div>
+                    <div>
+                        <h6>City</h6>
+                        <input value="{{ vehicle.seller_city|default:'' }}" type="text" class="text-field w-input" maxlength="256" name="seller_city" id="seller_city">
+                    </div>
+                    <div>
+                        <h6>State</h6>
+                        <select class="text-field w-input" name="seller_state" id="seller_state">
+                            <option value="" selected disabled>Select State</option>
+                            {% for state in states %}
+                            {% if state in vehicle.seller_state %}
+                            <option value="{{ state }}" selected>{{ state }}</option>
+                            {% else %}
+                            <option value="{{ state }}">{{ state }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
         <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
             <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
                 style="background-color: rgb(255, 1, 116, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
@@ -162,11 +237,11 @@
                         <select name="transmission" id="transmission" class="text-field w-input">
                             <option value="" selected disabled>Select Transmission</option>
                             {% for transmission in transmissions %}
-                            {% ifequal transmission vehicle.transmission %}
+                            {% if transmission in vehicle.transmission %}
                             <option value="{{ transmission }}" selected>{{ transmission }}</option>
                             {% else %}
                             <option value="{{ transmission }}">{{ transmission }}</option>
-                            {% endifequal %}
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -201,11 +276,11 @@
                         <select name="exterior_primary_color" id="exterior_primary_color" class="text-field w-input">
                             <option value="" selected disabled>Select Color</option>
                             {% for color in colors %}
-                            {% ifequal color vehicle.exterior_primary_color %}
+                            {% if color in vehicle.exterior_primary_color %}
                             <option value="{{ color }}" selected>{{ color }}</option>
                             {% else %}
                             <option value="{{ color }}">{{ color }}</option>
-                            {% endifequal %}
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -218,11 +293,11 @@
                         <select name="exterior_secondary_color" id="exterior_secondary_color" class="text-field w-input">
                             <option value="" selected disabled>Select Color</option>
                             {% for color in colors %}
-                            {% ifequal color vehicle.exterior_secondary_color %}
+                            {% if color in vehicle.exterior_secondary_color %}
                             <option value="{{ color }}" selected>{{ color }}</option>
                             {% else %}
                             <option value="{{ color }}">{{ color }}</option>
-                            {% endifequal %}
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -235,11 +310,11 @@
                         <select name="interior_primary_color" id="interior_primary_color" class="text-field w-input">
                             <option value="" selected disabled>Select Color</option>
                             {% for color in colors %}
-                            {% ifequal color vehicle.interior_primary_color %}
+                            {% if color in vehicle.interior_primary_color %}
                             <option value="{{ color }}" selected>{{ color }}</option>
                             {% else %}
                             <option value="{{ color }}">{{ color }}</option>
-                            {% endifequal %}
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -252,11 +327,11 @@
                         <select name="interior_secondary_paint_code" id="interior_secondary_paint_code" class="text-field w-input">
                             <option value="" selected disabled>Select Color</option>
                             {% for color in colors %}
-                            {% ifequal color vehicle.interior_secondary_color %}
+                            {% if color in vehicle.interior_secondary_color %}
                             <option value="{{ color }}" selected>{{ color }}</option>
                             {% else %}
                             <option value="{{ color }}">{{ color }}</option>
-                            {% endifequal %}
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -383,6 +458,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="z-index: 500; grid-column: span 2">
             <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle w--open"
                 style="background-color: rgb(132, 173, 199, .15) !important; opacity: 1; filter: grayscale(0%); background-color: white; border: 1px solid #e1e6f0; border-radius: 3px;" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
@@ -484,7 +560,7 @@
         </div>
 
     </div>
-    <input type="submit" value="Add Vehicle" data-wait="Please wait..." class="button button-small w-button">
+    <input type="submit" value="Save Vehicle" data-wait="Please wait..." class="button button-small w-button">
 </form>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
