@@ -4,9 +4,9 @@
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
 <div class="dashboard-container">
-    <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: space-between;">
-        <h1>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
-        <div style="display: flex;">
+    <div style="margin: 16px 0px 0px 16px;">
+        <h1 class="mobile-header">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
+        <div style="display: flex; justify-content: end; margin-bottom: 12px;">
             <div id="print-button">
                 <a title="Print Barcode" onclick="printBarcode('{{ vehicle.stock_number }}');" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; margin-right: 10px">
                     <img style="height: 25px; margin-right: 0px" src="/static/icons/print.svg" loading="lazy" alt="" class="nav-icon print-icon"> Print Barcode
@@ -294,6 +294,14 @@
     <svg id="barcode-container" style="display:none;"></svg>
 
 </div>
+<style>
+    @media screen and (max-width: 479px) {
+        h1.mobile-header {
+            font-size: 25px !important;
+            /* Could be more or less, depending on screen size */
+        }
+    }
+</style>
 <script>
     function printBarcode(stockNumber) {
         // Generate the barcode

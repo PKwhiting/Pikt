@@ -24,7 +24,7 @@
 <form id="wf-form-Form" onsubmit="removeDollarSign()" name="wf-form-Form" data-name="Form" method="post"
     enctype="multipart/form-data" aria-label="Form">
     {% csrf_token %}
-    <div class="w-layout-grid form-grid space-bottom-small">
+    <div class="w-layout-grid form-grid space-bottom-small" style="grid-template-columns: minmax(40%, 50%) minmax(40%, 50%);">
         <div style="display: flex; align-items: end;">
             <input type="text" class="text-field w-input" maxlength="256" name="vin" id="vin-input"
                 placeholder="VIN" style="margin-right: 10px; margin-bottom: 10px"> 
