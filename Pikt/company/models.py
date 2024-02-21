@@ -71,6 +71,8 @@ class Location(models.Model):
     city = models.CharField("City", max_length=1024, blank=True, null=True)
     state = models.CharField("State", max_length=2, choices=STATE_CHOICES, blank=True, null=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
 class ShippingAddress(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

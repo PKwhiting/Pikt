@@ -1,0 +1,136 @@
+{% extends "root.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="w-layout-grid main-grid">
+        <div style="display: flex;">
+            <div style="margin-right: 15px">
+                <input id="filter-button" type="button" value="Filter Parts"
+                        class="button button-small w-button filter-button" style="display: none;">
+            </div>
+            <!-- <div style="margin-right: 15px">
+                <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
+                        class="button button-small w-button bg-primary-green"></a>
+            </div> -->
+            <select id="locationDropdown" class="dropdown">
+                <option>Select a location</option>
+                {% for location in locations %}
+                <option value="{{ location.latitude }},{{ location.longitude }}">
+                    {{ location.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div id="mapid" style="height: 500px; margin: 12px 15px 0px 15px;"></div>
+
+</div>
+<script>
+    // Function to create a custom marker icon with a colored dot
+    function createColoredDotIcon(color) {
+        console.log("HEEEERRE")
+        // Define the custom marker icon
+        var coloredDotIcon = L.divIcon({
+            className: 'colored-dot-icon', // CSS class for styling
+            iconSize: [10, 10], // Size of the icon
+            html: '<div class="dot" style="background-color: ' + color + '"></div>', // HTML content with the specified color
+        });
+        return coloredDotIcon;
+    }
+
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
+    googleSat.addTo(myMap);
+
+    myMap.pm.removeControls();
+
+    // Add only the desired controls
+    myMap.pm.addControls({
+        position: 'topright', 
+        drawCircle: false,    
+        drawMarker: false,
+        drawCircleMarker: false, 
+        drawPolygon: false,
+        drawPolyline: false,  
+        drawRectangle: false, 
+        editMode: false,       
+        dragMode: false,      
+        cutPolygon: false,    
+        removalMode: false,  
+        rotateMode: false,
+        drawText: false,
+    });
+
+    // Event listener for location dropdown change
+    document.getElementById('locationDropdown').addEventListener('change', function() {
+        var [lat, lng] = this.value.split(','); // Split the value by comma to get lat and lng
+
+        // Clear existing markers on the map
+        myMap.eachLayer(function (layer) {
+            if (layer instanceof L.Marker) {
+                myMap.removeLayer(layer);
+            }
+        });
+
+        // Fetch vehicle data based on selected location
+        let queryParams = new URLSearchParams();
+        queryParams.append('latitude', lat);
+        queryParams.append('longitude', lng);
+
+        fetch("{% url 'yard' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'vehicleLocations'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            vehicles = data['vehicles'];
+            for (let i = 0; i < vehicles.length; i++) {
+                const vehicle = vehicles[i];
+                if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+                    console.log(vehicle)
+                    iconColor = "#57db1c";
+                    if (vehicle.fields.category == "Pending"){
+                        iconColor = "#fff004"
+                    } else if (vehicle.fields.category == "Crushed"){
+                        iconColor = "#f44336"
+                    } else if (vehicle.fields.category == "Finalized"){
+                        iconColor = "#57db1c"
+                    }
+
+                    customMarker = {
+                        radius: 5,
+                        fillColor: iconColor,
+                        color: iconColor,
+                        weight: 5,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    };
+                    const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
+                    marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</a></strong>`);
+                }
+            }
+            // Set map view to the selected location
+            myMap.setView(new L.LatLng(lat, lng), 17);
+        })
+        .catch(error => console.error('Error:', error));
+        
+    });
+    
+</script>
+<style>
+    .leaflet-top {
+        z-index: 400 !important;
+    }
+    .sidebar-content {
+        z-index: 1000 !important;
+    }
+</style>
+
+{% endblock %}

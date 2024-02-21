@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 import random
 import string
+from company.models import Location
 
 PART_GRADES = (
     ('A', 'A'),
@@ -116,7 +117,9 @@ class Vehicle(models.Model):
     primary_damage = models.CharField(max_length=256, blank=True, null=True)
     secondary_damage = models.CharField(max_length=256, blank=True, null=True)
     yard = models.CharField(max_length=256)
-    location = models.CharField(max_length=256, blank=True, null=True)
+    location = models.ForeignKey(Location, on_delete=models.PROTECT, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     row = models.CharField(max_length=256, blank=True, null=True)
     category = models.CharField(max_length=256, blank=True, null=True)
     description = models.TextField(blank=True, null=True)

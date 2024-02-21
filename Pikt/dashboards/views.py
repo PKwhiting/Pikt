@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import part, Order, Vehicle
+from company.models import Location
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
 from .forms import VehicleForm
+from django.core.serializers import serialize
 from django.core.paginator import Paginator
 import base64
 import json
@@ -14,6 +16,7 @@ from django.db.models import Max
 import ast
 from django.conf import settings
 from django.utils import timezone
+from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -317,11 +320,19 @@ def add_vehicle(request):
             messages.append('Vehicle was not added, try again')
             request.user.messages = json.dumps(messages)
             request.user.save()
+    elif is_ajax(request):
+        location_id = request.GET.get('location_id')   
+        lat = Location.objects.get(id=location_id).latitude
+        lng = Location.objects.get(id=location_id).longitude
+        return JsonResponse({'lat': lat, 'lng': lng})
+
     else:
         form = VehicleForm()
     next_vehicle_id = Vehicle.objects.all().aggregate(Max('id'))['id__max'] + 1 if Vehicle.objects.all().exists() else 1
     while Vehicle.objects.filter(stock_number=next_vehicle_id).exists():
         next_vehicle_id += 1
+
+    locations = Location.objects.filter(company=request.user.company)
     context = {
         'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
         'years' : range(2024, 1969, -1),
@@ -333,9 +344,8 @@ def add_vehicle(request):
         'vehicles': Vehicle.objects.filter(user=request.user),
         'categories': CATEGORY_CONST,
         'stock_number': next_vehicle_id,
-        'seller_types': SELLER_TYPE_CONST
-
-    
+        'seller_types': SELLER_TYPE_CONST,
+        'locations': locations,
     }
     context['form'] = form
     context['messages'] = json.loads(request.user.messages)
@@ -570,3 +580,27 @@ class RedirectView(View):
         messages.append(message)
         request.user.messages = json.dumps(messages)
         request.user.save()
+
+
+class yard(LoginRequiredMixin, View):
+    def get(self, request, part_id=None, *args, **kwargs):
+        locations = Location.objects.filter(company=request.user.company)
+        if is_ajax(request):
+            latitude = request.GET.get('latitude')
+            longitude = request.GET.get('longitude')
+            location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
+            vehicles = Vehicle.objects.filter(location=location)
+            vehicles_data = serialize('json', vehicles)
+            vehicles_data_json = json.loads(vehicles_data)
+            return JsonResponse({'vehicles': vehicles_data_json}, safe=False)
+
+
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'locations': locations,
+        }
+        return render(request, 'yard.html', context)

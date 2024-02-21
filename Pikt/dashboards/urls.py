@@ -6,7 +6,7 @@ urlpatterns = [
     path('parts/', views.defaultDashboardView.as_view(), name='parts'),
     path('vehicles/', views.vehiclesView.as_view(), name='vehicles'),
     path('add-part/', views.add_part),
-    path('add-vehicle/', views.add_vehicle),
+    path('add-vehicle/', views.add_vehicle, name='add_vehicle'),
     path('delete_message/', views.delete_message.as_view(), name='delete_message'),
     path('single_part/<int:part_id>/', views.single_part.as_view(), name='single_part'),
     path('single_vehicle/<int:vehicle_id>/', views.single_vehicle.as_view(), name='single_vehicle'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('ebay_consent/', views.ebayConsent.as_view(), name='ebay_consent'),
     path('ebay_consent/redirect/', views.RedirectView.as_view(), name='redirect'),
     path('orders/', views.orders.as_view(), name='orders'),
+    path('yard/', views.yard.as_view(), name='yard'),
 ]
