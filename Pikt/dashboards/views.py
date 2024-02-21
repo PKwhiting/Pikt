@@ -324,7 +324,11 @@ def add_vehicle(request):
         location_id = request.GET.get('location_id')   
         lat = Location.objects.get(id=location_id).latitude
         lng = Location.objects.get(id=location_id).longitude
-        return JsonResponse({'lat': lat, 'lng': lng})
+        location = Location.objects.filter(latitude=lat, longitude=lng)[0]
+        vehicles = Vehicle.objects.filter(location=location)
+        vehicles_data = serialize('json', vehicles)
+        vehicles_data_json = json.loads(vehicles_data)
+        return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
 
     else:
         form = VehicleForm()
@@ -437,7 +441,7 @@ def edit_part(request, part_id):
 
 def edit_vehicle(request, vehicle_id):
     vehicle_instance = get_object_or_404(Vehicle, id=vehicle_id)
-
+    locations = Location.objects.filter(company=request.user.company)
     # if saving edits toa part
     if request.method == 'POST':
         form = VehicleForm(request.POST, request.FILES, instance=vehicle_instance)
@@ -450,6 +454,16 @@ def edit_vehicle(request, vehicle_id):
             return redirect('/dashboards/vehicles')  # Redirect to the parts list
         else:
             add_user_message(request, 'Vehicle was not updated')
+    elif is_ajax(request):
+        location_id = request.GET.get('location_id')   
+        lat = Location.objects.get(id=location_id).latitude
+        lng = Location.objects.get(id=location_id).longitude
+        location = Location.objects.filter(latitude=lat, longitude=lng)[0]
+        vehicles = Vehicle.objects.filter(location=location)
+        vehicles_data = serialize('json', vehicles)
+        vehicles_data_json = json.loads(vehicles_data)
+        return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
+    
     else:
         form = VehicleForm(instance=vehicle_instance)
     context = {
@@ -465,6 +479,7 @@ def edit_vehicle(request, vehicle_id):
         'transmissions': TRANSMISSION_CONST,
         'seller_types': SELLER_TYPE_CONST,
         'states': STATE_CHOICES,
+        'locations': locations,
     }
     
     return render(request, 'edit-vehicle.html', context)

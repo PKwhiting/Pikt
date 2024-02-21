@@ -546,7 +546,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
 
 <script>
-        googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
     });
@@ -558,7 +558,7 @@
     }
 
     // Variable to store the current marker
-var currentMarker = null;
+    var currentMarker = null;
 
     myMap.on('pm:create', function(e) {
         if (e.shape === "Marker") {
@@ -600,6 +600,32 @@ var currentMarker = null;
         .then(data => {
             lat = data['lat'];
             lng = data['lng'];
+            vehicles = data['vehicles'];
+            for (let i = 0; i < vehicles.length; i++) {
+                const vehicle = vehicles[i];
+                if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+                    console.log(vehicle)
+                    iconColor = "#57db1c";
+                    if (vehicle.fields.category == "Pending"){
+                        iconColor = "#fff004"
+                    } else if (vehicle.fields.category == "Crushed"){
+                        iconColor = "#f44336"
+                    } else if (vehicle.fields.category == "Finalized"){
+                        iconColor = "#57db1c"
+                    }
+
+                    customMarker = {
+                        radius: 5,
+                        fillColor: iconColor,
+                        color: iconColor,
+                        weight: 5,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    };
+                    const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
+                    marker.bindPopup(`<strong>${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</strong>`);
+                }
+            }
             changeMapView(lat, lng);
         })
         .catch(error => console.error('Error:', error));
@@ -760,6 +786,12 @@ var currentMarker = null;
 
 </script>
 <style>
+    .leaflet-top {
+        z-index: 400 !important;
+    }
+    .sidebar-content {
+        z-index: 1000 !important;
+    }
     .nav-link-dropdown {
         filter: none !important;
         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);

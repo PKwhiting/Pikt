@@ -108,10 +108,6 @@
             <input value="{{ vehicle.yard }}" type="text" class="text-field w-input" maxlength="256" name="yard" id="yard" required>
         </div>
         <div>
-            <h6>Location</h6>
-            <input value="{{ vehicle.location}}" type="text" class="text-field w-input" maxlength="256" name="location" id="location">
-        </div>
-        <div>
             <h6>Row</h6>
             <input value="{{ vehicle.row }}" type="text" class="text-field w-input" maxlength="256" name="row" id="row">
         </div>
@@ -128,6 +124,28 @@
                 {% endfor %}
             </select>
         </div>
+
+        <div>
+            <h6>Location</h6>
+            <select id="locationDropdown" class="dropdown text-field w-input" name="location">
+                <option>Select a location</option>
+                {% for location in locations %}
+                <option value="{{ location.id }}">
+                    {{ location.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="hidden" name="latitude" id="latitude" value="">
+        <input type="hidden" name="longitude" id="longitude" value="">
+        <div style="grid-column: span 2;">
+            <h6>Drop Pin New Vehicle Location</h6>
+            <div id="mapid" style="height: 350px; margin: 12px 15px 0px 15px;"></div>
+        </div>  
+
+
+
+
         <div style="grid-column: span 2;">
             <h6>Description</h6>
             <textarea class="text-field w-input" maxlength="256" name="description" id="description" rows="4" style="resize: none;">{{ vehicle.description }}</textarea>
@@ -567,6 +585,127 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
 
 <script>
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+    var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
+    googleSat.addTo(myMap);
+
+    function changeMapView(lat, lng) {
+        myMap.setView(new L.LatLng(lat, lng), 17);
+    }
+
+    var currentMarker = null;
+
+    myMap.on('pm:create', function(e) {
+        if (e.shape === "Marker") {
+            // Remove the existing marker if there is one
+            if (currentMarker) {
+                myMap.removeLayer(currentMarker);
+            }
+
+            // Update the current marker with the new one
+            currentMarker = e.layer;
+
+            // Get latitude and longitude from the created marker
+            var lat = e.layer.getLatLng().lat;
+            var lng = e.layer.getLatLng().lng;
+
+            // Update hidden input fields
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            // Optional: Bind a popup to the new marker
+            currentMarker.bindPopup("<strong>Location Selected</strong>").openPopup();
+
+            // Optionally, disable further marker creation - remove this line if you want to allow marker replacement
+            myMap.pm.disableDraw('Marker');
+        }
+    });
+
+    document.getElementById('locationDropdown').addEventListener('change', function() {
+        console.log("HERE")
+        let queryParams = new URLSearchParams();
+        queryParams.append('location_id', this.value);
+        fetch("{% url 'add_vehicle' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'vehicleLocations'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            lat = data['lat'];
+            lng = data['lng'];
+            vehicles = data['vehicles'];
+            for (let i = 0; i < vehicles.length; i++) {
+                const vehicle = vehicles[i];
+                if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+                    console.log(vehicle)
+                    iconColor = "#57db1c";
+                    if (vehicle.fields.category == "Pending"){
+                        iconColor = "#fff004"
+                    } else if (vehicle.fields.category == "Crushed"){
+                        iconColor = "#f44336"
+                    } else if (vehicle.fields.category == "Finalized"){
+                        iconColor = "#57db1c"
+                    }
+
+                    customMarker = {
+                        radius: 5,
+                        fillColor: iconColor,
+                        color: iconColor,
+                        weight: 5,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    };
+                    const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
+                    marker.bindPopup(`<strong>${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</strong>`);
+                }
+            }
+            changeMapView(lat, lng);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    // Enable GeoMan with default toolbar
+
+
+    myMap.pm.addControls(); 
+        myMap.pm.addControls({
+        position: 'topright', // Position of the toolbar
+        drawCircle: false,    // Disable circle drawing
+        drawCircleMarker: false,
+        drawText: false,
+        drawMarker: true,     // Enable marker drawing
+        drawPolygon: false,    // Enable polygon drawing
+        drawPolyline: false,  // Disable polyline drawing
+        drawRectangle: false, // Disable rectangle drawing
+        editMode: false,       // Enable edit mode
+        dragMode: false,       // Enable drag mode
+        cutPolygon: false,    // Disable cut mode
+        removalMode: true,    // Enable removal mode
+        rotateMode: false,
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     (function ($) {
         $(document).ready(function () {
             $('#fitment-location').select2({
