@@ -643,14 +643,18 @@
             for (let i = 0; i < vehicles.length; i++) {
                 const vehicle = vehicles[i];
                 if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
-                    console.log(vehicle)
                     iconColor = "#57db1c";
-                    if (vehicle.fields.category == "Pending"){
+                    if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
                         iconColor = "#fff004"
-                    } else if (vehicle.fields.category == "Crushed"){
+                    } else if (vehicle.fields.category == "CRUSHED"){
                         iconColor = "#f44336"
-                    } else if (vehicle.fields.category == "Finalized"){
+                    } else if (vehicle.fields.category == "YARD"){
+                        iconColor = "#4336f4"
+                    } else if (vehicle.fields.category == "SOLD"){
                         iconColor = "#57db1c"
+                    }
+                    else {
+                        iconColor = "#46e6bc"
                     }
 
                     customMarker = {
@@ -844,6 +848,15 @@
 
 </script>
 <style>
+    .leaflet-top {
+        z-index: 400 !important;
+    }
+    .sidebar-content {
+        z-index: 1000 !important;
+    }
+    .mobile-bar{
+        z-index: 1001;
+    }
     .nav-link-dropdown {
         filter: none !important;
         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -854,6 +867,9 @@
     }
     .w-dropdown {
         z-index: 1 !important;
+    }
+    .w-layout-grid {
+        grid-template-columns: 45% 45%;
     }
     .w-layout-grid._2-grid {
         border:1px solid #e1e6f0; 

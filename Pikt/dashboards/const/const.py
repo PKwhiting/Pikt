@@ -997,11 +997,14 @@ DAMAGE_TYPE_CONST = [
 ]
 
 CATEGORY_CONST = [
-    "Pending",
-    "Finalized",
-    "Storage",
-    "Dismantled",
-    "Crushed"
+    "ENROUTE",
+    "PAPERWORK",
+    "PROCESSING",
+    "YARD",
+    "IMPOUND",
+    "FOR SALE",
+    "SOLD",
+    "CRUSHED",
 ]
 
 TRANSMISSION_CONST = [
