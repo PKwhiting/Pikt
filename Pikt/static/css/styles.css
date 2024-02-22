@@ -6396,7 +6396,7 @@ blockquote {
     align-items: center;
   }
 
-  .in-page-menu {
+  /* .in-page-menu {
     margin-bottom: 16px;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -6404,7 +6404,7 @@ blockquote {
     -ms-flex-direction: column;
     flex-direction: column;
     border-bottom-style: none;
-  }
+  } */
 
   .in-page-menu-link {
     margin-right: 0px;

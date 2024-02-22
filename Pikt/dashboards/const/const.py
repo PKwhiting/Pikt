@@ -997,6 +997,15 @@ DAMAGE_TYPE_CONST = [
 ]
 
 CATEGORY_CONST = [
+    'INCOMING',
+    'NO TITLE',
+    'NEEDS A STICKER',
+    'TITLE PROBLEM',
+    'VIN NOT IN SYSTEM',
+    'PRE STRIP',
+    'STRIPPING',
+    "PRE YARD",
+    "YARD",
     "ENROUTE",
     "PAPERWORK",
     "PROCESSING",

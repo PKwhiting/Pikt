@@ -1,183 +1,510 @@
 {% extends "root.html" %}
 
 {% block content %}
-<div class="dashboard-container">
-    <div class="w-layout-grid main-grid">
-        <div style="display: flex; justify-content: flex-end;">
-            <div style="margin-right: 15px">
-                <input id="filter-button" type="button" value="Filter Vehicles"
-                        class="button button-small w-button filter-button" style="display: none;">
-            </div>
-            {% if user.u_pull_it_account %}
-                <div style="margin-right: 15px">
-                    <a href="/dashboards/add-vehicle/"><input type="button" value="+ Add Vehicle"
-                            class="button button-small w-button bg-primary-green"></a>
-                </div>
-            {% else %}
-                <div style="margin-right: 15px">
-                    <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
-                            class="button button-small w-button bg-primary-green"></a>
-                </div>
-            {% endif %}
-        </div>
-        <div class="w-layout-grid grid">
-            <div class="style-guide-padding">
-                <h6>Filters</h6>
-                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                            <div style="display: flex;">
-                                <div style="margin-right: 10px; width: 50%">
-                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Min Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
+
+    <div class="dashboard-container">
+        <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
+            <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="All"
+                    class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+                    href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0"
+                    aria-selected="true">
+                    <div>All</div>
+                </a><a data-w-tab="Incoming" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
+                    href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1"
+                    aria-selected="false" tabindex="-1">
+                    <div>Incoming</div>
+                </a><a data-w-tab="Holding" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
+                    href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1"
+                    aria-selected="false" tabindex="-1">
+                    <div>Holding</div>
+                </a><a data-w-tab="Pre-Strip" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
+                    aria-selected="false" tabindex="-1">
+                    <div>Pre Strip</div>
+                </a><a data-w-tab="Stripping" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
+                    aria-selected="false" tabindex="-1">
+                    <div>Stripping</div>
+                </a><a data-w-tab="Pre-Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
+                    aria-selected="false" tabindex="-1">
+                    <div>Pre-Yard</div>
+                </a></div>
+            
+            <div class="tabs-content w-tab-content">
+                <div data-w-tab="All" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
+                    <div class="w-layout-grid main-grid">
+                        <div style="display: flex; justify-content: flex-end;">
+                            <!-- <div style="margin-right: 15px">
+                                <input id="filter-button" type="button" value="Filter Vehicles"
+                                        class="button button-small w-button filter-button" style="display: none;">
+                            </div> -->
+                            {% if user.u_pull_it_account %}
+                                <!-- <div style="margin-right: 15px">
+                                    <a href="/dashboards/add-vehicle/"><input type="button" value="+ Add Vehicle"
+                                            class="button button-small w-button bg-primary-green"></a>
+                                </div> -->
+                            {% else %}
+                                <div style="margin-right: 15px">
+                                    <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
+                                            class="button button-small w-button bg-primary-green"></a>
                                 </div>
-                                <div style="width: 50%;">
-                                    <!-- <h6>Year End</h6> -->
-                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Max Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
+                            {% endif %}
+                        </div>
+                        <div class="w-layout-grid grid">
+                            <div class="style-guide-padding">
+                                <h6>Filters</h6>
+                                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
+                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                                            <div style="display: flex;">
+                                                <div style="margin-right: 10px; width: 50%">
+                                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                                        <option value="" selected disabled>Select Min Year</option>
+                                                        {% for year in years %}
+                                                        <option value="{{ year }}">{{ year }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div style="width: 50%;">
+                                                    <!-- <h6>Year End</h6> -->
+                                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
+                                                        <option value="" selected disabled>Select Max Year</option>
+                                                        {% for year in years %}
+                                                        <option value="{{ year }}">{{ year }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e"  style="display: flex;">
+                                            <div style="margin-right: 12px">
+                                                <!-- <h6>Vehicle Model</h6> -->
+                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Make" name="vehicle_make" id="Vehicle-Make"
+                                                    required="" onkeyup="submitFilterForm()"">
+                                            </div>
+                                            <div>
+                                                <!-- <h6>Vehicle Model</h6> -->
+                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Model" name="vehicle_model" id="Vehicle-Model"
+                                                    required="" onkeyup="submitFilterForm()">
+                                            </div>
+                                        </div>
+                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                                            <div>
+                                                <!-- <h6>Vehicle Model</h6> -->
+                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number"
+                                                    required="" onkeyup="submitFilterForm()">
+                                            </div>
+                                        </div>
+                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                                            <div>
+                                                <!-- <h6>Part Type</h6> -->
+                                                <select name="category" id="category" class="text-field w-select" required onchange="submitFilterForm()">
+                                                    <option value="" selected disabled>Select Category</option>
+                                                    {% for category in categories %}
+                                                    {% if category in vehicle.category %}
+                                                    <option value="{{ category }}" selected>{{ category }}</option>
+                                                    {% else %}
+                                                    <option value="{{ category }}">{{ category }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                                            <div>
+                                                <!-- <h6>Vehicle Model</h6> -->
+                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location"
+                                                    required="" onkeyup="submitFilterForm()">
+                                            </div>
+                                        </div>
+                                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                                            <div>Clear</div>
+                                        </a>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h6>Filters</h6>
+                                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();" style="width: 100%">
+                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
+                                        <div style="display: flex;">
+                                            <div style="margin-right: 10px; width: 50%">
+                                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
+                                                    <option value="" selected disabled>Select Year</option>
+                                                    {% for year in years %}
+                                                    <option value="{{ year }}">{{ year }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div style="width: 50%;">
+                                                <!-- <h6>Year End</h6> -->
+                                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
+                                                    <option value="" selected disabled>Select Year</option>
+                                                    {% for year in years %}
+                                                    <option value="{{ year }}">{{ year }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: flex;">
+                                        <div style="margin-right: 12px;">
+                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
+                                                required="" onkeyup="submitFilterModalForm()">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
+                                                required="" onkeyup="submitFilterModalForm()">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number-Modal"
+                                            required="" onkeyup="submitFilterForm()">
+                                    </div>
+                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
+                                        <div>
+                                            <!-- <h6>Part Type</h6> -->
+                                            <select name="category" id="category-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
+                                                <option value="" selected disabled>Select Part Type</option>
+                                                {% for category in categories %}
+                                                <option value="{{ category }}">{{ category }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                                        <div>
+                                            <!-- <h6>Vehicle Model</h6> -->
+                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-Modal"
+                                                required="" onkeyup="submitFilterModalForm()">
+                                        </div>
+                                    </div>
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
+                                        <div>Clear</div>
+                                    </a>
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
+                                        <div>Filter</div>
+                                    </a>
+                            </form>
+                            </div>
+                        
+                        </div>
+                        <div class="module" style="padding: 0">
+                            <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: end;">
+                                <!-- <div id="edit-button">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit Vehicles
+                                    </a>
+                                </div> -->
+                                
+                                
+                            </div>
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">All Vehicles</h4>
+                                <div style="display: flex;">
+                                    <div style="margin-right: 6px;">
+                                        <a id="filter-button"
+                                                class="button bg-primary-green w-inline-block" style="width: auto; align-items: center; height: 37px; padding: 12px 12px;">Filter
+                                        </a>
+                                    </div>
+                                    <div id="edit-button-6">
+                                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                        </a>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if vehicles %}
+                                            {% for vehicle in vehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
+                                        <span class="step-links" style="margin-right: 20px">
+                                            {% if vehicles.has_previous %}
+                                            <!-- <a href="?page=1">&laquo; first</a> -->
+                                            <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
+                                                    value="<" class="button button-small w-button"></a>
+                                            {% else %}
+                                            <input type="button" value="<" class="button button-small w-button" disabled>
+                                            {% endif %}
+                            
+                                            <span class="current" style="width: 50px">
+                                                {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
+                                            </span>
+                            
+                                            {% if vehicles.has_next %}
+                                            <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
+                                                    class="button button-small w-button"></a>
+                                            {% else %}
+                                            <input type="button" value=">" class="button button-small w-button" disabled>
+                                            {% endif %}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e"  style="display: flex;">
-                            <div style="margin-right: 12px">
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Make" name="vehicle_make" id="Vehicle-Make"
-                                    required="" onkeyup="submitFilterForm()"">
+                    </div>
+                </div>
+                <div data-w-tab="Incoming" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">Incoming</h4>
+                                <div id="edit-button-1">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                    </a>
+                                </div>
                             </div>
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Model" name="vehicle_model" id="Vehicle-Model"
-                                    required="" onkeyup="submitFilterForm()">
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if incomingVehicles %}
+                                            {% for vehicle in incomingVehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number"
-                                    required="" onkeyup="submitFilterForm()">
+                    </div>
+                </div>
+                <div data-w-tab="Holding" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-1" style="">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">In Holding</h4>
+                                <div id="edit-button-2">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if holdingVehicles %}
+                                            {% for vehicle in holdingVehicles %}
+                                                <div class="w-layout-grid table-row {{ vehicle.category|slugify}}">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                            <div>
-                                <!-- <h6>Part Type</h6> -->
-                                <select name="category" id="category" class="text-field w-select" required onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Category</option>
-                                    {% for category in categories %}
-                                    {% if category in vehicle.category %}
-                                    <option value="{{ category }}" selected>{{ category }}</option>
-                                    {% else %}
-                                    <option value="{{ category }}">{{ category }}</option>
-                                    {% endif %}
-                                    {% endfor %}
-                                </select>
+                    </div>
+                </div>
+                <div data-w-tab="Pre-Strip" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">Ready For Stripping</h4>
+                                <div id="edit-button-3">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if preStripVehicles %}
+                                            {% for vehicle in preStripVehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location"
-                                    required="" onkeyup="submitFilterForm()">
+                    </div>
+                </div>
+                <div data-w-tab="Stripping" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">Being Stripped</h4>
+                                <div id="edit-button-4">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if stripVehicles %}
+                                            {% for vehicle in stripVehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                            <div>Clear</div>
-                        </a>
-                </form>
+                    </div>
+                </div>
+                <div data-w-tab="Pre-Yard" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">Ready For Yard</h4>
+                                <div id="edit-button-5">
+                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit 
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if preYardVehicles %}
+                                            {% for vehicle in preYardVehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h6>Filters</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();" style="width: 100%">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                        <div style="display: flex;">
-                            <div style="margin-right: 10px; width: 50%">
-                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div style="width: 50%;">
-                                <!-- <h6>Year End</h6> -->
-                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: flex;">
-                        <div style="margin-right: 12px;">
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                        <div>
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <div>
-                        <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number-Modal"
-                            required="" onkeyup="submitFilterForm()">
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                        <div>
-                            <!-- <h6>Part Type</h6> -->
-                            <select name="category" id="category-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                                <option value="" selected disabled>Select Part Type</option>
-                                {% for category in categories %}
-                                <option value="{{ category }}">{{ category }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                        <div>Clear</div>
-                    </a>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
-                        <div>Filter</div>
-                    </a>
-            </form>
-            </div>
-        
-        </div>
-        <div id="vehicleEditModal" class="modal">
-            <div class="modal-content">
+        <div id="vehicleEditModal" class="modal" style="display: none">
+            <div class="modal-content" style="width: 300px;">
                 <span class="close" id="editVehicleClose">&times;</span>
                 <h6>Edit Vehicles</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid" style="width: 100%">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Row" name="row" id="row-edit"
-                                required>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-edit"
-                                required>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
+                <form id="filter-form-modal" class="" style="width: 100%">
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="margin-bottom: 16px;">
                         <div>
                             <select name="category" id="category-edit" class="text-field w-select">
                                 <option value="" selected disabled>Select Category</option>
@@ -191,6 +518,18 @@
                             </select>
                         </div>
                     </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: none;">
+                        <div>
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Row" name="row" id="row-edit"
+                                required>
+                        </div>
+                    </div>
+                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: none;">
+                        <div>
+                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-edit"
+                                required>
+                        </div>
+                    </div>
                     <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="saveVehicleChanges()">
                         <div>Save Change</div>
                     </a>
@@ -198,81 +537,27 @@
             </div>
         
         </div>
-        <div class="module" style="padding: 0">
-            <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: end;">
-                <div id="edit-button">
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit Vehicles
-                    </a>
-                </div>
-                
-                
-            </div>
-            <div class="table-module" id="table-container">
-                <div class="table-content" style="margin-top: 15px;">
-                    <div class="table-list">
-                        <div class="w-layout-grid table-headers mobile-table">
-                            <div class="caption-large select-column"></div>
-                            <div class="caption-large">Year</div>
-                            <div class="caption-large mobile tablet">Make</div>
-                            <div class="caption-large">Model</div>
-                            <div class="caption-large tablet mobile">Location</div>
-                            <div class="caption-large">Row</div>
-                            <div class="caption-large mobile">Category</div>
-                        </div>
-                        {% if vehicles %}
-                            {% for vehicle in vehicles %}
-                                <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
-                                    <div class="w-layout-grid table-row">
-                                        <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.year }}</div>
-                                        <div class="tablet mobile">{{ vehicle.make }}</div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title tablet mobile" style="display: block">
-                                            {{ vehicle.model }}
-                                        </div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.location|default:"" }}</div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.row|default:"" }}</div>
-                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ vehicle.category|default:"" }}</div>
-                                    </div>
-                                </a> 
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
-                        <span class="step-links" style="margin-right: 20px">
-                            {% if vehicles.has_previous %}
-                            <!-- <a href="?page=1">&laquo; first</a> -->
-                            <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
-                                    value="<" class="button button-small w-button"></a>
-                            {% else %}
-                            <input type="button" value="<" class="button button-small w-button" disabled>
-                            {% endif %}
-            
-                            <span class="current" style="width: 50px">
-                                {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
-                            </span>
-            
-                            {% if vehicles.has_next %}
-                            <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
-                                    class="button button-small w-button"></a>
-                            {% else %}
-                            <input type="button" value=">" class="button button-small w-button" disabled>
-                            {% endif %}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
+
 <script>
     var editVehicleModal = document.getElementById("vehicleEditModal");
-    var editVehicleBtn = document.getElementById("edit-button");
-    editVehicleBtn.onclick = function () {
-        editVehicleModal.style.display = "block";
+    var editVehicleBtn1 = document.getElementById("edit-button-1");
+    var editVehicleBtn2 = document.getElementById("edit-button-2");
+    var editVehicleBtn3 = document.getElementById("edit-button-3");
+    var editVehicleBtn4 = document.getElementById("edit-button-4");
+    var editVehicleBtn5 = document.getElementById("edit-button-5");
+    var editVehicleBtn5 = document.getElementById("edit-button-6");
+    var allButtons = [editVehicleBtn1, editVehicleBtn2, editVehicleBtn3, editVehicleBtn4, editVehicleBtn5];
+
+    for (var i = 0; i < allButtons.length; i++) {
+        allButtons[i].onclick = function () {
+            editVehicleModal.style.display = 'block';
+        }
     }
     var editVehicleModalSpan = document.getElementById("editVehicleClose");
+
     editVehicleModalSpan.onclick = function () {
+
         editVehicleModal.style.display = "none";
     }
     function clearVehicleCheckboxes() {
@@ -286,10 +571,11 @@
         $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
             selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
         });
+
         var row = document.getElementById('row-edit').value;
         var location = document.getElementById('location-edit').value;
         var category = document.getElementById('category-edit').value;
-        console.log(row)
+
         if (!location && !row && category === "") {
             alert("Please fill out at least one field before saving changes.");
             return false; // Stop the form submission
@@ -300,6 +586,9 @@
             category: category,
             row: row
         };
+
+        
+
         let params = new URLSearchParams(data).toString();
         fetch("{% url 'vehicles' %}?" + params, {
             method: 'GET',
@@ -317,7 +606,6 @@
 
         })
         .catch(error => console.error('Error:', error));
-
 
     }
     var modal = document.getElementById("myModal");
@@ -423,10 +711,48 @@
         .catch(error => console.error('Error:', error));
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to clear all vehicle checkboxes
+        function clearVehicleSelections() {
+            // Find all vehicle checkboxes by name and reset their 'checked' state
+            document.querySelectorAll('input[name="vehicle"]').forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+        }
+
+        // Add click event listeners to each in-page menu link
+        document.querySelectorAll('.in-page-menu-link').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                clearVehicleSelections();
+            });
+        });
+    });
 
 
 </script>
 <style>
+    .needs-a-sticker {
+        background-color: #EED897 !important;
+    }
+    .title-problem {
+        background-color: #DA4167 !important;
+    }
+    .no-title {
+        background-color: #F2CEE6 !important;
+    }
+    .vin-not-in-system {
+        background-color: #C3DBC5 !important;
+    }
+
+
+
+
+
+    .table-header {
+        padding-bottom: 0px !important;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
     .table-row {
         grid-template-columns: .35fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
@@ -463,9 +789,12 @@
             display: inline-grid !important;
         }
     }
+    #filter-button{
+            display: none;
+        }
     @media screen and (max-width: 991px) {
         #filter-button{
-            display: block !important;
+            display: flex;
         }
     }
     .form-row {
@@ -552,5 +881,46 @@
         text-decoration: none;
         cursor: pointer;
     }
+    .in-page-menu::-webkit-scrollbar {
+        display: none; /* This will hide the scrollbar in WebKit browsers */
+    }
+
+    /* For IE, Edge, and Firefox 64+: */
+    .in-page-menu {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    /* Ensure this applies to the in-page-menu specifically for mobile views */
+    @media screen and (max-width: 750px) {
+        .in-page-menu {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            scrollbar-width: thin; /* For modern browsers */
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Custom scrollbar colors */
+        }
+
+        .in-page-menu .in-page-menu-link {
+            flex: 0 0 auto;
+            display: inline-flex; /* Use inline-flex for the links to align them properly */
+            margin-right: 8px; /* Adjust space between tabs */
+        }
+
+        /* Styles for the scrollbar */
+        .in-page-menu::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .in-page-menu::-webkit-scrollbar-thumb {
+            background-color: #ccc; /* Scrollbar thumb color */
+            border-radius: 2px;
+        }
+
+        .in-page-menu::-webkit-scrollbar-track {
+            background: #f0f0f0; /* Scrollbar track color */
+        }
+    }
+
 </style>
 {% endblock %}

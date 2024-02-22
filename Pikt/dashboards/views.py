@@ -187,12 +187,25 @@ class defaultDashboardView(LoginRequiredMixin,View):
 class vehiclesView(LoginRequiredMixin,View):
     def get(self, request):
         vehicles = Vehicle.objects.filter(user=request.user) if request.user.is_authenticated else []
+        incomingVehicles = Vehicle.objects.filter(user=request.user, category='INCOMING') if request.user.is_authenticated else []
+        categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
+        holdingVehicles = Vehicle.objects.filter(user=request.user, category__in=categories) if request.user.is_authenticated else []
+        preStripVehicles = Vehicle.objects.filter(user=request.user, category='PRE STRIP') if request.user.is_authenticated else []
+        stripVehicles = Vehicle.objects.filter(user=request.user, category='STRIPPING') if request.user.is_authenticated else []
+        preYardVehicles = Vehicle.objects.filter(user=request.user, category='PRE YARD') if request.user.is_authenticated else []
+        yardVehicles = Vehicle.objects.filter(user=request.user, category='YARD') if request.user.is_authenticated else []
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'vehicles': vehicles,
+            'incomingVehicles': incomingVehicles,
+            'holdingVehicles': holdingVehicles,
+            'preStripVehicles': preStripVehicles,
+            'stripVehicles': stripVehicles,
+            'preYardVehicles': preYardVehicles,
+            'yardVehicles': yardVehicles,
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
