@@ -27,16 +27,16 @@
     <div class="w-layout-grid form-grid space-bottom-small" style="grid-template-columns: minmax(40%, 50%) minmax(40%, 50%);">
         <div style="display: flex; align-items: end;">
             <input type="text" class="text-field w-input" maxlength="256" name="vin" id="vin-input"
-                placeholder="VIN" style="margin-right: 10px; margin-bottom: 10px"> 
+                placeholder="VIN" style="margin-right: 10px; margin-bottom: 10px" required> 
             <button  onclick="decodeVin()" class="button button-small w-button remove-row" style="height: 38px; margin-right: 5px; margin-bottom: 10px;">Go</button>
         </div>
         <div>
             <h6>Stock Number</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="stock_number" id="stock_number" value="{{ stock_number }}" required>
+            <input type="text" class="text-field w-input" maxlength="256" name="stock_number" id="stock_number" value="{{ stock_number }}">
         </div>
         <div>
             <h6>Year</h6>
-            <select name="year" id="year" class="text-field w-select" required>
+            <select name="year" id="year" class="text-field w-select">
                 <option value="" selected disabled>Select Year</option>
                 {% for year in years %}
                     <option value="{{ year }}">{{ year }}</option>
@@ -54,7 +54,7 @@
         </div>
         <div>
             <h6>Model</h6>
-            <select name="model" id="model" class="text-field w-select" required>
+            <select name="model" id="model" class="text-field w-select">
                 <option value="" selected disabled>Select Model</option>
                 {% for make, models in makes_models.items %}
                 <optgroup label="{{ make }}">
@@ -85,7 +85,7 @@
         </div>
         <div>
             <h6>Category</h6>
-            <select name="category" id="category" class="text-field w-input">
+            <select name="category" id="category" class="text-field w-input" required>
                 <option value="" selected disabled>Select Category</option>
                 {% for category in categories %}
                 {% if category in vehicle.category %}
@@ -98,7 +98,7 @@
         </div>
         <div>
             <h6>Yard</h6>
-            <input type="text" class="text-field w-input" maxlength="256" name="yard" id="yard" required>
+            <input type="text" class="text-field w-input" maxlength="256" name="yard" id="yard">
         </div>
         <div>
             <h6>Row</h6>
@@ -106,8 +106,8 @@
         </div>
         <div>
             <h6>Location</h6>
-            <select id="locationDropdown" class="dropdown text-field w-input" name="location">
-                <option>Select a location</option>
+            <select id="locationDropdown" class="dropdown text-field w-input" name="location" required>
+                <option value="">Select a location</option>
                 {% for location in locations %}
                 <option value="{{ location.id }}">
                     {{ location.name }}

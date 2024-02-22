@@ -236,17 +236,19 @@
                                         </div>
                                         {% if vehicles %}
                                             {% for vehicle in vehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
+                                                <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
+                                                    <div class="w-layout-grid table-row">
+                                                        <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                        <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                            {{ vehicle.model }}
+                                                        </div>
+                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
                                                     </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
+                                                </a>
                                             {% endfor %}
                                         {% endif %}
                                     </div>

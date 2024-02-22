@@ -6,25 +6,49 @@
                 <div class="caption-large tablet mobile">Year</div>
                 <div class="caption-large mobile tablet">Make</div>
                 <div class="caption-large mobile">Model</div>
-                <div class="caption-large">Stock Number</div>
+                <div class="caption-large">STK #</div>
                 <div class="caption-large">VIN</div>
                 <div class="caption-large">Category</div>
             </div>
             {% if vehicles %}
                 {% for vehicle in vehicles %}
-                    <div class="w-layout-grid table-row">
-                        <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                        <div class="tablet mobile">{{ vehicle.make }}</div>
-                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                            {{ vehicle.model }}
+                    <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
+                        <div class="w-layout-grid table-row">
+                            <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                            <div class="tablet mobile">{{ vehicle.make }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                {{ vehicle.model }}
+                            </div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
                         </div>
-                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                    </div>
+                    </a>
                 {% endfor %}
             {% endif %}
+        </div>
+        <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
+            <span class="step-links" style="margin-right: 20px">
+                {% if vehicles.has_previous %}
+                <!-- <a href="?page=1">&laquo; first</a> -->
+                <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
+                        value="<" class="button button-small w-button"></a>
+                {% else %}
+                <input type="button" value="<" class="button button-small w-button" disabled>
+                {% endif %}
+
+                <span class="current" style="width: 50px">
+                    {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
+                </span>
+
+                {% if vehicles.has_next %}
+                <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
+                        class="button button-small w-button"></a>
+                {% else %}
+                <input type="button" value=">" class="button button-small w-button" disabled>
+                {% endif %}
+            </span>
         </div>
     </div>
 </div>
