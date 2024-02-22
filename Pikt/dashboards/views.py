@@ -237,7 +237,7 @@ class vehiclesView(LoginRequiredMixin,View):
                 vehicle_make = request.GET.get('vehicle_make')
                 vehicle_model = request.GET.get('vehicle_model')
                 category = request.GET.get('category')
-                location = request.GET.get('location')
+                vin = request.GET.get('vin')
                 stock_number = request.GET.get('stock_number')
 
                 vehicles = Vehicle.objects.filter(user=request.user)
@@ -251,8 +251,8 @@ class vehiclesView(LoginRequiredMixin,View):
                     vehicles = vehicles.filter(make__icontains=vehicle_make)
                 if category:
                     vehicles = vehicles.filter(category__iexact=category)
-                if location:
-                    vehicles = vehicles.filter(location__icontains=location)
+                if vin:
+                    vehicles = vehicles.filter(vin__icontains=vin)
                 if stock_number:
                     vehicles = vehicles.filter(stock_number__icontains=stock_number)
                 context['vehicles'] = vehicles
@@ -267,7 +267,7 @@ class vehiclesView(LoginRequiredMixin,View):
                     context['vehicle_make_filter'] = vehicle_make
                     context['vehicle_model_filter'] = vehicle_model
                     context['category_filter'] = category
-                    context['location_filter'] = location
+                    context['vin_filter'] = vin
                 return HttpResponse(render_to_string('vehicles-table.html', context))
         if context['vehicles'].count() > 0:
             vehicles = Vehicle.objects.filter(user=request.user).order_by('id')

@@ -119,7 +119,7 @@
                                         <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
                                             <div>
                                                 <!-- <h6>Vehicle Model</h6> -->
-                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location"
+                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="VIN" name="vin" id="vin"
                                                     required="" onkeyup="submitFilterForm()">
                                             </div>
                                         </div>
@@ -183,7 +183,7 @@
                                     <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
                                         <div>
                                             <!-- <h6>Vehicle Model</h6> -->
-                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-Modal"
+                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="vin-Modal"
                                                 required="" onkeyup="submitFilterModalForm()">
                                         </div>
                                     </div>
@@ -691,14 +691,14 @@
         document.getElementById('Year-Start').selectedIndex = 0;
         document.getElementById('Year-Start').selectedIndex = 0;
         document.getElementById('category').selectedIndex = 0;
-        document.getElementById('location').selectedIndex = 0;
+        document.getElementById('vin').selectedIndex = 0;
         document.getElementById('Vehicle-Model').value = '';
         document.getElementById('Vehicle-Make').value = '';
         document.getElementById('Vehicle-Stock-Number').value = '';
 
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
         document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('location-Modal').selectedIndex = 0;
+        document.getElementById('vin-Modal').selectedIndex = 0;
         document.getElementById('category-Modal').selectedIndex = 0;
         document.getElementById('Vehicle-Model-Modal').value = '';
         document.getElementById('Vehicle-Make-Modal').value = '';
@@ -710,11 +710,11 @@
         $('#Year-Start').val(null).trigger('change');
         $('#Year-End').val(null).trigger('change');
         $('#category').val(null).trigger('change');
-        $('#location').val(null).trigger('change');
+        $('#vin').val(null).trigger('change');
         $('#Year-Start-Modal').val(null).trigger('change');
         $('#Year-End-Modal').val(null).trigger('change');
         $('#category-Modal').val(null).trigger('change');
-        $('#location-Modal').val(null).trigger('change');
+        $('#vin-Modal').val(null).trigger('change');
         $('#Vehicle-Stock-Number').val(null).trigger('change');
         // Trigger the filter form submission to refresh the results
         submitFilterForm();
@@ -724,6 +724,7 @@
 
     function submitFilterForm() {
         var formData = new FormData(document.forms[0]);
+
         var queryParams = new URLSearchParams();
         for (var pair of formData.entries()) {
             queryParams.append(pair[0], pair[1]);
@@ -944,7 +945,7 @@
         scrollbar-width: none;  /* Firefox */
     }
     /* Ensure this applies to the in-page-menu specifically for mobile views */
-    @media screen and (max-width: 750px) {
+    @media screen and (max-width: 1200px) {
         .in-page-menu {
             display: flex;
             flex-wrap: nowrap;
