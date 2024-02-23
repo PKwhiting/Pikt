@@ -247,6 +247,18 @@ class vehiclesView(LoginRequiredMixin,View):
                     if row != '':
                         vehicle.row = row
                     vehicle.save()
+            elif requestType == 'newVehicleLocation':
+                vehicle_ids = request.GET.get('vehicleIds')
+                vehicle_ids = list(map(int, vehicle_ids.split(',')))
+                latitude = request.GET.get('latitude')
+                longitude = request.GET.get('longitude')
+                for vehicle_id in vehicle_ids:
+                    vehicle = Vehicle.objects.get(id=vehicle_id)
+                    vehicle.latitude = latitude
+                    vehicle.longitude = longitude
+                    vehicle.save()
+                add_user_message(request, 'Vehicle location updated successfully')
+                return JsonResponse({'success': True}, safe=False)
             else:
                 year_start = request.GET.get('year_start')
                 year_end = request.GET.get('year_end')

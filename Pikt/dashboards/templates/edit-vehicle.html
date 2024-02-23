@@ -631,7 +631,7 @@
     });
 
     document.getElementById('locationDropdown').addEventListener('change', function() {
-        console.log("HERE")
+
         let queryParams = new URLSearchParams();
         queryParams.append('location_id', this.value);
         fetch("{% url 'add_vehicle' %}?" + queryParams.toString(), {
