@@ -866,7 +866,7 @@
                 event.preventDefault();
                 
                 var tabName = this.getAttribute('data-w-tab');
-                console.log(tabName);
+
                 clearCircleMarkers(vehicleMap);
                 if (tabName === 'All') {
                     vehicles = ({{ vehiclesJson|safe }});
