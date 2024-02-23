@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import part, Order, Vehicle
 from company.models import Location
+from django.core import serializers
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
 from .forms import VehicleForm
@@ -195,13 +196,28 @@ class vehiclesView(LoginRequiredMixin,View):
         preYardVehicles = Vehicle.objects.filter(user=request.user, category='PRE YARD') if request.user.is_authenticated else []
         yardVehicles = Vehicle.objects.filter(user=request.user, category='YARD') if request.user.is_authenticated else []
         forSaleVehicles = Vehicle.objects.filter(user=request.user, category='FOR SALE') if request.user.is_authenticated else []
+        vehiclesJSON = serializers.serialize('json', vehicles)
+        incomingVehiclesJSON = serializers.serialize('json', incomingVehicles)
+        holdingVehiclesJSON = serializers.serialize('json', holdingVehicles)
+        preStripVehiclesJSON = serializers.serialize('json', preStripVehicles)
+        stripVehiclesJSON = serializers.serialize('json', stripVehicles)
+        preYardVehiclesJSON = serializers.serialize('json', preYardVehicles)
+        forSaleVehiclesJSON = serializers.serialize('json', forSaleVehicles)
+
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'vehicles': vehicles,
+            'vehiclesJson': vehiclesJSON,
             'incomingVehicles': incomingVehicles,
+            'incomingVehiclesJson': json.dumps(incomingVehiclesJSON),
+            'holdingVehiclesJson': json.dumps(holdingVehiclesJSON),
+            'preStripVehiclesJson': json.dumps(preStripVehiclesJSON),
+            'stripVehiclesJson': json.dumps(stripVehiclesJSON),
+            'preYardVehiclesJson': json.dumps(preYardVehiclesJSON),
+            'forSaleVehiclesJson': json.dumps(forSaleVehiclesJSON),
             'holdingVehicles': holdingVehicles,
             'preStripVehicles': preStripVehicles,
             'stripVehicles': stripVehicles,

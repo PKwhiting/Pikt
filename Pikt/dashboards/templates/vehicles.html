@@ -35,7 +35,7 @@
                 aria-selected="false" tabindex="-1">
                 <div>For Sale</div>
             </a></div>
-            
+            <div id="vehicle-map" class="tablet mobile" style="height: 300px; margin-bottom: 16px; border-radius: 3px;"></div>
             <div class="tabs-content w-tab-content">
                 <div data-w-tab="All" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
@@ -535,7 +535,7 @@
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
                                                     <div class="tablet mobile">{{ vehicle.make }}</div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
+                                                        {{ vehicle.model }}ss
                                                     </div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
@@ -765,6 +765,7 @@
         .catch(error => console.error('Error:', error));
     }
 
+    // clears selected vehicles everytime the tab is changed
     document.addEventListener('DOMContentLoaded', function() {
         // Function to clear all vehicle checkboxes
         function clearVehicleSelections() {
@@ -781,6 +782,146 @@
             });
         });
     });
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    var vehicleMap = L.map(`vehicle-map`).setView([{{ user.location.latitude }}, {{ user.location.longitude }}], 16);
+    googleSat.addTo(vehicleMap);
+    vehicleMap.pm.removeControls();
+    vehicleMap.pm.addControls({
+        position: 'topright', 
+        drawCircle: false,    
+        drawMarker: false,
+        drawCircleMarker: false, 
+        drawPolygon: false,
+        drawPolyline: false,  
+        drawRectangle: false, 
+        editMode: false,       
+        dragMode: false,      
+        cutPolygon: false,    
+        removalMode: false,  
+        rotateMode: false,
+        drawText: false,
+    });
+
+    vehicles = ({{ vehiclesJson|safe }});
+
+    for (let i = 0; i < vehicles.length; i++) {
+        const vehicle = vehicles[i];
+        if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+            iconColor = "#FFFFFF";
+            if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
+                iconColor = "#fff004"
+            } else if (vehicle.fields.category == "CRUSHED"){
+                iconColor = "#f44336"
+            } else if (vehicle.fields.category == "YARD"){
+                iconColor = "#4336f4"
+            } else if (vehicle.fields.category == "NO TITLE"){
+                iconColor = "#F2CEE6"
+            } else if (vehicle.fields.categroy == "TITLE PROBLEM"){
+                iconColor = "#DA4167"
+            } else if (vehicle.fields.category == "NEEDS A STICKER"){
+                iconColor = "#EED897"
+            } else if (vehicle.fields.category == "VIN NOT IN SYSTEM"){
+                iconColor = "#C3DBC5"
+            }
+            else {
+                iconColor = "#FFFFFF"
+            }
+
+            customMarker = {
+                radius: 5,
+                fillColor: iconColor,
+                color: iconColor,
+                weight: 5,
+                opacity: 1,
+                fillOpacity: 0.8
+            };
+            const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(vehicleMap);
+            marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.vin}<br>${vehicle.fields.category}</a></strong>`);
+        }
+    }
+
+    function clearCircleMarkers(map) {
+        map.eachLayer(function (layer) {
+            if (layer instanceof L.LayerGroup || layer instanceof L.FeatureGroup) {
+                // If the layer is a group, recursively clear its children
+                clearCircleMarkers(layer);
+            } else if (layer instanceof L.CircleMarker) {
+                // If the layer is a circle marker, remove it
+                map.removeLayer(layer);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all tab links
+        var tabLinks = document.querySelectorAll('.w-tab-link');
+        
+        tabLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                // Prevent default anchor behavior
+                event.preventDefault();
+                
+                var tabName = this.getAttribute('data-w-tab');
+                console.log(tabName);
+                clearCircleMarkers(vehicleMap);
+                if (tabName === 'All') {
+                    vehicles = ({{ vehiclesJson|safe }});
+                } else if (tabName === 'Incoming'){
+                    vehicles = JSON.parse({{ incomingVehiclesJson|safe }});
+                } else if (tabName === "Holding"){
+                    vehicles = JSON.parse({{ holdingVehiclesJson|safe }});
+                } else if (tabName === "Pre-Strip"){
+                    vehicles = JSON.parse({{ preStripVehiclesJson|safe }});
+                } else if (tabName === "Stripping"){
+                    vehicles = JSON.parse({{ stripVehiclesJson|safe }});
+                } else if (tabName === "Pre-Yard"){
+                    vehicles = JSON.parse({{ preYardVehiclesJson|safe }});
+                } else if (tabName === "For-Sale"){
+                    vehicles = JSON.parse({{ forSaleVehiclesJson|safe }});
+                }
+                for (let i = 0; i < vehicles.length; i++) {
+                    const vehicle = vehicles[i];
+                    if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+                        iconColor = "#FFFFFF";
+                        if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
+                            iconColor = "#fff004"
+                        } else if (vehicle.fields.category == "CRUSHED"){
+                            iconColor = "#f44336"
+                        } else if (vehicle.fields.category == "YARD"){
+                            iconColor = "#4336f4"
+                        } else if (vehicle.fields.category == "NO TITLE"){
+                            iconColor = "#F2CEE6"
+                        } else if (vehicle.fields.categroy == "TITLE PROBLEM"){
+                            iconColor = "#DA4167"
+                        } else if (vehicle.fields.category == "NEEDS A STICKER"){
+                            iconColor = "#EED897"
+                        } else if (vehicle.fields.category == "VIN NOT IN SYSTEM"){
+                            iconColor = "#C3DBC5"
+                        }
+                        else {
+                            iconColor = "#FFFFFF"
+                        }
+
+                        customMarker = {
+                            radius: 5,
+                            fillColor: iconColor,
+                            color: iconColor,
+                            weight: 5,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        };
+                        const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(vehicleMap);
+                        marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.vin}<br>${vehicle.fields.category}</a></strong>`);
+                    }
+                }
+            });
+        });
+    });
+
 
 
 </script>

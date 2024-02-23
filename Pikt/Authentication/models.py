@@ -1,6 +1,8 @@
 from django.db import models
+
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import RegexValidator
+from company.models import Location
 
 ROLE_CHOICES = (
     ('Admin', 'Admin'),
@@ -26,6 +28,7 @@ class User(AbstractUser):
     is_main_company_contact = models.BooleanField(default=False)
     role = models.CharField(choices=ROLE_CHOICES, max_length=10, default='Employee')
     u_pull_it_account = models.BooleanField(default=False)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
 
 class templateImage(models.Model):
     image = models.ImageField(upload_to='images/')

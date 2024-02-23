@@ -1,5 +1,4 @@
 from django.db import models
-from Authentication.models import User
 
 STATE_CHOICES = (
     ('AL', 'Alabama'),
