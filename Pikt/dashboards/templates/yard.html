@@ -63,6 +63,33 @@
         rotateMode: false,
         drawText: false,
     });
+    function calculateRectangleBounds(centerLatLng, widthFeet, heightFeet) {
+        const widthMeters = widthFeet / 3.2808;
+        const heightMeters = heightFeet / 3.2808;
+        const southWest = centerLatLng.toBounds(heightMeters).getSouthWest();
+        const northEast = centerLatLng.toBounds(widthMeters).getNorthEast();
+        return [southWest, northEast];
+    }
+
+    function placeRectangle(e) {
+        const centerLatLng = e.latlng;
+        const bounds = calculateRectangleBounds(centerLatLng, 9, 20);
+        const rectangle = L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(myMap);
+    }
+    
+    myMap.pm.Toolbar.createCustomControl({
+        name: 'PlaceRectangle',
+        block: 'custom',
+        title: 'Place Rectangle',
+        className: 'leaflet-pm-icon-rectangle',
+        toggle: true,
+        onClick: function() {
+            myMap.on('click', placeRectangle);
+        },
+        offClick: function() {
+            myMap.off('click', placeRectangle);
+        },
+    });
 
     // Event listener for location dropdown change
     document.getElementById('locationDropdown').addEventListener('change', function() {
