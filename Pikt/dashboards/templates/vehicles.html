@@ -1146,28 +1146,49 @@
                     // clearCircleMarkers(vehicleMap);
                     alert("Select a new vehicle location.")
                     emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-                    buildVehicleMap(emptyVehicleSpots, vehicleMap, selectedVehicleIds[0]);
+                    vehiclesWithMarkers = ({{ vehiclesList|safe }})
+                    
+                    buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
+                    buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, selectedVehicleIds[0]);
                     
                     
                 }
             }
         })();
     }
+    function ifMarkerExists(marker, listOfVehicleMarkers){
+        let matchingMarker = false;
+        listOfVehicleMarkers.forEach(function(vehicle){
+                if (vehicle.marker){
+                bounds = JSON.parse(vehicle.marker);
+                vehicleMarker = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+                if (marker._northEast.lat === vehicleMarker._northEast.lat && marker._northEast.lng === vehicleMarker._northEast.lng && marker._southWest.lat === vehicleMarker._southWest.lat && marker._southWest.lng === vehicleMarker._southWest.lng){
+                    matchingMarker = true;
+                }
+            }
+        });
+        return matchingMarker;
+    }
 
-    function buildVehicleMap(emptyVehicleSpots, vehicleMap, vehicleId) {
+    function buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, vehicleId) {
         emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
         emptyVehicleSpots.forEach(function(bounds) {
             var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-            rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
-            rectangle.on('click', function(e) {
-                vehicleMap.eachLayer(function(layer) {
-                    if (!(layer instanceof L.TileLayer)) {
-                        vehicleMap.removeLayer(layer);
-                    }
-                });
-                setVehicleMarker(vehicleMap, latLngBounds, vehicleId);
 
-            });
+            if (!ifMarkerExists(latLngBounds ,vehiclesWithMarkers)){
+                rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
+                rectangle.on('click', function(e) {
+                    vehicleMap.eachLayer(function(layer) {
+                        if (!(layer instanceof L.TileLayer)) {
+                            vehicleMap.removeLayer(layer);
+                        }
+                    });
+                    
+                    setVehicleMarker(vehicleMap, latLngBounds, vehicleId);
+
+                });
+            }
+            
         });
 
     }
@@ -1222,7 +1243,7 @@
                     "INCOMING": "#FFFFFF"
                 };
                 let iconColor = categoryColors[vehicle.category] || "#000000";
-                rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4}).addTo(vehicleMap)
+                rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4, fillOpacity: 1}).addTo(vehicleMap)
                 rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
             }
         });
