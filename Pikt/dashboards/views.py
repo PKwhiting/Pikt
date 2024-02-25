@@ -189,7 +189,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
 class vehiclesView(LoginRequiredMixin,View):
     def get(self, request):
         location = request.user.location
-        vehicles = Vehicle.objects.filter(location=location) if request.user.is_authenticated else []
+        vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED") if request.user.is_authenticated else []
         incomingVehicles = Vehicle.objects.filter(location=location, category='INCOMING') if request.user.is_authenticated else []
         categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
         holdingVehicles = Vehicle.objects.filter(location=location, category__in=categories) if request.user.is_authenticated else []
@@ -199,6 +199,7 @@ class vehiclesView(LoginRequiredMixin,View):
         yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []
         processingVehicles = Vehicle.objects.filter(location=location, category='PROCESSING') if request.user.is_authenticated else []
         forSaleVehicles = Vehicle.objects.filter(location=location, category='FOR SALE') if request.user.is_authenticated else []
+        crushedVehicles = Vehicle.objects.filter(location=location, category='CRUSHED') if request.user.is_authenticated else []
         vehiclesList = json.dumps(list(vehicles.values()), cls=DjangoJSONEncoder)
         incomingVehiclesList = json.dumps(list(incomingVehicles.values()), cls=DjangoJSONEncoder)
         holdingVehiclesList = json.dumps(list(holdingVehicles.values()), cls=DjangoJSONEncoder)
@@ -207,6 +208,7 @@ class vehiclesView(LoginRequiredMixin,View):
         preYardVehiclesList = json.dumps(list(preYardVehicles.values()), cls=DjangoJSONEncoder)
         processingVehiclesList = json.dumps(list(processingVehicles.values()), cls=DjangoJSONEncoder)
         forSaleVehiclesList = json.dumps(list(forSaleVehicles.values()), cls=DjangoJSONEncoder)
+        crushedVehiclesList = json.dumps(list(crushedVehicles.values()), cls=DjangoJSONEncoder)
         emptyVehicleSpots = location.layout
         vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
         vehiclesWithMarkers_json = json.dumps(vehiclesWithMarkers, cls=DjangoJSONEncoder)
@@ -225,6 +227,7 @@ class vehiclesView(LoginRequiredMixin,View):
             'preYardVehiclesList': preYardVehiclesList,
             'processingVehiclesList': processingVehiclesList,
             'forSaleVehiclesList': forSaleVehiclesList,
+            'crushedVehiclesList': crushedVehiclesList,
             'holdingVehicles': holdingVehicles,
             'preStripVehicles': preStripVehicles,
             'stripVehicles': stripVehicles,
@@ -232,6 +235,7 @@ class vehiclesView(LoginRequiredMixin,View):
             'yardVehicles': yardVehicles,
             'processingVehicles': processingVehicles,
             'forSaleVehicles': forSaleVehicles,
+            'crushedVehicles': crushedVehicles,
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
@@ -308,7 +312,7 @@ class vehiclesView(LoginRequiredMixin,View):
                     context['vin_filter'] = vin
                 return HttpResponse(render_to_string('vehicles-table.html', context))
         if context['vehicles'].count() > 0:
-            vehicles = Vehicle.objects.filter(user=request.user).order_by('id')
+            vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED") if request.user.is_authenticated else []
             paginator = Paginator(vehicles, 20)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
