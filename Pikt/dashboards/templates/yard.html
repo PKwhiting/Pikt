@@ -8,19 +8,9 @@
                 <input id="filter-button" type="button" value="Filter Parts"
                         class="button button-small w-button filter-button" style="display: none;">
             </div> -->
-            <div style="display: flex;">
-                <select id="locationDropdown" class="dropdown">
-                    <option>Select a location</option>
-                    {% for location in locations %}
-                    <option value="{{ location.latitude }},{{ location.longitude }}">
-                        {{ location.name }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
             <div id="edit-button-7"  onclick="saveMarkers()">
-                <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                    Save Markers
+                <a title="Save Location Layout" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                    Save Layout
                 </a>
             </div>
             
@@ -241,20 +231,11 @@
 
             if (e){
                 if (!isPlacingRectangleActive) {
-                    locationDropdownValue = document.getElementById('locationDropdown').value.split(',')
-                    if (locationDropdownValue[0] == 'Select a location' ){
-                        alert("Please select a location first")
-                        myMap.pm.Toolbar.toggleButton('PlaceRectangle', true);
-                        isPlacingRectangleActive = false;
-                        return
-                    } else {
-                        // Start the rectangle placement process
-                        isPlacingRectangle = true;
-                        myMap.on('mousemove', updatePreviewRectangle);
-                        myMap.on('click', placeRectangle);
-                        myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
-                        isPlacingRectangleActive = true; // Update the button state
-                    }
+                    isPlacingRectangle = true;
+                    myMap.on('mousemove', updatePreviewRectangle);
+                    myMap.on('click', placeRectangle);
+                    myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
+                    isPlacingRectangleActive = true; // Update the button state
                     
                 } else {
                     // Stop the rectangle placement process
@@ -274,80 +255,81 @@
         },
     });
 
-// Event listener for location dropdown change
-    document.getElementById('locationDropdown').addEventListener('change', function() {
-        var [lat, lng] = this.value.split(','); // Split the value by comma to get lat and lng
+    // vehicles = data['vehicles'];
+    locationLayout = ({{ location_layout|safe }});
 
-        // Clear existing markers on the map
-        myMap.eachLayer(function (layer) {
-            if (layer instanceof L.Marker) {
-                myMap.removeLayer(layer);
-            }
-        });
-
-        // Fetch vehicle data based on selected location
-        let queryParams = new URLSearchParams();
-        queryParams.append('latitude', lat);
-        queryParams.append('longitude', lng);
-
-        fetch("{% url 'yard' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'vehicleLocations'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            vehicles = data['vehicles'];
-            locationLayout = JSON.parse(data['locationLayout']);
-
-            locationLayout.forEach(function (bounds) {
-                var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                L.rectangle(latLngBounds, {color: "#fe019a", weight: 3}).addTo(myMap)
-                const corners = [latLngBounds.getSouthWest(), latLngBounds.getNorthWest(), latLngBounds.getNorthEast(), latLngBounds.getSouthEast()];
-                rectangleCorners.push(...corners);
-            });
-
-            for (let i = 0; i < vehicles.length; i++) {
-                const vehicle = vehicles[i];
-                if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
-                    iconColor = "#57db1c";
-                    if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
-                        iconColor = "#fff004"
-                    } else if (vehicle.fields.category == "CRUSHED"){
-                        iconColor = "#f44336"
-                    } else if (vehicle.fields.category == "YARD"){
-                        iconColor = "#4336f4"
-                    } else if (vehicle.fields.category == "SOLD"){
-                        iconColor = "#57db1c"
-                    }
-                    else {
-                        iconColor = "#46e6bc"
-                    }
-
-                    customMarker = {
-                        radius: 5,
-                        fillColor: iconColor,
-                        color: iconColor,
-                        weight: 5,
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    };
-                    const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
-                    marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</a></strong>`);
-                }
-            }
-            // Set map view to the selected location
-            myMap.setView(new L.LatLng(lat, lng), 17);
-        })
-        .catch(error => console.error('Error:', error));
-        
+    locationLayout.forEach(function (bounds) {
+        var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+        L.rectangle(latLngBounds, {color: "#fe019a", weight: 3}).addTo(myMap)
+        const corners = [latLngBounds.getSouthWest(), latLngBounds.getNorthWest(), latLngBounds.getNorthEast(), latLngBounds.getSouthEast()];
+        rectangleCorners.push(...corners);
     });
+// Event listener for location dropdown change
+    // document.getElementById('locationDropdown').addEventListener('change', function() {
+    //     var [lat, lng] = this.value.split(','); // Split the value by comma to get lat and lng
+
+    //     // Clear existing markers on the map
+    //     myMap.eachLayer(function (layer) {
+    //         if (layer instanceof L.Marker) {
+    //             myMap.removeLayer(layer);
+    //         }
+    //     });
+
+    //     // Fetch vehicle data based on selected location
+    //     let queryParams = new URLSearchParams();
+    //     queryParams.append('latitude', lat);
+    //     queryParams.append('longitude', lng);
+
+    //     fetch("{% url 'yard' %}?" + queryParams.toString(), {
+    //         method: 'GET',
+    //         headers: {
+    //             'X-Requested-With': 'XMLHttpRequest',
+    //             'X-Request-Type': 'vehicleLocations'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+            
+
+    //         for (let i = 0; i < vehicles.length; i++) {
+    //             const vehicle = vehicles[i];
+    //             if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
+    //                 iconColor = "#57db1c";
+    //                 if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
+    //                     iconColor = "#fff004"
+    //                 } else if (vehicle.fields.category == "CRUSHED"){
+    //                     iconColor = "#f44336"
+    //                 } else if (vehicle.fields.category == "YARD"){
+    //                     iconColor = "#4336f4"
+    //                 } else if (vehicle.fields.category == "SOLD"){
+    //                     iconColor = "#57db1c"
+    //                 }
+    //                 else {
+    //                     iconColor = "#46e6bc"
+    //                 }
+
+    //                 customMarker = {
+    //                     radius: 5,
+    //                     fillColor: iconColor,
+    //                     color: iconColor,
+    //                     weight: 5,
+    //                     opacity: 1,
+    //                     fillOpacity: 0.8
+    //                 };
+    //                 // const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
+    //                 // marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</a></strong>`);
+    //             }
+    //         }
+    //         // Set map view to the selected location
+    //         myMap.setView(new L.LatLng(lat, lng), 17);
+    //     })
+    //     .catch(error => console.error('Error:', error));
+        
+    // });
 
     function saveMarkers() {
+        myMap.pm.Toolbar.toggleButton('PlaceRectangle', true);
         var markersData = []; // Array to hold data of each marker
-
         myMap.eachLayer(function(layer) {
 
             if (layer instanceof L.Polygon) {
@@ -356,16 +338,6 @@
             }
         });
         
-        locationDropdownValue = document.getElementById('locationDropdown').value.split(',')
-        if (locationDropdownValue[0] == 'Select a location' ){
-            alert("Please select a location first")
-            return
-        } else if (markersData.length == 0){
-            alert("Please place a rectangle first")
-            return
-        }
-        lat = locationDropdownValue[0]
-        lng = locationDropdownValue[1]
         
        
 
@@ -374,8 +346,6 @@
         // Convert markers data to a string to save in a field (e.g., a hidden input field in a form)
         let queryParams = new URLSearchParams();
         queryParams.append('markersData', markersDataString);
-        queryParams.append('latitude', lat);
-        queryParams.append('longitude', lng);
         
         fetch("{% url 'yard' %}?" + queryParams.toString(), {
             method: 'GET',

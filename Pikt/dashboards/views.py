@@ -648,23 +648,12 @@ class RedirectView(View):
 
 class yard(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
-        locations = Location.objects.filter(company=request.user.company)
+        location = request.user.location
         if is_ajax(request):
             requestType = request.headers['x-request-type']
-            if requestType == 'vehicleLocations':
-                latitude = request.GET.get('latitude')
-                longitude = request.GET.get('longitude')
-                location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
-                location_layout = location.layout
-                vehicles = Vehicle.objects.filter(location=location)
-                vehicles_data = serialize('json', vehicles)
-                vehicles_data_json = json.loads(vehicles_data)
-                return JsonResponse({'vehicles': vehicles_data_json ,'locationLayout': location_layout}, safe=False)
-            elif requestType == 'saveYardLayout':
+            if requestType == 'saveYardLayout':
                 markersData = request.GET.get('markersData')
-                latitude = request.GET.get('latitude')
-                longitude = request.GET.get('longitude')
-                location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
+                location = request.user.location
                 location.layout = markersData
                 location.save()
                 return JsonResponse({'success': True}, safe=False)
@@ -675,6 +664,7 @@ class yard(LoginRequiredMixin, View):
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
-            'locations': locations,
+            'location': location,
+            'location_layout': location.layout,
         }
         return render(request, 'yard.html', context)

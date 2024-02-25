@@ -1084,6 +1084,7 @@
                 rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
             });
             buildMarkedVehicleSpots(vehiclesWithMarkers, vehicleMap);
+            clearVehicleSelections
         })
         .catch(error => console.error('Error:', error));
     }
