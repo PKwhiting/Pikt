@@ -21,6 +21,12 @@
 </div>
 <script>
     var newRectangles = [];
+    existingSpots = {{ location_layout|safe }};
+    existingSpots.forEach(function (bounds) {
+        var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+        newRectangles.push(latLngBounds);
+    });
+
 
 
 
@@ -47,7 +53,7 @@
     });
 
     myMap.on('pm:remove', function(e) {
-        console.log("REMOVED")
+
         var removedLayer = e.layer; // This is the layer that was removed.
         // Now you need to find this layer in your newRectangles array.
         // This example assumes that you directly store L.rectangle instances in newRectangles. If you store bounds or some other identifier, you'll need to adjust the logic accordingly.
@@ -288,7 +294,6 @@
     function saveMarkers() {
 
         myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
-
         let queryParams = new URLSearchParams();
         queryParams.append('markersData', JSON.stringify(newRectangles));
         
