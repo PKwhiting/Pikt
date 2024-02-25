@@ -940,47 +940,23 @@
 
     vehicles = ({{ vehiclesJson|safe }});
 
-    for (let i = 0; i < vehicles.length; i++) {
-        const vehicle = vehicles[i];
-        if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
-            iconColor = "#FFFFFF";
-            if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
-                iconColor = "#fff004"
-            } else if (vehicle.fields.category == "CRUSHED"){
-                iconColor = "#f44336"
-            } else if (vehicle.fields.category == "YARD"){
-                iconColor = "#4336f4"
-            } else if (vehicle.fields.category == "NO TITLE"){
-                iconColor = "#F2CEE6"
-            } else if (vehicle.fields.categroy == "TITLE PROBLEM"){
-                iconColor = "#DA4167"
-            } else if (vehicle.fields.category == "NEEDS A STICKER"){
-                iconColor = "#EED897"
-            } else if (vehicle.fields.category == "VIN NOT IN SYSTEM"){
-                iconColor = "#C3DBC5"
-            }
-            else {
-                iconColor = "#FFFFFF"
-            }
-
-            customMarker = {
-                radius: 5,
-                fillColor: iconColor,
-                color: iconColor,
-                weight: 5,
-                opacity: 1,
-                fillOpacity: 0.8
-            };
-            const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(vehicleMap);
-            marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.vin}<br>${vehicle.fields.category}</a></strong>`);
-        }
-    }
 
     
 
     document.addEventListener('DOMContentLoaded', function() {
         // Select all tab links
         var tabLinks = document.querySelectorAll('.w-tab-link');
+
+        emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
+        vehiclesWithMarkers = {{ markedVehicles|safe }}
+
+        emptyVehicleSpots.forEach(function(bounds) {
+            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+            rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
+        });
+
+        buildMarkedVehicleSpots(vehiclesWithMarkers, vehicleMap);
+
         
         tabLinks.forEach(function(link) {
             link.addEventListener('click', function(event) {
@@ -1040,79 +1016,86 @@
                         marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.vin}<br>${vehicle.fields.category}</a></strong>`);
                     }
                 }
+                
             });
         });
     });
-        for (var i = 0; i < editLocationButtons.length; i++) {
-            (function() {
-                editLocationButton = editLocationButtons[i];
-                editLocationButton.onclick = function () {
-                    var selectedVehicleIds = [];
-                    $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
-                        selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
-                    });
+    for (var i = 0; i < editLocationButtons.length; i++) {
+        (function() {
+            editLocationButton = editLocationButtons[i];
+            editLocationButton.onclick = function () {
+                var selectedVehicleIds = [];
+                $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
+                    selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
+                });
+                
+                if (selectedVehicleIds.length === 0) {
+                    alert("Please select at least one vehicle to edit the location.");
+                } else if (selectedVehicleIds.length > 1) {
+                    alert("Please select only one vehicle to edit the location.");
+                } else {
+                    selectedMarker = null;
+                    clearCircleMarkers(vehicleMap);
+                    alert("Select a new vehicle location.")
+                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
+                    buildVehicleMap(emptyVehicleSpots, vehicleMap, selectedVehicleIds[0]);
                     
-                    if (selectedVehicleIds.length === 0) {
-                        alert("Please select at least one vehicle to edit the location.");
-                    } else {
-                        clearCircleMarkers(vehicleMap);
-                        alert("Select a new vehicle location.")
-                        vehicleMap.pm.addControls({
-                            position: 'topright', 
-                            drawCircle: false,    
-                            drawMarker: true,
-                            drawCircleMarker: false, 
-                            drawPolygon: false,
-                            drawPolyline: false,  
-                            drawRectangle: false, 
-                            editMode: false,       
-                            dragMode: false,      
-                            cutPolygon: false,    
-                            removalMode: true,  
-                            rotateMode: false,
-                            drawText: false,
-                        });
-                        var currentMarker = null;
-                        vehicleMap.on('pm:create', function(e) {
-                        if (e.shape === "Marker") {
-                            // Remove the existing marker if there is one
-                            if (currentMarker) {
-                                vehicleMap.removeLayer(currentMarker);
-                            }
-
-                            // Update the current marker with the new one
-                            currentMarker = e.layer;
-
-                            // Get latitude and longitude from the created marker
-                            var lat = e.layer.getLatLng().lat;
-                            var lng = e.layer.getLatLng().lng;
-
-                            var queryParams = new URLSearchParams();
-                            queryParams.append('vehicleIds', selectedVehicleIds);
-                            queryParams.append('latitude', lat);
-                            queryParams.append('longitude', lng);
-                            fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
-                                method: 'GET',
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                    'X-Request-Type': 'newVehicleLocation'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                // Handle the JSON data here
-                                console.log(data);
-                                if (data['success'] == true) {
-                                    window.location.reload()
-                                }
-                            })
-                            .catch(error => console.error('Error:', error));   
-                        }
-                    });
-                    }
                 }
-            })();
-        }
+            }
+        })();
+    }
+
+    function buildVehicleMap(emptyVehicleSpots, vehicleMap, vehicleId) {
+        emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
+        emptyVehicleSpots.forEach(function(bounds) {
+            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+            rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
+            rectangle.on('click', function(e) {
+                vehicleMap.eachLayer(function(layer) {
+                    if (!(layer instanceof L.TileLayer)) {
+                        vehicleMap.removeLayer(layer);
+                    }
+                });
+                setVehicleMarker(vehicleMap, latLngBounds, vehicleId);
+
+            });
+        });
+
+    }
+    function setVehicleMarker(vehicleMap, selectedMarker, vehicleId) {
+        var selectedMarkerString = JSON.stringify(selectedMarker);
+
+        var queryParams = new URLSearchParams();
+        queryParams.append('vehicleId', vehicleId);
+        queryParams.append('selectedMarker', selectedMarkerString);
+        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'newVehicleLocation'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            emptyVehicleSpots = JSON.parse(data['locationEmptySpots']);
+            vehiclesWithMarkers = data['vehiclesWithMarkers'];
+            emptyVehicleSpots.forEach(function(bounds) {
+                var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+                rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
+            });
+            buildMarkedVehicleSpots(vehiclesWithMarkers, vehicleMap);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    function buildMarkedVehicleSpots(vehiclesArray, map){
+        vehiclesArray.forEach(function(vehicle){
+            bounds = JSON.parse(vehicle.marker);
+            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+            rectangle = L.rectangle(latLngBounds, {color: "#EC407A", weight: 4}).addTo(map)
+            rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
+        })
+
+    }
 </script>
 <style>
     .needs-a-sticker {
@@ -1315,6 +1298,15 @@
     .table-row {
         padding-left: 6px;
         padding-right: 6px;
+    }
+    .mobile-bar{
+        z-index: 1001;
+    }
+    .leaflet-top {
+        z-index: 400 !important;
+    }
+    .sidebar-content {
+        z-index: 1000 !important;
     }
 </style>
 {% endblock %}

@@ -8,6 +8,7 @@ from .forms import PartForm
 from .forms import VehicleForm
 from django.core.serializers import serialize
 from django.core.paginator import Paginator
+from django.core.serializers.json import DjangoJSONEncoder
 import base64
 import json
 from django.template.loader import render_to_string
@@ -187,15 +188,16 @@ class defaultDashboardView(LoginRequiredMixin,View):
 
 class vehiclesView(LoginRequiredMixin,View):
     def get(self, request):
-        vehicles = Vehicle.objects.filter(user=request.user) if request.user.is_authenticated else []
-        incomingVehicles = Vehicle.objects.filter(user=request.user, category='INCOMING') if request.user.is_authenticated else []
+        location = request.user.location
+        vehicles = Vehicle.objects.filter(location=location) if request.user.is_authenticated else []
+        incomingVehicles = Vehicle.objects.filter(location=location, category='INCOMING') if request.user.is_authenticated else []
         categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
-        holdingVehicles = Vehicle.objects.filter(user=request.user, category__in=categories) if request.user.is_authenticated else []
-        preStripVehicles = Vehicle.objects.filter(user=request.user, category='PRE STRIP') if request.user.is_authenticated else []
-        stripVehicles = Vehicle.objects.filter(user=request.user, category='STRIPPING') if request.user.is_authenticated else []
-        preYardVehicles = Vehicle.objects.filter(user=request.user, category='PRE YARD') if request.user.is_authenticated else []
-        yardVehicles = Vehicle.objects.filter(user=request.user, category='YARD') if request.user.is_authenticated else []
-        forSaleVehicles = Vehicle.objects.filter(user=request.user, category='FOR SALE') if request.user.is_authenticated else []
+        holdingVehicles = Vehicle.objects.filter(location=location, category__in=categories) if request.user.is_authenticated else []
+        preStripVehicles = Vehicle.objects.filter(location=location, category='PRE STRIP') if request.user.is_authenticated else []
+        stripVehicles = Vehicle.objects.filter(location=location, category='STRIPPING') if request.user.is_authenticated else []
+        preYardVehicles = Vehicle.objects.filter(location=location, category='PRE YARD') if request.user.is_authenticated else []
+        yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []
+        forSaleVehicles = Vehicle.objects.filter(location=location, category='FOR SALE') if request.user.is_authenticated else []
         vehiclesJSON = serializers.serialize('json', vehicles)
         incomingVehiclesJSON = serializers.serialize('json', incomingVehicles)
         holdingVehiclesJSON = serializers.serialize('json', holdingVehicles)
@@ -203,7 +205,9 @@ class vehiclesView(LoginRequiredMixin,View):
         stripVehiclesJSON = serializers.serialize('json', stripVehicles)
         preYardVehiclesJSON = serializers.serialize('json', preYardVehicles)
         forSaleVehiclesJSON = serializers.serialize('json', forSaleVehicles)
-
+        emptyVehicleSpots = location.layout
+        vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
+        vehiclesWithMarkers_json = json.dumps(vehiclesWithMarkers, cls=DjangoJSONEncoder)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
@@ -228,6 +232,8 @@ class vehiclesView(LoginRequiredMixin,View):
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
             'categories': CATEGORY_CONST,
+            'emptyVehicleSpots': emptyVehicleSpots,
+            'markedVehicles': vehiclesWithMarkers_json,
         }
         if is_ajax(request):
             requestType = request.headers['x-request-type']
@@ -237,7 +243,6 @@ class vehiclesView(LoginRequiredMixin,View):
                 location = request.GET.get('location')
                 category = request.GET.get('category')
                 row = request.GET.get('row')
-                print(row)
                 for vehicle_id in vehicle_ids_list:
                     vehicle = Vehicle.objects.get(id=vehicle_id)
                     if location != '':
@@ -248,17 +253,18 @@ class vehiclesView(LoginRequiredMixin,View):
                         vehicle.row = row
                     vehicle.save()
             elif requestType == 'newVehicleLocation':
-                vehicle_ids = request.GET.get('vehicleIds')
-                vehicle_ids = list(map(int, vehicle_ids.split(',')))
-                latitude = request.GET.get('latitude')
-                longitude = request.GET.get('longitude')
-                for vehicle_id in vehicle_ids:
-                    vehicle = Vehicle.objects.get(id=vehicle_id)
-                    vehicle.latitude = latitude
-                    vehicle.longitude = longitude
-                    vehicle.save()
+                selectedMarker = request.GET.get('selectedMarker')
+                vehicle_id = request.GET.get('vehicleId')
+                location = request.user.location
+                vehicle = Vehicle.objects.get(id=vehicle_id)
+                vehicle.location = location
+                vehicle.marker = selectedMarker
+                vehicle.save()
+                selectedMarker = json.loads(selectedMarker)
+
+                vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
                 add_user_message(request, 'Vehicle location updated successfully')
-                return JsonResponse({'success': True}, safe=False)
+                return JsonResponse({'success': True, 'locationEmptySpots': location.layout, 'vehiclesWithMarkers': vehiclesWithMarkers}, safe=False)
             else:
                 year_start = request.GET.get('year_start')
                 year_end = request.GET.get('year_end')
@@ -644,14 +650,24 @@ class yard(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
         locations = Location.objects.filter(company=request.user.company)
         if is_ajax(request):
-            latitude = request.GET.get('latitude')
-            longitude = request.GET.get('longitude')
-            location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
-            vehicles = Vehicle.objects.filter(location=location)
-            vehicles_data = serialize('json', vehicles)
-            vehicles_data_json = json.loads(vehicles_data)
-            return JsonResponse({'vehicles': vehicles_data_json}, safe=False)
-
+            requestType = request.headers['x-request-type']
+            if requestType == 'vehicleLocations':
+                latitude = request.GET.get('latitude')
+                longitude = request.GET.get('longitude')
+                location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
+                location_layout = location.layout
+                vehicles = Vehicle.objects.filter(location=location)
+                vehicles_data = serialize('json', vehicles)
+                vehicles_data_json = json.loads(vehicles_data)
+                return JsonResponse({'vehicles': vehicles_data_json ,'locationLayout': location_layout}, safe=False)
+            elif requestType == 'saveYardLayout':
+                markersData = request.GET.get('markersData')
+                latitude = request.GET.get('latitude')
+                longitude = request.GET.get('longitude')
+                location = Location.objects.filter(latitude=latitude, longitude=longitude)[0]
+                location.layout = markersData
+                location.save()
+                return JsonResponse({'success': True}, safe=False)
 
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),

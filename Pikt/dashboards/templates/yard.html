@@ -3,51 +3,39 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
-        <div style="display: flex;">
-            <div style="margin-right: 15px">
+        <div style="margin: 15px; display: flex; justify-content: space-between;">
+            <!-- <div style="margin-right: 15px">
                 <input id="filter-button" type="button" value="Filter Parts"
                         class="button button-small w-button filter-button" style="display: none;">
-            </div>
-            <!-- <div style="margin-right: 15px">
-                <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
-                        class="button button-small w-button bg-primary-green"></a>
             </div> -->
-            <select id="locationDropdown" class="dropdown">
-                <option>Select a location</option>
-                {% for location in locations %}
-                <option value="{{ location.latitude }},{{ location.longitude }}">
-                    {{ location.name }}
-                </option>
-                {% endfor %}
-            </select>
+            <div style="display: flex;">
+                <select id="locationDropdown" class="dropdown">
+                    <option>Select a location</option>
+                    {% for location in locations %}
+                    <option value="{{ location.latitude }},{{ location.longitude }}">
+                        {{ location.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="edit-button-7"  onclick="saveMarkers()">
+                <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                    Save Markers
+                </a>
+            </div>
+            
         </div>
     </div>
     <div id="mapid" style="height: 500px; margin: 12px 15px 0px 15px;"></div>
-
+    <input type="hidden" id="markersField" name="markersData">
 </div>
 <script>
-    // Function to create a custom marker icon with a colored dot
-    function createColoredDotIcon(color) {
-        // Define the custom marker icon
-        var coloredDotIcon = L.divIcon({
-            className: 'colored-dot-icon', // CSS class for styling
-            iconSize: [10, 10], // Size of the icon
-            html: '<div class="dot" style="background-color: ' + color + '"></div>', // HTML content with the specified color
-        });
-        return coloredDotIcon;
-    }
-
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
+    L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
-    });
+    }).addTo(myMap);
 
-    var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
-    googleSat.addTo(myMap);
-
-    myMap.pm.removeControls();
-
-    // Add only the desired controls
     myMap.pm.addControls({
         position: 'topright', 
         drawCircle: false,    
@@ -57,41 +45,236 @@
         drawPolyline: false,  
         drawRectangle: false, 
         editMode: false,       
-        dragMode: false,      
+        dragMode: true,      
         cutPolygon: false,    
-        removalMode: false,  
+        removalMode: true,  
         rotateMode: false,
         drawText: false,
     });
-    function calculateRectangleBounds(centerLatLng, widthFeet, heightFeet) {
+
+
+
+
+
+    var isPlacingRectangle = false;
+    var previewRectangle = null;
+    let rectangleCorners = [];
+    const SNAP_THRESHOLD = 2; // Meters
+    var rectangleOrientation = 0;
+
+    function calculateSnapPoint(latlng, widthFeet, heightFeet) {
+        if (rectangleOrientation === 1) {
+            [widthFeet, heightFeet] = [heightFeet, widthFeet];
+        }
         const widthMeters = widthFeet / 3.2808;
         const heightMeters = heightFeet / 3.2808;
-        const southWest = centerLatLng.toBounds(heightMeters).getSouthWest();
-        const northEast = centerLatLng.toBounds(widthMeters).getNorthEast();
-        return [southWest, northEast];
+        
+        // Calculate the rectangle bounds
+        const [sw, ne] = calculateRectangleBounds(latlng, widthFeet, heightFeet);
+
+        // Calculate the other two corners
+        const nw = L.latLng(ne.lat, sw.lng);
+        const se = L.latLng(sw.lat, ne.lng);
+
+        // Put all corners in an array
+        const previewRectangleCorners = {
+            sw: sw,
+            nw: nw,
+            ne: ne,
+            se: se
+        };
+
+        let snapLat = latlng.lat;
+        let snapLng = latlng.lng;
+        let minDist = Infinity;
+        let snapCornerName = null; // This will hold the name of the snapping corner
+        let snapCornerPoint = null; // This will hold the LatLng of the snapping corner
+
+        Object.entries(previewRectangleCorners).forEach(([cornerName, previewCorner]) => {
+            rectangleCorners.forEach(corner => {
+                const dist = myMap.distance(corner, previewCorner);
+                if (dist < minDist && dist < SNAP_THRESHOLD) {
+                    minDist = dist;
+                    snapLat = corner.lat;
+                    snapLng = corner.lng;
+                    snapCornerName = cornerName; // Update the name of the snapping corner
+                    snapCornerPoint = previewCorner; // Update the LatLng of the snapping corner
+                }
+            });
+        });
+
+        return { latLng: L.latLng(snapLat, snapLng), corner: snapCornerName };
+    }
+
+
+    function calculateRectangleBounds(centerLatLng, widthFeet, heightFeet) {
+        if (rectangleOrientation === 1) {
+            [widthFeet, heightFeet] = [heightFeet, widthFeet];
+        }
+        // convert feet to meters
+        const widthMeters = widthFeet / 3.2808;
+        const heightMeters = heightFeet / 3.2808;
+
+        // calculate the change in latitude for the height
+        const deltaLat = (heightMeters / 40075017) * 360;
+
+        // calculate the change in longitude for the width
+        const deltaLng = (widthMeters / 40075017) * 360 / Math.cos(centerLatLng.lat * Math.PI / 180);
+
+        let ne = L.latLng(centerLatLng.lat + deltaLat / 2, centerLatLng.lng + deltaLng / 2);
+        const sw = L.latLng(centerLatLng.lat - deltaLat / 2, centerLatLng.lng - deltaLng / 2);
+
+        // sw = L.latLng(ne.lat - deltaLat / 2, ne.lng - deltaLng / 2);
+        // ne = L.latLng(ne.lat + deltaLat / 2, ne.lng + deltaLng / 2);
+
+        return [sw, ne];
+    }
+
+
+    function calculateSnappedRectangleBounds(snapPoint, snapCornerName, widthFeet, heightFeet) {
+        
+        if (rectangleOrientation === 1) {
+            [widthFeet, heightFeet] = [heightFeet, widthFeet];
+        }
+        
+        // convert feet to meters
+        const widthMeters = widthFeet / 3.2808;
+        const heightMeters = heightFeet / 3.2808;
+        
+        // calculate the change in latitude for the height
+        const deltaLat = (heightMeters / 40075017) * 360;
+        
+        // calculate the change in longitude for the width
+        const deltaLng = (widthMeters / 40075017) * 360 / Math.cos(snapPoint.lat * Math.PI / 180);
+        
+        let ne, sw;
+
+        switch (snapCornerName) {
+            case 'sw':
+                ne = L.latLng(snapPoint.lat + deltaLat, snapPoint.lng + deltaLng);
+                sw = snapPoint;
+                break;
+            case 'nw':
+                ne = L.latLng(snapPoint.lat, snapPoint.lng + deltaLng);
+                sw = L.latLng(snapPoint.lat - deltaLat, snapPoint.lng);
+                break;
+            case 'ne':
+                sw = L.latLng(snapPoint.lat - deltaLat, snapPoint.lng - deltaLng);
+                ne = snapPoint;
+                break;
+            case 'se':
+                sw = L.latLng(snapPoint.lat, snapPoint.lng - deltaLng);
+                ne = L.latLng(snapPoint.lat + deltaLat, snapPoint.lng);
+                break;
+        }
+        return [sw, ne];
+    }
+
+    function updatePreviewRectangle(e) {
+        if (!isPlacingRectangle) return;
+        let snapPoint = calculateSnapPoint(e.latlng, 20, 9);
+        let snapCornerName = snapPoint.corner;
+
+        snapPoint = snapPoint.latLng; // This is the LatLng object
+        
+        let boundsArray;
+        if (snapCornerName === null) {
+            boundsArray = calculateRectangleBounds(snapPoint, 20, 9);
+        } else {
+            boundsArray = calculateSnappedRectangleBounds(snapPoint, snapCornerName, 20, 9);
+        }
+        let bounds = L.latLngBounds(boundsArray[0], boundsArray[1]);
+        if (previewRectangle) {
+            previewRectangle.setBounds(bounds);
+        } else {
+            previewRectangle = L.rectangle(bounds, {color: "#DAF7A6", weight: 3}).addTo(myMap);
+        }
     }
 
     function placeRectangle(e) {
-        const centerLatLng = e.latlng;
-        const bounds = calculateRectangleBounds(centerLatLng, 9, 20);
-        const rectangle = L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(myMap);
+        let snapPoint = calculateSnapPoint(e.latlng, 20, 9);
+        let snapCornerName = snapPoint.corner;
+        snapPoint = snapPoint.latLng;
+        let boundsArray;
+        if (snapCornerName === null) {
+            boundsArray = calculateRectangleBounds(snapPoint, 20, 9);
+        } else {
+            boundsArray = calculateSnappedRectangleBounds(snapPoint, snapCornerName, 20, 9);
+        }
+        let bounds = L.latLngBounds(boundsArray[0], boundsArray[1]);
+
+        L.rectangle(bounds, {color: "#fe019a", weight: 3}).addTo(myMap);
+
+        const corners = [bounds.getSouthWest(), bounds.getNorthWest(), bounds.getNorthEast(), bounds.getSouthEast()];
+        rectangleCorners.push(...corners);
+
+        if (previewRectangle) {
+            myMap.removeLayer(previewRectangle);
+            previewRectangle = null;
+        }
+        // Re-enable the preview for the next placement
+        isPlacingRectangle = true;
+        myMap.on('mousemove', updatePreviewRectangle);
     }
     
+    myMap.pm.Toolbar.createCustomControl({
+        name: 'toggleRectangleOrientation',
+        block: 'custom',
+        title: 'Toggle Rectangle Orientation',
+        className: 'leaflet-pm-icon-rotate', // You may need to customize this class for an appropriate icon
+        onClick: function(e) {
+            if (e){
+                rectangleOrientation = 1 - rectangleOrientation;
+                myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
+            }
+        },
+    });
+
+    let isPlacingRectangleActive = false; // This variable keeps track of the button state
+
     myMap.pm.Toolbar.createCustomControl({
         name: 'PlaceRectangle',
         block: 'custom',
         title: 'Place Rectangle',
         className: 'leaflet-pm-icon-rectangle',
-        toggle: true,
-        onClick: function() {
-            myMap.on('click', placeRectangle);
-        },
-        offClick: function() {
-            myMap.off('click', placeRectangle);
+        onClick: function(e) {
+
+            if (e){
+                if (!isPlacingRectangleActive) {
+                    locationDropdownValue = document.getElementById('locationDropdown').value.split(',')
+                    if (locationDropdownValue[0] == 'Select a location' ){
+                        alert("Please select a location first")
+                        myMap.pm.Toolbar.toggleButton('PlaceRectangle', true);
+                        isPlacingRectangleActive = false;
+                        return
+                    } else {
+                        // Start the rectangle placement process
+                        isPlacingRectangle = true;
+                        myMap.on('mousemove', updatePreviewRectangle);
+                        myMap.on('click', placeRectangle);
+                        myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
+                        isPlacingRectangleActive = true; // Update the button state
+                    }
+                    
+                } else {
+                    // Stop the rectangle placement process
+                    isPlacingRectangle = false;
+                    if (previewRectangle) {
+                        myMap.removeLayer(previewRectangle);
+                        previewRectangle = null;
+                    }
+                    myMap.off('mousemove', updatePreviewRectangle);
+                    myMap.off('click', placeRectangle);
+                    isPlacingRectangleActive = false; // Update the button state
+                    myMap.pm.Toolbar.toggleButton('PlaceRectangle', true);
+                }
+            }
+
+            
         },
     });
 
-    // Event listener for location dropdown change
+// Event listener for location dropdown change
     document.getElementById('locationDropdown').addEventListener('change', function() {
         var [lat, lng] = this.value.split(','); // Split the value by comma to get lat and lng
 
@@ -117,6 +300,15 @@
         .then(response => response.json())
         .then(data => {
             vehicles = data['vehicles'];
+            locationLayout = JSON.parse(data['locationLayout']);
+
+            locationLayout.forEach(function (bounds) {
+                var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+                L.rectangle(latLngBounds, {color: "#fe019a", weight: 3}).addTo(myMap)
+                const corners = [latLngBounds.getSouthWest(), latLngBounds.getNorthWest(), latLngBounds.getNorthEast(), latLngBounds.getSouthEast()];
+                rectangleCorners.push(...corners);
+            });
+
             for (let i = 0; i < vehicles.length; i++) {
                 const vehicle = vehicles[i];
                 if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
@@ -152,7 +344,61 @@
         .catch(error => console.error('Error:', error));
         
     });
-    
+
+    function saveMarkers() {
+        var markersData = []; // Array to hold data of each marker
+
+        myMap.eachLayer(function(layer) {
+
+            if (layer instanceof L.Polygon) {
+                var bounds = layer.getBounds();
+                markersData.push(bounds);
+            }
+        });
+        
+        locationDropdownValue = document.getElementById('locationDropdown').value.split(',')
+        if (locationDropdownValue[0] == 'Select a location' ){
+            alert("Please select a location first")
+            return
+        } else if (markersData.length == 0){
+            alert("Please place a rectangle first")
+            return
+        }
+        lat = locationDropdownValue[0]
+        lng = locationDropdownValue[1]
+        
+       
+
+        var markersDataString = JSON.stringify(markersData);
+
+        // Convert markers data to a string to save in a field (e.g., a hidden input field in a form)
+        let queryParams = new URLSearchParams();
+        queryParams.append('markersData', markersDataString);
+        queryParams.append('latitude', lat);
+        queryParams.append('longitude', lng);
+        
+        fetch("{% url 'yard' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'saveYardLayout'
+            }
+        })
+        .then(response => response.text())
+        .catch(error => console.error('Error:', error));
+        location.reload();
+
+    }
+    function buildMarkedVehicleSpots(vehiclesArray, map){
+        vehiclesArray.forEach(function(vehicle){
+            bounds = JSON.parse(vehicle.marker);
+            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
+            rectangle = L.rectangle(latLngBounds, {color: "#EC407A", weight: 4}).addTo(map)
+            rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
+        })
+
+    }
+
 </script>
 <style>
     .mobile-bar{

@@ -120,6 +120,7 @@ class Vehicle(models.Model):
     location = models.ForeignKey(Location, on_delete=models.PROTECT, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    marker = models.CharField(max_length=10000, blank=True, null=True)
     row = models.CharField(max_length=256, blank=True, null=True)
     category = models.CharField(max_length=256, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
