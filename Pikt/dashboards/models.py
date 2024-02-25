@@ -138,6 +138,7 @@ class Vehicle(models.Model):
     interior_secondary_color = models.CharField(max_length=256, blank=True, null=True)
     interior_secondary_paint_code = models.CharField(max_length=256, blank=True, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    for_sale_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     auction_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     buyer_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

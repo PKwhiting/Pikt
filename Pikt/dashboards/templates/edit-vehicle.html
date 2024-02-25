@@ -386,6 +386,10 @@
                         <input value="{{ vehicle.total_cost|default:'' }}" type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="total_cost" id="total_cost" oninput="formatInput(this)">
                     </div>
                     <div>
+                        <h6>For Sale Price</h6>
+                        <input value="{{ vehicle.for_sale_price|default:'' }}" type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="for_sale_price" id="for_sale_price" oninput="formatInput(this)">
+                    </div>
+                    <div>
                         <h6>Bid Amount</h6>
                         <input value="{{ vehicle.bid_amount|default:'' }}" type="text" placeholder="$0.00" class="text-field w-input" maxlength="256" name="bid_amount" id="bid_amount" oninput="formatInput(this)">
                     </div>

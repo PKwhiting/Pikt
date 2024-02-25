@@ -1154,9 +1154,9 @@
                     "PRE STRIP": "#E4572E",
                     "STRIPPING": "#9046CF",
                     "HOLDING": "#9E9E9E",
-                    "INCOMING": "#F0F66E"
+                    "INCOMING": "#FFFFFF"
                 };
-                let iconColor = categoryColors[vehicle.category] || "#FFFFFF";
+                let iconColor = categoryColors[vehicle.category] || "#000000";
                 rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4}).addTo(vehicleMap)
                 rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
             }
