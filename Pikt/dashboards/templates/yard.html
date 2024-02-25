@@ -20,6 +20,7 @@
     <input type="hidden" id="markersField" name="markersData">
 </div>
 <script>
+    var newRectangles = [];
     var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
     L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
@@ -177,7 +178,7 @@
         if (previewRectangle) {
             previewRectangle.setBounds(bounds);
         } else {
-            previewRectangle = L.rectangle(bounds, {color: "#DAF7A6", weight: 3}).addTo(myMap);
+            previewRectangle = L.rectangle(bounds, {color: "#DAF7A6", weight: 1, isPreview: true}).addTo(myMap);
         }
     }
 
@@ -192,9 +193,10 @@
             boundsArray = calculateSnappedRectangleBounds(snapPoint, snapCornerName, 20, 9);
         }
         let bounds = L.latLngBounds(boundsArray[0], boundsArray[1]);
+        newRectangles.push(bounds);
 
         L.rectangle(bounds, {color: "#fe019a", weight: 3}).addTo(myMap);
-
+        
         const corners = [bounds.getSouthWest(), bounds.getNorthWest(), bounds.getNorthEast(), bounds.getSouthEast()];
         rectangleCorners.push(...corners);
 
@@ -205,6 +207,7 @@
         // Re-enable the preview for the next placement
         isPlacingRectangle = true;
         myMap.on('mousemove', updatePreviewRectangle);
+        return bounds
     }
     
     myMap.pm.Toolbar.createCustomControl({
@@ -264,88 +267,17 @@
         const corners = [latLngBounds.getSouthWest(), latLngBounds.getNorthWest(), latLngBounds.getNorthEast(), latLngBounds.getSouthEast()];
         rectangleCorners.push(...corners);
     });
-// Event listener for location dropdown change
-    // document.getElementById('locationDropdown').addEventListener('change', function() {
-    //     var [lat, lng] = this.value.split(','); // Split the value by comma to get lat and lng
 
-    //     // Clear existing markers on the map
-    //     myMap.eachLayer(function (layer) {
-    //         if (layer instanceof L.Marker) {
-    //             myMap.removeLayer(layer);
-    //         }
-    //     });
+    var rectangleBoundsArray = []; // Initialize the array to store rectangle bounds
 
-    //     // Fetch vehicle data based on selected location
-    //     let queryParams = new URLSearchParams();
-    //     queryParams.append('latitude', lat);
-    //     queryParams.append('longitude', lng);
 
-    //     fetch("{% url 'yard' %}?" + queryParams.toString(), {
-    //         method: 'GET',
-    //         headers: {
-    //             'X-Requested-With': 'XMLHttpRequest',
-    //             'X-Request-Type': 'vehicleLocations'
-    //         }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-            
-
-    //         for (let i = 0; i < vehicles.length; i++) {
-    //             const vehicle = vehicles[i];
-    //             if (vehicle.fields.latitude != null && vehicle.fields.longitude != null){
-    //                 iconColor = "#57db1c";
-    //                 if (vehicle.fields.category == "ENROUTE" || vehicle.fields.category == "PROCESSING"){
-    //                     iconColor = "#fff004"
-    //                 } else if (vehicle.fields.category == "CRUSHED"){
-    //                     iconColor = "#f44336"
-    //                 } else if (vehicle.fields.category == "YARD"){
-    //                     iconColor = "#4336f4"
-    //                 } else if (vehicle.fields.category == "SOLD"){
-    //                     iconColor = "#57db1c"
-    //                 }
-    //                 else {
-    //                     iconColor = "#46e6bc"
-    //                 }
-
-    //                 customMarker = {
-    //                     radius: 5,
-    //                     fillColor: iconColor,
-    //                     color: iconColor,
-    //                     weight: 5,
-    //                     opacity: 1,
-    //                     fillOpacity: 0.8
-    //                 };
-    //                 // const marker = L.circleMarker([vehicle.fields.latitude, vehicle.fields.longitude], customMarker).addTo(myMap);
-    //                 // marker.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.pk}">${vehicle.fields.year} ${vehicle.fields.make} ${vehicle.fields.model}<br>STK: ${vehicle.fields.stock_number}<br>${vehicle.fields.category}</a></strong>`);
-    //             }
-    //         }
-    //         // Set map view to the selected location
-    //         myMap.setView(new L.LatLng(lat, lng), 17);
-    //     })
-    //     .catch(error => console.error('Error:', error));
-        
-    // });
 
     function saveMarkers() {
-        myMap.pm.Toolbar.toggleButton('PlaceRectangle', true);
-        var markersData = []; // Array to hold data of each marker
-        myMap.eachLayer(function(layer) {
 
-            if (layer instanceof L.Polygon) {
-                var bounds = layer.getBounds();
-                markersData.push(bounds);
-            }
-        });
-        
-        
-       
+        myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
 
-        var markersDataString = JSON.stringify(markersData);
-
-        // Convert markers data to a string to save in a field (e.g., a hidden input field in a form)
         let queryParams = new URLSearchParams();
-        queryParams.append('markersData', markersDataString);
+        queryParams.append('markersData', JSON.stringify(newRectangles));
         
         fetch("{% url 'yard' %}?" + queryParams.toString(), {
             method: 'GET',
@@ -355,8 +287,10 @@
             }
         })
         .then(response => response.text())
+        .then(data => {
+            location.reload();
+        })
         .catch(error => console.error('Error:', error));
-        location.reload();
 
     }
     function buildMarkedVehicleSpots(vehiclesArray, map){

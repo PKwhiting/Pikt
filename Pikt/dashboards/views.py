@@ -652,10 +652,22 @@ class yard(LoginRequiredMixin, View):
         if is_ajax(request):
             requestType = request.headers['x-request-type']
             if requestType == 'saveYardLayout':
-                markersData = request.GET.get('markersData')
-                location = request.user.location
-                location.layout = markersData
+                # Deserialize the incoming markers data
+                incoming_markers_data = request.GET.get('markersData')
+                print(incoming_markers_data)
+                incoming_markers_list = json.loads(incoming_markers_data) if incoming_markers_data else []
+
+                # Deserialize the existing layout data
+                existing_layout_data = location.layout
+                existing_layout_list = json.loads(existing_layout_data) if existing_layout_data else []
+
+                # Append new data to the existing array
+                updated_layout_list = existing_layout_list + incoming_markers_list
+
+                # Serialize and save the updated layout
+                location.layout = json.dumps(updated_layout_list)
                 location.save()
+
                 return JsonResponse({'success': True}, safe=False)
 
         context = {
