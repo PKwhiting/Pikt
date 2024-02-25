@@ -198,13 +198,13 @@ class vehiclesView(LoginRequiredMixin,View):
         preYardVehicles = Vehicle.objects.filter(location=location, category='PRE YARD') if request.user.is_authenticated else []
         yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []
         forSaleVehicles = Vehicle.objects.filter(location=location, category='FOR SALE') if request.user.is_authenticated else []
-        vehiclesJSON = serializers.serialize('json', vehicles)
-        incomingVehiclesJSON = serializers.serialize('json', incomingVehicles)
-        holdingVehiclesJSON = serializers.serialize('json', holdingVehicles)
-        preStripVehiclesJSON = serializers.serialize('json', preStripVehicles)
-        stripVehiclesJSON = serializers.serialize('json', stripVehicles)
-        preYardVehiclesJSON = serializers.serialize('json', preYardVehicles)
-        forSaleVehiclesJSON = serializers.serialize('json', forSaleVehicles)
+        vehiclesList = json.dumps(list(vehicles.values()), cls=DjangoJSONEncoder)
+        incomingVehiclesList = json.dumps(list(incomingVehicles.values()), cls=DjangoJSONEncoder)
+        holdingVehiclesList = json.dumps(list(holdingVehicles.values()), cls=DjangoJSONEncoder)
+        preStripVehiclesList = json.dumps(list(preStripVehicles.values()), cls=DjangoJSONEncoder)
+        stripVehiclesList = json.dumps(list(stripVehicles.values()), cls=DjangoJSONEncoder)
+        preYardVehiclesList = json.dumps(list(preYardVehicles.values()), cls=DjangoJSONEncoder)
+        forSaleVehiclesList = json.dumps(list(forSaleVehicles.values()), cls=DjangoJSONEncoder)
         emptyVehicleSpots = location.layout
         vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
         vehiclesWithMarkers_json = json.dumps(vehiclesWithMarkers, cls=DjangoJSONEncoder)
@@ -214,14 +214,14 @@ class vehiclesView(LoginRequiredMixin,View):
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'vehicles': vehicles,
-            'vehiclesJson': vehiclesJSON,
+            'vehiclesList': vehiclesList,
             'incomingVehicles': incomingVehicles,
-            'incomingVehiclesJson': json.dumps(incomingVehiclesJSON),
-            'holdingVehiclesJson': json.dumps(holdingVehiclesJSON),
-            'preStripVehiclesJson': json.dumps(preStripVehiclesJSON),
-            'stripVehiclesJson': json.dumps(stripVehiclesJSON),
-            'preYardVehiclesJson': json.dumps(preYardVehiclesJSON),
-            'forSaleVehiclesJson': json.dumps(forSaleVehiclesJSON),
+            'incomingVehiclesList': incomingVehiclesList,
+            'holdingVehiclesList': holdingVehiclesList,
+            'preStripVehiclesList': preStripVehiclesList,
+            'stripVehiclesList': stripVehiclesList,
+            'preYardVehiclesList': preYardVehiclesList,
+            'forSaleVehiclesList': forSaleVehiclesList,
             'holdingVehicles': holdingVehicles,
             'preStripVehicles': preStripVehicles,
             'stripVehicles': stripVehicles,
@@ -375,7 +375,7 @@ def add_vehicle(request):
         lng = Location.objects.get(id=location_id).longitude
         location = Location.objects.filter(latitude=lat, longitude=lng)[0]
         vehicles = Vehicle.objects.filter(location=location)
-        vehicles_data = serialize('json', vehicles)
+        vehicles_data = serialize('List', vehicles)
         vehicles_data_json = json.loads(vehicles_data)
         return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
 
@@ -509,7 +509,7 @@ def edit_vehicle(request, vehicle_id):
         lng = Location.objects.get(id=location_id).longitude
         location = Location.objects.filter(latitude=lat, longitude=lng)[0]
         vehicles = Vehicle.objects.filter(location=location)
-        vehicles_data = serialize('json', vehicles)
+        vehicles_data = serialize('List', vehicles)
         vehicles_data_json = json.loads(vehicles_data)
         return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
     
