@@ -312,7 +312,7 @@ class vehiclesView(LoginRequiredMixin,View):
                     context['vin_filter'] = vin
                 return HttpResponse(render_to_string('vehicles-table.html', context))
         if context['vehicles'].count() > 0:
-            vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED") if request.user.is_authenticated else []
+            vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED").order_by('id')
             paginator = Paginator(vehicles, 20)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
