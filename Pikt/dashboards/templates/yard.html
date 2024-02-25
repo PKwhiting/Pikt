@@ -21,6 +21,9 @@
 </div>
 <script>
     var newRectangles = [];
+
+
+
     var myMap = L.map('mapid').setView([40.143517089593566, -111.62220182251667], 17);
     L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
@@ -43,6 +46,16 @@
         drawText: false,
     });
 
+    myMap.on('pm:remove', function(e) {
+        console.log("REMOVED")
+        var removedLayer = e.layer; // This is the layer that was removed.
+        // Now you need to find this layer in your newRectangles array.
+        // This example assumes that you directly store L.rectangle instances in newRectangles. If you store bounds or some other identifier, you'll need to adjust the logic accordingly.
+        newRectangles = newRectangles.filter(function(rectangle) {
+            // Assuming newRectangles contains L.latLngBounds instances directly comparable to removedLayer.getBounds()
+            return !rectangle.equals(removedLayer.getBounds());
+        });
+    });
 
 
 
