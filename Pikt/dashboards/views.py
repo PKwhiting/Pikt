@@ -197,6 +197,7 @@ class vehiclesView(LoginRequiredMixin,View):
         stripVehicles = Vehicle.objects.filter(location=location, category='STRIPPING') if request.user.is_authenticated else []
         preYardVehicles = Vehicle.objects.filter(location=location, category='PRE YARD') if request.user.is_authenticated else []
         yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []
+        processingVehicles = Vehicle.objects.filter(location=location, category='PROCESSING') if request.user.is_authenticated else []
         forSaleVehicles = Vehicle.objects.filter(location=location, category='FOR SALE') if request.user.is_authenticated else []
         vehiclesList = json.dumps(list(vehicles.values()), cls=DjangoJSONEncoder)
         incomingVehiclesList = json.dumps(list(incomingVehicles.values()), cls=DjangoJSONEncoder)
@@ -204,6 +205,7 @@ class vehiclesView(LoginRequiredMixin,View):
         preStripVehiclesList = json.dumps(list(preStripVehicles.values()), cls=DjangoJSONEncoder)
         stripVehiclesList = json.dumps(list(stripVehicles.values()), cls=DjangoJSONEncoder)
         preYardVehiclesList = json.dumps(list(preYardVehicles.values()), cls=DjangoJSONEncoder)
+        processingVehiclesList = json.dumps(list(processingVehicles.values()), cls=DjangoJSONEncoder)
         forSaleVehiclesList = json.dumps(list(forSaleVehicles.values()), cls=DjangoJSONEncoder)
         emptyVehicleSpots = location.layout
         vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
@@ -221,12 +223,14 @@ class vehiclesView(LoginRequiredMixin,View):
             'preStripVehiclesList': preStripVehiclesList,
             'stripVehiclesList': stripVehiclesList,
             'preYardVehiclesList': preYardVehiclesList,
+            'processingVehiclesList': processingVehiclesList,
             'forSaleVehiclesList': forSaleVehiclesList,
             'holdingVehicles': holdingVehicles,
             'preStripVehicles': preStripVehicles,
             'stripVehicles': stripVehicles,
             'preYardVehicles': preYardVehicles,
             'yardVehicles': yardVehicles,
+            'processingVehicles': processingVehicles,
             'forSaleVehicles': forSaleVehicles,
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,

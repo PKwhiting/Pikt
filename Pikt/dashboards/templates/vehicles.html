@@ -29,6 +29,10 @@
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
                     aria-selected="false" tabindex="-1">
                     <div>Pre Yard</div>
+                </a><a data-w-tab="Processing" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
+                    aria-selected="false" tabindex="-1">
+                    <div>Processing</div>
                 </a>
                 <a data-w-tab="For-Sale" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                 href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
@@ -574,12 +578,12 @@
                         </div>
                     </div>
                 </div>
-                <div data-w-tab="For-Sale" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                <div data-w-tab="Processing" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-2">
                     <div class="w-layout-grid main-grid">
                         <div class="table-module">
                             <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Ready For Yard</h4>
+                                <h4 class="no-space-bottom">Processing</h4>
                                 <div style="display: flex;">
                                     <div id="edit-button-7" style="margin-right: 6px">
                                         <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
@@ -592,6 +596,63 @@
                                         </a>
                                     </div>
                                     <div id="cancel-button-7">
+                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
+                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-module" id="table-container">
+                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
+                                    <div class="table-list">
+                                        <div class="w-layout-grid table-headers mobile-table">
+                                            <div class="caption-large select-column"></div>
+                                            <div class="caption-large tablet mobile">Year</div>
+                                            <div class="caption-large mobile tablet">Make</div>
+                                            <div class="caption-large mobile">Model</div>
+                                            <div class="caption-large">STK #</div>
+                                            <div class="caption-large">VIN</div>
+                                            <div class="caption-large">Category</div>
+                                        </div>
+                                        {% if processingVehicles %}
+                                            {% for vehicle in processingVehicles %}
+                                                <div class="w-layout-grid table-row">
+                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
+                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
+                                                        {{ vehicle.model }}
+                                                    </div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-w-tab="For-Sale" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="w-layout-grid main-grid">
+                        <div class="table-module">
+                            <div class="table-header" style="display: flex; justify-content: space-between;">
+                                <h4 class="no-space-bottom">Ready For Yard</h4>
+                                <div style="display: flex;">
+                                    <div id="edit-button-8" style="margin-right: 6px">
+                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+                                        </a>
+                                    </div>
+                                    <div id="edit-location-8" style="margin-right: 6px">
+                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
+                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+                                        </a>
+                                    </div>
+                                    <div id="cancel-button-8">
                                         <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
                                             <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
                                         </a>
@@ -695,6 +756,7 @@
     var editVehicleBtn5 = document.getElementById("edit-button-5");
     var editVehicleBtn6 = document.getElementById("edit-button-6");
     var editVehicleBtn7 = document.getElementById("edit-button-7");
+    var editVehicleBtn8 = document.getElementById("edit-button-8");
     var editVehicleLctnBtn1 = document.getElementById("edit-location-1");
     var editVehicleLctnBtn2 = document.getElementById("edit-location-2");
     var editVehicleLctnBtn3 = document.getElementById("edit-location-3");
@@ -702,6 +764,7 @@
     var editVehicleLctnBtn5 = document.getElementById("edit-location-5");
     var editVehicleLctnBtn6 = document.getElementById("edit-location-6");
     var editVehicleLctnBtn7 = document.getElementById("edit-location-7");
+    var editVehicleLctnBtn8 = document.getElementById("edit-location-8");
     var cancelBtn1 = document.getElementById("cancel-button-1");
     var cancelBtn2 = document.getElementById("cancel-button-2");
     var cancelBtn3 = document.getElementById("cancel-button-3");
@@ -709,11 +772,12 @@
     var cancelBtn5 = document.getElementById("cancel-button-5");
     var cancelBtn6 = document.getElementById("cancel-button-6");
     var cancelBtn7 = document.getElementById("cancel-button-7");
+    var cancelBtn8 = document.getElementById("cancel-button-8");
 
 
-    var editCategoryButtons = [editVehicleBtn1, editVehicleBtn2, editVehicleBtn3, editVehicleBtn4, editVehicleBtn5, editVehicleBtn6, editVehicleBtn7];
-    var editLocationButtons = [editVehicleLctnBtn1, editVehicleLctnBtn2, editVehicleLctnBtn3, editVehicleLctnBtn4, editVehicleLctnBtn5, editVehicleLctnBtn6, editVehicleLctnBtn7];
-    var cancelButtons = [cancelBtn1, cancelBtn2, cancelBtn3, cancelBtn4, cancelBtn5, cancelBtn6, cancelBtn7];
+    var editCategoryButtons = [editVehicleBtn1, editVehicleBtn2, editVehicleBtn3, editVehicleBtn4, editVehicleBtn5, editVehicleBtn6, editVehicleBtn7, editVehicleBtn8];
+    var editLocationButtons = [editVehicleLctnBtn1, editVehicleLctnBtn2, editVehicleLctnBtn3, editVehicleLctnBtn4, editVehicleLctnBtn5, editVehicleLctnBtn6, editVehicleLctnBtn7, editVehicleLctnBtn8];
+    var cancelButtons = [cancelBtn1, cancelBtn2, cancelBtn3, cancelBtn4, cancelBtn5, cancelBtn6, cancelBtn7, cancelBtn8];
 
     for (var i = 0; i < cancelButtons.length; i++) {
         cancelButtons[i].onclick = function () {
@@ -986,6 +1050,8 @@
                     vehicles = {{ preYardVehiclesList|safe}}
                 } else if (tabName === "For-Sale"){
                     vehicles = {{ forSaleVehiclesList|safe}}
+                } else if ( tabName === "Processing"){
+                    vehicles = {{ processingVehiclesList|safe}}
                 }
                 
                 emptyVehicleSpots.forEach(function(bounds) {
