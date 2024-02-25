@@ -669,7 +669,7 @@
                                             <div class="caption-large mobile">Model</div>
                                             <div class="caption-large">STK #</div>
                                             <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
+                                            <div class="caption-large">Sales Price</div>
                                         </div>
                                         {% if forSaleVehicles %}
                                             {% for vehicle in forSaleVehicles %}
@@ -678,11 +678,11 @@
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
                                                     <div class="tablet mobile">{{ vehicle.make }}</div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}ss
+                                                        {{ vehicle.model }}
                                                     </div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
+                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.for_sale_price|default:"" }}</div>
                                                 </div>
                                             {% endfor %}
                                         {% endif %}
@@ -1202,11 +1202,11 @@
     }
     @media screen and (max-width: 730px) {
         .table-row{
-            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr;
 
         } 
         .mobile-table {
-            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr;
         }
         .tablet {
             display: none;
@@ -1214,11 +1214,11 @@
     }
     @media screen and (max-width: 479px) {
         .table-row{
-            grid-template-columns: .35fr 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr !important;
 
         } 
         .mobile-table {
-            grid-template-columns: .35fr 1fr 1fr 1fr;
+            grid-template-columns: .35fr 1fr 1fr 1fr !important;
             grid-column-gap: 0% !important;
             display: inline-grid !important;
         }
@@ -1230,6 +1230,14 @@
             display: none;
         }
     @media screen and (max-width: 991px) {
+        .table-row{
+            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
+
+        } 
+        .mobile-table {
+            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
+        }
+        
         #filter-button{
             display: flex;
         }
