@@ -295,14 +295,17 @@
 
         myMap.pm.Toolbar.toggleButton('PlaceRectangle', false);
         let queryParams = new URLSearchParams();
-        queryParams.append('markersData', JSON.stringify(newRectangles));
+        markersData =  JSON.stringify(newRectangles);
         
-        fetch("{% url 'yard' %}?" + queryParams.toString(), {
-            method: 'GET',
+        fetch("{% url 'yard' %}", {
+            method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'saveYardLayout'
-            }
+                'X-Request-Type': 'saveYardLayout',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: markersData
         })
         .then(response => response.text())
         .then(data => {

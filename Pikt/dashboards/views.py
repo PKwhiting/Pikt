@@ -45,6 +45,7 @@ from decimal import Decimal
 from django.db.models.functions import Coalesce
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+from django.views.decorators.http import require_POST
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -653,20 +654,9 @@ class RedirectView(View):
         request.user.messages = json.dumps(messages)
         request.user.save()
 
-
 class yard(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
         location = request.user.location
-        if is_ajax(request):
-            requestType = request.headers['x-request-type']
-            if requestType == 'saveYardLayout':
-                incoming_markers_data = request.GET.get('markersData')
-                incoming_markers_list = json.loads(incoming_markers_data) if incoming_markers_data else []
-                location.layout = json.dumps(incoming_markers_list)
-                location.save()
-
-                return JsonResponse({'success': True}, safe=False)
-
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
@@ -677,3 +667,16 @@ class yard(LoginRequiredMixin, View):
             'location_layout': location.layout,
         }
         return render(request, 'yard.html', context)
+    
+    def post(self, request, part_id=None, *args, **kwargs):
+        location = request.user.location
+        requestType = request.headers['x-request-type']
+        if requestType == 'saveYardLayout':
+            incoming_markers_data = request.body
+            incoming_markers_list = json.loads(incoming_markers_data) if incoming_markers_data else []
+            location.layout = json.dumps(incoming_markers_list)
+            location.save()
+
+            return JsonResponse({'success': True}, safe=False)
+
+        
