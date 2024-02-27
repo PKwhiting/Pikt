@@ -180,7 +180,7 @@
         <div class="dashboard-content">
             {% if messages %}
                 {% for message in messages %}
-                    <form action="{% url 'delete_message' %}" method="post" class="alert-module" style="opacity: 1; display: flex; margin-bottom: 10px">
+                    <form id="message-{{ forloop.counter }}" action="{% url 'delete_message' %}" method="post" class="alert-module" style="position: fixed; width: -webkit-fill-available; z-index: 10000; opacity: 1; display: flex; margin-bottom: 10px; margin-left: 10%; margin-right: 10%; transition: opacity 1s;">
                         {% csrf_token %}
                         <input type="hidden" name="message" value="{{ message }}">
                         <div>{{ message }}</div>
@@ -189,11 +189,20 @@
                                 src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
                                 alt=""></button>
                     </form>
+                    <script>
+                        setTimeout(function() {
+                            var messageElement = document.getElementById('message-{{ forloop.counter }}');
+                            messageElement.style.opacity = '0';
+                            setTimeout(function() {
+                                messageElement.style.display = 'none';
+                            }, 1000);
+                        }, 2000);
+                    </script>
                 {% endfor %}
             {% endif %}
             {% block content %}
             {% endblock %}
-            <div class="footer">PIKT<a href="/dashboards/" target="_blank"
+            <div class="footer">PIKT<a href="/dashboards/" target="_blank"></a></div>
         </div>
         <div class="mobile-bottom-spacing"></div>
     </div>
@@ -221,7 +230,7 @@
         .tablet {
             display: none;
         }
-  {}
+    }
 </style>
 
 </html>

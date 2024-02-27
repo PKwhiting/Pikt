@@ -141,7 +141,8 @@ class rootView(LoginRequiredMixin,View):
             'recent_vehicles': recent_vehicles,
         }
 
-
+        request.user.messages = []
+        request.user.save()
         return render(request, 'dashboard.html', context)
  
 class defaultDashboardView(LoginRequiredMixin,View):
@@ -185,6 +186,8 @@ class defaultDashboardView(LoginRequiredMixin,View):
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
             context['parts'] = page_obj
+        request.user.messages = []
+        request.user.save()
         return render(request, 'parts.html', context)
 
 class vehiclesView(LoginRequiredMixin,View):
@@ -272,7 +275,7 @@ class vehiclesView(LoginRequiredMixin,View):
                 selectedMarker = json.loads(selectedMarker)
 
                 vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
-                add_user_message(request, 'Vehicle location updated successfully')
+                add_user_message(request, 'Location updated successfully')
                 return JsonResponse({'success': True, 'locationEmptySpots': location.layout, 'vehiclesWithMarkers': vehiclesWithMarkers}, safe=False)
             else:
                 year_start = request.GET.get('year_start')
@@ -318,6 +321,8 @@ class vehiclesView(LoginRequiredMixin,View):
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
             context['vehicles'] = page_obj
+        request.user.messages = []
+        request.user.save()
         return render(request, 'vehicles.html', context)
 
 @login_required  
@@ -359,6 +364,8 @@ def add_part(request):
     }
     context['form'] = form
     context['messages'] = json.loads(request.user.messages)
+    request.user.messages = []
+    request.user.save()
     return render(request, 'add-part.html', context)
 
 @login_required  
@@ -411,6 +418,8 @@ def add_vehicle(request):
     }
     context['form'] = form
     context['messages'] = json.loads(request.user.messages)
+    request.user.messages = []
+    request.user.save()
     return render(request, 'add-vehicle.html', context)
 
 @login_required
@@ -495,6 +504,8 @@ def edit_part(request, part_id):
         'part_ozs' : part_instance.weight % 16 if part_instance.weight is not None else None,
         'vehicle_fitments': fitment_list,
     }
+    request.user.messages = []
+    request.user.save()
     return render(request, 'edit-part.html', context)
 
 def edit_vehicle(request, vehicle_id):
@@ -539,7 +550,8 @@ def edit_vehicle(request, vehicle_id):
         'states': STATE_CHOICES,
         'locations': locations,
     }
-    
+    request.user.messages = []
+    request.user.save()
     return render(request, 'edit-vehicle.html', context)
 
 class single_part(LoginRequiredMixin, View):
@@ -555,6 +567,8 @@ class single_part(LoginRequiredMixin, View):
             'potential_profit': (selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01')),
             'roi': round(((selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01'))) / (selected_part.cost or Decimal('0.01')) * 100, 2)   
         }
+        request.user.messages = []
+        request.user.save()
         return render(request, 'single-part.html', context)
 
 class single_vehicle(LoginRequiredMixin, View):
@@ -570,6 +584,8 @@ class single_vehicle(LoginRequiredMixin, View):
             'potential_profit': 0,
             'roi': 0
         }
+        request.user.messages = []
+        request.user.save()
         return render(request, 'single-vehicle.html', context)
     
 class orders(LoginRequiredMixin, View):
@@ -597,6 +613,8 @@ class orders(LoginRequiredMixin, View):
             'processing_orders': processing_orders,
             'cancelled_orders': cancelled_orders,
         }
+        request.user.messages = []
+        request.user.save()
         return render(request, 'orders.html', context)
 
 class ebayConsent(View):
@@ -666,6 +684,8 @@ class yard(LoginRequiredMixin, View):
             'location': location,
             'location_layout': location.layout,
         }
+        request.user.messages = []
+        request.user.save()
         return render(request, 'yard.html', context)
     
     def post(self, request, part_id=None, *args, **kwargs):

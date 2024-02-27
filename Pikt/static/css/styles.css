@@ -4109,8 +4109,8 @@ blockquote {
   -ms-flex-pack: justify;
   justify-content: space-between;
   border-radius: 6px;
-  background-color: var(--primary-color);
-  box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);
+  background-color: var(--color14);
+  box-shadow: 6px 7px 5px 0px rgba(0,0,0,0.37);
   color: #fff;
 }
 

@@ -43,8 +43,8 @@
                 aria-selected="false" tabindex="-1">
                 <div>Crushed</div>
             </a></div>
-            <div id="vehicle-map" class="mobile-map" style="height: 400px; margin-bottom: 16px; border-radius: 3px;"></div>
-            <div class="tabs-content w-tab-content">
+            <div id="vehicle-map" class="mobile-map" style="height: 400px; margin: 85px 20px 16px 20px; border-radius: 3px;"></div>
+            <div class="tabs-content w-tab-content" style="padding: 0 20px 0 20px">
                 <div data-w-tab="All" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
                     <div class="w-layout-grid main-grid">
@@ -1420,6 +1420,13 @@
     .in-page-menu {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none !important;  /* Firefox */
+        padding: 20px 20px 10px 20px;
+        background-color: #ffffff;
+        position: fixed;
+        z-index: 499;
+        width: 100%;
+        border-bottom: 1px solid #e3e3e3;
+        /* box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.37); */
     }
     /* Ensure this applies to the in-page-menu specifically for mobile views */
     @media screen and (max-width: 1600px) {
@@ -1468,6 +1475,12 @@
     }
     .sidebar-content {
         z-index: 1000 !important;
+    }
+    .dashboard-content {
+        padding: 0px  !important;
+    }
+    .alert-module {
+        margin-top: 20px !important;
     }
 </style>
 {% endblock %}
