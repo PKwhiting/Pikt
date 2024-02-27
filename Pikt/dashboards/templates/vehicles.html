@@ -809,6 +809,8 @@
     }
 
 
+    vehiclesWithMarkers = {{ markedVehicles|safe }}
+
     var editVehicleModal = document.getElementById("vehicleEditModal");
     var editVehicleBtn1 = document.getElementById("edit-button-1");
     var editVehicleBtn2 = document.getElementById("edit-button-2");
@@ -841,6 +843,13 @@
     var editCategoryButtons = [editVehicleBtn1, editVehicleBtn2, editVehicleBtn3, editVehicleBtn4, editVehicleBtn5, editVehicleBtn6, editVehicleBtn7, editVehicleBtn8, editVehicleBtn9];
     var editLocationButtons = [editVehicleLctnBtn1, editVehicleLctnBtn2, editVehicleLctnBtn3, editVehicleLctnBtn4, editVehicleLctnBtn5, editVehicleLctnBtn6, editVehicleLctnBtn7, editVehicleLctnBtn8, editVehicleLctnBtn9];
     var cancelButtons = [cancelBtn1, cancelBtn2, cancelBtn3, cancelBtn4, cancelBtn5, cancelBtn6, cancelBtn7, cancelBtn8, cancelBtn9];
+
+    var selectedVehiclePopupId = null;
+    let popupOpenHandled = false;
+    
+
+
+
 
     for (var i = 0; i < cancelButtons.length; i++) {
         cancelButtons[i].onclick = function () {
@@ -1067,7 +1076,16 @@
 
     // vehicles = {{ vehiclesList|safe }};
 
-
+    vehicleMap.on('popupopen', function(e) {
+        if (!popupOpenHandled) {
+            popupOpenHandled = true;
+            selectedVehiclePopupId = e.popup._source.options.vehicleId;
+            vehicleMap.on('popupclose', function() {
+                selectedVehiclePopupId = null;
+                popupOpenHandled = false;
+            });
+        }
+    });
     
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -1075,7 +1093,7 @@
         var tabLinks = document.querySelectorAll('.w-tab-link');
 
         emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-        vehiclesWithMarkers = {{ markedVehicles|safe }}
+        // vehiclesWithMarkers = {{ markedVehicles|safe }}
 
         emptyVehicleSpots.forEach(function(bounds) {
             var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
@@ -1137,16 +1155,25 @@
                     selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
                 });
                 
-                if (selectedVehicleIds.length === 0) {
+                if (selectedVehicleIds.length === 0 && selectedVehiclePopupId === null) {
                     alert("Please select at least one vehicle to edit the location.");
-                } else if (selectedVehicleIds.length > 1) {
+                } else if (selectedVehicleIds.length > 1 || (selectedVehicleIds.length >= 1 && selectedVehiclePopupId !== null)) {
                     alert("Please select only one vehicle to edit the location.");
+                } else if (selectedVehiclePopupId !== null) {
+                    selectedMarker = null;
+                    // clearCircleMarkers(vehicleMap);
+                    alert("Select a new vehicle location.");
+                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }});
+                    // vehiclesWithMarkers = ({{ vehiclesList|safe }});
+                    
+                    buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
+                    buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, selectedVehiclePopupId);
                 } else {
                     selectedMarker = null;
                     // clearCircleMarkers(vehicleMap);
-                    alert("Select a new vehicle location.")
-                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-                    vehiclesWithMarkers = ({{ vehiclesList|safe }})
+                    alert("Select a new vehicle location.");
+                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }});
+                    // vehiclesWithMarkers = ({{ vehiclesList|safe }});
                     
                     buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
                     buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, selectedVehicleIds[0]);
@@ -1214,7 +1241,7 @@
                 rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
             });
             buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-            location.reload();
+            // location.reload();
         })
         .catch(error => console.error('Error:', error));
     }
@@ -1243,7 +1270,7 @@
                     "INCOMING": "#FFFFFF"
                 };
                 let iconColor = categoryColors[vehicle.category] || "#000000";
-                rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4, fillOpacity: 1}).addTo(vehicleMap)
+                rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
                 rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
             }
         });
