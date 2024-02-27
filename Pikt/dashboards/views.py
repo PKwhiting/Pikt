@@ -247,6 +247,13 @@ class vehiclesView(LoginRequiredMixin,View):
             'emptyVehicleSpots': emptyVehicleSpots,
             'markedVehicles': vehiclesWithMarkers_json,
         }
+        if context['vehicles'].count() > 0:
+            vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED").order_by('id')
+            paginator = Paginator(vehicles, 20)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            context['vehicles'] = page_obj
+
         if is_ajax(request):
             requestType = request.headers['x-request-type']
             if requestType == 'vehicleEdit':
@@ -256,6 +263,7 @@ class vehiclesView(LoginRequiredMixin,View):
                 category = request.GET.get('category')
                 row = request.GET.get('row')
                 for vehicle_id in vehicle_ids_list:
+                    vehicle_id = int(vehicle_id)
                     vehicle = Vehicle.objects.get(id=vehicle_id)
                     if location != '':
                         vehicle.location = location
@@ -315,12 +323,7 @@ class vehiclesView(LoginRequiredMixin,View):
                     context['category_filter'] = category
                     context['vin_filter'] = vin
                 return HttpResponse(render_to_string('vehicles-table.html', context))
-        if context['vehicles'].count() > 0:
-            vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED").order_by('id')
-            paginator = Paginator(vehicles, 20)
-            page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-            context['vehicles'] = page_obj
+        
         request.user.messages = []
         request.user.save()
         return render(request, 'vehicles.html', context)

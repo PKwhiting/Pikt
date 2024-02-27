@@ -863,7 +863,7 @@
             $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
                 selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
             });
-            if (selectedVehicleIds.length === 0) {
+            if (selectedVehicleIds.length === 0 && !popupOpenHandled) {
                 alert("Please select at least one vehicle to edit.");
             } else {
                 editVehicleModal.style.display = 'block';
@@ -892,6 +892,10 @@
         $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
             selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
         });
+        if (selectedVehiclePopupId){
+            selectedVehicleIds.push(`${selectedVehiclePopupId}`)
+        }
+
 
         var row = document.getElementById('row-edit').value;
         var location = document.getElementById('location-edit').value;
@@ -1270,7 +1274,7 @@
                     "INCOMING": "#FFFFFF"
                 };
                 let iconColor = categoryColors[vehicle.category] || "#000000";
-                rectangle = L.rectangle(latLngBounds, {color: iconColor, weight: 4, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
+                rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
                 rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
             }
         });
