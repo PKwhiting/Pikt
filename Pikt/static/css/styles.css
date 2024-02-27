@@ -4110,8 +4110,8 @@ blockquote {
   justify-content: space-between;
   border-radius: 6px;
   background-color: var(--color14);
-  box-shadow: 6px 7px 5px 0px rgba(0,0,0,0.37);
-  color: #fff;
+  box-shadow: 15px 15px 20px -11px rgba(0,0,0,0.37);
+  color: #ffffff;
 }
 
 .table-module {
