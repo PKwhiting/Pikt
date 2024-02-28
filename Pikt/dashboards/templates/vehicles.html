@@ -17,14 +17,14 @@
                     href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1"
                     aria-selected="false" tabindex="-1">
                     <div>Holding</div>
-                </a><a data-w-tab="Pre-Strip" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                </a><a data-w-tab="Pre Drain" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
                     aria-selected="false" tabindex="-1">
-                    <div>Pre Strip</div>
-                </a><a data-w-tab="Stripping" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    <div>Pre Drain</div>
+                </a><a data-w-tab="Draining" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
                     aria-selected="false" tabindex="-1">
-                    <div>Stripping</div>
+                    <div>Draining</div>
                 </a><a data-w-tab="Pre-Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
                     aria-selected="false" tabindex="-1">
@@ -411,12 +411,12 @@
                         </div>
                     </div>
                 </div>
-                <div data-w-tab="Pre-Strip" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                <div data-w-tab="Pre Drain" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-2">
                     <div class="w-layout-grid main-grid">
                         <div class="table-module">
                             <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Ready For Stripping</h4>
+                                <h4 class="no-space-bottom">Ready For Draining</h4>
                                 <div style="display: flex;">
                                     <div id="edit-button-4" style="margin-right: 6px">
                                         <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
@@ -468,12 +468,12 @@
                         </div>
                     </div>
                 </div>
-                <div data-w-tab="Stripping" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                <div data-w-tab="Draining" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-2">
                     <div class="w-layout-grid main-grid">
                         <div class="table-module">
                             <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Being Stripped</h4>
+                                <h4 class="no-space-bottom">Being Drained</h4>
                                 <div style="display: flex;">
                                     <div id="edit-button-5" style="margin-right: 6px">
                                         <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
@@ -1144,9 +1144,9 @@
                     vehicles = {{ incomingVehiclesList|safe }};
                 } else if (tabName === "Holding"){
                     vehicles = {{ holdingVehiclesList|safe}}
-                } else if (tabName === "Pre-Strip"){
+                } else if (tabName === "Pre Drain"){
                     vehicles = {{ preStripVehiclesList|safe}}
-                } else if (tabName === "Stripping"){
+                } else if (tabName === "Draining"){
                     vehicles = {{ stripVehiclesList|safe}}
                 } else if (tabName === "Pre-Yard"){
                     vehicles = {{ preYardVehiclesList|safe}}
@@ -1285,10 +1285,10 @@
                     "READY FOR YARD": "#4CAF50",
                     "FOR SALE": "#FF9800",
                     "PRE YARD": "#FFC107",
-                    "PRE STRIP": "#E4572E",
-                    "STRIPPING": "#9046CF",
+                    "PRE DRAIN": "#FFFFFF",
+                    "DRAINING": "#9046CF",
                     "HOLDING": "#9E9E9E",
-                    "INCOMING": "#FFFFFF"
+                    "INCOMING": "#E4572E"
                 };
                 let iconColor = categoryColors[vehicle.category] || "#000000";
                 rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)

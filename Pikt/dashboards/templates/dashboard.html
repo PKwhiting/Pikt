@@ -2,56 +2,12 @@
 {% block content %}
 {% load static %}
 <script>
-    var chartData = {{ parts_last_12_months|safe }};
-    {% if user.u_pull_it_account %}
-        var revenuedata = {{ vehicles_purchase_volume_by_month|safe}}
-    {% else %}
-        var revenuedata = {{ parts_inventory_by_month|safe}}
-    {% endif %}
+    var chartLabels = {{ chartLabels|safe }};
+    var chartData = {{ chartData|safe}}
 </script>
 <div class="w-layout-grid main-grid">
-    {% if user.u_pull_it_account %}
         <div class="w-layout-grid grid">
-            <div class="table-module">
-                <div class="row">
-                    <div class="chart__container" style="overflow-x: hidden;">
-                        <div class="card-header">
-                            {% if user.u_pull_it_account %}
-                                <h4>Purchase Volume ($)</h4>
-                            {% else %}
-                                <h4>Inventory Value ($)</h4>
-                            {% endif %}
-                            <div class="header-detail">Real Time</div>
-                        </div>
-                        <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="style-guide-padding" style="display: block;">
-                <div class="table-content">
-                    <div class="table-list">
-                        <h6>Recently Purchased Vehicles</h6>
-                        <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr 1fr;">
-                            <div class="caption-large">Year</div>
-                            <div class="caption-large">Make</div>
-                            <div class="caption-large">Model</div>
-                        </div>
-                        {% if recent_vehicles %}
-                        {% for vehicle in recent_vehicles %}
-                            <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr 1fr;">
-                                <div class="table-title">{{ vehicle.year }}</div>
-                                <div class="table-title">{{ vehicle.make }}</div>
-                                <div id="w-node-_5eeacceb-74e8-a525-4028-d47dafe21121-1de9a152">{{ vehicle.model }}</div>
-                            </div>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <div class="w-layout-grid _1-2-grid">
-            <div class="table-module">
+            <!-- <div class="table-module">
                 <div class="table-header">
                     <h4 class="no-space-bottom">Recently Added Parts</h4>
                 </div>
@@ -73,12 +29,12 @@
                         {% endif %}
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="table-module">
                 <div class="row">
                     <div class="chart__container" style="overflow-x: hidden;">
                         <div class="card-header">
-                            <h4>Inventory Value ($)</h4>
+                            <h4>Purchases</h4>
                             <div class="header-detail">Real Time</div>
                         </div>
                         <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
@@ -95,7 +51,7 @@
                         <div class="light-fill"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Revenue</div>
+                        <div class="caption">Goal</div>
                         <div class="numbers-wrapper">
                             <h3 class="number">${{ total_revenue }}</h3>
                         </div>
@@ -110,9 +66,9 @@
                         <div class="light-fill bg-primary-green"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Sold</div>
+                        <div class="caption">MTD Purchases</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">{{ sold_parts }}</h3>
+                            <h3 class="number">{{ mtd_purchases }}</h3>
                             <!-- <div class="negative-value">-10%</div> -->
                         </div>
                     </div>
@@ -126,7 +82,7 @@
                         <div class="light-fill bg-primary-orange"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Shipped</div>
+                        <div class="caption">MTD Goal</div>
                         <div class="numbers-wrapper">
                             <h3 class="number">{{ shipped_parts }}</h3>
                             <!-- <div class="positive-value">+19%</div> -->
@@ -151,7 +107,6 @@
                 </div>
             </a>
         </div>
-    {% endif %}
     <!-- <div class="table-module">
         <div class="table-header">
             <h4 class="no-space-bottom">Latest orders</h4>

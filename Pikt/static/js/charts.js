@@ -93,12 +93,12 @@ var chart = new Chart(ctx, {
 
     // The data for our dataset
     data: {
-        labels: chartData,
+        labels: chartLabels,
         datasets: [{
             label: "Value",
             backgroundColor: gradientBkgrd,
             borderColor: gradientStroke,
-            data: revenuedata,
+            data: chartData,
             pointBorderColor: "rgba(255,255,255,0)",
             pointBackgroundColor: "rgba(255,255,255,0)",
             pointBorderWidth: 0,

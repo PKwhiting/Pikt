@@ -6,6 +6,8 @@ from django.core import serializers
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PartForm
 from .forms import VehicleForm
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.core.serializers import serialize
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
@@ -84,44 +86,46 @@ class rootView(LoginRequiredMixin,View):
         shipped_parts = part.objects.filter(user=request.user, status='Shipped')
         unsold_parts = part.objects.filter(user=request.user, status__in=['Pending', 'Listed'])
         average_price = unsold_parts.aggregate(Avg('price'))['price__avg'] if unsold_parts.aggregate(Avg('price'))['price__avg'] is not None else '0.00'
-        last_12_months = []
-        for i in range(7, -1, -1):
-            last_12_months.append((datetime.now() - relativedelta(months=i)).strftime('%B'))
+        last_15_days = []
+        for i in range(15, -1, -1):
+            last_15_days.append((datetime.now() - timedelta(days=i)).strftime('%b-%d'))
 
-        inventory_by_month = []
-        for i in range(7, -1, -1):
-            date = datetime.now() - relativedelta(months=i)
-            month_name = date.strftime('%B')
-            month_number = date.month
-            inventory_by_month.append({
-                'month': month_name,
-                'total_sales': unsold_parts.filter(created_at__month=month_number).aggregate(total_sales=Coalesce(Sum('price'), Decimal('0.00')))['total_sales']
-            })
-        inventory_by_month = ["{:.2f}".format(float(item['total_sales'])) for item in inventory_by_month]
+        start_date = datetime.now() - timedelta(days=15)
 
-        last_8_months = datetime.now() - relativedelta(months=7)
-        vehicles_sold_by_month = Vehicle.objects.filter(
-            user=request.user,
-            purchase_date__gte=last_8_months
+        # Get the number of vehicles created each day for the last 15 days
+        vehicles_created_each_day = Vehicle.objects.filter(
+            location=request.user.location,
+            created_at__gte=start_date
         ).annotate(
-            month=TruncMonth('purchase_date')
+            date=TruncDate('created_at')
         ).values(
-            'month'
+            'date'
         ).annotate(
-            total_purchase_volume=Sum('bid_amount')
-        ).order_by('month')
+            total_created=Count('id')
+        ).order_by('date')
 
         # Convert QuerySet to a format suitable for the graph
-        vehicles_sold_by_month_data = []
-        for i in range(7, -1, -1):
-            date = datetime.now() - relativedelta(months=i)
-            month_name = date.strftime('%B')
+        vehicles_created_each_day_data = []
+        for i in range(15, -1, -1):
+            date = (datetime.now() - timedelta(days=i)).date()
             # Try to find a match in our query results
-            match = next((item for item in vehicles_sold_by_month if item['month'].month == date.month and item['month'].year == date.year), None)
-            total_purchase_volume = match['total_purchase_volume'] if match else 0
-            vehicles_sold_by_month_data.append(
-                float(total_purchase_volume),
+            match = next((item for item in vehicles_created_each_day if item['date'] == date), None)
+            total_created = match['total_created'] if match else 0
+            vehicles_created_each_day_data.append(
+                total_created,
             )
+
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+
+
+        vehicles_bought_this_month = Vehicle.objects.filter(
+            user=request.user,
+            created_at__month=current_month,
+            created_at__year=current_year
+        ).count()
+        print(vehicles_bought_this_month)
+
 
         recent_vehicles = Vehicle.objects.filter(user=request.user).order_by('-created_at')[:5]
 
@@ -135,9 +139,9 @@ class rootView(LoginRequiredMixin,View):
             'shipped_parts': shipped_parts.count(),
             'total_revenue': total_revenue,
             'average_price': round(average_price,2) if average_price != '0.00' else '0.00',
-            'parts_last_12_months': json.dumps(last_12_months),
-            'parts_inventory_by_month': inventory_by_month,
-            'vehicles_purchase_volume_by_month': json.dumps(vehicles_sold_by_month_data),
+            'chartLabels': json.dumps(last_15_days),
+            'chartData': vehicles_created_each_day_data,
+            'mtd_purchases': vehicles_bought_this_month,
             'recent_vehicles': recent_vehicles,
         }
 
@@ -197,8 +201,9 @@ class vehiclesView(LoginRequiredMixin,View):
         incomingVehicles = Vehicle.objects.filter(location=location, category='INCOMING') if request.user.is_authenticated else []
         categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
         holdingVehicles = Vehicle.objects.filter(location=location, category__in=categories) if request.user.is_authenticated else []
-        preStripVehicles = Vehicle.objects.filter(location=location, category='PRE STRIP') if request.user.is_authenticated else []
-        stripVehicles = Vehicle.objects.filter(location=location, category='STRIPPING') if request.user.is_authenticated else []
+        preStripVehicles = Vehicle.objects.filter(location=location, category='PRE DRAIN') if request.user.is_authenticated else []
+        print(preStripVehicles)
+        stripVehicles = Vehicle.objects.filter(location=location, category='DRAINING') if request.user.is_authenticated else []
         preYardVehicles = Vehicle.objects.filter(location=location, category='PRE YARD') if request.user.is_authenticated else []
         yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []
         processingVehicles = Vehicle.objects.filter(location=location, category='PROCESSING') if request.user.is_authenticated else []
