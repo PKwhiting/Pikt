@@ -198,7 +198,7 @@ class vehiclesView(LoginRequiredMixin,View):
         location = request.user.location
         vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED") if request.user.is_authenticated else []
         incomingVehicles = Vehicle.objects.filter(location=location, category='INCOMING') if request.user.is_authenticated else []
-        categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
+        categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM', 'INCOMING']  # Add your categories here
         holdingVehicles = Vehicle.objects.filter(location=location, category__in=categories) if request.user.is_authenticated else []
         preStripVehicles = Vehicle.objects.filter(location=location, category='PRE DRAIN') if request.user.is_authenticated else []
         stripVehicles = Vehicle.objects.filter(location=location, category='DRAINING') if request.user.is_authenticated else []
