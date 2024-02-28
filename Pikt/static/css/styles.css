@@ -2677,6 +2677,17 @@ blockquote {
   -ms-grid-rows: auto;
   grid-template-rows: auto;
 }
+._5-grid {
+  display: -ms-grid;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  -ms-grid-rows: auto;
+  grid-template-rows: auto;
+}
 
 ._3-grid {
   display: -ms-grid;
@@ -5934,6 +5945,10 @@ blockquote {
     -ms-grid-columns: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
+  ._5-grid {
+    -ms-grid-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 
   ._3-grid {
     width: 100%;
@@ -6340,6 +6355,11 @@ blockquote {
     grid-row-gap: 12px;
     -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
+  }
+  ._5-grid {
+    grid-row-gap: 12px;
+    -ms-grid-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   ._3-grid {

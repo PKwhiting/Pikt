@@ -124,7 +124,6 @@ class rootView(LoginRequiredMixin,View):
             created_at__month=current_month,
             created_at__year=current_year
         ).count()
-        print(vehicles_bought_this_month)
 
 
         recent_vehicles = Vehicle.objects.filter(user=request.user).order_by('-created_at')[:5]
@@ -202,7 +201,6 @@ class vehiclesView(LoginRequiredMixin,View):
         categories = ['HOLDING', 'NO TITLE', 'NEEDS A STICKER', 'TITLE PROBLEM', 'VIN NOT IN SYSTEM']  # Add your categories here
         holdingVehicles = Vehicle.objects.filter(location=location, category__in=categories) if request.user.is_authenticated else []
         preStripVehicles = Vehicle.objects.filter(location=location, category='PRE DRAIN') if request.user.is_authenticated else []
-        print(preStripVehicles)
         stripVehicles = Vehicle.objects.filter(location=location, category='DRAINING') if request.user.is_authenticated else []
         preYardVehicles = Vehicle.objects.filter(location=location, category='PRE YARD') if request.user.is_authenticated else []
         yardVehicles = Vehicle.objects.filter(location=location, category='YARD') if request.user.is_authenticated else []

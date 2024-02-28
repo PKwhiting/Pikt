@@ -1,10 +1,6 @@
 {% extends "root.html" %}
 {% block content %}
 {% load static %}
-<script>
-    var chartLabels = {{ chartLabels|safe }};
-    var chartData = {{ chartData|safe}}
-</script>
 <div class="w-layout-grid main-grid">
         <div class="w-layout-grid grid">
             <!-- <div class="table-module">
@@ -37,12 +33,14 @@
                             <h4>Purchases</h4>
                             <div class="header-detail">Real Time</div>
                         </div>
+                        <input type="date" id="startDate" name="startDate">
+                        <input type="date" id="endDate" name="endDate">
                         <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-layout-grid _4-grid">
+        <div class="w-layout-grid _5-grid">
             <a class="module-link w-inline-block">
                 <div class="content-chart">
                     <div class="chart-square"><img
@@ -51,9 +49,24 @@
                         <div class="light-fill"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Goal</div>
+                        <div class="caption">Monthly Goal</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">${{ total_revenue }}</h3>
+                            <h3 class="number">324</h3>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class="module-link w-inline-block">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">MTD Goal</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">324</h3>
                         </div>
                     </div>
                 </div>
@@ -68,7 +81,7 @@
                     <div class="div-block">
                         <div class="caption">MTD Purchases</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">{{ mtd_purchases }}</h3>
+                            <h3 class="number">145</h3>
                             <!-- <div class="negative-value">-10%</div> -->
                         </div>
                     </div>
@@ -82,9 +95,9 @@
                         <div class="light-fill bg-primary-orange"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">MTD Goal</div>
+                        <div class="caption">% To Goal</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">{{ shipped_parts }}</h3>
+                            <h3 class="number">44.7%</h3>
                             <!-- <div class="positive-value">+19%</div> -->
                         </div>
                     </div>
@@ -193,12 +206,158 @@
         </div>
     </div> -->
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var today = new Date();
+  var pastDate = new Date(today);
+  pastDate.setDate(pastDate.getDate() - 15); // Set to 15 days before today
+
+  // Format dates as YYYY-MM-DD
+  today = today.toISOString().substr(0, 10);
+  pastDate = pastDate.toISOString().substr(0, 10);
+
+  document.getElementById('startDate').value = pastDate;
+  document.getElementById('endDate').value = today;
+});
+
+
+
+
+
+let ctx = document.getElementById("chart").getContext('2d');
+
+var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+gradientStroke.addColorStop(0, "#ff6c00");
+gradientStroke.addColorStop(1, "#ff3b74");
+
+var gradientBkgrd = ctx.createLinearGradient(0, 100, 0, 400);
+gradientBkgrd.addColorStop(0, "rgba(244,94,132,0.2)");
+gradientBkgrd.addColorStop(1, "rgba(249,135,94,0)");
+
+var gradientStroke2 = ctx.createLinearGradient(500, 0, 50, 0);
+gradientStroke2.addColorStop(0, "#00bfff"); // Light blue
+gradientStroke2.addColorStop(1, "#87cefa"); // Light sky blue
+
+var gradientBkgrd2 = ctx.createLinearGradient(0, 50, 0, 400);
+gradientBkgrd2.addColorStop(0, "rgba(135,206,250,0.2)"); // Light sky blue with 20% opacity
+gradientBkgrd2.addColorStop(1, "rgba(0,191,255,0)"); // Light blue with 0% opacity
+
+class CustomLineController extends Chart.controllers.line {
+    draw() {
+        super.draw();
+        let ctx = this.chart.ctx;
+        let _stroke = ctx.stroke;
+        ctx.stroke = function() {
+            ctx.save();
+            //ctx.shadowColor = 'rgba(244,94,132,0.8)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 6;
+            _stroke.apply(this, arguments)
+            ctx.restore();
+        }
+    }
+}
+
+// Register the controller
+Chart.register(CustomLineController);
+
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: CustomLineController.id,
+
+    // The data for our dataset
+    
+    data: {
+        labels: {{ chartLabels|safe }},
+        datasets: [{
+            label: "Purchases",
+            backgroundColor: gradientBkgrd,
+            borderColor: gradientStroke,
+            data: {{ chartData|safe}},
+            pointBorderColor: "rgba(255,255,255,0)",
+            pointBackgroundColor: "rgba(255,255,255,0)",
+            pointBorderWidth: 0,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: gradientStroke,
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 4,
+            pointRadius: 5,
+            borderWidth: 5,
+            pointHitRadius: 16,
+            tension: 0.4 
+        },
+        {
+            label: "Daily Purchase Goal",
+            backgroundColor: gradientBkgrd2,
+            borderColor: gradientStroke2,
+            data: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+            pointBorderColor: "rgba(255,255,255,0)",
+            pointBackgroundColor: "rgba(255,255,255,0)",
+            pointBorderWidth: 0,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: gradientStroke2,
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 4,
+            pointRadius: 5,
+            borderWidth: 5,
+            pointHitRadius: 16,
+            tension: 0.4 
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          backgroundColor:'#fff',
+          displayColors:false,
+          titleColor: '#000',
+          bodyColor: '#000'
+        },
+        legend: {
+          display: true,
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display:false
+          }
+        },
+        y: {
+          beginAtZero: true, // Start at 0
+          ticks: {
+            stepSize: 10, // Increase by 10
+            callback: function(value, index, values) {
+              if (value >= 0) { // Only return positive values
+                return value;
+              }
+            }
+          }
+        }
+      }
+    }
+});
+</script>
 <style>
     .chart__container {
         background-color: #fff;
         border-radius: 6px;
         padding: 30px;
         box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);
+    }
+    .content-chart {
+        align-items: center;
+    }
+    .chart-square {
+        height: 30px;
+        width: 30px;
+    }
+    .module-link {
+        padding: 24px 12px;
     }
 </style>
 
