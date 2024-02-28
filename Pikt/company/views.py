@@ -17,17 +17,18 @@ def add_user_message(request, message):
 # Create your views here.
 class rootView(View):
     def get(self, request):
-        company = request.user.company
-        users = User.objects.filter(company=company).exclude(id=request.user.id)
-        locations = Location.objects.filter(company=company)
-        form = UserForm()
-        context = {
-            'users': users,
-            'company': company,
-            'locations': locations,
-            'form': form
-        }
-        return render(request, 'company.html', context)
+        if request.user.role != 'Admin':
+            return redirect(request.META.get('HTTP_REFERER', 'vehicles'))
+        else:
+            company = request.user.company
+            users = User.objects.filter(company=company).exclude(id=request.user.id)
+            form = UserForm()
+            context = {
+                'users': users,
+                'company': company,
+                'form': form
+            }
+            return render(request, 'company.html', context)
     def post(self, request):
         form = UserForm(request.POST)
         if form.is_valid():

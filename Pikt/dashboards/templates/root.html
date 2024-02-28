@@ -74,13 +74,14 @@
                         loading="lazy" alt="" class="nav-icon">
                     <div>Orders</div>
                     </a> -->
-                
-                    <a href="/company/" class="nav-link w-inline-block"><img
-                        style="height: 25px;"
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e101182eaf273ae92_Team.svg"
-                        loading="lazy" alt="" class="nav-icon">
-                        <div>Company</div>
-                    </a>
+                    {% if user.role == "Admin" %}
+                        <a href="/company/" class="nav-link w-inline-block"><img
+                            style="height: 25px;"
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e101182eaf273ae92_Team.svg"
+                            loading="lazy" alt="" class="nav-icon">
+                            <div>Company</div>
+                        </a>
+                    {% endif %}
                     <a href="/account/" class="nav-link w-inline-block"><img
                             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882df8063b970ea883ad9_toggle-left.svg"
                             loading="lazy" alt="" class="nav-icon">
