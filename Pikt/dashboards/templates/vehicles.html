@@ -1012,9 +1012,26 @@
         .then(response => response.text())
         .then(html => {
             document.getElementById('table-container').innerHTML = html;
+            // After updating the DOM, reinitialize event listeners or any JavaScript-based UI components
+            reinitializeDynamicElements();
         })
         .catch(error => console.error('Error:', error));
     }
+
+    // Example function to reinitialize event listeners on dynamic elements
+    function reinitializeDynamicElements() {
+        // Reattach event listeners to your dynamic elements here.
+        // This is just an example. Replace 'dynamic-element-selector' with your actual dynamic element's selector.
+        var dynamicElements = document.querySelectorAll('.dynamic-element-selector');
+        dynamicElements.forEach(element => {
+            element.addEventListener('click', yourEventHandlerFunction);
+        });
+
+        // If you have forms or inputs that are dynamically loaded and need to bind events:
+        document.getElementById('YourDynamicFormId').addEventListener('submit', yourFormSubmitHandler);
+        // Repeat for other dynamic elements as needed.
+    }
+
     function submitFilterModalForm() {
         var formData = new FormData(document.forms[1]);
         var queryParams = new URLSearchParams();
