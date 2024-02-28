@@ -853,7 +853,7 @@
 
     for (var i = 0; i < cancelButtons.length; i++) {
         cancelButtons[i].onclick = function () {
-            location.reload();
+            // location.reload();
         }
     }
 
@@ -1059,7 +1059,7 @@
         subdomains:['mt0','mt1','mt2','mt3']
     });
 
-    var vehicleMap = L.map(`vehicle-map`).setView([{{ user.location.latitude }}, {{ user.location.longitude }}], 16);
+    var vehicleMap = L.map(`vehicle-map`).setView([{{ user.location.latitude }}, {{ user.location.longitude }}], 17);
     googleSat.addTo(vehicleMap);
     vehicleMap.pm.removeControls();
     vehicleMap.pm.addControls({
@@ -1245,7 +1245,7 @@
                 rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
             });
             buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-            // location.reload();
+            location.reload();
         })
         .catch(error => console.error('Error:', error));
     }
