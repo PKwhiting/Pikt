@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.homeView.as_view()),
     path('login/', views.loginView.as_view()),
-    path('register/', views.registerView.as_view()),
+    path('register/', views.registerView.as_view(), name='register'),
     path('password-reset/', views.passwordResetView.as_view()),
     path('account/', views.accountView.as_view(), name='account'),
     path('dashboards/', include('dashboards.urls')),

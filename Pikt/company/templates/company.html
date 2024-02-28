@@ -512,6 +512,24 @@
                             <div class="weight-500">Website</div>{{ company.website|urlize }}
                         </div>
                     </div>
+                    <div class="authentication-module" style="min-width: 100%">
+                        <h2>Add User</h2>
+                        <div class="authentication-form-block w-form">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form }}
+                                <input type="submit" value="Submit">
+                            </form>
+                           
+                            <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
+                                <div>Thank you! Your account has successfully been created.</div>
+                            </div>
+                            <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
+                                <div>Oops! Something went wrong while creating your account.</div>
+                            </div>
+                            
+                        </div>
+                    </div>
                     <!-- <div id="w-node-_63489f4b-2448-999c-ba5c-3f39ff56d949-bd60c3d7" class="module">
                         <div class="card-header">
                             <h4>Projects</h4><a href="#" class="small-text text-primary-blue">View all</a>
@@ -562,4 +580,24 @@
         </div>
     </div>
 </div>
+
+
+<style>
+    form ul {
+        list-style-type: none !important;
+        margin: 0 !important;
+        padding: 5px 10px 5px 10px !important;
+        background-color: #FE938C;
+        border-radius: 8px;
+        font-size: small;
+        line-height: normal;
+    }
+    /* .errorList {
+        list-style-type: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    } */
+</style>
 {% endblock %}

@@ -17561,7 +17561,7 @@
             g = i.env(),
             y = /list-manage[1-9]?.com/i,
             E = e.debounce(function() {
-                v("Oops! This page has improperly configured forms. Please contact your website administrator to fix this issue.")
+                // v("Oops! This page has improperly configured forms. Please contact your website administrator to fix this issue.")
             }, 100);
 
         function b(e, r) {
