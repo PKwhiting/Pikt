@@ -392,14 +392,28 @@ def add_vehicle(request):
             request.user.messages = json.dumps(messages)
             request.user.save()
     elif is_ajax(request):
-        location_id = request.GET.get('location_id')   
-        lat = Location.objects.get(id=location_id).latitude
-        lng = Location.objects.get(id=location_id).longitude
-        location = Location.objects.filter(latitude=lat, longitude=lng)[0]
-        vehicles = Vehicle.objects.filter(location=location)
-        vehicles_data = serialize('List', vehicles)
-        vehicles_data_json = json.loads(vehicles_data)
-        return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
+        requestType = request.headers['x-request-type']
+        if requestType == 'multiVehicleUpload':
+            vehicles = request.GET.get('vehicles')
+            category = request.GET.get('category')
+            vehicles_list = json.loads(vehicles)
+            for vehicle in vehicles_list:
+                vin = vehicle.get("vin")
+                stock_number = vin[-6:]
+                vehicle = Vehicle(user=request.user ,vin=vehicle.get("vin"), year=vehicle.get("year"), make=vehicle.get("make"), model=vehicle.get("model"), category=category, location=request.user.location, stock_number=stock_number)
+                vehicle.save()
+            add_user_message(request, 'Vehicles added successfully')
+            return JsonResponse({'success': True}, safe=False)
+
+        else:
+            location_id = request.GET.get('location_id')   
+            lat = Location.objects.get(id=location_id).latitude
+            lng = Location.objects.get(id=location_id).longitude
+            location = Location.objects.filter(latitude=lat, longitude=lng)[0]
+            vehicles = Vehicle.objects.filter(location=location)
+            vehicles_data = serialize('List', vehicles)
+            vehicles_data_json = json.loads(vehicles_data)
+            return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
 
     else:
         form = VehicleForm()

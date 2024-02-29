@@ -20,10 +20,35 @@
             alt=""></button>
 </div>
 {% endif %}
+<div style="border-bottom: 1px solid #e1e6f0; padding: 16px 0px">
+    <div>
+        <h4>Bulk Upload</h4>
+        <div class="small-text">Enter vehicle VINs on its own line</div>
+        <textarea id="multiVIN" rows="10" cols="10" style="resize: none; width: 100%; height: 100px"></textarea>
+        <button id="decodeVinsButton" class="button button-small w-button">Decode VINs</button>
+    </div>
+    <div id="vinResults"></div>
+    <form style="display: none;" id="multi-vehicle-submit">
+        <button id="submitVehiclesButton" type="submit" class="button button-small w-button" style="height: 38px; margin-right: 10px">Add Vehicles</button>
+        <div>
+            <select name="category" id="category" class="text-field w-input" style="margin-bottom: 0px;" required>
+                <option value="" selected disabled>Select Category</option>
+                {% for category in categories %}
+                {% if category in vehicle.category %}
+                <option value="{{ category }}" selected>{{ category }}</option>
+                {% else %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</div>
 
 <form id="wf-form-Form" onsubmit="removeDollarSign()" name="wf-form-Form" data-name="Form" method="post"
-    enctype="multipart/form-data" aria-label="Form">
+    enctype="multipart/form-data" aria-label="Form" style="margin-top: 16px">
     {% csrf_token %}
+    <h4>Single Vehicle Upload</h4>
     <div class="w-layout-grid form-grid space-bottom-small" style="grid-template-columns: minmax(40%, 50%) minmax(40%, 50%);">
         <div style="display: flex; align-items: end;">
             <input type="text" class="text-field w-input" maxlength="256" name="vin" id="vin-input"
@@ -550,6 +575,107 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
 
 <script>
+
+    document.getElementById('decodeVinsButton').addEventListener('click', async function() {
+        var textarea = document.getElementById('multiVIN');
+        var vins = textarea.value.split('\n');
+
+        var resultsContainer = document.getElementById('vinResults');
+        resultsContainer.innerHTML = ''; // Clear previous results
+
+        document.getElementById('decodeVinsButton').style.display = 'none';
+
+        for (let vin of vins) {
+            // Trim whitespace and check the length of the VIN
+            vin = vin.trim();
+            if (vin.length > 17) {
+                alert("One or more VINs are longer than 17 characters. Please re-enter VIN's.");
+                textarea.value = ''; // Clear the textarea
+                resultsContainer.innerHTML = ''; // Also clear any previously added divs
+                document.getElementById('decodeVinsButton').style.display = 'block'; // Show the decode button again
+                document.getElementById('multi-vehicle-submit').style.display = 'none'; // Hide the submit button
+                return; // Exit the function to stop further processing
+            }
+
+            await decodeAndDisplayVin(vin, resultsContainer);
+        }
+        document.getElementById('multi-vehicle-submit').style.display = 'flex';
+    });
+
+
+    async function decodeAndDisplayVin(vin, container) {
+        if (vin) {
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`);
+                const data = await response.json();
+                if (data.Results) {
+                    // Process the data and create elements to display
+                    // For simplicity, let's just show the Make, Model, and Year
+                    const make = data.Results.find(result => result.Variable === "Make").Value;
+                    const model = data.Results.find(result => result.Variable === "Model").Value;
+                    const year = data.Results.find(result => result.Variable === "Model Year").Value;
+
+                    const div = document.createElement('div');
+                    div.classList.add('vin-decode-result');
+                    // Set data attributes for VIN, Year, Make, and Model
+                    div.setAttribute('data-vin', vin);
+                    div.setAttribute('data-year', year);
+                    div.setAttribute('data-make', make);
+                    div.setAttribute('data-model', model);
+
+                    // Set a more human-readable format for display, if desired
+                    div.textContent = `VIN: ${vin} - Year: ${year}, Make: ${make}, Model: ${model}`;
+
+                    container.appendChild(div);
+                }
+            } catch (error) {
+                console.error('Error decoding VIN:', error);
+                // Optionally, handle errors more gracefully, e.g., by showing a message to the user
+            }
+        }
+    }
+
+    document.getElementById('multi-vehicle-submit').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting in the traditional way
+        submitVehicles(); // Call the function to handle the submission
+    });
+
+
+    async function submitVehicles() {
+        // Extract information from each .vin-decode-result element and create a library of vehicles
+        const results = document.querySelectorAll('.vin-decode-result');
+        const vehicles = Array.from(results).map(result => ({
+            vin: result.getAttribute('data-vin'),
+            year: result.getAttribute('data-year'),
+            make: result.getAttribute('data-make'),
+            model: result.getAttribute('data-model')
+        }));
+
+        const category = document.getElementById('category').value;
+
+
+        let params = new URLSearchParams();
+        params.append('vehicles', JSON.stringify(vehicles));
+        params.append('category', category);
+        fetch("{% url 'add_vehicle' %}?" + params, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-Request-Type': 'multiVehicleUpload'
+            },
+        })
+        .then(response => response.text())
+        .then(html => {
+            location.reload()
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+
+
+
+
+
     googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
@@ -794,6 +920,14 @@
 
 </script>
 <style>
+    .vin-decode-result {
+        background-color: #e1e6f0;
+        border-radius: 8px;
+        padding: 6px;
+        margin-bottom: 5px;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
     .mobile-bar{
         z-index: 1001;
     }
