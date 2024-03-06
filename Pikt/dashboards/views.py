@@ -397,12 +397,15 @@ def add_vehicle(request):
             vehicles = request.GET.get('vehicles')
             category = request.GET.get('category')
             vehicles_list = json.loads(vehicles)
-            for vehicle in vehicles_list:
-                vin = vehicle.get("vin")
-                stock_number = vin[-6:]
-                vehicle = Vehicle(user=request.user ,vin=vehicle.get("vin"), year=vehicle.get("year"), make=vehicle.get("make"), model=vehicle.get("model"), category=category, location=request.user.location, stock_number=stock_number)
-                vehicle.save()
-            add_user_message(request, 'Vehicles added successfully')
+            try:
+                for vehicle in vehicles_list:
+                    vin = vehicle.get("vin")
+                    stock_number = vin[-6:]
+                    vehicle = Vehicle(user=request.user ,vin=vehicle.get("vin"), year=vehicle.get("year"), make=vehicle.get("make"), model=vehicle.get("model"), category=category, location=request.user.location, stock_number=stock_number)
+                    vehicle.save()
+                add_user_message(request, 'Vehicles added successfully')
+            except:
+                add_user_message(request, 'Issue while adding vehicles. Try again.')
             return JsonResponse({'success': True}, safe=False)
 
         else:

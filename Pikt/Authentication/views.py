@@ -10,6 +10,7 @@ from .models import templateImage
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 import json
+from .forms import FunnelSubmissionForm
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -30,11 +31,30 @@ class MyView(View):
 
 class homeView(View):
     def get(self, request):
+        form = FunnelSubmissionForm()
         transparent_logo_large_white  = os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_white.png')
         context = {
+            'form': form,
             'transparent_logo_large_white': transparent_logo_large_white
         }
         return render(request, 'home.html', context)
+
+    def post(self, request):
+        transparent_logo_large_white  = os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_white.png')
+        form = FunnelSubmissionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            context = {
+                'transparent_logo_large_white': transparent_logo_large_white
+            }
+            return render(request, 'funnel-success.html', context)  # replace 'success_url' with the name of the URL you want to redirect to after successful form submission
+        else:
+            transparent_logo_large_white  = os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_white.png')
+            context = {
+                'form': form,
+                'transparent_logo_large_white': transparent_logo_large_white
+            }
+            return render(request, 'home.html', context)
 
 class loginView(View):
     def get(self, request):

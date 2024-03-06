@@ -3,6 +3,7 @@ from . import views  # Import views from the current directory
 
 urlpatterns = [
     path('', views.rootView.as_view(), name='dashboard'),
+    path('success/', views.rootView.as_view(), name='funnel_success'),
     path('parts/', views.defaultDashboardView.as_view(), name='parts'),
     path('vehicles/', views.vehiclesView.as_view(), name='vehicles'),
     path('add-part/', views.add_part),

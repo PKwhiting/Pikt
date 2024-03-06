@@ -16,13 +16,38 @@
                     src="{% static 'images/logo_transparent_large_white.png' %}"
                     loading="lazy" style="opacity: 1;" alt=""
                     class="logo-presentation">
-                <h1 data-w-id="a854c0b2-01fc-e990-1029-182060e95531" style="opacity: 1;" class="display-heading-1">Revolutionizing the Way You Sell Parts</h1>
-                <div data-w-id="ed503702-153b-0192-1e6b-37d0374b7368" style="opacity: 1;" class="space-bottom">Maximize Your Sales, Minimize Your Effort</div>
-                <div data-w-id="0b116e1e-3c59-e38f-55f5-7b8592f9aec1" style="opacity: 1;" class="presentation-buttons">
+                <div>
+                    <div>
+                        <h1 data-w-id="a854c0b2-01fc-e990-1029-182060e95531" style="opacity: 1;" class="display-heading-1">Revolutionizing the Way You Sell Parts</h1>
+                        <div data-w-id="ed503702-153b-0192-1e6b-37d0374b7368" style="opacity: 1;" class="space-bottom">Maximize Your Sales, Minimize Your Effort</div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <form method="post" id="funnel-form" style="max-width: 400px;">
+                            {% csrf_token %}
+                            <div class="form-row" style="display: flex;">
+                                <div class="form-group col-md-6" style="margin-right: 8px;">
+                                    {{ form.name }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            <select name="{{ form.yard_size.name }}" class="text-field w-input">
+                                {% for value, display in form.yard_size.field.choices %}
+                                    <option value="{{ value }}" {% if form.yard_size.value == value %}selected{% endif %}>{{ display }}</option>
+                                {% endfor %}
+                            </select>
+                            {{ form.company }}
+                            <button type="submit" class="button button-large w-button remove-row">Join The Waitlist</button>
+                        </form>
+                    </div> 
+                </div>
+                <!-- <div data-w-id="0b116e1e-3c59-e38f-55f5-7b8592f9aec1" style="opacity: 1;" class="presentation-buttons">
                     <a href="/login"
                         class="button button-spacing w-button">Login</a><a href="#Presentation"
-                        class="button bg-white w-button w--current">Learn More</a></div>
-            </div><img
+                        class="button bg-white w-button w--current">Learn More</a></div> -->
+            </div>
+            <img
                 src="{% static 'images/landing_page_hero_image.jpg' %}"
                 loading="eager" style="opacity: 1;" data-w-id="d54c53ec-8d9f-0172-9bd4-480a4503cb75" alt=""
                 class="dashboard-mockup">
@@ -219,11 +244,11 @@
                     </div>
                 </a>
             </div> -->
-            <div class="presentation-category-wrapper">
+            <!-- <div class="presentation-category-wrapper">
                 <h1 class="display-heading-2">Pricing</h1>
-                <!-- <div>Secure your platform</div> -->
-            </div>
-            <div class="w-layout-grid presentation-grid _3-column no-space-bottom"><a href=""
+                <div>Secure your platform</div>
+            </div> -->
+            <!-- <div class="w-layout-grid presentation-grid _3-column no-space-bottom"><a href=""
                     class="presentation-module w-inline-block" style="opacity: 0;">
                     <div class="presentation-module-top"></div>
                     <div class="presentation-module-bottom">
@@ -276,16 +301,17 @@
                         <div class="caption-large"><div class="caption-large">Contact Us at pwhiting@simpli-cars.com for a Custom Quote</div></div>
                     </div>
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="presentation-section cta wf-section">
         <div class="container">
             <div class="presentation-cta">
                 <h1 class="display-heading-2">Start selling today.</h1>
-                <div class="space-bottom">Make selling parts that much easier.</div><a
+                <div class="space-bottom">Make selling parts that much easier.</div>
+                <!-- <a
                     href="/login"
-                    class="button cta w-button">Login</a>
+                    class="button cta w-button">Login</a> -->
             </div>
             <div class="footer"><a href=""
                     class="footer-link">Pikt</a>
@@ -297,5 +323,34 @@
         <script src="{% static 'js/index.js' %}" type="text/javascript"></script>
     <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
+<style>
+    .presentation-hero-section {
+        padding-top: 32px;
+    }
 
+    #funnel-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        color: black;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 20px;
+    }
+    .form-group {
+        width: 100%;
+    }
+    #id_yard_size {
+        margin: 10px;
+        width: 100%;
+    }
+    #id_name {
+        width: 100%;
+    }
+    #id_company {
+        width: 100%;
+        /* margin: 10px; */
+    }
+</style>
 </html>
