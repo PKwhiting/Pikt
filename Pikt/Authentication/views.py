@@ -42,8 +42,14 @@ class homeView(View):
     def post(self, request):
         transparent_logo_large_white  = os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_white.png')
         form = FunnelSubmissionForm(request.POST)
+        
         if form.is_valid():
-            form.save()
+            if form.cleaned_data['otherInput']:
+                instance = form.save(commit=False)
+                instance.message = form.cleaned_data['otherInput']
+                instance.save()
+            else:
+                form.save()
             context = {
                 'transparent_logo_large_white': transparent_logo_large_white
             }

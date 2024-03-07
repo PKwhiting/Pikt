@@ -12,7 +12,7 @@
 <body>
     <div class="presentation-hero-section wf-section">
         <div class="container">
-            <div class="presentation-title-wrapper"><img
+            <div class="form"><img
                     src="{% static 'images/logo_transparent_large_white.png' %}"
                     loading="lazy" style="opacity: 1;" alt=""
                     class="logo-presentation">
@@ -22,7 +22,7 @@
                         <div data-w-id="ed503702-153b-0192-1e6b-37d0374b7368" style="opacity: 1;" class="space-bottom">Maximize Your Sales, Minimize Your Effort</div>
                     </div>
                     <div style="display: flex; justify-content: center;">
-                        <form method="post" id="funnel-form" style="max-width: 400px;">
+                        <form method="post" id="funnel-form" style="max-width: 400px; box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);">
                             {% csrf_token %}
                             <div class="form-row" style="display: flex;">
                                 <div class="form-group col-md-6" style="margin-right: 8px;">
@@ -38,7 +38,28 @@
                                 {% endfor %}
                             </select>
                             {{ form.company }}
-                            <button type="submit" class="button button-large w-button remove-row">Join The Waitlist</button>
+                            <div style="text-align: left; width: 100%">
+                                <h5>What is your biggest pain point right now?</h5>
+                                {% for choice in form.message.field.choices %}
+                                    <label style="font-weight: normal; font-size: 14px; color: #333333">
+                                        {% if choice.0 == 'other' %}
+                                            <div style="display: flex">
+                                                <input required type="radio" id="otherInputRadioButton" name="{{ form.message.name }}" value="{{ choice.0 }}">
+                                                <!-- {{ choice.1 }}   -->
+                                                <span style="margin-left: 5px;">Other</span>
+                                               
+                                            </div>
+                                        {% else %}
+                                            <input required type="radio" name="{{ form.message.name }}" value="{{ choice.0 }}">
+                                            {{ choice.1 }}
+                                        {% endif %}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                            <div style="width: 100%; height: 0px">
+                                <input type="text" name="otherInput" id="otherInput" style="display: none; position: relative; top: -28px; left: 60px; width: 120px;">
+                            </div>
+                            <button type="submit" style="margin-top: 10px;" class="button button-large w-button remove-row">Join The Waitlist</button>
                         </form>
                     </div> 
                 </div>
@@ -323,6 +344,37 @@
         <script src="{% static 'js/index.js' %}" type="text/javascript"></script>
     <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Detect changes on the radio buttons to handle showing/hiding the text input
+        document.querySelectorAll('input[type=radio][name="{{ form.message.name }}"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // If "Other" is selected, ensure the text input is ready to capture the custom message
+                if(this.value === 'other') {
+                    document.getElementById('otherInput').style.display = 'block';
+                } else {
+                    // Optionally hide the text input if "Other" is not selected
+                    document.getElementById('otherInput').style.display = 'none';
+                }
+            });
+        });
+    
+        // Update the radio button value to the text input's value on typing, but only if "Other" is selected
+        // document.getElementById('otherInput').addEventListener('input', function() {
+        //     const otherRadioButton = document.getElementById('otherInputRadioButton');
+        //     if(otherRadioButton.checked) {
+        //         // Set the radio button's value to the text input's current value
+        //         otherRadioButton.value = this.value;
+        //     }
+        // });
+    
+        // Optional: Initial check in case the page reloads with "Other" already selected
+        if(document.getElementById('otherInputRadioButton').checked) {
+            document.getElementById('otherInput').style.display = 'block';
+        }
+    });
+</script>
+    
 <style>
     .presentation-hero-section {
         padding-top: 32px;
