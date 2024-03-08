@@ -367,7 +367,7 @@
         document.querySelectorAll('input[type=radio][name="{{ form.message.name }}"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 // If "Other" is selected, ensure the text input is ready to capture the custom message
-                if(this.value === 'other') {
+                if(this.value === 'Other') {
                     document.getElementById('otherInput').style.display = 'block';
                 } else {
                     // Optionally hide the text input if "Other" is not selected
@@ -386,9 +386,18 @@
         // });
     
         // Optional: Initial check in case the page reloads with "Other" already selected
-        if(document.getElementById('otherInputRadioButton').checked) {
-            document.getElementById('otherInput').style.display = 'block';
-        }
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     if(document.getElementById('otherInputRadioButton').checked) {
+        //         console.log('checked');
+        //         document.getElementById('otherInput').style.display = 'block';
+        //     }
+        // });
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     document.getElementById('otherInputRadioButton').addEventListener('change', function() {
+        //         console.log("HERE");
+        //         document.getElementById('otherInput').style.display = 'block';
+        //     });
+        // });
     });
 </script>
     
