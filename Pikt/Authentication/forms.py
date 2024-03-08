@@ -9,12 +9,12 @@ class FunnelSubmissionForm(forms.ModelForm):
         ('1000+ Vehicles', '1000+ Vehicles'),
     ]
     PAIN_POINT_OPTIONS = [
-        ('Managing Inventory', 'Managing Inventory'),
+        ('Managing/Adding Parts Inventory', 'Managing/Adding Parts Inventory'),
         ('Selling Parts', 'Selling Parts'),
-        ('Buying Vehicles', 'Buying Vehicles'),
+        ('Buying/Managing Vehicles', 'Buying/Managing Vehicles'),
         ('Managing Customers', 'Managing Customers'),
         ('Managing invoices/POs', 'Managing Invoices/POs'),
-        ('other', 'other'),
+        ('Other', 'Other'),
     ]
 
 
