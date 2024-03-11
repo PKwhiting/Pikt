@@ -1016,8 +1016,8 @@
     });
 
     var bounds = L.latLngBounds(
-        L.latLng({{ user.location.latitude }} - 0.0025, {{ user.location.longitude }} - 0.0025),
-        L.latLng({{ user.location.latitude }} + 0.0025, {{ user.location.longitude }} + 0.0025)
+        L.latLng({{ user.location.latitude }} - 0.025, {{ user.location.longitude }} - 0.025),
+        L.latLng({{ user.location.latitude }} + 0.025, {{ user.location.longitude }} + 0.025)
     );
     // var vehicleMap = L.map(`vehicle-map`).setView([{{ user.location.latitude }}, {{ user.location.longitude }}], 17, maxBounds: bounds);
 
@@ -1055,6 +1055,15 @@
                 selectedVehiclePopupId = null;
                 popupOpenHandled = false;
             });
+        }
+    });
+    
+    var tooltipThreshold = 20;
+    vehicleMap.on('zoomend', function() {
+        if (vehicleMap.getZoom() < tooltipThreshold) {
+            $(".last-6-vin").css("display","none")
+        } else { 
+            $(".last-6-vin").css("display","block")
         }
     });
     
@@ -1216,6 +1225,32 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+
+
+    L.FixedSizeMarker = L.Marker.extend({
+    options: {
+        fontSize: 12,   // starting size of icon in pixels
+        zoomBase: 3     // Zoom level where fontSize is the correct size
+    },
+    update: function () {
+        if (this._icon && this._icon.tagName === 'DIV' && this._map) {
+        let size = this.options.fontSize * Math.pow(2, (this._map.getZoom() - this.options.zoomBase));
+        this._icon.style.fontSize = size + 'px';
+        }
+        return L.Marker.prototype.update.call(this);
+    }
+    });
+    L.fixedSizeMarker = (latlng, options) => new L.FixedSizeMarker(latlng, options);
+
+
+
+
+
+
+
+
+
     function buildColoredVehicleMarkers(vehicles, vehicleMap){
         let iconColor = "#FFFFFF";
         vehicles.forEach(function(vehicle){
@@ -1243,12 +1278,33 @@
                 let iconColor = categoryColors[vehicle.category] || "#000000";
                 rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
                 rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
+                
+                let center = latLngBounds.getCenter();
+                let lastSixVIN = vehicle.vin.slice(-6);
+
+                var myIcon3 = L.divIcon({className: 'last-6-vin', html: `<p>${lastSixVIN}<p>`});
+                marker = L.fixedSizeMarker(center,
+                                {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
             }
         });
 
     }
 </script>
 <style>
+    .last-6-vin {
+        font-size: 14px !important;
+        margin-left: -24px !important;
+        margin-top: -10px !important;
+        font-weight: bold;
+        display: none;
+    }
+
+    .leaflet-image-layer{
+        z-index: 1000 !important;
+    }
+
+
+
     .needs-a-sticker {
         background-color: #EED897 !important;
     }
