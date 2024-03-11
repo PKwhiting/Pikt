@@ -1061,9 +1061,11 @@
     var tooltipThreshold = 20;
     vehicleMap.on('zoomend', function() {
         if (vehicleMap.getZoom() < tooltipThreshold) {
-            $(".last-6-vin").css("display","none")
+            $(".last-6-vin-vertical").css("display","none")
+            $(".last-6-vin-horizontal").css("display","none")
         } else { 
-            $(".last-6-vin").css("display","block")
+            $(".last-6-vin-vertical").css("display","block")
+            $(".last-6-vin-horizontal").css("display","block")
         }
     });
     
@@ -1277,24 +1279,73 @@
                 };
                 let iconColor = categoryColors[vehicle.category] || "#000000";
                 rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
-                rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
                 
-                let center = latLngBounds.getCenter();
+                let southWest = latLngBounds.getSouthWest();
+                let northEast = latLngBounds.getNorthEast();
+                let centerLat = (southWest.lat + northEast.lat) / 2;
+                let centerLng = (southWest.lng + northEast.lng) / 2;
+                let center = L.latLng(centerLat, centerLng);
+                var customLatLng = L.latLng(40.14321328464628, -111.62285811098624);
                 let lastSixVIN = vehicle.vin.slice(-6);
 
-                var myIcon3 = L.divIcon({className: 'last-6-vin', html: `<p>${lastSixVIN}<p>`});
-                marker = L.fixedSizeMarker(center,
-                                {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
+                lat_diff = (southWest.lat - northEast.lat)
+                lon_diff = (southWest.lng - northEast.lng)
+            
+                function calculateAngle(latlng1, latlng2) {
+                    // Calculate the difference in coordinates
+                    let dy = latlng2.lat - latlng1.lat;
+                    let dx = Math.cos(Math.PI / 180 * latlng1.lat) * (latlng2.lng - latlng1.lng);
+
+                    // Calculate the angle in radians
+                    let angleRadians = Math.atan2(dy, dx);
+
+                    // Convert to degrees
+                    let angleDeg = angleRadians * (180 / Math.PI);
+
+                    return angleDeg;
+                }
+
+
+                let angle = calculateAngle(southWest, northEast);
+                console.log(angle)
+                if (angle < 25){
+                    angle = angle - 24.227741429716023
+                } else {
+                    angle = angle + 24.227741429716023
+                }
+
+                
+                let angleOfRotation = angle;
+
+                if (lat_diff > lon_diff){
+                    var myIcon3 = L.divIcon({className: 'last-6-vin-horizontal', html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
+                    marker = L.fixedSizeMarker(center,
+                                    {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
+                } else {
+                    var myIcon3 = L.divIcon({className: 'last-6-vin-vertical', html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
+                    marker = L.fixedSizeMarker(center,
+                                    {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
+                }
+                rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
+                
+                
             }
         });
 
     }
 </script>
 <style>
-    .last-6-vin {
+    .last-6-vin-horizontal {
         font-size: 14px !important;
         margin-left: -24px !important;
         margin-top: -10px !important;
+        font-weight: bold;
+        display: none;
+    }
+    .last-6-vin-vertical {
+        font-size: 14px !important;
+        /* margin-left: -24px !important;*/
+        margin-top: -28px !important;
         font-weight: bold;
         display: none;
     }
