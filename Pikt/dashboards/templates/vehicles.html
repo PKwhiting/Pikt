@@ -785,6 +785,8 @@
 
     var selectedVehiclePopupId = null;
     let popupOpenHandled = false;
+    let vehicleTimeOnLotFilterButton = false
+    let vehicleCategoryFilterButton = true
     
 
 
@@ -1030,7 +1032,7 @@
     googleSat.addTo(vehicleMap);
     vehicleMap.pm.removeControls();
     vehicleMap.pm.addControls({
-        position: 'topright', 
+        position: 'left', 
         drawCircle: false,    
         drawMarker: false,
         drawCircleMarker: false, 
@@ -1043,7 +1045,7 @@
         removalMode: false,  
         rotateMode: false,
         drawText: false,
-            });
+    });
 
     // vehicles = {{ vehiclesList|safe }};
 
@@ -1058,17 +1060,152 @@
         }
     });
     
+
+
+    function getVehiclesByTabName(tabName) {
+        if (tabName === 'All') {
+            vehicles = {{ markedVehicles|safe }};
+        } else if (tabName === 'Incoming'){
+            vehicles = {{ incomingVehiclesList|safe }};
+        } else if (tabName === "Holding"){
+            vehicles = {{ holdingVehiclesList|safe}}
+        } else if (tabName === "Pre Drain"){
+            vehicles = {{ preStripVehiclesList|safe}}
+        } else if (tabName === "Draining"){
+            vehicles = {{ stripVehiclesList|safe}}
+        } else if (tabName === "Pre-Yard"){
+            vehicles = {{ preYardVehiclesList|safe}}
+        } else if (tabName === "For-Sale"){
+            vehicles = {{ forSaleVehiclesList|safe}}
+        } else if ( tabName === "Processing"){
+            vehicles = {{ processingVehiclesList|safe}}
+        } else if (tabName === "Crushed"){
+            vehicles = {{ crushedVehiclesList|safe}}
+        }
+        return vehicles
+    }
+
+
+
+
+    var vehicleTimeOnLotFilterControl = L.Control.extend({
+        options: {
+            position: 'topright' // Position of the control
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+
+            container.style.backgroundColor = 'white'; 
+            container.style.width = '30px';
+            container.style.height = '30px';
+
+            var icon = L.DomUtil.create('img');
+            icon.src = "/static/icons/clock.svg"; // replace with the URL or path of your icon
+            icon.style.width = '100%';
+            icon.style.height = '100%';
+            
+            container.appendChild(icon);
+            container.id = 'view-vehicle-time-icon';
+            container.title = "Vehicle Color By Time On Lot"
+
+            container.onclick = function(){
+                
+                if (vehicleTimeOnLotFilterButton) {
+                    vehicleTimeOnLotFilterButton = false;
+                    vehicleCategoryFilterButton = true;
+                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
+                    vehicles = getVehiclesByTabName(currentTab);
+                    buildColoredVehicleMarkers(vehicles, vehicleMap);
+                    this.classList.remove('clicked');
+                    document.getElementById('vehicle-category-filter-icon').classList.add('clicked');
+                    
+                } else {
+                    vehicleTimeOnLotFilterButton = true;
+                    vehicleCategoryFilterButton = false;
+                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
+                    vehicles = getVehiclesByTabName(currentTab);
+                    buildColoredVehicleMarkers(vehicles, vehicleMap);
+                    this.classList.add('clicked');
+                    document.getElementById('vehicle-category-filter-icon').classList.remove('clicked');
+                }
+            }
+            return container;
+        },
+    });
+
+
+
+
+    var vehicleCategoryFilterControl = L.Control.extend({
+        options: {
+            position: 'topright' // Position of the control
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+
+            container.style.backgroundColor = 'white'; 
+            container.style.width = '30px';
+            container.style.height = '30px';
+
+            var icon = L.DomUtil.create('img');
+            icon.src = "/static/icons/category.svg"; // replace with the URL or path of your icon
+            icon.style.width = '100%';
+            icon.style.height = '100%';
+            
+            container.appendChild(icon);
+            container.id = 'vehicle-category-filter-icon';
+            container.title = "Vehicle Color By Category"
+            container.classList.add('clicked')
+
+            container.onclick = function(){
+                
+                if (vehicleCategoryFilterButton) {
+                    vehicleCategoryFilterButton = false;
+                    vehicleTimeOnLotFilterButton = true;
+                    this.classList.remove('clicked');
+                    document.getElementById('view-vehicle-time-icon').classList.add('clicked');
+
+                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
+                    vehicles = getVehiclesByTabName(currentTab);
+                    buildColoredVehicleMarkers(vehicles, vehicleMap);
+                } else {
+                    vehicleCategoryFilterButton = true;
+                    vehicleTimeOnLotFilterButton = false;
+
+                    this.classList.add('clicked');
+                    document.getElementById('view-vehicle-time-icon').classList.remove('clicked');
+                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
+                    vehicles = getVehiclesByTabName(currentTab);
+                    buildColoredVehicleMarkers(vehicles, vehicleMap);
+                }
+            }
+            return container;
+        },
+    });
+
+    vehicleMap.addControl(new vehicleTimeOnLotFilterControl());
+    vehicleMap.addControl(new vehicleCategoryFilterControl());
+
+
+
+
+
+
+
+
+
     var tooltipThreshold = 20;
     vehicleMap.on('zoomend', function() {
         if (vehicleMap.getZoom() < tooltipThreshold) {
-            $(".last-6-vin-vertical").css("display","none")
-            $(".last-6-vin-horizontal").css("display","none")
+            $(".last-6-vin-vertical").addClass("display-none");
+            $(".last-6-vin-horizontal").addClass("display-none");
         } else { 
-            $(".last-6-vin-vertical").css("display","block")
-            $(".last-6-vin-horizontal").css("display","block")
+            $(".last-6-vin-vertical").removeClass("display-none");
+            $(".last-6-vin-horizontal").removeClass("display-none");
         }
     });
-    
 
     document.addEventListener('DOMContentLoaded', function() {
         // Select all tab links
@@ -1248,7 +1385,21 @@
 
 
 
+    function getColorByTimeSinceCreation(creationDate) {
+        // Calculate the difference in time from the creation date to now
+        const timeNow = new Date();
+        const timeDiff = timeNow - new Date(creationDate); // timeDiff will be in milliseconds
 
+        // Now map timeDiff to a color
+        // This is where you'll convert time into a gradient
+        // For example, newer vehicles might be green and older ones might fade to red
+        // Here's a simple linear gradient from green (0 ms) to red (1 week)
+        const oneWeek = 7 * 24 * 60 * 60 * 1000 * 30 * 3;
+        const ratio = Math.min(timeDiff / oneWeek, 1);
+        const red = Math.floor(255 * ratio);
+        const green = 255 - red;
+        return `rgb(${red},${green},0)`;
+    }
 
 
 
@@ -1257,29 +1408,34 @@
         let iconColor = "#FFFFFF";
         vehicles.forEach(function(vehicle){
             bounds = JSON.parse(vehicle.marker);
+            let iconColor = "#000000";
             if (bounds != null){
                 var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                
-                let categoryColors = {
-                    "ENROUTE": "#fff004",
-                    "PROCESSING": "#fff004",
-                    "CRUSHED": "#f44336",
-                    "YARD": "#4336f4",
-                    "NO TITLE": "#F2CEE6",
-                    "TITLE PROBLEM": "#DA4167",
-                    "NEEDS A STICKER": "#EED897",
-                    "VIN NOT IN SYSTEM": "#C3DBC5",
-                    "READY FOR YARD": "#4CAF50",
-                    "FOR SALE": "#FF9800",
-                    "PRE YARD": "#FFC107",
-                    "PRE DRAIN": "#FFFFFF",
-                    "DRAINING": "#9046CF",
-                    "HOLDING": "#9E9E9E",
-                    "INCOMING": "#E4572E"
-                };
-                let iconColor = categoryColors[vehicle.category] || "#000000";
-                rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)
-                
+                if (vehicleCategoryFilterButton){
+                    let categoryColors = {
+                        "ENROUTE": "#fff004",
+                        "PROCESSING": "#fff004",
+                        "CRUSHED": "#f44336",
+                        "YARD": "#4336f4",
+                        "NO TITLE": "#F2CEE6",
+                        "TITLE PROBLEM": "#DA4167",
+                        "NEEDS A STICKER": "#EED897",
+                        "VIN NOT IN SYSTEM": "#C3DBC5",
+                        "READY FOR YARD": "#4CAF50",
+                        "FOR SALE": "#FF9800",
+                        "PRE YARD": "#FFC107",
+                        "PRE DRAIN": "#FFFFFF",
+                        "DRAINING": "#9046CF",
+                        "HOLDING": "#9E9E9E",
+                        "INCOMING": "#E4572E"
+                    };
+                    iconColor = categoryColors[vehicle.category] || "#000000";
+                } else {
+                    iconColor = getColorByTimeSinceCreation(vehicle.created_at);
+                    // console.log(iconColor)
+                }
+                    
+                rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)  
                 let southWest = latLngBounds.getSouthWest();
                 let northEast = latLngBounds.getNorthEast();
                 let centerLat = (southWest.lat + northEast.lat) / 2;
@@ -1307,7 +1463,6 @@
 
 
                 let angle = calculateAngle(southWest, northEast);
-                console.log(angle)
                 if (angle < 25){
                     angle = angle - 24.227741429716023
                 } else {
@@ -1316,13 +1471,18 @@
 
                 
                 let angleOfRotation = angle;
+                let divConVisibility = "";
+                var tooltipThreshold = 20;
+                if (vehicleMap.getZoom() < tooltipThreshold) {
+                    divConVisibility = "display-none"
+                }
 
                 if (lat_diff > lon_diff){
-                    var myIcon3 = L.divIcon({className: 'last-6-vin-horizontal', html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
+                    var myIcon3 = L.divIcon({className: `last-6-vin-horizontal ${divConVisibility}`, html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
                     marker = L.fixedSizeMarker(center,
                                     {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
                 } else {
-                    var myIcon3 = L.divIcon({className: 'last-6-vin-vertical', html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
+                    var myIcon3 = L.divIcon({className: `last-6-vin-vertical ${divConVisibility}`, html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
                     marker = L.fixedSizeMarker(center,
                                     {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
                 }
@@ -1335,19 +1495,37 @@
     }
 </script>
 <style>
+    .display-none {
+        display: none;
+    }
+
+    #view-vehicle-time-icon {
+        border: 1px solid #4f4f4f;
+    }
+
+    #vehicle-category-filter-icon {
+        margin-top: 0;
+        border: 1px solid #4f4f4f;
+    }
+
+    div.leaflet-bar.leaflet-control.leaflet-control-custom.clicked {
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+    }
+
+
     .last-6-vin-horizontal {
         font-size: 14px !important;
         margin-left: -24px !important;
         margin-top: -10px !important;
         font-weight: bold;
-        display: none;
+        /* display: none; */
     }
     .last-6-vin-vertical {
         font-size: 14px !important;
         /* margin-left: -24px !important;*/
         margin-top: -28px !important;
         font-weight: bold;
-        display: none;
+        /* display: none; */
     }
 
     .leaflet-image-layer{
