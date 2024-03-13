@@ -1229,7 +1229,7 @@
         
         tabLinks.forEach(function(link) {
             link.addEventListener('click', function(event) {
-                clearFilters();
+                // clearFilters();
                 vehicleMap.eachLayer(function (layer) {
                     if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
                         vehicleMap.removeLayer(layer);
