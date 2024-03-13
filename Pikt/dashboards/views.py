@@ -313,6 +313,7 @@ class vehiclesView(LoginRequiredMixin,View):
                 if stock_number:
                     vehicles = vehicles.filter(stock_number__icontains=stock_number)
                 context['vehicles'] = vehicles
+                context['filtered_vehicles'] = vehicles
                 if context['vehicles'].count() > 0:
                     vehicles = vehicles.order_by('id')
                     paginator = Paginator(vehicles, 20)
@@ -325,7 +326,15 @@ class vehiclesView(LoginRequiredMixin,View):
                     context['vehicle_model_filter'] = vehicle_model
                     context['category_filter'] = category
                     context['vin_filter'] = vin
-                return HttpResponse(render_to_string('vehicles-table.html', context))
+                # html = render_to_string('vehicles-table.html', {'vehicles': vehicles}, request=request)
+                # Constructing the response data
+                response_data = {
+                    'html': render_to_string('vehicles-table.html', context),
+                    'vehicles': list(vehicles.values()),  # Assuming 'vehicles' is a QuerySet; adapt as needed
+                }
+
+                return JsonResponse(response_data)
+                # return HttpResponse(render_to_string('vehicles-table.html', context))
         
         request.user.messages = []
         request.user.save()

@@ -932,15 +932,19 @@
         // Trigger the filter form submission to refresh the results
         submitFilterForm();
         submitFilterModalForm();
+        document.getElementById("vehicle-category-filter-icon").style.display = "block";
+        document.getElementById("view-vehicle-time-icon").style.display = "block";
     }
 
 
     function submitFilterForm() {
+        document.getElementById("vehicle-category-filter-icon").style.display = "none";
+        document.getElementById("view-vehicle-time-icon").style.display = "none";
+
         var formElement = document.getElementById('filter-form');
         var formData = new FormData(formElement);
         var queryParams = new URLSearchParams(formData);
         var queryString = queryParams.toString();
-        console.log(queryParams.toString())
         fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
@@ -948,30 +952,30 @@
                 'X-Request-Type': 'vehicleFilter'
             }
         })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('table-container').innerHTML = html;
-            // After updating the DOM, reinitialize event listeners or any JavaScript-based UI components
-            reinitializeDynamicElements();
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            vehicles = data.vehicles;
+            document.getElementById('table-container').innerHTML = data.html;
+
+
+            vehicleMap.eachLayer(function (layer) {
+                if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
+                    vehicleMap.removeLayer(layer);
+                } else if (layer instanceof L.Marker) {
+                    vehicleMap.removeLayer(layer);
+                }
+
+            });
+            buildColoredVehicleMarkers(vehicles, vehicleMap);
+            document.getElementById('table-container').innerHTML = data.html;
         })
         .catch(error => console.error('Error:', error));
     }
 
-    // Example function to reinitialize event listeners on dynamic elements
-    function reinitializeDynamicElements() {
-        // Reattach event listeners to your dynamic elements here.
-        // This is just an example. Replace 'dynamic-element-selector' with your actual dynamic element's selector.
-        var dynamicElements = document.querySelectorAll('.dynamic-element-selector');
-        dynamicElements.forEach(element => {
-            element.addEventListener('click', yourEventHandlerFunction);
-        });
-
-        // If you have forms or inputs that are dynamically loaded and need to bind events:
-        document.getElementById('filter-form').addEventListener('submit', yourFormSubmitHandler);
-        // Repeat for other dynamic elements as needed.
-    }
 
     function submitFilterModalForm() {
+        document.getElementById("vehicle-category-filter-icon").style.display = "none";
+        document.getElementById("view-vehicle-time-icon").style.display = "none";
         var formData = new FormData(document.forms[1]);
         var queryParams = new URLSearchParams();
 
@@ -986,9 +990,22 @@
                 'X-Request-Type': 'clearVehicleFilter'
             }
         })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('table-container').innerHTML = html;
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            vehicles = data.vehicles;
+            document.getElementById('table-container').innerHTML = data.html;
+
+
+            vehicleMap.eachLayer(function (layer) {
+                if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
+                    vehicleMap.removeLayer(layer);
+                } else if (layer instanceof L.Marker) {
+                    vehicleMap.removeLayer(layer);
+                }
+
+            });
+            buildColoredVehicleMarkers(vehicles, vehicleMap);
+            document.getElementById('table-container').innerHTML = data.html;
         })
         .catch(error => console.error('Error:', error));
     }
@@ -1209,11 +1226,8 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Select all tab links
         var tabLinks = document.querySelectorAll('.w-tab-link');
-
         emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-        // vehiclesWithMarkers = {{ markedVehicles|safe }}
 
         emptyVehicleSpots.forEach(function(bounds) {
             var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
@@ -1226,17 +1240,18 @@
         tabLinks.forEach(function(link) {
             link.addEventListener('click', function(event) {
 
-                vehicleMap.eachLayer(function(layer) {
-                    if (!(layer instanceof L.TileLayer)) {
+                vehicleMap.eachLayer(function (layer) {
+                    if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
+                        vehicleMap.removeLayer(layer);
+                    } else if (layer instanceof L.Marker) {
                         vehicleMap.removeLayer(layer);
                     }
+
                 });
-                // Prevent default anchor behavior
                 event.preventDefault();
                 
                 var tabName = this.getAttribute('data-w-tab');
 
-                // clearCircleMarkers(vehicleMap);
                 if (tabName === 'All') {
                     vehicles = ({{ vehiclesList|safe }});
                 } else if (tabName === 'Incoming'){
@@ -1257,10 +1272,6 @@
                     vehicles = {{ crushedVehiclesList|safe}}
                 }
                 
-                emptyVehicleSpots.forEach(function(bounds) {
-                    var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                    rectangle = L.rectangle(latLngBounds, {color: "ffffff", weight: 1}).addTo(vehicleMap)
-                });
                 buildColoredVehicleMarkers(vehicles, vehicleMap);
                 
             });
@@ -1429,7 +1440,6 @@
                     iconColor = categoryColors[vehicle.category] || "#000000";
                 } else {
                     iconColor = getColorByTimeSinceCreation(vehicle.created_at);
-                    // console.log(iconColor)
                 }
                     
                 rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)  
