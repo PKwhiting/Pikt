@@ -21,14 +21,15 @@ class rootView(View):
             return redirect(request.META.get('HTTP_REFERER', 'vehicles'))
         else:
             company = request.user.company
-            shippingAddress = ShippingAddress.objects.filter(company=company)
+            queryResults = ShippingAddress.objects.filter(company=company)
+            shippingAddress = queryResults[0] if queryResults else None
             users = User.objects.filter(company=company).exclude(id=request.user.id)
             form = UserForm()
             context = {
                 'users': users,
                 'company': company,
                 'form': form,
-                'address': shippingAddress[0]
+                'address': shippingAddress
             }
             return render(request, 'company.html', context)
     def post(self, request):

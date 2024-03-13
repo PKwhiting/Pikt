@@ -936,13 +936,11 @@
 
 
     function submitFilterForm() {
-        var formData = new FormData(document.forms[0]);
-
-        var queryParams = new URLSearchParams();
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
+        var formElement = document.getElementById('filter-form');
+        var formData = new FormData(formElement);
+        var queryParams = new URLSearchParams(formData);
+        var queryString = queryParams.toString();
+        console.log(queryParams.toString())
         fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
             method: 'GET',
             headers: {
@@ -969,7 +967,7 @@
         });
 
         // If you have forms or inputs that are dynamically loaded and need to bind events:
-        document.getElementById('YourDynamicFormId').addEventListener('submit', yourFormSubmitHandler);
+        document.getElementById('filter-form').addEventListener('submit', yourFormSubmitHandler);
         // Repeat for other dynamic elements as needed.
     }
 
