@@ -34,15 +34,15 @@
             role="banner" class="dashboard-sidebar w-nav">
             <div class="sidebar-content" style="display: flex; justify-content: space-between;">
                 <div>
-                    <div class="sidebar-logo-wrapper"><a href="/dashboards" class="w-nav-brand" aria-label="home"><img
+                    <div class="sidebar-logo-wrapper"><a href="/dashboards/vehicles/" class="w-nav-brand" aria-label="home"><img
                                 src="{% static 'images/logo_transparent_large_black.png' %}"
                                 loading="lazy" alt="" class="sidebar-logo"></a></div>
-                    <a href="/dashboards/" class="nav-link w-inline-block"><img
+                    <!-- <a href="/dashboards/" class="nav-link w-inline-block"><img
                         style="height: 25px;"
                         src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058703e748ec21a46ed3b4e_Account.svg"
                         loading="lazy" alt="" class="nav-icon">
                     <div>Dashboard</div>
-                    </a>
+                    </a> -->
                     <a href="/dashboards/vehicles/" class="nav-link w-inline-block"><img
                         style="height: 25px;"
                         src="{% static 'icons/car.svg' %}"
@@ -207,7 +207,7 @@
             {% endif %}
             {% block content %}
             {% endblock %}
-            <div class="footer">PIKT<a href="/dashboards/" target="_blank"></a></div>
+            <div class="footer">PIKT<a href="/dashboards/vehicles/" target="_blank"></a></div>
         </div>
         <div class="mobile-bottom-spacing"></div>
     </div>

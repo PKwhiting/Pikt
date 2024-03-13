@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from Authentication.models import User
-from .models import Location
+from .models import Location, ShippingAddress, BillingAddress
 from .forms import UserForm
 import json
 from django.templatetags.static import static
@@ -21,12 +21,14 @@ class rootView(View):
             return redirect(request.META.get('HTTP_REFERER', 'vehicles'))
         else:
             company = request.user.company
+            shippingAddress = ShippingAddress.objects.filter(company=company)
             users = User.objects.filter(company=company).exclude(id=request.user.id)
             form = UserForm()
             context = {
                 'users': users,
                 'company': company,
-                'form': form
+                'form': form,
+                'address': shippingAddress[0]
             }
             return render(request, 'company.html', context)
     def post(self, request):

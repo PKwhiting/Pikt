@@ -216,7 +216,7 @@ class vehiclesView(LoginRequiredMixin,View):
         processingVehiclesList = json.dumps(list(processingVehicles.values()), cls=DjangoJSONEncoder)
         forSaleVehiclesList = json.dumps(list(forSaleVehicles.values()), cls=DjangoJSONEncoder)
         crushedVehiclesList = json.dumps(list(crushedVehicles.values()), cls=DjangoJSONEncoder)
-        emptyVehicleSpots = location.layout
+        emptyVehicleSpots = location.layout if location else []
         vehiclesWithMarkers = list(Vehicle.objects.filter(location=location).exclude(marker__isnull=True).values())
         vehiclesWithMarkers_json = json.dumps(vehiclesWithMarkers, cls=DjangoJSONEncoder)
         context = {
@@ -460,7 +460,7 @@ def delete_part(request, part_id):
     messages.append('Part deleted successfully')
     request.user.messages = json.dumps(messages)
     request.user.save()
-    return redirect('/dashboards/')
+    return redirect('/dashboards/vehicles/')
 
 @login_required
 def delete_vehicle(request, vehicle_id):
@@ -471,7 +471,7 @@ def delete_vehicle(request, vehicle_id):
         add_user_message(request, 'This vehicle cannot be deleted because it is being used elsewhere')
         return redirect('single_part', vehicle_id=vehicle_id)
     add_user_message(request, 'Vehicle deleted successfully')
-    return redirect('/dashboards/')
+    return redirect('/dashboards/vehicles/')
 
 def edit_part(request, part_id):
     part_instance = get_object_or_404(part, id=part_id)
@@ -698,6 +698,7 @@ class RedirectView(View):
 class yard(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):
         location = request.user.location
+        layout = location.layout if location.layout is not None else []
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
@@ -705,7 +706,7 @@ class yard(LoginRequiredMixin, View):
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
             'location': location,
-            'location_layout': location.layout,
+            'location_layout': layout,
         }
         request.user.messages = []
         request.user.save()

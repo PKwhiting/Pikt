@@ -500,13 +500,14 @@
                 </div>
                 <div class="w-layout-grid stacked-modules">
                     <div id="w-node-_4281f6b2-61e0-d604-f1a1-77c1b14892f0-bd60c3d7" class="module">
+                        <h4>{{ company.name }}</h4>
                         <div class="profile-details">
                             <div class="weight-500">Members</div>
                             <div class="text-grey-3">{{ users|length }}</div>
                         </div>
                         <div class="profile-details">
                             <div class="weight-500">Location</div>
-                            <div class="text-grey-3">{{ locations.first.city}}, {{ locations.first.state }}</div>
+                            <div class="text-grey-3">{{ address.city}}</div>
                         </div>
                         <div class="profile-details bottom">
                             <div class="weight-500">Website</div>{{ company.website|urlize }}
