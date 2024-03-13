@@ -24,11 +24,11 @@
                 </a><a data-w-tab="Pre-Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
                     aria-selected="false" tabindex="-1">
-                    <div>Pre Set</div>
-                </a><a data-w-tab="Processing" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                    <div>Pre Yard</div>
+                </a><a data-w-tab="Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                     href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                    aria-selected="false" tabindex="-1" style="display: none;">
-                    <div>Processing</div>
+                    aria-selected="false" tabindex="-1" style="display: block;">
+                    <div>Yard</div>
                 </a>
                 <a data-w-tab="For-Sale" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                 href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
@@ -635,12 +635,12 @@
                         </div>
                     </div>
                 </div>
-                <div data-w-tab="Crushed" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                <div data-w-tab="Yard" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-2">
                     <div class="w-layout-grid main-grid">
                         <div class="table-module">
                             <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Crushed Vehicles</h4>
+                                <h4 class="no-space-bottom">Vehicles in the Yard</h4>
                                 <div style="display: flex;">
                                     <div id="edit-button-9" style="margin-right: 6px">
                                         <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
@@ -672,7 +672,7 @@
                                             <div class="caption-large">Category</div>
                                         </div>
                                         {% if processingVehicles %}
-                                            {% for vehicle in crushedVehicles %}
+                                            {% for vehicle in yardVehicles %}
                                                 <div class="w-layout-grid table-row">
                                                     <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
                                                     <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
@@ -735,18 +735,6 @@
     </div>
 
 <script>
-    function clearCircleMarkers(map) {
-        map.eachLayer(function (layer) {
-            if (layer instanceof L.LayerGroup || layer instanceof L.FeatureGroup) {
-                // If the layer is a group, recursively clear its children
-                clearCircleMarkers(layer);
-            } else if (layer instanceof L.CircleMarker) {
-                // If the layer is a circle marker, remove it
-                map.removeLayer(layer);
-            }
-        });
-    }
-
 
     vehiclesWithMarkers = {{ markedVehicles|safe }}
 
@@ -1099,6 +1087,8 @@
             vehicles = {{ processingVehiclesList|safe}}
         } else if (tabName === "Crushed"){
             vehicles = {{ crushedVehiclesList|safe}}
+        } else if (tabName === "Yard") {
+            vehicles = {{ yardVehiclesList|safe}}
         }
         return vehicles
     }
@@ -1239,7 +1229,7 @@
         
         tabLinks.forEach(function(link) {
             link.addEventListener('click', function(event) {
-
+                clearFilters();
                 vehicleMap.eachLayer(function (layer) {
                     if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
                         vehicleMap.removeLayer(layer);
@@ -1270,6 +1260,8 @@
                     vehicles = {{ processingVehiclesList|safe}}
                 } else if (tabName === "Crushed"){
                     vehicles = {{ crushedVehiclesList|safe}}
+                } else if (tabName === "Yard") {
+                    vehicles = {{ yardVehiclesList|safe}}
                 }
                 
                 buildColoredVehicleMarkers(vehicles, vehicleMap);
@@ -1423,8 +1415,8 @@
                     let categoryColors = {
                         "ENROUTE": "#fff004",
                         "PROCESSING": "#fff004",
-                        "CRUSHED": "#f44336",
-                        "YARD": "#4336f4",
+                        "CRUSHED": "#6fb0ff",
+                        "YARD": "#36aef4",
                         "NO TITLE": "#F2CEE6",
                         "TITLE PROBLEM": "#DA4167",
                         "NEEDS A STICKER": "#EED897",
@@ -1435,7 +1427,7 @@
                         "PRE DRAIN": "#FFFFFF",
                         "DRAINING": "#9046CF",
                         "HOLDING": "#9E9E9E",
-                        "INCOMING": "#E4572E"
+                        "INCOMING": "#E4572E",
                     };
                     iconColor = categoryColors[vehicle.category] || "#000000";
                 } else {

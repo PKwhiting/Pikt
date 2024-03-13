@@ -213,6 +213,7 @@ class vehiclesView(LoginRequiredMixin,View):
         preStripVehiclesList = json.dumps(list(preStripVehicles.values()), cls=DjangoJSONEncoder)
         stripVehiclesList = json.dumps(list(stripVehicles.values()), cls=DjangoJSONEncoder)
         preYardVehiclesList = json.dumps(list(preYardVehicles.values()), cls=DjangoJSONEncoder)
+        yardVehiclesList = json.dumps(list(yardVehicles.values()), cls=DjangoJSONEncoder)
         processingVehiclesList = json.dumps(list(processingVehicles.values()), cls=DjangoJSONEncoder)
         forSaleVehiclesList = json.dumps(list(forSaleVehicles.values()), cls=DjangoJSONEncoder)
         crushedVehiclesList = json.dumps(list(crushedVehicles.values()), cls=DjangoJSONEncoder)
@@ -240,6 +241,7 @@ class vehiclesView(LoginRequiredMixin,View):
             'stripVehicles': stripVehicles,
             'preYardVehicles': preYardVehicles,
             'yardVehicles': yardVehicles,
+            'yardVehiclesList': yardVehiclesList,
             'processingVehicles': processingVehicles,
             'forSaleVehicles': forSaleVehicles,
             'crushedVehicles': crushedVehicles,

@@ -92,12 +92,11 @@ class registerView(View):
         last_name = request.POST['last_name']
         icon = '../static/images/default-avatar.webp'
         if User.objects.filter(username=username).exists():
-            # If the user already exists, return an error message
             return render(request, 'register.html', {'error': 'A user with this username already exists'})
         company = Company.objects.create(name=f'{first_name} {last_name} Company', logo=icon)
         company.save
         location = Location.objects.create(company=company, name=f'Location 1', latitude=40.143443276343255, longitude=-111.62128987127304)
-        user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role='Admin', location=location)
+        user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role='Admin', location=location, company=company)
         
         login(request, user)
         messages = json.loads(request.user.messages)
