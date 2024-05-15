@@ -19,4 +19,6 @@ urlpatterns = [
     path('ebay_consent/redirect/', views.RedirectView.as_view(), name='redirect'),
     path('orders/', views.orders.as_view(), name='orders'),
     path('yard/', views.yard.as_view(), name='yard'),
+    path('cores/', views.cores.as_view(), name='cores'),
+    path('upload_inventory', views.uploadInventoryView.as_view(), name='upload_inventory'),
 ]

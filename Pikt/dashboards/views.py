@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import part, Order, Vehicle
+from .models import part, Order, Vehicle, Inventory
 from company.models import Location
 from django.core import serializers
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -733,5 +733,59 @@ class yard(LoginRequiredMixin, View):
             location.save()
 
             return JsonResponse({'success': True}, safe=False)
+    
 
-        
+class cores(LoginRequiredMixin, View):
+    def get(self, request):
+        orders = Order.objects.all()
+        shipped_orders = Order.objects.filter(status='Shipped')
+        processing_orders = Order.objects.filter(status='Processing')
+        cancelled_orders = Order.objects.filter(status='Cancelled')
+        total_revenue = round(orders.aggregate(Sum('price'))['price__sum'], 2) if orders.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
+        total_orders = Order.objects.count() or 0
+        deliveries = Order.objects.filter(status='Delivered') or 0
+        unique_customer_count = Order.objects.values_list('customer_name', flat=True).distinct().count() or 0
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'orders': orders,
+            'revenue': total_revenue,
+            'total_orders': total_orders,
+            'deliveries': deliveries,
+            'messages':json.loads(request.user.messages),
+            'unique_customer_count': unique_customer_count,
+            'shipped_orders': shipped_orders,
+            'processing_orders': processing_orders,
+            'cancelled_orders': cancelled_orders,
+        }
+        request.user.messages = []
+        request.user.save()
+        return render(request, 'cores.html', context)
+
+    def post(self, request):
+        if is_ajax(request):
+            print("HRE")
+            if 'icon' in request.FILES:
+                file = request.FILES['icon']
+                # Process the uploaded file here
+                # For example, you can save it or read its contents
+
+                # Placeholder for processing logic
+                success = True
+
+                if success:
+                    return JsonResponse({'message': 'Inventory uploaded successfully.'}, status=200)
+                else:
+                    return JsonResponse({'message': 'Failed to process the file.'}, status=500)
+            else:
+                return JsonResponse({'message': 'No file uploaded.'}, status=400)
+        return JsonResponse({'message': 'Invalid request.'}, status=400)
+
+class uploadInventoryView(View):
+    def post(self, request):
+        inventory = Inventory(user=request.user, file=request.FILES['inventory'])
+        inventory.save()
+        add_user_message(request, 'Inventory uploaded successfully')
+        return redirect('cores/')

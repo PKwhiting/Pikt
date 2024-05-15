@@ -181,3 +181,8 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return self.stock_number
+
+class Inventory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
+    file = models.FileField(upload_to='inventory_files/')
+
