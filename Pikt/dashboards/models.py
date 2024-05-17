@@ -50,17 +50,20 @@ class image(models.Model):
 
 class part(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True)
-    vehicle_year = models.IntegerField()
-    vehicle_make = models.CharField(max_length=50)
-    vehicle_model = models.CharField(max_length=50)
-    vehicle_trim = models.CharField(max_length=50)
-    vehicle_engine = models.CharField(max_length=50)
-    vehicle_color = models.CharField(max_length=50)
-    type = models.CharField(max_length=50)
-    fitment_location = models.CharField(max_length=255)
+    vehicle_year = models.IntegerField(null=True, blank=True)
+    vehicle_make = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_model = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_trim = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_engine = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_color = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_vin = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
+    category = models.CharField(max_length=50, null=True, blank=True)
+    fitment_location = models.CharField(max_length=255, null=True, blank=True)
     grade = models.CharField(max_length=1, choices=PART_GRADES)
-    hollander_interchange = models.CharField(max_length=5000)
-    notes = models.CharField(max_length=255)
+    stock_number = models.CharField(max_length=50, null=True, blank=True)
+    hollander_interchange = models.CharField(max_length=5000, null=True, blank=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True) # in ounces
     height = models.IntegerField(null=True, blank=True) # in inches
     width = models.IntegerField(null=True, blank=True) # in inches

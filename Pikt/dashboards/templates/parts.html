@@ -1,541 +1,279 @@
 {% extends "root.html" %}
-
 {% block content %}
+{% load static %}
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
-        <div style="display: flex;">
-            <div style="margin-right: 15px">
-                <input id="filter-button" type="button" value="Filter Parts"
-                        class="button button-small w-button filter-button" style="display: none;">
-            </div>
-            <div style="margin-right: 15px">
-                <a href="/dashboards/add-part/"><input type="button" value="+ Add Part"
-                        class="button button-small w-button bg-primary-green"></a>
-            </div>
-        </div>
-        <div class="w-layout-grid grid">
-            <div class="style-guide-padding">
-                <h6>Filters</h6>
-                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                            <div style="display: flex;">
-                                <div style="margin-right: 10px; width: 50%">
-                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div style="width: 50%;">
-                                    <!-- <h6>Year End</h6> -->
-                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                        <option value="" selected disabled>Select Year</option>
-                                        {% for year in years %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make"
-                                    required="" onkeyup="submitFilterForm()">
-                            </div>
-                        </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                            <div>
-                                <!-- <h6>Vehicle Model</h6> -->
-                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model"
-                                    required="" onkeyup="submitFilterForm()">
-                            </div>
-                        </div>
-                        <!-- <div>
-                            <div>
-                                <h6>Vehicle Model</h6>
-                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                    <option value="" selected disabled>Select Model</option>
-                                    {% for make, models in makes_models.items %}
-                                    <optgroup label="{{ make }}">
-                                        {% for model in models %}
-                                        <option value="{{ model }}">{{ model }}</option>
-                                        {% endfor %}
-                                    </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div> -->
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                            <div>
-                                <!-- <h6>Part Type</h6> -->
-                                <select name="part_type" id="Part-Type" class="text-field w-select" required onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Part Type</option>
-                                    {% for part in part_types %}
-                                    {% if part in form.type.value %}
-                                    <option value="{{ part }}" selected>{{ part }}</option>
-                                    {% else %}
-                                    <option value="{{ part }}">{{ part }}</option>
-                                    {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <!-- <h6>Part Grade</h6> -->
-                            <select name="grade" id="Parts-Grade" class="text-field w-select" required onchange="submitFilterForm()">
-                                <option value="" selected disabled>Select Part Grade</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                            </select>
-                        </div>
-                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                            <div>Clear</div>
-                        </a>
-                </form>
-            </div>
-        </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h6>Filters</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                        <div style="display: flex;">
-                            <div style="margin-right: 10px; width: 50%">
-                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div style="width: 50%;">
-                                <!-- <h6>Year End</h6> -->
-                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
-                                required="" onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <!-- <div>
-                        <div>
-                            <h6>Vehicle Model</h6>
-                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                <option value="" selected disabled>Select Model</option>
-                                {% for make, models in makes_models.items %}
-                                <optgroup label="{{ make }}">
-                                    {% for model in models %}
-                                    <option value="{{ model }}">{{ model }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div> -->
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                        <div>
-                            <!-- <h6>Part Type</h6> -->
-                            <select name="part_type" id="Part-Type-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                                <option value="" selected disabled>Select Part Type</option>
-                                {% for part in part_types %}
-                                {% if part in form.type.value %}
-                                <option value="{{ part }}" selected>{{ part }}</option>
-                                {% else %}
-                                <option value="{{ part }}">{{ part }}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <!-- <h6>Part Grade</h6> -->
-                        <select name="grade" id="Parts-Grade-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                            <option value="" selected disabled>Select Part Grade</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                        </select>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-orange w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                        <div>Clear</div>
-                    </a>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
-                        <div>Filter</div>
-                    </a>
-            </form>
-            </div>
-          
-          </div>
-       <div class="table-module" id="table-container">
-            <div class="table-content" style="margin-top: 15px;">
-                <div class="table-list">
-                    <div class="w-layout-grid table-headers mobile-table">
-                        <div class="caption-large select-column"></div>
-                        <div class="caption-large mobile tablet">Year</div>
-                        <div class="caption-large mobile tablet">Make</div>
-                        <div class="caption-large">Model</div>
-                        <div class="caption-large mobile">Grade</div>
-                        <div class="caption-large">Part</div>
-                    </div>
-                    {% if parts %}
-                        {% for part in parts %}
-                            <a href="{% url 'single_part' part.id %}" target="_blank">
-                                <div class="w-layout-grid table-row">
-                                    <td><input type="checkbox" name="part"  style="width: 20px; height: 20px;" value="{{ part.id }}"></td>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile tablet">{{ part.vehicle_year }}</div>
-                                    <div class="mobile tablet">{{ part.vehicle_make }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
-                                        {{ part.vehicle_model }}
-                                    </div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.grade }}</div>
-                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ part.type }}</div>
-                                </div>
-                            </a>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
-                    <span class="step-links" style="margin-right: 20px">
-                        {% if parts.has_previous %}
-                        <!-- <a href="?page=1">&laquo; first</a> -->
-                        <a style="width: 50px" href="?page={{ parts.previous_page_number }}"><input type="button"
-                                value="<" class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value="<" class="button button-small w-button" disabled>
-                        {% endif %}
-        
-                        <span class="current" style="width: 50px">
-                            {{ parts.number }} of {{ parts.paginator.num_pages }}
-                        </span>
-        
-                        {% if parts.has_next %}
-                        <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
-                                class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value=">" class="button button-small w-button" disabled>
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
-            <!-- <div class="table-bottom-caption">
-                <div>Showing all items from Work Performance dataset</div>
-            </div> -->
-        </div>
-        <!-- <div class="w-layout-grid _1-2-grid">
+        <!-- <div class="w-layout-grid _4-grid">
             <div class="module">
-                <div class="card-header">
-                    <h4>Circle Chart</h4>
-                </div>
-                <div class="child-content-center"><img
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac2d25bb74b5e3d4a6fa3_Dash%20Chart%2001.svg"
-                        loading="lazy" alt="" class="cirlce-chart">
-                    <div class="chart-colors-wrapper">
-                        <div class="label">
-                            <div class="indication-color bg-primary-blue"></div>
-                            <div class="small-text">Running</div>
-                        </div>
-                        <div class="label">
-                            <div class="indication-color bg-primary-rose"></div>
-                            <div class="small-text">Delivered</div>
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                            loading="lazy" alt="" class="icon">
+                        <div class="light-fill"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Revenue</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">$201K</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="module">
-                <div class="card-header">
-                    <h4>Projects</h4>
-                </div><a href="/project-management" class="projects-list first w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%2520Visual%252006-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290cffe17403887a80e16_Project%20Visual%2006-min.jpg 4501w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Dashboard Kit</h6>
-                            <div class="small-text text-grey-2">2 hr ago</div>
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-green"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Orders</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">719</h3>
+                            <div class="negative-value">-10%</div>
                         </div>
                     </div>
-                    <div class="small-link">View Project</div>
-                </a><a href="/project-management" class="projects-list w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%2520Visual%252004-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290d8f89d5e26b68e8194_Project%20Visual%2004-min.jpg 4500w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Sport Website</h6>
-                            <div class="small-text text-grey-2">6 hr ago</div>
+                </div>
+            </div>
+            <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-a83755f0" class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-orange"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Deliveries</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">240</h3>
+                            <div class="positive-value">+19%</div>
                         </div>
                     </div>
-                    <div class="small-link">View Project</div>
-                </a><a href="/project-management" class="projects-list last w-inline-block">
-                    <div class="project-list-logo"><img
-                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg"
-                            loading="lazy" sizes="64px"
-                            srcset="https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-800.jpeg 800w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1080.jpeg 1080w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-1600.jpeg 1600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2000.jpeg 2000w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-2600.jpeg 2600w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%2520Visual%252003-min-p-3200.jpeg 3200w, https://assets.website-files.com/6057ab51530cb39d3fdac75d/618290dcedd0c3166a7ceb2a_Project%20Visual%2003-min.jpg 4501w"
-                            alt="" class="project-small-thumbnail">
-                        <div>
-                            <h6 class="no-space-bottom">Landingpage System</h6>
-                            <div class="small-text text-grey-2">1 week ago</div>
+                </div>
+            </div>
+            <div class="module">
+                <div class="content-chart">
+                    <div class="chart-square"><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884bd2fa05845ae96285f_users.svg"
+                            loading="lazy" width="24" alt="" class="icon">
+                        <div class="light-fill bg-primary-yellow"></div>
+                    </div>
+                    <div class="div-block">
+                        <div class="caption">Audience</div>
+                        <div class="numbers-wrapper">
+                            <h3 class="number">1.5K</h3>
+                            <div class="positive-value">+10%</div>
                         </div>
                     </div>
-                    <div class="small-link">View Project</div>
-                </a>
+                </div>
             </div>
         </div> -->
+        <div data-duration-in="300" data-duration-out="100" data-current="Parts" data-easing="ease" class="w-tabs">
+            <div class="in-page-menu w-tab-menu" role="tablist">
+                <a data-w-tab="Parts" class="in-page-menu-link w-inline-block w-tab-link  w--current" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
+                    <div>Parts</div>
+                </a>
+                <a data-w-tab="Upload Inventory"
+                    class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-0"
+                    href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0"
+                    aria-selected="true">
+                    <div>Upload Inventory</div>
+                </a>
+                <!-- <a data-w-tab="Processing" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
+                    <div>Processing</div>
+                </a><a data-w-tab="Cancelled" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                    id="w-tabs-0-data-w-tab-3" href="#w-tabs-0-data-w-pane-3" role="tab"
+                    aria-controls="w-tabs-0-data-w-pane-3" aria-selected="false">
+                    <div>Cancelled</div>
+                </a> -->
+            </div>
+            <div class="tabs-content w-tab-content">
+                <div data-w-tab="Upload Inventory" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-0">
+                    {% include "upload-inventory.html" %}
+                </div>
+                <div data-w-tab="Parts" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-1">
+                    <!-- <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Shipped)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646a7-a83755f0"
+                                            class="table-title">#10423</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Shipped</div>
+                                        </div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646ad-a83755f0">Johan D.</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646af-a83755f0">$140.99</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646b1-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646b5-a83755f0"
+                                            class="table-title">#10422</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Shipped</div>
+                                        </div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bb-a83755f0">James A.</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bd-a83755f0">$220.99</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bf-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646c3-a83755f0"
+                                            class="table-title">#10421</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Shipped</div>
+                                        </div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646c9-a83755f0">Rose G.</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646cb-a83755f0">$109.00</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646cd-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d1-a83755f0"
+                                            class="table-title">#10420</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>Shipped</div>
+                                        </div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d7-a83755f0">Michael D.</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d9-a83755f0">$2,120.00</div>
+                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646db-a83755f0">05/05/21</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-bottom-caption">
+                            <div>All orders are updated every 30 seconds</div>
+                        </div>
+                    </div> -->
+                    {% include "parts-nav.html" %}
+                </div>
+                <div data-w-tab="Processing" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-2">
+                    <div class="table-module">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Processing)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e41023e-a83755f0"
+                                            class="table-title">#10419</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-blue"></div>
+                                            <div>Processing</div>
+                                        </div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410244-a83755f0">Shane M.</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410246-a83755f0">$29.00</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410248-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e41024c-a83755f0"
+                                            class="table-title">#10418</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-blue"></div>
+                                            <div>Processing</div>
+                                        </div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410252-a83755f0">Gerald S.</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410254-a83755f0">$210.00</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410256-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e41025a-a83755f0"
+                                            class="table-title">#10417</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-blue"></div>
+                                            <div>Processing</div>
+                                        </div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410260-a83755f0">Edward B.</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410262-a83755f0">$325.00</div>
+                                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410264-a83755f0">05/05/21</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-bottom-caption">
+                            <div>All orders are updated every 30 seconds</div>
+                        </div>
+                    </div>
+                </div>
+                <div data-w-tab="Cancelled" class="w-tab-pane" id="w-tabs-0-data-w-pane-3" role="tabpanel"
+                    aria-labelledby="w-tabs-0-data-w-tab-3">
+                    <div class="table-module overflow-auto">
+                        <div class="table-header">
+                            <h4 class="no-space-bottom">Orders (Cancelled)</h4>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers _5-columns">
+                                    <div class="caption-large">Order</div>
+                                    <div class="caption-large">Status</div>
+                                    <div class="caption-large">customer</div>
+                                    <div class="caption-large">Total</div>
+                                    <div class="caption-large">Date</div>
+                                </div><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cc92-a83755f0"
+                                            class="table-title">#10416</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-rose"></div>
+                                            <div>Cancelled</div>
+                                        </div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cc98-a83755f0">Samuel A.</div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cc9a-a83755f0">$210.00</div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cc9c-a83755f0">05/05/21</div>
+                                    </div>
+                                </a><a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row _5-columns">
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cca0-a83755f0"
+                                            class="table-title">#10415</div>
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-rose"></div>
+                                            <div>Cancelled</div>
+                                        </div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cca6-a83755f0">Daniel V.</div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7cca8-a83755f0">$299.99</div>
+                                        <div id="w-node-_12dd449b-29cc-7cb7-d059-aad766d7ccaa-a83755f0">05/05/21</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-bottom-caption">
+                            <div>All orders are updated every 30 seconds</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("filter-button");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    // When the user clicks the button, open the modal 
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-
-    function clearFilters() {
-        // Clear select elements
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Part-Type').selectedIndex = 0;
-        document.getElementById('Parts-Grade').selectedIndex = 0;
-        document.getElementById('Vehicle-Model').value = '';
-        document.getElementById('Vehicle-Make').value = '';
-
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Part-Type-Modal').selectedIndex = 0;
-        document.getElementById('Parts-Grade-Modal').selectedIndex = 0;
-        document.getElementById('Vehicle-Model-Modal').value = '';
-        document.getElementById('Vehicle-Make-Modal').value = '';
-
-        // If you are using any plugins like Select2, you may need to trigger a change event
-        // so that the visual component updates correctly.
-        $('#Year-Start').val(null).trigger('change');
-        $('#Year-End').val(null).trigger('change');
-        $('#Part-Type').val(null).trigger('change');
-        $('#Parts-Grade').val(null).trigger('change');
-        $('#Year-Start-Modal').val(null).trigger('change');
-        $('#Year-End-Modal').val(null).trigger('change');
-        $('#Part-Type-Modal').val(null).trigger('change');
-        $('#Parts-Grade-Modal').val(null).trigger('change');
-        // Trigger the filter form submission to refresh the results
-        submitFilterForm();
-        submitFilterModalForm();
-    }
-
-
-    function submitFilterForm() {
-        var formData = new FormData(document.forms[0]);
-        var queryParams = new URLSearchParams();
-
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('table-container').innerHTML = html;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    function submitFilterModalForm() {
-        var formData = new FormData(document.forms[1]);
-        var queryParams = new URLSearchParams();
-
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('table-container').innerHTML = html;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-
-
-</script>
-<style>
-    .table-row {
-        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
-    }
-    .mobile-table {
-        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
-    }
-
-    @media screen and (max-width: 1000px) {
-        .modal-content {
-            width: 90% !important;
-            /* Could be more or less, depending on screen size */
-        }
-    }
-    @media screen and (max-width: 730px) {
-        .table-row{
-            grid-template-columns: .25fr 1fr 1fr 1fr;
-
-        } 
-        .mobile-table {
-            grid-template-columns: .25fr 1fr 1fr 1fr;
-        }
-        .tablet {
-            display: none;
-        }
-    }
-    @media screen and (max-width: 479px) {
-        .table-row{
-            grid-template-columns: .25fr 1fr 1fr;
-
-        } 
-        .mobile-table {
-            grid-template-columns: .25fr 1fr 1fr;
-            grid-column-gap: 0% !important;
-            display: inline-grid !important;
-        }
-    }
-    @media screen and (max-width: 991px) {
-        #filter-button{
-            display: block !important;
-        }
-    }
-    .form-row {
-        margin-bottom: 10px;
-    }
-
-    .selection span {
-        border-style: none !important;
-    }
-
-    .select2 {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 38px !important;
-    }
-
-    .select2-selection__arrow {
-        margin-right: 5px !important;
-    }
-
-    .select2-selection {
-        height: 38px !important;
-        border: 1px solid #e3e3e3 !important;
-    }
-
-    span.select2-selection.select2-selection--single {
-        border: 1px solid #e1e6f0 !important;
-        margin-right: 5px !important;
-    }
-
-    span.select2-selection.select2-selection--multiple {
-        border: 1px solid #e1e6f0 !important;
-        max-height: 100px;
-        max-width: 28.75vw !important;
-        overflow-y: auto;
-    }
-
-    /* The Modal (background) */
-    .modal {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1000;
-        /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
-    }
-
-    /* Modal Content/Box */
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        /* 15% from the top and centered */
-        padding: 20px;
-        border-radius: 16px;
-        width: 60%;
-        /* Could be more or less, depending on screen size */
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-</style>
 {% endblock %}

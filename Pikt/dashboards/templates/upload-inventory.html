@@ -1,0 +1,58 @@
+<div class="table-module">
+    <div style="margin-left: 25px; margin-right: 25px;">
+        <div class="account">
+            <div class="div-block" style="width: 70%;">
+                <div class="caption">File must have columns: 'INTERCHANGE', 'STOCK_NUMBER', 'NAME', 'CATEGORY',
+                    'VIN'</div>
+                <div class="numbers-wrapper">
+                    <h3 class="number">Upload Inventory</h3>
+                </div>
+            </div>
+            <form id="inventoryForm" action="{% url 'upload_inventory' %}" method="post"
+                enctype="multipart/form-data" style="display: none;">
+                {% csrf_token %}
+                <input type="file" id="inventory" name="inventory" accept=".xlsx, .xls, .csv">
+            </form>
+            <button onclick="document.getElementById('inventory').click()"
+                class="button button-small button-outline w-button">
+                <div>Select File</div>
+            </button>
+        </div>
+    </div>
+    {% if table_data %}
+    <div class="table-content">
+        <div class="table-list">
+            <div class="w-layout-grid table-headers _5-columns">
+                <div class="caption-large">Interchange</div>
+                <div class="caption-large">Stock Number</div>
+                <div class="caption-large">Name</div>
+                <div class="caption-large">Category</div>
+                <div class="caption-large">VIN</div>
+            </div>
+            {% for row in table_data %}
+            <a href="#" class="table-row-link w-inline-block">
+                <div class="w-layout-grid table-row _5-columns">
+                    <div id="w-node-_5521c124-0f92-8dbc-1ac2-8e7319e308ce-a83755f0"
+                        class="table-title">{{ row.INTERCHANGE }}</div>
+                    <div class="status">
+                        <!-- <div class="indication-color bg-primary-green"></div> -->
+                        <div>{{ row.STOCK_NUMBER }}</div>
+                    </div>
+                    <div id="w-node-_615c3cff-330e-8cea-cda9-fd603b82f842-a83755f0">{{ row.NAME }}
+                    </div>
+                    <div id="w-node-_4f66ef2c-f5e4-013a-33f4-d541a0a4cfc2-a83755f0">{{ row.NAME }}
+                    </div>
+                    <div id="w-node-d4d54e6d-8393-a477-68d3-d0b23521355f-a83755f0">{{ row.VIN }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+<script>
+    document.getElementById('inventory').addEventListener('change', function () {
+        document.getElementById('inventoryForm').submit();
+    });
+</script>

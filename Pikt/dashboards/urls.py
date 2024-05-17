@@ -4,7 +4,6 @@ from . import views  # Import views from the current directory
 urlpatterns = [
     path('', views.rootView.as_view(), name='dashboard'),
     path('success/', views.rootView.as_view(), name='funnel_success'),
-    path('parts/', views.defaultDashboardView.as_view(), name='parts'),
     path('vehicles/', views.vehiclesView.as_view(), name='vehicles'),
     path('add-part/', views.add_part),
     path('add-vehicle/', views.add_vehicle, name='add_vehicle'),
@@ -19,6 +18,6 @@ urlpatterns = [
     path('ebay_consent/redirect/', views.RedirectView.as_view(), name='redirect'),
     path('orders/', views.orders.as_view(), name='orders'),
     path('yard/', views.yard.as_view(), name='yard'),
-    path('cores/', views.cores.as_view(), name='cores'),
-    path('upload_inventory', views.uploadInventoryView.as_view(), name='upload_inventory'),
+    path('parts/', views.parts.as_view(), name='parts'),
+    path('upload_inventory', views.parts.as_view(), name='upload_inventory'),
 ]
