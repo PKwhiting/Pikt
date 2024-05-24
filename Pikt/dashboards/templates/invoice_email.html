@@ -1,0 +1,79 @@
+<!-- invoice_email.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice {
+            padding: 20px;
+        }
+        .invoice-header {
+            margin-bottom: 20px;
+        }
+        .invoice-contact-details {
+            margin-bottom: 10px;
+        }
+        .table-headers-invoice, .table-row-invoice {
+            display: grid;
+            grid-template-columns: 3.25fr 1fr 1fr .25fr;
+            grid-column-gap: 5px;
+            padding: 16px 10px;
+        }
+        .invoice-total {
+            display: grid;
+            grid-template-columns: 3.25fr 1fr 1fr .25fr;
+            grid-column-gap: 5px;
+            padding: 16px 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="invoice-header">
+            <div class="text-grey-3">Invoice #14020</div>
+        </div>
+        <div class="w-layout-grid invoice-contacts">
+            <div>
+                <div class="caption">Invoiced from</div>
+                <h5>{{ user.company.name }}</h5>
+                <div class="invoice-contact-details">{{ user.company.address_line1 }} {{ user.company.address_line2 }}<br>{{ user.company.city }}, {{ user.company.state }}<br>{{ user.company.phone_number }}<br>{{ user.company.email }}</div>
+                <div class="caption">Invoice ID</div>
+                <div>Invoice #14020</div>
+            </div>
+            <div class="text-right-invoice">
+                <div class="caption">Invoiced to</div>
+                <h5>{{ customer.name }}</h5>
+                <div class="invoice-contact-details">{{ customer.address }}<br>{{ customer.city }}, {{ customer.state }}<br>{{ customer.phone }}<br>{{ customer.email }}</div>
+                <div class="caption">Due date</div>
+                <div>{{ customer.due_date }}</div>
+            </div>
+        </div>
+        <div class="table-headers-invoice">
+            <div class="caption-large">Part</div>
+            <div class="caption-large">Warranty</div>
+            <div class="caption-large">Price</div>
+        </div>
+        <div id="invoice-rows">
+            {% for order in orders %}
+                <div class="table-row-invoice">
+                    <div>{{ order.part.description }}</div>
+                    <div>{{ order.part.warranty }}</div>
+                    <div>${{ order.part.price }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="invoice-total">
+            <div class="table-title">Total amount</div>
+            <div></div>
+            <div class="table-title" id="total-amount" style="margin-left: 5px;">$0.00</div>
+            <div></div>
+        </div>
+    </div>
+</body>
+</html>

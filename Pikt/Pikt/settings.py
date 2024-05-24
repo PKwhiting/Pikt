@@ -176,3 +176,9 @@ LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/login/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = os.environ.get('GMAIL_EMAIL')
+EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
+EMAIL_USE_TLS = True

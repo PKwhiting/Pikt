@@ -48,6 +48,15 @@ from django.db.models.functions import Coalesce
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.views.decorators.http import require_POST
+from .models import Customer
+from django.db.models import Max, Sum, Subquery, OuterRef
+from .models import core
+import pdfkit
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -193,7 +202,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
         request.user.save()
         return render(request, 'parts.html', context)
 
-class vehiclesView(LoginRequiredMixin,View):
+class yardView(LoginRequiredMixin,View):
     def get(self, request):
         location = request.user.location
         vehicles = Vehicle.objects.filter(location=location).exclude(category="CRUSHED") if request.user.is_authenticated else []
@@ -340,7 +349,7 @@ class vehiclesView(LoginRequiredMixin,View):
         
         request.user.messages = []
         request.user.save()
-        return render(request, 'vehicles.html', context)
+        return render(request, 'vehiclesYard.html', context)
 
 @login_required  
 def add_part(request):
@@ -543,46 +552,46 @@ def edit_part(request, part_id):
     return render(request, 'edit-part.html', context)
 
 def edit_vehicle(request, vehicle_id):
-    vehicle_instance = get_object_or_404(Vehicle, id=vehicle_id)
-    locations = Location.objects.filter(company=request.user.company)
-    # if saving edits toa part
-    if request.method == 'POST':
-        form = VehicleForm(request.POST, request.FILES, instance=vehicle_instance)
-        if form.is_valid():
-            vehicle_instance = form.save(commit=False)
-            vehicle_instance.user = request.user
-            vehicle_instance.save()
-            form.save()
-            add_user_message(request, 'Vehicle updated successfully')
-            return redirect('/dashboards/vehicles')  # Redirect to the parts list
-        else:
-            add_user_message(request, 'Vehicle was not updated')
-    elif is_ajax(request):
-        location_id = request.GET.get('location_id')   
-        lat = Location.objects.get(id=location_id).latitude
-        lng = Location.objects.get(id=location_id).longitude
-        location = Location.objects.filter(latitude=lat, longitude=lng)[0]
-        vehicles = Vehicle.objects.filter(location=location)
-        vehicles_data = serialize('List', vehicles)
-        vehicles_data_json = json.loads(vehicles_data)
-        return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
+    # vehicle_instance = get_object_or_404(Vehicle, id=vehicle_id)
+    # locations = Location.objects.filter(company=request.user.company)
+    # # if saving edits toa part
+    # if request.method == 'POST':
+    #     form = VehicleForm(request.POST, request.FILES, instance=vehicle_instance)
+    #     if form.is_valid():
+    #         vehicle_instance = form.save(commit=False)
+    #         vehicle_instance.user = request.user
+    #         vehicle_instance.save()
+    #         form.save()
+    #         add_user_message(request, 'Vehicle updated successfully')
+    #         return redirect('/dashboards/vehicles')  # Redirect to the parts list
+    #     else:
+    #         add_user_message(request, 'Vehicle was not updated')
+    # elif is_ajax(request):
+    #     location_id = request.GET.get('location_id')   
+    #     lat = Location.objects.get(id=location_id).latitude
+    #     lng = Location.objects.get(id=location_id).longitude
+    #     location = Location.objects.filter(latitude=lat, longitude=lng)[0]
+    #     vehicles = Vehicle.objects.filter(location=location)
+    #     vehicles_data = serialize('List', vehicles)
+    #     vehicles_data_json = json.loads(vehicles_data)
+    #     return JsonResponse({'lat': lat, 'lng': lng, 'vehicles': vehicles_data_json}, safe=False)
     
-    else:
-        form = VehicleForm(instance=vehicle_instance)
+    # else:
+    #     form = VehicleForm(instance=vehicle_instance)
     context = {
         'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
         'years' : range(2024, 1969, -1),
         'colors': COLORS_CONST,
         'makes': ['AMC', 'Acura', 'Alfa', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler','Daewoo', 'Daihatsu', 'Dodge', 'Eagle', 'Fiat', 'Ford', 'GMC', 'Genesis', 'Geo', 'Honda', 'Hummer', 'Hyundai', 'IH', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Lincoln', 'Maserati', 'Mazda', 'McLaren', 'Mercedes', 'Mercury', 'MG', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Pagani', 'Peugeot', 'Plymouth', 'Pontiac', 'Porsche', 'Ram', 'Renault', 'Rivian', 'Rover', 'Saab', 'Saturn', 'Scion', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Triumph', 'Volkswagen', 'Volvo'],
         'makes_models': MAKES_MODELS,
-        'form': form,
-        'vehicle': vehicle_instance,
+        # 'form': form,
+        # 'vehicle': vehicle_instance,
         'damage_types': DAMAGE_TYPE_CONST,
         'categories': CATEGORY_CONST,
         'transmissions': TRANSMISSION_CONST,
         'seller_types': SELLER_TYPE_CONST,
         'states': STATE_CHOICES,
-        'locations': locations,
+        # 'locations': locations,
     }
     request.user.messages = []
     request.user.save()
@@ -606,15 +615,14 @@ class single_part(LoginRequiredMixin, View):
         return render(request, 'single-part.html', context)
 
 class single_vehicle(LoginRequiredMixin, View):
-    def get(self, request, vehicle_id=None, *args, **kwargs):
-        selected_vehicle = get_object_or_404(Vehicle, id=vehicle_id)
+    def get(self, request, *args, **kwargs):
+        selected_vehicle = get_object_or_404(Vehicle, stock_number=36)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
-            'vehicle': selected_vehicle,
             'potential_profit': 0,
             'roi': 0
         }
@@ -783,11 +791,132 @@ class parts(View):
         return redirect('parts')
 
     def get(self, request):
+        total_parts_count = part.objects.filter(user=request.user).count()
+        max_cores = core.objects.filter(interchange=OuterRef('hollander_interchange')).order_by().values('interchange').annotate(max_price=Max('price'))
+        parts_with_max_core = part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
+        total_max_core_price = parts_with_max_core.aggregate(total=Sum('max_core_price'))['total']
+        total_max_core_price = Decimal(total_max_core_price).quantize(Decimal('0.00'))
         # del request.session['table_data']
         table_data = request.session.get('table_data', '')
         parts = part.objects.filter(user=request.user).order_by('id')
         context = {
             'table_data': table_data,
             'parts': parts,
+            'messages': json.loads(request.user.messages),
+            'total_parts_count': total_parts_count,
+            'total_max_core_price': total_max_core_price,
         }
         return render(request, 'parts.html', context)
+    
+# define the sales view and render sales.html
+class sales(LoginRequiredMixin, View):
+    def get(self, request):
+        orders = Order.objects.all()
+        customers = Customer.objects.filter(company=request.user.company)
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'orders': orders,
+            'customers': customers,
+        }
+        request.user.messages = []
+        request.user.save()
+        return render(request, 'sales.html', context)
+
+def customer_list(request):
+    query = request.GET.get('q')
+    if query:
+        customers = Customer.objects.filter(
+            Q(name__icontains=query) |
+            Q(owner__icontains=query) |
+            Q(address__icontains=query) |
+            Q(city__icontains=query) |
+            Q(state__icontains=query) |
+            Q(zip_code__icontains=query) |
+            Q(phone__icontains=query) |
+            Q(email__icontains=query)
+        )
+    else:
+        customers = Customer.objects.all()
+
+    if is_ajax(request):
+        html = render_to_string('customer-list.html', {'customers': customers})
+        return JsonResponse({'html': html})
+
+    return render(request, 'customer-search.html', {'customers': customers})
+
+def generate_quote(request, customer_id):
+    customer = get_object_or_404(Customer, id=customer_id)
+    context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'orders': orders,
+            'customer': customer,
+        }
+    return render(request, 'invoice.html', context)
+
+
+def part_search(request):
+    query = request.GET.get('q')
+    if query:
+        parts = part.objects.filter(
+            Q(vehicle_year__icontains=query) |
+            Q(vehicle_make__icontains=query) |
+            Q(vehicle_model__icontains=query) |
+            Q(type__icontains=query) |
+            Q(grade__icontains=query) |
+            Q(hollander_interchange__icontains=query)
+        )
+    else:
+        parts = part.objects.all()
+
+    if is_ajax(request):
+        html = render_to_string('part-list.html', {'parts': parts})
+        return JsonResponse({'html': html})
+
+    return render(request, 'part-search.html', {'parts': parts})
+
+def send_invoice(request, customer_id):
+    customer = get_object_or_404(Customer, id=customer_id)
+    print(customer)
+    context = {
+        'user': request.user,
+        'customer': customer,
+    }
+    html_string = render_to_string('invoice_email.html', context)
+    pdf_file = pdfkit.from_string(html_string, False)
+
+    email = EmailMessage(
+        subject='Your Invoice',
+        body='Please find the attached invoice.',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[customer.email],
+    )
+    email.attach('invoice.pdf', pdf_file, 'application/pdf')
+    email.send()
+
+    return JsonResponse({'message': 'Invoice sent successfully!'})
+
+class vehicles(LoginRequiredMixin, View):
+    def get(self, request):
+        vehicles = Vehicle.objects.filter(user=request.user)
+        context = {
+            'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
+            'years' : range(2024, 1969, -1),
+            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+            'messages': json.loads(request.user.messages),
+            'vehicles': vehicles,
+        }
+        request.user.messages = []
+        request.user.save()
+        return render(request, 'vehicles.html', context)
+    
+def inventory_addition_success(request):
+    return render(request, 'add-inventory-success.html')

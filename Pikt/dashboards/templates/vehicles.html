@@ -1,1772 +1,722 @@
 {% extends "root.html" %}
-
 {% block content %}
-
-    <div class="dashboard-container">
-        <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
-            <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="All"
-                    class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
-                    href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0"
-                    aria-selected="true">
-                    <div>All</div>
-                </a><a data-w-tab="Holding" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
-                    href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1"
-                    aria-selected="false" tabindex="-1">
-                    <div>Holding</div>
-                </a><a data-w-tab="Pre Drain" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                    aria-selected="false" tabindex="-1">
-                    <div>Pre Drain</div>
-                </a><a data-w-tab="Draining" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                    aria-selected="false" tabindex="-1">
-                    <div>Draining</div>
-                </a><a data-w-tab="Pre-Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                    aria-selected="false" tabindex="-1">
-                    <div>Pre Yard</div>
-                </a><a data-w-tab="Yard" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                    href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                    aria-selected="false" tabindex="-1" style="display: block;">
-                    <div>Yard</div>
-                </a>
-                <a data-w-tab="For-Sale" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                aria-selected="false" tabindex="-1" style="display: none;">
-                <div>For Sale</div></a>
-                <a data-w-tab="Crushed" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
-                href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2"
-                aria-selected="false" tabindex="-1"  style="display: none;">
-                <div>Crushed</div>
-            </a></div>
-            <div id="vehicle-map" class="mobile-map" style="height: 400px; margin: 85px 20px 16px 20px; border-radius: 3px;"></div>
-            <div class="tabs-content w-tab-content" style="padding: 0 20px 0 20px">
-                <div data-w-tab="All" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
-                    <div class="w-layout-grid main-grid">
-                        <!-- <div style="display: flex; justify-content: flex-end;">
-                            <div style="margin-right: 15px">
-                                <input id="filter-button" type="button" value="Filter Vehicles"
-                                        class="button button-small w-button filter-button" style="display: none;">
-                            </div>
-                            {% if user.u_pull_it_account %}
-                                <div style="margin-right: 15px">
-                                    <a href="/dashboards/add-vehicle/"><input type="button" value="+ Add Vehicle"
-                                            class="button button-small w-button bg-primary-green"></a>
+{% load static %}
+<div class="dashboard-container">
+    <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
+        <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="Overview"
+                class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+                href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
+                <div>All Vehicles</div>
+            </a><a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
+                aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
+                <div>Tasks</div>
+            </a>
+            <a data-w-tab="Files" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
+                aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
+                <div>Inventory Vehicle</div>
+            </a>
+        </div>
+        <div class="tabs-content w-tab-content">
+            <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-0">
+                <div class="w-layout-grid main-grid">
+                    <div class="w-layout-grid _4-grid">
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img loading="lazy"
+                                        src="/static/icons/car.svg"
+                                        style="height: 25px;"
+                                        alt="" class="icon">
+                                    <div class="light-fill"></div>
                                 </div>
-                            {% else %}
-                                <div style="margin-right: 15px">
-                                    <a href="/dashboards/add-vehicle/"><input type="button" value="Inventory Vehicle"
-                                            class="button button-small w-button bg-primary-green"></a>
+                                <div class="div-block">
+                                    <div class="caption">Vehicles</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">652</h3>
+                                    </div>
                                 </div>
-                            {% endif %}
-                        </div> -->
-                        <div class="w-layout-grid grid">
-                            <div class="style-guide-padding">
-                                <h6>Filters</h6>
-                                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;" onsubmit="event.preventDefault(); submitFilterForm();">
-                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                                            <div style="display: flex;">
-                                                <div style="margin-right: 10px; width: 50%">
-                                                    <select name="year_start" id="Year-Start" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                                        <option value="" selected disabled>Select Min Year</option>
-                                                        {% for year in years %}
-                                                        <option value="{{ year }}">{{ year }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div style="width: 50%;">
-                                                    <!-- <h6>Year End</h6> -->
-                                                    <select name="year_end" id="Year-End" class="text-field w-select" required="" onchange="submitFilterForm()">
-                                                        <option value="" selected disabled>Select Max Year</option>
-                                                        {% for year in years %}
-                                                        <option value="{{ year }}">{{ year }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e"  style="display: flex;">
-                                            <div style="margin-right: 12px">
-                                                <!-- <h6>Vehicle Model</h6> -->
-                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Make" name="vehicle_make" id="Vehicle-Make"
-                                                    required="" onkeyup="submitFilterForm()"">
-                                            </div>
-                                            <div>
-                                                <!-- <h6>Vehicle Model</h6> -->
-                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Model" name="vehicle_model" id="Vehicle-Model"
-                                                    required="" onkeyup="submitFilterForm()">
-                                            </div>
-                                        </div>
-                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                                            <div>
-                                                <!-- <h6>Vehicle Model</h6> -->
-                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number"
-                                                    required="" onkeyup="submitFilterForm()">
-                                            </div>
-                                        </div>
-                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                                            <div>
-                                                <!-- <h6>Part Type</h6> -->
-                                                <select name="category" id="category" class="text-field w-select" required onchange="submitFilterForm()">
-                                                    <option value="" selected disabled>Select Category</option>
-                                                    {% for category in categories %}
-                                                    {% if category in vehicle.category %}
-                                                    <option value="{{ category }}" selected>{{ category }}</option>
-                                                    {% else %}
-                                                    <option value="{{ category }}">{{ category }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                                            <div>
-                                                <!-- <h6>Vehicle Model</h6> -->
-                                                <input type="text" class="text-field w-input" maxlength="256" placeholder="VIN" name="vin" id="vin"
-                                                    required="" onkeyup="submitFilterForm()">
-                                            </div>
-                                        </div>
-                                        <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                                            <div>Clear</div>
-                                        </a>
-                                </form>
                             </div>
                         </div>
-                        <div id="myModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h6>Filters</h6>
-                                <form id="filter-form-modal" class="w-layout-grid _3-grid" onsubmit="event.preventDefault(); submitFilterModalForm();" style="width: 100%">
-                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                                        <div style="display: flex;">
-                                            <div style="margin-right: 10px; width: 50%">
-                                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                                    <option value="" selected disabled>Select Year</option>
-                                                    {% for year in years %}
-                                                    <option value="{{ year }}">{{ year }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div style="width: 50%;">
-                                                <!-- <h6>Year End</h6> -->
-                                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required="" onchange="submitFilterModalForm()">
-                                                    <option value="" selected disabled>Select Year</option>
-                                                    {% for year in years %}
-                                                    <option value="{{ year }}">{{ year }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-green"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Daily Inventories</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">17</h3>
+                                        <div class="negative-value">-10%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-ef2958bf" class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-orange"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Deliveries</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">153</h3>
+                                        <div class="positive-value">+19%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module">
+                            <div class="content-chart">
+                                <div class="chart-square"><img width="24" loading="lazy"
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                                        alt="" class="icon">
+                                    <div class="light-fill bg-primary-yellow"></div>
+                                </div>
+                                <div class="div-block">
+                                    <div class="caption">Daily Purchases</div>
+                                    <div class="numbers-wrapper">
+                                        <h3 class="number">23</h3>
+                                        <div class="positive-value">+10%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-module">
+                        <div class="table-header">
+                            <img style="height: 25px; align-self: center; margin-bottom: 15px;" src="/static/icons/filter-black.svg" loading="lazy" alt="">
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Year" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Make" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Model" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Stock Number" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="VIN" id="First-name" required="">
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers">
+                                    <div class="caption-large">Stock #</div>
+                                    <div class="caption-large">Make</div>
+                                    <div class="caption-large">Model</div>
+                                    <div class="caption-large">Year</div>
+                                </div>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">ABC123</div>
+                                        <div>Toyota</div>
+                                        <div>Camry</div>
+                                        <div>2020</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">DEF456</div>
+                                        <div>Honda</div>
+                                        <div>Accord</div>
+                                        <div>2019</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">GHI789</div>
+                                        <div>BMW</div>
+                                        <div>3 Series</div>
+                                        <div>2022</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">JKL012</div>
+                                        <div>Mercedes</div>
+                                        <div>C Class</div>
+                                        <div>2021</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">MNO345</div>
+                                        <div>Audi</div>
+                                        <div>Q7</div>
+                                        <div>2020</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">PQR678</div>
+                                        <div>Hyundai</div>
+                                        <div>Sonata</div>
+                                        <div>2019</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">STU901</div>
+                                        <div>Ford</div>
+                                        <div>Fusion</div>
+                                        <div>2022</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">VWX234</div>
+                                        <div>Chevrolet</div>
+                                        <div>Malibu</div>
+                                        <div>2021</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">YZA567</div>
+                                        <div>Nissan</div>
+                                        <div>Altima</div>
+                                        <div>2020</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">BCD890</div>
+                                        <div>Subaru</div>
+                                        <div>Impreza</div>
+                                        <div>2019</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">EFG123</div>
+                                        <div>Volkswagen</div>
+                                        <div>Passat</div>
+                                        <div>2022</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">HIJ456</div>
+                                        <div>Volvo</div>
+                                        <div>S60</div>
+                                        <div>2021</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">KLM789</div>
+                                        <div>Mazda</div>
+                                        <div>6</div>
+                                        <div>2020</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">NOP012</div>
+                                        <div>Jeep</div>
+                                        <div>Grand Cherokee</div>
+                                        <div>2019</div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">QRS345</div>
+                                        <div>Tesla</div>
+                                        <div>Model 3</div>
+                                        <div>2022</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-1">
+                <div class="kanban">
+                    <div class="kanban-wrapper">
+                        <h4>To Be Inventoried</h4>
+                        <div class="kanban-color-bar in-progress"></div>
+                        <div class="kanban-card">
+                            <div>2007 Honda Accord</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2009 Buick LeSabre</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2010 Audi A4</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2008 Ford F-150</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2014 Ram 1500</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2008 Chevrolet Suburban</div>
+                        </div>
+                    </div>
+                    <div class="kanban-wrapper">
+                        <h4>Processing</h4>
+                        <div class="kanban-color-bar next-up"></div>
+                        <div class="kanban-card">
+                            <div>2009 Chevrolet 1500</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2015 Cadillac Escilade</div>
+                        </div>
+                    </div>
+                    <div class="kanban-wrapper">
+                        <h4>Recently Completed</h4>
+                        <div class="kanban-color-bar done"></div>
+                        <div class="kanban-card">
+                            <div>1997 Jeep Grand Cherokee</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2015 Volvo S60</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>1999 Volkswagen Passat</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2002 Subaru Impreza</div>
+                        </div>
+                        <div class="kanban-card">
+                            <div>2015 Nissan Altima</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-w-tab="Files" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-2">
+                <div class="w-layout-grid main-grid">
+                    <!-- <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
+                            <div class="content-storage">
+                                <div>
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d37ee33fcb3f67627f_hard-drive.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <h4>Drive Storage</h4>
+                                </div>
+                                <div>
+                                    <div class="percentage-info">
+                                        <div class="small-description">60 GB</div>
+                                        <div class="small-description">100&nbsp;GB</div>
+                                    </div>
+                                    <div class="percentage-bar-wrapper">
+                                        <div class="percentage-bar bg-primary-blue"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a><a href="#" class="module-link w-inline-block">
+                            <div class="content-storage">
+                                <div>
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883eff0807bad77363c90_hard-drive.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-rose"></div>
+                                    </div>
+                                    <h4>Cloud Storage</h4>
+                                </div>
+                                <div class="percentage-info">
+                                    <div class="small-description">30 GB</div>
+                                    <div class="small-description">50&nbsp;GB</div>
+                                </div>
+                                <div>
+                                    <div class="percentage-bar-wrapper">
+                                        <div class="percentage-bar bg-primary-rose"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div id="w-node-_75c0a142-7cc7-2dfb-adf6-ae0e4bed8b34-ef2958bf" class="module">
+                            <div class="content-percentage">
+                                <div class="content-storage">
+                                    <div class="storage-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831413ede764f64a258d_pie-chart.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-green"></div>
+                                    </div>
+                                    <h4>User Storage</h4>
+                                    <div class="small-description">Check your storage on your dashboard.</div>
+                                </div><img loading="lazy"
+                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac26976322417838e72f4_Dash%20Chart%2003.svg"
+                                    alt="" class="data-visualisation-storage">
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="main-grid-title">Folders</h3>
+                    <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
+                            <div class="content-folder">
+                                <div class="storage-folder-content">
+                                    <div class="storage-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="project-avatars"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
+                                            alt="" class="project-avatar first"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
+                                            alt="" class="project-avatar"></div>
+                                </div>
+                                <div>
+                                    <h4>Resources</h4>
+                                    <div class="folder-info">
+                                        <div class="small-description">15 files</div>
+                                        <div class="small-description">15 GB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a><a href="#" class="module-link w-inline-block">
+                            <div class="content-folder">
+                                <div class="storage-folder-content">
+                                    <div class="storage-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="project-avatars"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
+                                            alt="" class="project-avatar first"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
+                                            alt="" class="project-avatar"></div>
+                                </div>
+                                <div>
+                                    <h4>Research</h4>
+                                    <div class="folder-info">
+                                        <div class="small-description">10 files</div>
+                                        <div class="small-description">5 GB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Budget</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">$12,500</h3>
                                         </div>
                                     </div>
-                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: flex;">
-                                        <div style="margin-right: 12px;">
-                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make" name="vehicle_make" id="Vehicle-Make-Modal"
-                                                required="" onkeyup="submitFilterModalForm()">
-                                        </div>
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model" name="vehicle_model" id="Vehicle-Model-Modal"
-                                                required="" onkeyup="submitFilterModalForm()">
+                                </div>
+                            </div>
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-green"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Hours</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">719</h3>
+                                            <div class="negative-value">(- 10%)</div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <input type="text" class="text-field w-input" maxlength="256" placeholder="Stock Number" name="stock_number" id="Vehicle-Stock-Number-Modal"
-                                            required="" onkeyup="submitFilterForm()">
+                                </div>
+                            </div>
+                            <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa7132b-ef2958bf" class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-orange"></div>
                                     </div>
-                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                                        <div>
-                                            <!-- <h6>Part Type</h6> -->
-                                            <select name="category" id="category-Modal" class="text-field w-select" required onchange="submitFilterModalForm()">
-                                                <option value="" selected disabled>Select Part Type</option>
-                                                {% for category in categories %}
-                                                <option value="{{ category }}">{{ category }}</option>
-                                                {% endfor %}
+                                    <div class="div-block">
+                                        <div class="caption">Deliveries</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">10.5K</h3>
+                                            <div class="positive-value">(+ 19%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="module">
+                                <div class="content-chart">
+                                    <div class="chart-square"><img width="24" loading="lazy"
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
+                                            alt="" class="icon">
+                                        <div class="light-fill bg-primary-yellow"></div>
+                                    </div>
+                                    <div class="div-block">
+                                        <div class="caption">Target&nbsp;Ratio</div>
+                                        <div class="numbers-wrapper">
+                                            <h3 class="number">95%</h3>
+                                            <div class="positive-value">(+ 10%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div>
+                        <div class="table-header" style="justify-content: flex-start; padding: 24px 0px 16px;">
+                            <div style="margin-right: 5px;">
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name" data-name="First name"
+                                    placeholder="VIN" id="First-name" required="">
+                            </div>
+                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="#"
+                                class="button button-small button-outline w-inline-block"
+                                style="margin-right: 5px">
+                                <div>Decode</div>
+                            </a>
+                            <div style="padding: 12px;
+                        border-radius: 6px;
+                        background-color: #fff;
+                        box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);">
+                            <h6 class="no-space-bottom">2015 Honda Civic EX 1.8L</h6>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="table-module">
+                        <div class="table-header" style="justify-content: space-between;">
+                            <h4 class="no-space-bottom">Parts</h4>
+                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="{% url 'inventory_addition_success' %}"
+                                class="button bg-primary-green w-inline-block">
+                                <div>Add Inventory</div>
+                            </a>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-list">
+                                <div class="w-layout-grid table-headers">
+                                    <div class="caption-large">Part name</div>
+                                    <div class="caption-large">Price</div>
+                                    <div class="caption-large">Description</div>
+                                    <div class="caption-large">Interchange</div>
+                                </div>
+                                <a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Engine</div>
+                                        <div>$390.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                                <option value="" disabled selected>Select Interchange</option>
+                                                <option value="1">1.8L, VIN 2 (6th digit, gasoline, Sdn), Cal emissions</option>
+                                                <option value="2">1.8L, VIN 2 (6th digit, gasoline, Sdn), Fed emissions</option>
+                                                <option value="3">1.8L, VIN 3 (6th digit, gasoline, Cpe), Cal emissions</option>
+                                                <option value="4">1.8L, VIN 3 (6th digit, gasoline, Cpe), Fed emissions</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                                        <div>
-                                            <!-- <h6>Vehicle Model</h6> -->
-                                            <input type="text" class="text-field w-input" maxlength="256" placeholder="VIN" name="vin" id="vin-Modal"
-                                                required="" onkeyup="submitFilterModalForm()">
+                                </a>
+                                <a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Alternator</div>
+                                        <div>$70.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>663924</div>
                                         </div>
                                     </div>
-                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-rose w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                                        <div>Clear</div>
-                                    </a>
-                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
-                                        <div>Filter</div>
-                                    </a>
-                            </form>
-                            </div>
-                        
-                        </div>
-                        <div class="module" style="padding: 0">
-                            <div style="margin: 16px 16px 0px 16px; display: flex; justify-content: end;">
-                                <!-- <div id="edit-button">
-                                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                        <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">   Edit Vehicles
-                                    </a>
-                                </div> -->
-                                
-                                
-                            </div>
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">All Vehicles</h4>
-                                <div style="display: flex;">
-                                    <div style="margin-right: 6px;">
-                                        <a id="filter-button"
-                                                class="button bg-primary-green w-inline-block" style="width: auto; align-items: center; height: 37px; padding: 12px 12px;">Filter
-                                        </a>
-                                    </div>
-                                    <div id="edit-button-1" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-1" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-1">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
+                                </a>
+                                <a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">A/C Compressor</div>
+                                        <div>$65.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-green"></div>
+                                            <div>666504</div>
                                         </div>
-                                        {% if vehicles %}
-                                            {% for vehicle in vehicles %}
-                                                <a href="{% url 'single_vehicle' vehicle.id %}" target="_blank">
-                                                    <div class="w-layout-grid table-row">
-                                                        <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                        <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                            {{ vehicle.model }}
-                                                        </div>
-                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                    </div>
-                                                </a>
-                                            {% endfor %}
-                                        {% endif %}
                                     </div>
-                                    <div class="pagination" style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
-                                        <span class="step-links" style="margin-right: 20px">
-                                            {% if vehicles.has_previous %}
-                                            <!-- <a href="?page=1">&laquo; first</a> -->
-                                            <a style="width: 50px" href="?page={{ vehicles.previous_page_number }}"><input type="button"
-                                                    value="<" class="button button-small w-button"></a>
-                                            {% else %}
-                                            <input type="button" value="<" class="button button-small w-button" disabled>
-                                            {% endif %}
-                            
-                                            <span class="current" style="width: 50px">
-                                                {{ vehicles.number }} of {{ vehicles.paginator.num_pages }}
-                                            </span>
-                            
-                                            {% if vehicles.has_next %}
-                                            <a href="?page={{ vehicles.next_page_number }}"><input type="button" value=">"
-                                                    class="button button-small w-button"></a>
-                                            {% else %}
-                                            <input type="button" value=">" class="button button-small w-button" disabled>
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Holding" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-1" style="">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">In Holding</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-3" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-3" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-3">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
+                                </a>
+                                <a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Bumper Assy (Front)</div>
+                                        <div>$125.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                                <option value="" disabled selected>Select Interchange</option>
+                                                <option value="1">Sdn, EX</option>
+                                                <option value="2">Sdn, EX-L</option>
+                                                <option value="3">Cpe, EX</option>
+                                                <option value="4">Cpe, EX-L (leather)</option>
+                                            </select>
                                         </div>
-                                        {% if holdingVehicles %}
-                                            {% for vehicle in holdingVehicles %}
-                                                <div class="w-layout-grid table-row {{ vehicle.category|slugify}}">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Pre Drain" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Ready For Draining</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-4" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-4" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-4">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
+                                </a>
+                                <a href="#" class="table-row-link w-inline-block">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Bumper Assy (Rear)</div>
+                                        <div>$285.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                                <option value="" disabled selected>Select Interchange</option>
+                                                <option value="1">Sdn, 1.8L</option>
+                                                <option value="2">Cpe, 1.8L</option>
+                                            </select>
                                         </div>
-                                        {% if preStripVehicles %}
-                                            {% for vehicle in preStripVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                    </div>
+                                </a>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Starter</div>
+                                    <div>$110.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>6682943</div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Draining" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Being Drained</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-5" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-5" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-5">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Seat (Front)</div>
+                                    <div>$45.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-orange"></div>
+                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                            <option value="" disabled selected>Select Interchange</option>
+                                            <option value="1">(bucket), (air bag), cloth, (manual), Cpe, 1.8L, LH</option>
+                                            <option value="2">(bucket), (air bag), cloth, (manual), Sdn, 1.8L, LH</option>
+                                            <option value="3">(bucket), (air bag), leather, manual, Cpe, LH</option>
+                                            <option value="4">(bucket), (air bag), leather, manual, Sdn, LH</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Rack and Pinion</div>
+                                    <div>$70.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>669839</div>
+                                    </div>
+                                </div>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Radiator</div>
+                                    <div>$75.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-orange"></div>
+                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                            <option value="" disabled selected>Select Interchange</option>
+                                            <option value="1">1.8L, Denso manufacturer, AT (CVT)</option>
+                                            <option value="2">1.8L, Denso manufacturer, MT</option>
+                                            <option value="3">1.8L, Toyo manufacturer (AT, CVT)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Power Steering Pump</div>
+                                    <div>$51.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-green"></div>
+                                        <div>663927</div>
+                                    </div>
+                                </div>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Door (Front) (Left)</div>
+                                    <div>$615.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-orange"></div>
+                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                            <option value="" disabled selected>Select Interchange</option>
+                                            <option value="1">(electric), Sdn, 1.8L, EX, LH</option>
+                                            <option value="2">(electric), Sdn, 1.8L, EX-L (leather), LH</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">Door (Front) (Right)</div>
+                                    <div>$615.00</div>
+                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                        data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        style="max-width: 90%;">
+                                    <div class="status">
+                                        <div class="indication-color bg-primary-orange"></div>
+                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                            <option value="" disabled selected>Select Interchange</option>
+                                            <option value="1">(electric), Sdn, 1.8L, EX, RH</option>
+                                            <option value="2">(electric), Sdn, 1.8L, EX-L (leather), RH</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <a href="#" class="table-row-link w-inline-block" style="display: none;">
+                                    <div class="w-layout-grid table-row">
+                                        <div class="table-title">Bumper Assy (Rear)</div>
+                                        <div>$285.00</div>
+                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                            style="max-width: 90%;">
+                                        <div class="status">
+                                            <div class="indication-color bg-primary-orange"></div>
+                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                                <option value="" disabled selected>Select Interchange</option>
+                                                <option value="1">Sdn, 1.8L</option>
+                                                <option value="2">Cpe, 1.8L</option>
+                                            </select>
                                         </div>
-                                        {% if stripVehicles %}
-                                            {% for vehicle in stripVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Pre-Yard" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Ready For Yard</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-6" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-6" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-6">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
-                                        </div>
-                                        {% if preYardVehicles %}
-                                            {% for vehicle in preYardVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Processing" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Processing</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-7" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-7" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-7">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
-                                        </div>
-                                        {% if processingVehicles %}
-                                            {% for vehicle in processingVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="For-Sale" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Vehicles For Sale</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-8" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-8" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-8">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Sales Price</div>
-                                        </div>
-                                        {% if forSaleVehicles %}
-                                            {% for vehicle in forSaleVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.for_sale_price|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-w-tab="Yard" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                    aria-labelledby="w-tabs-0-data-w-tab-2">
-                    <div class="w-layout-grid main-grid">
-                        <div class="table-module">
-                            <div class="table-header" style="display: flex; justify-content: space-between;">
-                                <h4 class="no-space-bottom">Vehicles in the Yard</h4>
-                                <div style="display: flex;">
-                                    <div id="edit-button-9" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Category" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/edit.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="edit-location-9" style="margin-right: 6px">
-                                        <a title="Edit Vehicle Location" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-blue w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/pin.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                    <div id="cancel-button-9">
-                                        <a title="Cancel" id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"  class="button bg-primary-rose w-inline-block" style="width: auto; display: flex; align-items: center; height: 37px; padding: 12px 12px; background-color: #DA4167;">
-                                            <img style="height: 25px; margin-right: 2px" src="/static/icons/cancel.svg" loading="lazy" alt="" class="nav-icon edit-icon">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-module" id="table-container">
-                                <div class="table-content" style="margin-top: 15px; margin-bottom: 15px">
-                                    <div class="table-list">
-                                        <div class="w-layout-grid table-headers mobile-table">
-                                            <div class="caption-large select-column"></div>
-                                            <div class="caption-large tablet mobile">Year</div>
-                                            <div class="caption-large mobile tablet">Make</div>
-                                            <div class="caption-large mobile">Model</div>
-                                            <div class="caption-large">STK #</div>
-                                            <div class="caption-large">VIN</div>
-                                            <div class="caption-large">Category</div>
-                                        </div>
-                                        {% if processingVehicles %}
-                                            {% for vehicle in yardVehicles %}
-                                                <div class="w-layout-grid table-row">
-                                                    <td><input type="checkbox" name="vehicle"  style="width: 30px; height: 30px;" value="{{ vehicle.id }}"></td>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="tablet mobile">{{ vehicle.year }}</div>
-                                                    <div class="tablet mobile">{{ vehicle.make }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title mobile">
-                                                        {{ vehicle.model }}
-                                                    </div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ vehicle.stock_number|default:"" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" >{{ vehicle.vin|default:""|slice:"-6:" }}</div>
-                                                    <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31">{{ vehicle.category|default:"" }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="vehicleEditModal" class="modal" style="display: none">
-            <div class="modal-content" style="width: 300px;">
-                <span class="close" id="editVehicleClose">&times;</span>
-                <h6>Edit Vehicles</h6>
-                <form id="filter-form-modal" class="" style="width: 100%">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="margin-bottom: 16px;">
-                        <div>
-                            <select name="category" id="category-edit" class="text-field w-select">
-                                <option value="" selected disabled>Select Category</option>
-                                {% for category in categories %}
-                                {% if category in vehicle.category %}
-                                <option value="{{ category }}" selected>{{ category }}</option>
-                                {% else %}
-                                <option value="{{ category }}">{{ category }}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: none;">
-                        <div>
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Row" name="row" id="row-edit"
-                                required>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e" style="display: none;">
-                        <div>
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Location" name="location" id="location-edit"
-                                required>
-                        </div>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#" class="button bg-primary-green w-inline-block" style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="saveVehicleChanges()">
-                        <div>Save Change</div>
-                    </a>
-            </form>
-            </div>
-        
         </div>
     </div>
-
-<script>
-
-    vehiclesWithMarkers = {{ markedVehicles|safe }}
-
-    var editVehicleModal = document.getElementById("vehicleEditModal");
-    var editVehicleBtn1 = document.getElementById("edit-button-1");
-    // var editVehicleBtn2 = document.getElementById("edit-button-2");
-    var editVehicleBtn3 = document.getElementById("edit-button-3");
-    var editVehicleBtn4 = document.getElementById("edit-button-4");
-    var editVehicleBtn5 = document.getElementById("edit-button-5");
-    var editVehicleBtn6 = document.getElementById("edit-button-6");
-    var editVehicleBtn7 = document.getElementById("edit-button-7");
-    var editVehicleBtn8 = document.getElementById("edit-button-8");
-    var editVehicleBtn9 = document.getElementById("edit-button-9");
-    var editVehicleLctnBtn1 = document.getElementById("edit-location-1");
-    // var editVehicleLctnBtn2 = document.getElementById("edit-location-2");
-    var editVehicleLctnBtn3 = document.getElementById("edit-location-3");
-    var editVehicleLctnBtn4 = document.getElementById("edit-location-4");
-    var editVehicleLctnBtn5 = document.getElementById("edit-location-5");
-    var editVehicleLctnBtn6 = document.getElementById("edit-location-6");
-    var editVehicleLctnBtn7 = document.getElementById("edit-location-7");
-    var editVehicleLctnBtn8 = document.getElementById("edit-location-8");
-    var editVehicleLctnBtn9 = document.getElementById("edit-location-9");
-    var cancelBtn1 = document.getElementById("cancel-button-1");
-    // var cancelBtn2 = document.getElementById("cancel-button-2");
-    var cancelBtn3 = document.getElementById("cancel-button-3");
-    var cancelBtn4 = document.getElementById("cancel-button-4");
-    var cancelBtn5 = document.getElementById("cancel-button-5");
-    var cancelBtn6 = document.getElementById("cancel-button-6");
-    var cancelBtn7 = document.getElementById("cancel-button-7");
-    var cancelBtn8 = document.getElementById("cancel-button-8");
-    var cancelBtn9 = document.getElementById("cancel-button-9");
-
-    var editCategoryButtons = [editVehicleBtn1, editVehicleBtn3, editVehicleBtn4, editVehicleBtn5, editVehicleBtn6, editVehicleBtn7, editVehicleBtn8, editVehicleBtn9];
-    var editLocationButtons = [editVehicleLctnBtn1, editVehicleLctnBtn3, editVehicleLctnBtn4, editVehicleLctnBtn5, editVehicleLctnBtn6, editVehicleLctnBtn7, editVehicleLctnBtn8, editVehicleLctnBtn9];
-    var cancelButtons = [cancelBtn1, cancelBtn3, cancelBtn4, cancelBtn5, cancelBtn6, cancelBtn7, cancelBtn8, cancelBtn9];
-
-    var selectedVehiclePopupId = null;
-    let popupOpenHandled = false;
-    let vehicleTimeOnLotFilterButton = false
-    let vehicleCategoryFilterButton = true
-    
-
-
-
-
-    for (var i = 0; i < cancelButtons.length; i++) {
-        cancelButtons[i].onclick = function () {
-            // location.reload();
-        }
-    }
-
-    for (var i = 0; i < editCategoryButtons.length; i++) {
-        editCategoryButtons[i].onclick = function () {
-            var selectedVehicleIds = [];
-            $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
-                selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
-            });
-            if (selectedVehicleIds.length === 0 && !popupOpenHandled) {
-                alert("Please select at least one vehicle to edit.");
-            } else {
-                editVehicleModal.style.display = 'block';
-            }
-        }
-    }
-
-    
-    
-
-
-    var editVehicleModalSpan = document.getElementById("editVehicleClose");
-
-    editVehicleModalSpan.onclick = function () {
-
-        editVehicleModal.style.display = "none";
-    }
-    function clearVehicleCheckboxes() {
-        // Select all checkboxes with the name 'part' and loop through them
-        document.querySelectorAll('input[type="checkbox"][name="vehicle"]').forEach(function(checkbox) {
-            checkbox.checked = false; // Uncheck the checkbox
-        });
-    }
-    function saveVehicleChanges() {
-        var selectedVehicleIds = [];
-        $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
-            selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
-        });
-        if (selectedVehiclePopupId){
-            selectedVehicleIds.push(`${selectedVehiclePopupId}`)
-        }
-
-
-        var row = document.getElementById('row-edit').value;
-        var location = document.getElementById('location-edit').value;
-        var category = document.getElementById('category-edit').value;
-
-        if (!location && !row && category === "") {
-            alert("Please fill out at least one field before saving changes.");
-            return false; // Stop the form submission
-        }
-        var data = {
-            vehicleIds: selectedVehicleIds,
-            location: location,
-            category: category,
-            row: row
-        };
-
-        
-
-        let params = new URLSearchParams(data).toString();
-        fetch("{% url 'vehicles' %}?" + params, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'vehicleEdit'
-            }
-        })
-        .then(response => response.text())
-        .then(html => {
-            clearVehicleCheckboxes();
-            editVehicleModal.style.display = "none";
-            window.location.reload();
-
-
-        })
-        .catch(error => console.error('Error:', error));
-
-    }
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("filter-button");
-    var span = document.getElementsByClassName("close")[0];
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    
-
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal || event.target == editVehicleModal) {
-            modal.style.display = "none";
-            editVehicleModal.style.display = "none";
-        }
-    }
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-
-    function clearFilters() {
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('category').selectedIndex = 0;
-        document.getElementById('vin').selectedIndex = 0;
-        document.getElementById('Vehicle-Model').value = '';
-        document.getElementById('Vehicle-Make').value = '';
-        document.getElementById('Vehicle-Stock-Number').value = '';
-
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('vin-Modal').selectedIndex = 0;
-        document.getElementById('category-Modal').selectedIndex = 0;
-        document.getElementById('Vehicle-Model-Modal').value = '';
-        document.getElementById('Vehicle-Make-Modal').value = '';
-        document.getElementById('Vehicle-Stock-Number-Modal').value = '';
-        
-
-        // If you are using any plugins like Select2, you may need to trigger a change event
-        // so that the visual component updates correctly.
-        $('#Year-Start').val(null).trigger('change');
-        $('#Year-End').val(null).trigger('change');
-        $('#category').val(null).trigger('change');
-        $('#vin').val(null).trigger('change');
-        $('#Year-Start-Modal').val(null).trigger('change');
-        $('#Year-End-Modal').val(null).trigger('change');
-        $('#category-Modal').val(null).trigger('change');
-        $('#vin-Modal').val(null).trigger('change');
-        $('#Vehicle-Stock-Number').val(null).trigger('change');
-        // Trigger the filter form submission to refresh the results
-        submitFilterForm();
-        submitFilterModalForm();
-        document.getElementById("vehicle-category-filter-icon").style.display = "block";
-        document.getElementById("view-vehicle-time-icon").style.display = "block";
-    }
-
-
-    function submitFilterForm() {
-        document.getElementById("vehicle-category-filter-icon").style.display = "none";
-        document.getElementById("view-vehicle-time-icon").style.display = "none";
-
-        var formElement = document.getElementById('filter-form');
-        var formData = new FormData(formElement);
-        var queryParams = new URLSearchParams(formData);
-        var queryString = queryParams.toString();
-        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'vehicleFilter'
-            }
-        })
-        .then(response => response.json()) // Parse the JSON response
-        .then(data => {
-            vehicles = data.vehicles;
-            document.getElementById('table-container').innerHTML = data.html;
-
-
-            vehicleMap.eachLayer(function (layer) {
-                if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
-                    vehicleMap.removeLayer(layer);
-                } else if (layer instanceof L.Marker) {
-                    vehicleMap.removeLayer(layer);
-                }
-
-            });
-            buildColoredVehicleMarkers(vehicles, vehicleMap);
-            document.getElementById('table-container').innerHTML = data.html;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-
-    function submitFilterModalForm() {
-        document.getElementById("vehicle-category-filter-icon").style.display = "none";
-        document.getElementById("view-vehicle-time-icon").style.display = "none";
-        var formData = new FormData(document.forms[1]);
-        var queryParams = new URLSearchParams();
-
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
-        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'clearVehicleFilter'
-            }
-        })
-        .then(response => response.json()) // Parse the JSON response
-        .then(data => {
-            vehicles = data.vehicles;
-            document.getElementById('table-container').innerHTML = data.html;
-
-
-            vehicleMap.eachLayer(function (layer) {
-                if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
-                    vehicleMap.removeLayer(layer);
-                } else if (layer instanceof L.Marker) {
-                    vehicleMap.removeLayer(layer);
-                }
-
-            });
-            buildColoredVehicleMarkers(vehicles, vehicleMap);
-            document.getElementById('table-container').innerHTML = data.html;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    // clears selected vehicles everytime the tab is changed
-    document.addEventListener('DOMContentLoaded', function() {
-        // Function to clear all vehicle checkboxes
-        function clearVehicleSelections() {
-            // Find all vehicle checkboxes by name and reset their 'checked' state
-            document.querySelectorAll('input[name="vehicle"]').forEach(function(checkbox) {
-                checkbox.checked = false;
-            });
-        }
-
-        // Add click event listeners to each in-page menu link
-        document.querySelectorAll('.in-page-menu-link').forEach(function(link) {
-            link.addEventListener('click', function(event) {
-                clearVehicleSelections();
-            });
-        });
-    });
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-
-    var bounds = L.latLngBounds(
-        L.latLng({{ user.location.latitude }} - 0.025, {{ user.location.longitude }} - 0.025),
-        L.latLng({{ user.location.latitude }} + 0.025, {{ user.location.longitude }} + 0.025)
-    );
-    // var vehicleMap = L.map(`vehicle-map`).setView([{{ user.location.latitude }}, {{ user.location.longitude }}], 17, maxBounds: bounds);
-
-    var vehicleMap = L.map('vehicle-map', {
-        center: [{{ user.location.latitude }}, {{ user.location.longitude }}],
-        zoom: 17,
-        maxBounds: bounds,
-        maxBoundsViscosity: 1.0,
-        tap: false,
-        dragging: true,
-        touchZoom: false,
-    });
-    googleSat.addTo(vehicleMap);
-    vehicleMap.pm.removeControls();
-    vehicleMap.pm.addControls({
-        position: 'left', 
-        drawCircle: false,    
-        drawMarker: false,
-        drawCircleMarker: false, 
-        drawPolygon: false,
-        drawPolyline: false,  
-        drawRectangle: false, 
-        editMode: false,       
-        dragMode: false,      
-        cutPolygon: false,    
-        removalMode: false,  
-        rotateMode: false,
-        drawText: false,
-    });
-
-    // vehicles = {{ vehiclesList|safe }};
-
-    vehicleMap.on('popupopen', function(e) {
-        if (!popupOpenHandled) {
-            popupOpenHandled = true;
-            selectedVehiclePopupId = e.popup._source.options.vehicleId;
-            vehicleMap.on('popupclose', function() {
-                selectedVehiclePopupId = null;
-                popupOpenHandled = false;
-            });
-        }
-    });
-    
-
-
-    function getVehiclesByTabName(tabName) {
-        if (tabName === 'All') {
-            vehicles = {{ markedVehicles|safe }};
-        } else if (tabName === 'Incoming'){
-            vehicles = {{ incomingVehiclesList|safe }};
-        } else if (tabName === "Holding"){
-            vehicles = {{ holdingVehiclesList|safe}}
-        } else if (tabName === "Pre Drain"){
-            vehicles = {{ preStripVehiclesList|safe}}
-        } else if (tabName === "Draining"){
-            vehicles = {{ stripVehiclesList|safe}}
-        } else if (tabName === "Pre-Yard"){
-            vehicles = {{ preYardVehiclesList|safe}}
-        } else if (tabName === "For-Sale"){
-            vehicles = {{ forSaleVehiclesList|safe}}
-        } else if ( tabName === "Processing"){
-            vehicles = {{ processingVehiclesList|safe}}
-        } else if (tabName === "Crushed"){
-            vehicles = {{ crushedVehiclesList|safe}}
-        } else if (tabName === "Yard") {
-            vehicles = {{ yardVehiclesList|safe}}
-        }
-        return vehicles
-    }
-
-
-
-
-    var vehicleTimeOnLotFilterControl = L.Control.extend({
-        options: {
-            position: 'topright' // Position of the control
-        },
-
-        onAdd: function (map) {
-            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-
-            container.style.backgroundColor = 'white'; 
-            container.style.width = '30px';
-            container.style.height = '30px';
-
-            var icon = L.DomUtil.create('img');
-            icon.src = "/static/icons/clock.svg"; // replace with the URL or path of your icon
-            icon.style.width = '100%';
-            icon.style.height = '100%';
-            
-            container.appendChild(icon);
-            container.id = 'view-vehicle-time-icon';
-            container.title = "Vehicle Color By Time On Lot"
-
-            container.onclick = function(){
-                
-                if (vehicleTimeOnLotFilterButton) {
-                    vehicleTimeOnLotFilterButton = false;
-                    vehicleCategoryFilterButton = true;
-                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
-                    vehicles = getVehiclesByTabName(currentTab);
-                    buildColoredVehicleMarkers(vehicles, vehicleMap);
-                    this.classList.remove('clicked');
-                    document.getElementById('vehicle-category-filter-icon').classList.add('clicked');
-                    
-                } else {
-                    vehicleTimeOnLotFilterButton = true;
-                    vehicleCategoryFilterButton = false;
-                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
-                    vehicles = getVehiclesByTabName(currentTab);
-                    buildColoredVehicleMarkers(vehicles, vehicleMap);
-                    this.classList.add('clicked');
-                    document.getElementById('vehicle-category-filter-icon').classList.remove('clicked');
-                }
-            }
-            return container;
-        },
-    });
-
-
-
-
-    var vehicleCategoryFilterControl = L.Control.extend({
-        options: {
-            position: 'topright' // Position of the control
-        },
-
-        onAdd: function (map) {
-            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-
-            container.style.backgroundColor = 'white'; 
-            container.style.width = '30px';
-            container.style.height = '30px';
-
-            var icon = L.DomUtil.create('img');
-            icon.src = "/static/icons/category.svg"; // replace with the URL or path of your icon
-            icon.style.width = '100%';
-            icon.style.height = '100%';
-            
-            container.appendChild(icon);
-            container.id = 'vehicle-category-filter-icon';
-            container.title = "Vehicle Color By Category"
-            container.classList.add('clicked')
-
-            container.onclick = function(){
-                
-                if (vehicleCategoryFilterButton) {
-                    vehicleCategoryFilterButton = false;
-                    vehicleTimeOnLotFilterButton = true;
-                    this.classList.remove('clicked');
-                    document.getElementById('view-vehicle-time-icon').classList.add('clicked');
-
-                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
-                    vehicles = getVehiclesByTabName(currentTab);
-                    buildColoredVehicleMarkers(vehicles, vehicleMap);
-                } else {
-                    vehicleCategoryFilterButton = true;
-                    vehicleTimeOnLotFilterButton = false;
-
-                    this.classList.add('clicked');
-                    document.getElementById('view-vehicle-time-icon').classList.remove('clicked');
-                    currentTab = document.querySelector('.w-tab-link.w--current').getAttribute('data-w-tab');
-                    vehicles = getVehiclesByTabName(currentTab);
-                    buildColoredVehicleMarkers(vehicles, vehicleMap);
-                }
-            }
-            return container;
-        },
-    });
-
-    vehicleMap.addControl(new vehicleTimeOnLotFilterControl());
-    vehicleMap.addControl(new vehicleCategoryFilterControl());
-
-
-
-
-
-
-
-
-
-    var tooltipThreshold = 20;
-    vehicleMap.on('zoomend', function() {
-        if (vehicleMap.getZoom() < tooltipThreshold) {
-            $(".last-6-vin-vertical").addClass("display-none");
-            $(".last-6-vin-horizontal").addClass("display-none");
-        } else { 
-            $(".last-6-vin-vertical").removeClass("display-none");
-            $(".last-6-vin-horizontal").removeClass("display-none");
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var tabLinks = document.querySelectorAll('.w-tab-link');
-        emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-
-        emptyVehicleSpots.forEach(function(bounds) {
-            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-            rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
-        });
-        buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-
-
-        
-        tabLinks.forEach(function(link) {
-            link.addEventListener('click', function(event) {
-                // clearFilters();
-                vehicleMap.eachLayer(function (layer) {
-                    if (layer instanceof L.Polygon && layer.options.color !== '#ffffff') { 
-                        vehicleMap.removeLayer(layer);
-                    } else if (layer instanceof L.Marker) {
-                        vehicleMap.removeLayer(layer);
-                    }
-
-                });
-                event.preventDefault();
-                
-                var tabName = this.getAttribute('data-w-tab');
-
-                if (tabName === 'All') {
-                    vehicles = ({{ vehiclesList|safe }});
-                } else if (tabName === 'Incoming'){
-                    vehicles = {{ incomingVehiclesList|safe }};
-                } else if (tabName === "Holding"){
-                    vehicles = {{ holdingVehiclesList|safe}}
-                } else if (tabName === "Pre Drain"){
-                    vehicles = {{ preStripVehiclesList|safe}}
-                } else if (tabName === "Draining"){
-                    vehicles = {{ stripVehiclesList|safe}}
-                } else if (tabName === "Pre-Yard"){
-                    vehicles = {{ preYardVehiclesList|safe}}
-                } else if (tabName === "For-Sale"){
-                    vehicles = {{ forSaleVehiclesList|safe}}
-                } else if ( tabName === "Processing"){
-                    vehicles = {{ processingVehiclesList|safe}}
-                } else if (tabName === "Crushed"){
-                    vehicles = {{ crushedVehiclesList|safe}}
-                } else if (tabName === "Yard") {
-                    vehicles = {{ yardVehiclesList|safe}}
-                }
-                
-                buildColoredVehicleMarkers(vehicles, vehicleMap);
-                
-            });
-        });
-    });
-    for (var i = 0; i < editLocationButtons.length; i++) {
-        (function() {
-            editLocationButton = editLocationButtons[i];
-            editLocationButton.onclick = function () {
-                var selectedVehicleIds = [];
-                $('input[type="checkbox"][name="vehicle"]:checked').each(function () {
-                    selectedVehicleIds.push($(this).val()); // Collecting IDs of checked vehicles
-                });
-                
-                if (selectedVehicleIds.length === 0 && selectedVehiclePopupId === null) {
-                    alert("Please select at least one vehicle to edit the location.");
-                } else if (selectedVehicleIds.length > 1 || (selectedVehicleIds.length >= 1 && selectedVehiclePopupId !== null)) {
-                    alert("Please select only one vehicle to edit the location.");
-                } else if (selectedVehiclePopupId !== null) {
-                    selectedMarker = null;
-                    // clearCircleMarkers(vehicleMap);
-                    alert("Select a new vehicle location.");
-                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }});
-                    // vehiclesWithMarkers = ({{ vehiclesList|safe }});
-                    
-                    buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-                    buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, selectedVehiclePopupId);
-                } else {
-                    selectedMarker = null;
-                    // clearCircleMarkers(vehicleMap);
-                    alert("Select a new vehicle location.");
-                    emptyVehicleSpots = ({{ emptyVehicleSpots|safe }});
-                    // vehiclesWithMarkers = ({{ vehiclesList|safe }});
-                    
-                    buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-                    buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, selectedVehicleIds[0]);
-                    
-                    
-                }
-            }
-        })();
-    }
-    function ifMarkerExists(marker, listOfVehicleMarkers){
-        let matchingMarker = false;
-        listOfVehicleMarkers.forEach(function(vehicle){
-                if (vehicle.marker){
-                bounds = JSON.parse(vehicle.marker);
-                vehicleMarker = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                if (marker._northEast.lat === vehicleMarker._northEast.lat && marker._northEast.lng === vehicleMarker._northEast.lng && marker._southWest.lat === vehicleMarker._southWest.lat && marker._southWest.lng === vehicleMarker._southWest.lng){
-                    matchingMarker = true;
-                }
-            }
-        });
-        return matchingMarker;
-    }
-
-    function buildVehicleMap(emptyVehicleSpots, vehiclesWithMarkers, vehicleMap, vehicleId) {
-        emptyVehicleSpots = ({{ emptyVehicleSpots|safe }})
-        emptyVehicleSpots.forEach(function(bounds) {
-            var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-
-            if (!ifMarkerExists(latLngBounds ,vehiclesWithMarkers)){
-                rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
-                rectangle.on('click', function(e) {
-                    vehicleMap.eachLayer(function(layer) {
-                        if (!(layer instanceof L.TileLayer)) {
-                            vehicleMap.removeLayer(layer);
-                        }
-                    });
-                    
-                    setVehicleMarker(vehicleMap, latLngBounds, vehicleId);
-
-                });
-            }
-            
-        });
-
-    }
-    function setVehicleMarker(vehicleMap, selectedMarker, vehicleId) {
-        var selectedMarkerString = JSON.stringify(selectedMarker);
-
-        var queryParams = new URLSearchParams();
-        queryParams.append('vehicleId', vehicleId);
-        queryParams.append('selectedMarker', selectedMarkerString);
-        fetch("{% url 'vehicles' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-Request-Type': 'newVehicleLocation'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            emptyVehicleSpots = JSON.parse(data['locationEmptySpots']);
-            vehiclesWithMarkers = data['vehiclesWithMarkers'];
-            emptyVehicleSpots.forEach(function(bounds) {
-                var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                rectangle = L.rectangle(latLngBounds, {color: "#ffffff", weight: 1}).addTo(vehicleMap)
-            });
-            buildColoredVehicleMarkers(vehiclesWithMarkers, vehicleMap);
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-
-
-    L.FixedSizeMarker = L.Marker.extend({
-    options: {
-        fontSize: 12,   // starting size of icon in pixels
-        zoomBase: 3     // Zoom level where fontSize is the correct size
-    },
-    update: function () {
-        if (this._icon && this._icon.tagName === 'DIV' && this._map) {
-        let size = this.options.fontSize * Math.pow(2, (this._map.getZoom() - this.options.zoomBase));
-        this._icon.style.fontSize = size + 'px';
-        }
-        return L.Marker.prototype.update.call(this);
-    }
-    });
-    L.fixedSizeMarker = (latlng, options) => new L.FixedSizeMarker(latlng, options);
-
-
-
-
-    function getColorByTimeSinceCreation(creationDate) {
-        // Calculate the difference in time from the creation date to now
-        const timeNow = new Date();
-        const timeDiff = timeNow - new Date(creationDate); // timeDiff will be in milliseconds
-
-        const oneWeek = 7 * 24 * 60 * 60 * 1000 * 30 * 3;
-        const ratio = Math.min(timeDiff / oneWeek, 1);
-        const red = Math.floor(255 * ratio);
-        const green = 255 - red;
-        return `rgb(${red},${green},0)`;
-    }
-
-
-
-
-    function buildColoredVehicleMarkers(vehicles, vehicleMap){
-        let iconColor = "#FFFFFF";
-        vehicles.forEach(function(vehicle){
-            bounds = JSON.parse(vehicle.marker);
-            let iconColor = "#000000";
-            if (bounds != null){
-                var latLngBounds = L.latLngBounds([bounds._southWest.lat, bounds._southWest.lng], [bounds._northEast.lat, bounds._northEast.lng]);
-                if (vehicleCategoryFilterButton){
-                    let categoryColors = {
-                        "ENROUTE": "#fff004",
-                        "PROCESSING": "#fff004",
-                        "CRUSHED": "#6fb0ff",
-                        "YARD": "#36aef4",
-                        "NO TITLE": "#F2CEE6",
-                        "TITLE PROBLEM": "#DA4167",
-                        "NEEDS A STICKER": "#EED897",
-                        "VIN NOT IN SYSTEM": "#C3DBC5",
-                        "READY FOR YARD": "#4CAF50",
-                        "FOR SALE": "#FF9800",
-                        "PRE YARD": "#FFC107",
-                        "PRE DRAIN": "#FFFFFF",
-                        "DRAINING": "#9046CF",
-                        "HOLDING": "#9E9E9E",
-                        "INCOMING": "#E4572E",
-                    };
-                    iconColor = categoryColors[vehicle.category] || "#000000";
-                } else {
-                    iconColor = getColorByTimeSinceCreation(vehicle.created_at);
-                }
-                    
-                rectangle = L.rectangle(latLngBounds, {color: "#000000", fillColor: iconColor, weight: 1, fillOpacity: 1, vehicleId: vehicle.id}).addTo(vehicleMap)  
-                let southWest = latLngBounds.getSouthWest();
-                let northEast = latLngBounds.getNorthEast();
-                let centerLat = (southWest.lat + northEast.lat) / 2;
-                let centerLng = (southWest.lng + northEast.lng) / 2;
-                let center = L.latLng(centerLat, centerLng);
-                var customLatLng = L.latLng(40.14321328464628, -111.62285811098624);
-                let lastSixVIN = vehicle.vin.slice(-6);
-
-                lat_diff = (southWest.lat - northEast.lat)
-                lon_diff = (southWest.lng - northEast.lng)
-            
-                function calculateAngle(latlng1, latlng2) {
-                    // Calculate the difference in coordinates
-                    let dy = latlng2.lat - latlng1.lat;
-                    let dx = Math.cos(Math.PI / 180 * latlng1.lat) * (latlng2.lng - latlng1.lng);
-
-                    // Calculate the angle in radians
-                    let angleRadians = Math.atan2(dy, dx);
-
-                    // Convert to degrees
-                    let angleDeg = angleRadians * (180 / Math.PI);
-
-                    return angleDeg;
-                }
-
-
-                let angle = calculateAngle(southWest, northEast);
-                if (angle < 25){
-                    angle = angle - 24.227741429716023
-                } else {
-                    angle = angle + 24.227741429716023 - 180
-                }
-
-                
-                let angleOfRotation = angle;
-                let divConVisibility = "";
-                var tooltipThreshold = 20;
-                if (vehicleMap.getZoom() < tooltipThreshold) {
-                    divConVisibility = "display-none"
-                }
-
-                if (lat_diff > lon_diff){
-                    var myIcon3 = L.divIcon({className: `last-6-vin-horizontal ${divConVisibility}`, html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
-                    marker = L.fixedSizeMarker(center,
-                                    {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
-                } else {
-                    var myIcon3 = L.divIcon({className: `last-6-vin-vertical ${divConVisibility}`, html: `<p style="transform: rotate(${angleOfRotation}deg);">${lastSixVIN}</p>`});
-                    marker = L.fixedSizeMarker(center,
-                                    {icon: myIcon3, zoomBase: 3}).addTo(vehicleMap);
-                }
-                rectangle.bindPopup(`<strong><a href="/dashboards/single_vehicle/${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model}<br>STK: ${vehicle.stock_number}<br>${vehicle.vin}<br>${vehicle.category}</a></strong>`);
-                
-                
-            }
-        });
-
-    }
-</script>
+</div>
 <style>
-    .display-none {
-        display: none;
+    .table-title, .status {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
-
-    #view-vehicle-time-icon {
-        border: 1px solid #4f4f4f;
-    }
-
-    #vehicle-category-filter-icon {
-        margin-top: 0;
-        border: 1px solid #4f4f4f;
-    }
-
-    div.leaflet-bar.leaflet-control.leaflet-control-custom.clicked {
-        box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
-    }
-
-
-    .last-6-vin-horizontal {
-        font-size: 14px !important;
-        margin-left: -24px !important;
-        margin-top: -10px !important;
-        font-weight: bold;
-        /* display: none; */
-    }
-    .last-6-vin-vertical {
-        font-size: 14px !important;
-        /* margin-left: -24px !important;*/
-        margin-top: 8px !important;
-        font-weight: bold;
-        /* display: none; */
-    }
-
-    .leaflet-image-layer{
-        z-index: 1000 !important;
-    }
-
-
-
-    .needs-a-sticker {
-        background-color: #EED897 !important;
-    }
-    .title-problem {
-        background-color: #DA4167 !important;
-    }
-    .no-title {
-        background-color: #F2CEE6 !important;
-    }
-    .vin-not-in-system {
-        background-color: #C3DBC5 !important;
-    }
-
-
-
-
-
-    .table-header {
-        padding-bottom: 0px !important;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    .table-row {
-        grid-template-columns: .35fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    }
-    .mobile-table {
-        grid-template-columns: .35fr 1fr 1fr 1fr 1fr 1fr  1fr;
-    }
-
-    @media screen and (max-width: 1000px) {
-        .modal-content {
-            width: 90% !important;
-            /* Could be more or less, depending on screen size */
-        }
-    }
-    @media screen and (max-width: 730px) {
-        .table-row{
-            grid-template-columns: .35fr 1fr 1fr 1fr;
-
-        } 
-        .mobile-table {
-            grid-template-columns: .35fr 1fr 1fr 1fr;
-        }
-        .tablet {
-            display: none;
-        }
-    }
-    @media screen and (max-width: 479px) {
-        .table-row{
-            grid-template-columns: .35fr 1fr 1fr 1fr !important;
-
-        } 
-        .mobile-table {
-            grid-template-columns: .35fr 1fr 1fr 1fr !important;
-            grid-column-gap: 0% !important;
-            display: inline-grid !important;
-        }
-        .mobile-map {
-            height: 200px !important;
-        }
-    }
-    #filter-button{
-            display: none;
-        }
-    @media screen and (max-width: 991px) {
-        .table-row{
-            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
-
-        } 
-        .mobile-table {
-            grid-template-columns: .35fr 1fr 1fr 1fr 1fr;
-        }
-        
-        #filter-button{
-            display: flex;
-        }
-    }
-    .form-row {
-        margin-bottom: 10px;
-    }
-
-    .selection span {
-        border-style: none !important;
-    }
-
-    .select2 {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 38px !important;
-    }
-
-    .select2-selection__arrow {
-        margin-right: 5px !important;
-    }
-
-    .select2-selection {
-        height: 38px !important;
-        border: 1px solid #e3e3e3 !important;
-    }
-
-    span.select2-selection.select2-selection--single {
-        border: 1px solid #e1e6f0 !important;
-        margin-right: 5px !important;
-    }
-
-    span.select2-selection.select2-selection--multiple {
-        border: 1px solid #e1e6f0 !important;
-        max-height: 100px;
-        max-width: 28.75vw !important;
-        overflow-y: auto;
-    }
-
-    /* The Modal (background) */
-    .modal {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1000;
-        /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
-    }
-
-    /* Modal Content/Box */
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        /* 15% from the top and centered */
-        padding: 20px;
-        border-radius: 16px;
-        width: 60%;
-        /* Could be more or less, depending on screen size */
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 50px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        margin-right: 5px;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .in-page-menu::-webkit-scrollbar {
-        display: none; /* This will hide the scrollbar in WebKit browsers */
-    }
-
-    /* For IE, Edge, and Firefox 64+: */
-    .in-page-menu {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none !important;  /* Firefox */
-        padding: 20px 20px 10px 20px;
-        background-color: #ffffff;
-        position: fixed;
-        z-index: 499;
-        width: 100%;
-        border-bottom: 1px solid #e3e3e3;
-        /* box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.37); */
-    }
-    /* Ensure this applies to the in-page-menu specifically for mobile views */
-    @media screen and (max-width: 1600px) {
-        .in-page-menu {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-            scrollbar-width: thin; /* For modern browsers */
-            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Custom scrollbar colors */
-        }
-
-        .in-page-menu .in-page-menu-link {
-            flex: 0 0 auto;
-            display: inline-flex; /* Use inline-flex for the links to align them properly */
-            margin-right: 8px; /* Adjust space between tabs */
-        }
-
-        /* Styles for the scrollbar */
-        .in-page-menu::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .in-page-menu::-webkit-scrollbar-thumb {
-            background-color: #ccc; /* Scrollbar thumb color */
-            border-radius: 2px;
-        }
-
-        .in-page-menu::-webkit-scrollbar-track {
-            background: #f0f0f0; /* Scrollbar track color */
-        }
-    }
-    .table-headers {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    .table-row {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    .mobile-bar{
-        z-index: 1001;
-    }
-    .leaflet-top {
-        z-index: 400 !important;
-    }
-    .sidebar-content {
-        z-index: 1000 !important;
-    }
-    .dashboard-content {
-        padding: 0px  !important;
-    }
-    .dashboard-container {
-        margin: 0px;
-        min-width: 100%;
-    }
-    .alert-module {
-        margin-top: 20px !important;
-    }
+    
 </style>
 {% endblock %}
+

@@ -12,3 +12,4 @@ django-cloudinary-storage
 sentry-sdk[django]
 python-dateutil
 django_extensions
+pandas

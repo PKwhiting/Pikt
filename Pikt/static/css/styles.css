@@ -4186,6 +4186,11 @@ blockquote {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
+.table-row._6-columns {
+  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
 .table-headers {
   padding: 16px 24px;
   grid-column-gap: 0px;
@@ -4201,6 +4206,11 @@ blockquote {
 .table-headers._5-columns {
   -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.table-headers._6-columns {
+  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .status {
@@ -6203,12 +6213,22 @@ blockquote {
     grid-template-columns: 1fr;
   }
 
+  .table-row._6-columns {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
   .table-headers {
     -ms-grid-columns: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
 
   .table-headers._5-columns {
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .table-headers._6-columns {
     -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
   }
@@ -6455,6 +6475,10 @@ blockquote {
   }
 
   .table-headers._5-columns {
+    grid-column-gap: 4px;
+  }
+
+  .table-headers._6-columns {
     grid-column-gap: 4px;
   }
 

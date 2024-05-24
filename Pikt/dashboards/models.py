@@ -86,8 +86,14 @@ class part(models.Model):
     ebay_link = models.CharField(max_length=255, null=True, blank=True)
     sku = models.UUIDField(default=uuid.uuid4, editable=True, unique=True, null=True, blank=True)
     def __str__(self):
-        return f'{self.vehicle_year} {self.vehicle_make} {self.vehicle_model} {self.vehicle_trim} {self.vehicle_engine} {self.type}'
+        return f'{self.stock_number} {self.hollander_interchange} {self.vehicle_model} {self.vehicle_trim} {self.vehicle_engine} {self.type}'
         
+    @property
+    def core(self):
+        try:
+            return core.objects.get(interchange=self.hollander_interchange)
+        except core.DoesNotExist:
+            return None
 
 class Order(models.Model):
     sku = models.CharField(max_length=36)
@@ -189,3 +195,24 @@ class Inventory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
     file = models.FileField(upload_to='inventory_files/')
 
+class core(models.Model):
+    interchange = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='cores')
+
+    def __str__(self):
+        return f'{self.interchange} - {self.price}'
+    
+class Customer(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    owner = models.CharField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
+    state = models.CharField(max_length=2, null=True, blank=True)
+    zip_code = models.CharField(max_length=10, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='customers')
+    def __str__(self):
+        return self.name

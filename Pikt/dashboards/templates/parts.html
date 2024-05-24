@@ -3,8 +3,8 @@
 {% load static %}
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
-        <!-- <div class="w-layout-grid _4-grid">
-            <div class="module">
+        <div class="w-layout-grid _4-grid">
+            <!-- <div class="module">
                 <div class="content-chart">
                     <div class="chart-square"><img
                             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
@@ -12,14 +12,14 @@
                         <div class="light-fill"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Revenue</div>
+                        <div class="caption">Total Core Value</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">$201K</h3>
+                            <h3 class="number">${{ total_max_core_price }}</h3>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="module">
+            </div> -->
+            <!-- <div class="module">
                 <div class="content-chart">
                     <div class="chart-square"><img
                             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831adf921f01483b3167_tag.svg"
@@ -27,15 +27,15 @@
                         <div class="light-fill bg-primary-green"></div>
                     </div>
                     <div class="div-block">
-                        <div class="caption">Orders</div>
+                        <div class="caption">Part Count</div>
                         <div class="numbers-wrapper">
-                            <h3 class="number">719</h3>
-                            <div class="negative-value">-10%</div>
-                        </div>
+                            <h3 class="number">{{ total_parts_count }}</h3>
+                            <div class="negative-value">-10%</div> -->
+                        <!-- </div>
                     </div>
                 </div>
-            </div>
-            <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-a83755f0" class="module">
+            </div> --> 
+            <!-- <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-a83755f0" class="module">
                 <div class="content-chart">
                     <div class="chart-square"><img
                             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
@@ -66,8 +66,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div> -->
+            </div> -->
+        </div>
         <div data-duration-in="300" data-duration-out="100" data-current="Parts" data-easing="ease" class="w-tabs">
             <div class="in-page-menu w-tab-menu" role="tablist">
                 <a data-w-tab="Parts" class="in-page-menu-link w-inline-block w-tab-link  w--current" tabindex="-1"

@@ -42,21 +42,6 @@
                                 name="vehicle_model" id="Vehicle-Model" required="" onkeyup="submitFilterForm()">
                         </div>
                     </div>
-                    <!-- <div>
-                            <div>
-                                <h6>Vehicle Model</h6>
-                                <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                    <option value="" selected disabled>Select Model</option>
-                                    {% for make, models in makes_models.items %}
-                                    <optgroup label="{{ make }}">
-                                        {% for model in models %}
-                                        <option value="{{ model }}">{{ model }}</option>
-                                        {% endfor %}
-                                    </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div> -->
                     <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
                         <div>
                             <!-- <h6>Part Type</h6> -->
@@ -204,32 +189,360 @@
             </div>
             <div class="table-content" style="margin-top: 15px;">
                 <div class="table-list">
-                    <div class="w-layout-grid table-headers _5-columns">
+                    <div class="w-layout-grid table-headers _6-columns">
                         <div class="caption-large">Interchange</div>
                         <div class="caption-large">Stock Number</div>
                         <div class="caption-large">Name</div>
                         <div class="caption-large">Category</div>
                         <div class="caption-large">VIN</div>
+                        <div class="caption-large">Core</div>
                     </div>
-                    {% if parts %}
-                    {% for part in parts %}
-                    <a href="{% url 'single_part' part.id %}" target="_blank">
-                        <div class="w-layout-grid table-row">
-                            <td><input type="checkbox" name="part" style="width: 20px; height: 20px;"
-                                    value="{{ part.id }}"></td>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile tablet">{{ part.hollander_interchange }}</div>
-                            <div class="mobile tablet">{{ part.stock_number }}</div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title"
-                                style="display: block">
-                                {{ part.type }}
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile tablet">663928
                             </div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.category }}</div>
-                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ part.vehicle_vin }}
+                            <div class="mobile tablet">STK36293</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title"
+                                style="display: block">Alternator</div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">Electrical
+                            </div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">KL8CC6SA6LC409855
+                            </div>
+                            <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">$7 L&M Cores
                             </div>
                         </div>
                     </a>
-                    {% endfor %}
-                    {% endif %}
+                    <!-- Part 1 - Alternator -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663929</div>
+                            <div class="mobile tablet">STK36294</div>
+                            <div class="table-title" style="display: block">Alternator</div>
+                            <div class="mobile">Electrical</div>
+                            <div>KJ8CC6SA6LC409856</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 2 - Battery -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663930</div>
+                            <div class="mobile tablet">STK36295</div>
+                            <div class="table-title" style="display: block">Battery</div>
+                            <div class="mobile">Electrical</div>
+                            <div>KJ8CC6SA6LC409857</div>
+                            <div class="mobile">$8 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 3 - Spark Plug -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663931</div>
+                            <div class="mobile tablet">STK36296</div>
+                            <div class="table-title" style="display: block">Spark Plug</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409858</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 4 - Oil Filter -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663932</div>
+                            <div class="mobile tablet">STK36297</div>
+                            <div class="table-title" style="display: block">Oil Filter</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409859</div>
+                            <div class="mobile">$9 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 5 - Air Filter -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663933</div>
+                            <div class="mobile tablet">STK36298</div>
+                            <div class="table-title" style="display: block">Air Filter</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409860</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 6 - Fuel Pump -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663934</div>
+                            <div class="mobile tablet">STK36299</div>
+                            <div class="table-title" style="display: block">Fuel Pump</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409861</div>
+                            <div class="mobile">$10 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 7 - Radiator -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663935</div>
+                            <div class="mobile tablet">STK36300</div>
+                            <div class="table-title" style="display: block">Radiator</div>
+                            <div class="mobile">Cooling</div>
+                            <div>KJ8CC6SA6LC409862</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 8 - Thermostat -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663936</div>
+                            <div class="mobile tablet">STK36301</div>
+                            <div class="table-title" style="display: block">Thermostat</div>
+                            <div class="mobile">Cooling</div>
+                            <div>KJ8CC6SA6LC409863</div>
+                            <div class="mobile">$11 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 9 - Water Pump -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663937</div>
+                            <div class="mobile tablet">STK36302</div>
+                            <div class="table-title" style="display: block">Water Pump</div>
+                            <div class="mobile">Cooling</div>
+                            <div>KJ8CC6SA6LC409864</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 10 - Timing Belt -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663938</div>
+                            <div class="mobile tablet">STK36303</div>
+                            <div class="table-title" style="display: block">Timing Belt</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409865</div>
+                            <div class="mobile">$12 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 11 - Serpentine Belt -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663939</div>
+                            <div class="mobile tablet">STK36304</div>
+                            <div class="table-title" style="display: block">Serpentine Belt</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409866</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 12 - Brake Rotor -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663940</div>
+                            <div class="mobile tablet">STK36305</div>
+                            <div class="table-title" style="display: block">Brake Rotor</div>
+                            <div class="mobile">Brakes</div>
+                            <div>KJ8CC6SA6LC409867</div>
+                            <div class="mobile">$13 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 13 - Brake Caliper -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663941</div>
+                            <div class="mobile tablet">STK36306</div>
+                            <div class="table-title" style="display: block">Brake Caliper</div>
+                            <div class="mobile">Brakes</div>
+                            <div>KJ8CC6SA6LC409868</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 14 - Brake Master Cylinder -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663942</div>
+                            <div class="mobile tablet">STK36307</div>
+                            <div class="table-title" style="display: block">Brake Master Cylinder</div>
+                            <div class="mobile">Brakes</div>
+                            <div>KJ8CC6SA6LC409869</div>
+                            <div class="mobile">$14 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 15 - Brake Booster -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">663943</div>
+                            <div class="mobile tablet">STK36308</div>
+                            <div class="table-title" style="display: block">Brake Booster</div>
+                            <div class="mobile">Brakes</div>
+                            <div>KJ8CC6SA6LC409870</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 16 - Headlight -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664001</div>
+                            <div class="mobile tablet">STK36309</div>
+                            <div class="table-title" style="display: block">Headlight</div>
+                            <div class="mobile">Lighting</div>
+                            <div>KJ8CC6SA6LC409871</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 17 - Taillight -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664002</div>
+                            <div class="mobile tablet">STK36310</div>
+                            <div class="table-title" style="display: block">Taillight</div>
+                            <div class="mobile">Lighting</div>
+                            <div>KJ8CC6SA6LC409872</div>
+                            <div class="mobile">$5 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 18 - Windshield Wiper -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664003</div>
+                            <div class="mobile tablet">STK36311</div>
+                            <div class="table-title" style="display: block">Windshield Wiper</div>
+                            <div class="mobile">Accessories</div>
+                            <div>KJ8CC6SA6LC409873</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 19 - Starter Motor -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664004</div>
+                            <div class="mobile tablet">STK36312</div>
+                            <div class="table-title" style="display: block">Starter Motor</div>
+                            <div class="mobile">Electrical</div>
+                            <div>KJ8CC6SA6LC409874</div>
+                            <div class="mobile">$6 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 20 - Clutch Kit -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664005</div>
+                            <div class="mobile tablet">STK36313</div>
+                            <div class="table-title" style="display: block">Clutch Kit</div>
+                            <div class="mobile">Transmission</div>
+                            <div>KJ8CC6SA6LC409875</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 21 - Flywheel -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664006</div>
+                            <div class="mobile tablet">STK36314</div>
+                            <div class="table-title" style="display: block">Flywheel</div>
+                            <div class="mobile">Transmission</div>
+                            <div>KJ8CC6SA6LC409876</div>
+                            <div class="mobile">$7 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 22 - Camshaft -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664007</div>
+                            <div class="mobile tablet">STK36315</div>
+                            <div class="table-title" style="display: block">Camshaft</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409877</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 23 - Crankshaft -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664008</div>
+                            <div class="mobile tablet">STK36316</div>
+                            <div class="table-title" style="display: block">Crankshaft</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409878</div>
+                            <div class="mobile">$8 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 24 - Pistons -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664009</div>
+                            <div class="mobile tablet">STK36317</div>
+                            <div class="table-title" style="display: block">Pistons</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409879</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 25 - Fuel Injector -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664010</div>
+                            <div class="mobile tablet">STK36318</div>
+                            <div class="table-title" style="display: block">Fuel Injector</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409880</div>
+                            <div class="mobile">$9 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 26 - Muffler -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664011</div>
+                            <div class="mobile tablet">STK36319</div>
+                            <div class="table-title" style="display: block">Muffler</div>
+                            <div class="mobile">Exhaust</div>
+                            <div>KJ8CC6SA6LC409881</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 27 - Catalytic Converter -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664012</div>
+                            <div class="mobile tablet">STK36320</div>
+                            <div class="table-title" style="display: block">Catalytic Converter</div>
+                            <div class="mobile">Exhaust</div>
+                            <div>KJ8CC6SA6LC409882</div>
+                            <div class="mobile">$10 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 28 - Engine Control Module -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664013</div>
+                            <div class="mobile tablet">STK36321</div>
+                            <div class="table-title" style="display: block">Engine Control Module</div>
+                            <div class="mobile">Electrical</div>
+                            <div>KJ8CC6SA6LC409883</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+                    <!-- Part 29 - Fuel Tank -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664014</div>
+                            <div class="mobile tablet">STK36322</div>
+                            <div class="table-title" style="display: block">Fuel Tank</div>
+                            <div class="mobile">Engine</div>
+                            <div>KJ8CC6SA6LC409884</div>
+                            <div class="mobile">$11 L&M Cores</div>
+                        </div>
+                    </a>
+                    <!-- Part 30 - Suspension Arm -->
+                    <a target="_blank">
+                        <div class="w-layout-grid table-row _6-columns">
+                            <div class="mobile tablet">664015</div>
+                            <div class="mobile tablet">STK36323</div>
+                            <div class="table-title" style="display: block">Suspension Arm</div>
+                            <div class="mobile">Suspension</div>
+                            <div>KJ8CC6SA6LC409885</div>
+                            <div class="mobile">No Core</div>
+                        </div>
+                    </a>
+
                 </div>
                 <div class="pagination"
                     style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
@@ -432,49 +745,6 @@
 
 </script>
 <style>
-    .table-row {
-        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
-    }
-
-    .mobile-table {
-        grid-template-columns: .25fr 1fr 1fr 1fr 1fr 1fr;
-    }
-
-    @media screen and (max-width: 1000px) {
-        .modal-content {
-            width: 90% !important;
-            /* Could be more or less, depending on screen size */
-        }
-    }
-
-    @media screen and (max-width: 730px) {
-        .table-row {
-            grid-template-columns: .25fr 1fr 1fr 1fr;
-
-        }
-
-        .mobile-table {
-            grid-template-columns: .25fr 1fr 1fr 1fr;
-        }
-
-        .tablet {
-            display: none;
-        }
-    }
-
-    @media screen and (max-width: 479px) {
-        .table-row {
-            grid-template-columns: .25fr 1fr 1fr;
-
-        }
-
-        .mobile-table {
-            grid-template-columns: .25fr 1fr 1fr;
-            grid-column-gap: 0% !important;
-            display: inline-grid !important;
-        }
-    }
-
     @media screen and (max-width: 991px) {
         #filter-button {
             display: block !important;

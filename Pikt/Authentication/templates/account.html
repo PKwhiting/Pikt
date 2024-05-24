@@ -28,14 +28,14 @@
                             <!-- <div class="small-text text-grey-3">Profile picture size: 400px x 400px</div> -->
                         </div>
                     </div>
-                    <form action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data"
-                        style="display: flex; flex-direction: column; align-items: center;">
+
+                    <form id="avatarForm" action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data" style="display: none;">
                         {% csrf_token %}
-                        <input type="file" name="icon" accept="image/*"
-                            style="margin-bottom: 5px; width: 103px; height: 30px; border: 1px solid #ccc; border-radius: 4px;">
-                        <button type="submit" class="button button-small button-outline w-button">Upload new
-                            avatar</button>
+                        <input type="file" id="avatar" name="icon" accept="image/*">
                     </form>
+                    <button onclick="document.getElementById('avatar').click()" class="button button-small button-outline w-button">
+                        <div>Upload New Avatar</div>
+                    </button>
                 </div>
                 <div class="w-form">
                     <form action="/account/" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post"
@@ -497,6 +497,11 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('avatar').addEventListener('change', function () {
+        document.getElementById('avatarForm').submit();
+    });
+</script>
 
 
 {% endblock %}

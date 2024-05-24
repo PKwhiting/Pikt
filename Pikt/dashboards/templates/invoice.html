@@ -1,0 +1,320 @@
+{% extends "root.html" %}
+{% block content %}
+{% load static %}
+<div class="utility-container">
+    <div class="w-layout-grid grid" style="margin-bottom: 5px;">
+        <div style="display: flex; justify-content: flex-end;">
+            <div style="display: flex; align-self: inherit">
+                <a id="print-invoice" class="button button-small button-outline w-button" style="padding: 8px 8px; margin-left: 5px;">
+                    <img style="height: 20px; max-width: none;" src="{% static 'icons/print-black.svg' %}" loading="lazy" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="module">
+        <div class="invoice">
+            <div class="invoice-header">
+                <div class="text-grey-3">Invoice #14020</div>
+            </div>
+            <div class="w-layout-grid invoice-contacts">
+                <div>
+                    <div class="caption">Invoiced from</div>
+                    <h5>{{ user.company.name }}</h5>
+                    <div class="invoice-contact-details">{{ user.company.address_line1 }} {{ user.company.address_line2 }}<br>{{ user.company.city }}, {{ user.company.state }}<br>{{ user.company.phone_number }}<br>{{ user.company.email }}</div>
+                    <div class="caption">Invoice ID</div>
+                    <div>Invoice #14020</div>
+                </div>
+                <div class="text-right-invoice">
+                    <div class="caption">Invoiced to</div>
+                    <h5>{{ customer.name }}</h5>
+                    <div class="invoice-contact-details">{{ customer.address }}<br>{{ customer.city }}, {{ customer.state }}<br>{{ customer.phone }}<br>{{ customer.email }}</div>
+                    <div class="caption">Due date</div>
+                    <div>
+                        <input class="button button-outline" type="date" id="dueDate" name="date" style="">
+                    </div>
+                </div>
+            </div>
+            <div class="w-layout-grid table-headers-invoice"
+                style="display: grid; grid-template-columns: 3.25fr 1fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
+                <div class="caption-large">Part</div>
+                <div class="caption-large">Warranty</div>
+                <div class="caption-large">Price</div>
+            </div>
+            <div id="invoice-rows">
+            </div>
+            <div class="invoice-total" 
+            style="display: grid; grid-template-columns: 3.25fr 1fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
+                <div class="table-title">Total amount</div>
+                <div></div>
+                <div class="table-title" id="total-amount" style="margin-left: 5px;">$0.00</div>
+                <div></div>
+            </div>
+            <div style="display: flex; justify-content: center;" class="no-print">
+                <a id="add-new-part" href="#" class="button button-outline w-inline-block" style="padding: 6px 12px;">
+                    <div>+ New Part</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="w-layout-grid grid" style="margin-top: 5px;">
+        <div style="display: flex; justify-content: flex-end;">
+            <div style="display: flex; align-self: inherit">
+                <a id="send-invoice" class="button bg-primary-green w-inline-block" style="padding: 8px 8px; margin-left: 5px;">
+                    Send Invoice
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        var dueDate = document.getElementById('dueDate');
+        var date = new Date();
+        date.setDate(date.getDate() + 1);
+        dueDate.value = date.toISOString().substr(0, 10);
+    }
+
+    document.getElementById('add-new-part').addEventListener('click', function (event) {
+        event.preventDefault();
+        addNewPartRow();
+    });
+
+    document.getElementById('print-invoice').addEventListener('click', function (event) {
+        event.preventDefault();
+        window.print();
+    });
+
+    document.getElementById('send-invoice').addEventListener('click', function (event) {
+        event.preventDefault();
+        sendInvoice();
+    });
+
+    function addNewPartRow() {
+        var invoiceRows = document.getElementById('invoice-rows');
+        var newRow = document.createElement('div');
+        newRow.className = 'w-layout-grid table-row-invoice';
+        newRow.style.display = 'grid';
+        newRow.style.gridTemplateColumns = '3fr 1fr 1fr .25fr';
+        newRow.style.gridColumnGap = '5px';
+        newRow.style.padding = '16px 0px';
+        newRow.style.borderBottom = 'none';
+        newRow.style.padding = '5px 0px';
+        newRow.innerHTML = `
+            <div style="position: relative;">
+                <input type="text" class="table-input part-search text-field w-input" placeholder="Description" style="margin-bottom: 0px">
+                <div class="part-list" style="position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; width: 100%;"></div>
+                <img class="clear-part-selection" style="height: 20px; position: absolute; right: 5px; top: 9px; display: none;" src="/static/icons/simple-cancel-red.svg" loading="lazy" alt="" class="nav-icon edit-icon">
+            </div>
+            <div>
+                <select class="table-input text-field w-input warranty-input" style="margin-bottom: 0px">
+                    <option value="NO WARRANTY">NO WARRANTY</option>
+                    <option value="WARRANTY">WARRANTY</option>
+                </select>
+            </div>
+            <div style="position: relative;">
+                <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                <input type="number" id="cost" class="table-input text-field w-input cost-input" placeholder="Cost" style="padding-left: 15px; margin-bottom: 0px">
+            </div>
+            <div style="display: flex; align-self: inherit">
+                <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                    <img style="height: 20px; max-width: none;" src="{% static 'icons/trash.svg' %}" loading="lazy" alt="">
+                </a>
+            </div>
+        `;
+        invoiceRows.appendChild(newRow);
+
+        // Add event listener to the delete button
+        newRow.querySelector('.delete-button').addEventListener('click', function () {
+            invoiceRows.removeChild(newRow);
+            updateTotalAmount();
+        });
+
+        // Add event listener to the part search input
+        newRow.querySelector('.part-search').addEventListener('input', function () {
+            const query = this.value.trim();
+            const partList = this.nextElementSibling;
+            searchParts(query, partList);
+        });
+
+        // Add event listener to the clear part selection button
+        newRow.querySelector('.clear-part-selection').addEventListener('click', function (event) {
+            event.preventDefault();
+            clearPartSelection(newRow);
+        });
+
+        // Add event listener to the cost input
+        newRow.querySelector('.cost-input').addEventListener('input', updateTotalAmount);
+
+        // Add event listener to the warranty dropdown
+        newRow.querySelector('.warranty-input').addEventListener('change', updateTotalAmount);
+    }
+
+    function clearPartSelection(row) {
+        const partSearchInput = row.querySelector('.part-search');
+        const costInput = row.querySelector('.cost-input');
+        const warrantyInput = row.querySelector('.warranty-input');
+        const clearButton = row.querySelector('.clear-part-selection');
+        const partList = row.querySelector('.part-list');
+
+        partSearchInput.value = '';
+        costInput.value = '';
+        warrantyInput.value = 'NO WARRANTY';
+        partList.innerHTML = '';
+        clearButton.style.display = 'none';
+        updateTotalAmount();
+    }
+
+    let debounceTimeout;
+    let currentRequest = null;
+
+    function debounce(func, delay) {
+        return function (...args) {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    function searchParts(query, partList) {
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+
+        currentRequest = $.ajax({
+            url: "{% url 'part_search' %}",
+            data: { 'q': query },
+            success: function (data) {
+                $(partList).html(data.html);
+            },
+            complete: function () {
+                currentRequest = null;
+            }
+        });
+    }
+
+    const debouncedSearch = debounce(function (event) {
+        const query = event.target.value.trim();
+        const partList = event.target.nextElementSibling;
+        searchParts(query, partList);
+    }, 50);
+
+    document.addEventListener("input", function (event) {
+        if (event.target.matches('.part-search')) {
+            debouncedSearch(event);
+        }
+    });
+
+    document.addEventListener("click", function (event) {
+        if (event.target.matches('.part-item')) {
+            const partData = JSON.parse(event.target.dataset.part);
+            const row = event.target.closest('.table-row-invoice');
+            const partSearchInput = row.querySelector('.part-search');
+            const costInput = row.querySelector('.cost-input');
+            const clearButton = row.querySelector('.clear-part-selection');
+            const partList = row.querySelector('.part-list');
+
+            partSearchInput.value = partData.description;
+            costInput.value = partData.price;
+            partList.innerHTML = '';
+            clearButton.style.display = 'block';
+            updateTotalAmount();
+        } else if (event.target.closest('.part-item')) {
+            const partItem = event.target.closest('.part-item');
+            const partData = JSON.parse(partItem.dataset.part);
+            const row = partItem.closest('.table-row-invoice');
+            const partSearchInput = row.querySelector('.part-search');
+            const costInput = row.querySelector('.cost-input');
+            const clearButton = row.querySelector('.clear-part-selection');
+            const partList = row.querySelector('.part-list');
+
+            partSearchInput.value = partData.description;
+            costInput.value = partData.price;
+            partList.innerHTML = '';
+            clearButton.style.display = 'block';
+            updateTotalAmount();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!event.target.matches('.part-item') && !event.target.matches('.part-search')) {
+            document.querySelectorAll('.part-list').forEach(function (partList) {
+                partList.innerHTML = '';
+            });
+        }
+    });
+
+    function updateTotalAmount() {
+        let totalAmount = 0;
+        document.querySelectorAll('.table-row-invoice').forEach(function (row) {
+            const costInput = row.querySelector('.cost-input');
+            const warrantyInput = row.querySelector('.warranty-input');
+            const costValue = parseFloat(costInput.value);
+            let cost = isNaN(costValue) ? 0 : costValue;
+
+            if (warrantyInput.value === 'WARRANTY') {
+                cost *= 1.1; // Add 10% if warranty is selected
+            }
+
+            totalAmount += cost;
+        });
+        document.getElementById('total-amount').textContent = `$${totalAmount.toFixed(2)}`;
+    }
+
+    function sendInvoice() {
+        const customerId = {{ customer.id }};
+        fetch(`/send-invoice/${customerId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+            } else {
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    }
+</script>
+<style>
+    @media print {
+        @page {
+            size: auto;
+            margin: 0;
+        }
+
+        body * {
+            visibility: hidden;
+        }
+
+        #add-new-part, .clear-part-selection, #print-invoice {
+            display: none !important;
+        }
+
+        .table-input {
+            border: none !important;
+        }
+
+        .invoice, .invoice * {
+            visibility: visible;
+        }
+
+        .invoice {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Hide default headers and footers (works in most browsers) */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    }
+</style>
+{% endblock %}

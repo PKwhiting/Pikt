@@ -1,0 +1,10 @@
+<div>
+    {% for part in parts %}
+    <div class="part-item" data-part='{
+        "description": "{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} - {{ part.type }} - {{ part.grade }} - {{ part.hollander_interchange }}",
+        "price": "{{ part.price }}"
+    }'>
+        <div>{{ part.vehicle_year }} {{ part.vehicle_make }} {{ part.vehicle_model }} - {{ part.type }} - {{ part.grade }} - {{ part.hollander_interchange }}</div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,106 @@
+{% extends "root.html" %}
+{% block content %}
+{% load static %}
+<div class="dashboard-container">
+    <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
+        <div>
+            <div class="alert-module" style="opacity: 1; display: flex;">
+                <div>Parts inventories successfully</div><a href="#" class="alert-module-link w-inline-block"><img
+                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
+                        loading="lazy" alt=""></a>
+            </div>
+        </div>
+    </div>
+    <div class="table-module">
+        <div class="table-header" style="justify-content: space-between;">
+            <h4 class="no-space-bottom">Added Parts</h4>
+        </div>
+        <div class="table-content">
+            <div class="table-list">
+                <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr">
+                    <div class="caption-large">Part name</div>
+                    <div class="caption-large">Price</div>
+                </div>
+                <a href="#" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                        <div class="table-title">Engine</div>
+                        <div>$390.00</div>
+                    </div>
+                </a>
+                <a href="#" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                        <div class="table-title">Alternator</div>
+                        <div>$70.00</div>
+
+                    </div>
+                </a>
+                <a href="#" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                        <div class="table-title">A/C Compressor</div>
+                        <div>$65.00</div>
+                    </div>
+                </a>
+                <a href="#" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                        <div class="table-title">Bumper Assy (Front)</div>
+                        <div>$125.00</div>
+                    </div>
+                </a>
+                <a href="#" class="table-row-link w-inline-block">
+                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                        <div class="table-title">Bumper Assy (Rear)</div>
+                        <div>$285.00</div>
+                    </div>
+                </a>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Starter</div>
+                    <div>$110.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Seat (Front)</div>
+                    <div>$45.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Rack and Pinion</div>
+                    <div>$70.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Radiator</div>
+                    <div>$75.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Power Steering Pump</div>
+                    <div>$51.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Door (Front) (Left)</div>
+                    <div>$615.00</div>
+                </div>
+                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr">
+                    <div class="table-title">Door (Front) (Right)</div>
+                    <div>$615.00</div>
+                </div>
+                <a href="#" class="table-row-link w-inline-block" style="display: none;">
+                    <div class="w-layout-grid table-row">
+                        <div class="table-title">Bumper Assy (Rear)</div>
+                        <div>$285.00</div>
+                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
+                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                            style="max-width: 90%;">
+                        <div class="status">
+                            <div class="indication-color bg-primary-orange"></div>
+                            <select id="interchange" name="interchange" data-name="Interchange" required=""
+                                class="text-field w-select">
+                                <option value="" disabled selected>Select Interchange</option>
+                                <option value="1">Sdn, 1.8L</option>
+                                <option value="2">Cpe, 1.8L</option>
+                            </select>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

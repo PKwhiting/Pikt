@@ -1,0 +1,25 @@
+{% if parts %}
+{% for part in parts %}
+<a href="{% url 'single_part' part.id %}" target="_blank">
+    <div class="w-layout-grid table-row _6-columns">
+        <!-- <td><input type="checkbox" name="part" style="width: 20px; height: 20px;"
+                                    value="{{ part.id }}"></td> -->
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile tablet">{{
+            part.hollander_interchange }}</div>
+        <div class="mobile tablet">{{ part.stock_number }}</div>
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f8a-cbeb6f31" class="table-title" style="display: block">
+            {{ part.type }}
+        </div>
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">{{ part.category }}</div>
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="">{{ part.vehicle_vin }}
+        </div>
+        {% if part.core %}
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">${{ part.core.price }} {{
+            part.core.company.name}} </div>
+        {% else %}
+        <div id="w-node-_6d0a7d03-8948-d1f4-7211-3504eaac5f94-cbeb6f31" class="mobile">No Core</div>
+        {% endif %}
+    </div>
+</a>
+{% endfor %}
+{% endif %}
