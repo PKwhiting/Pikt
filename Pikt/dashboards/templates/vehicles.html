@@ -103,9 +103,9 @@
                                             <div style="margin-top: 2px;">Filters</div>
                                         </div>  
                                         <img
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                                            src="/static/icons/dropdown-black.svg"
                                             loading="lazy" alt="" class="nav-dropdown-icon"
-                                            style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                                            style="height: 25px;transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
                                     </div>
                                 </div>
                                 <div class="dropdown-list w-dropdown-list"
@@ -733,10 +733,46 @@
         width: 90%;
     }
     @media screen and (min-width: 767px){
-        .table-row, .table-headers{
+        .table-row, .table-headers {
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
         }
     }
+    
+    @media screen and (max-width: 600px){
+        .stats {
+            display: none;
+        }
+    }
+
+        /* Animation for row deletion */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+    .fade-out {
+        animation: fadeOut .5s forwards;
+        position: relative;
+    }
+
+
+    .table-title, .status {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .w-select {
+        width: 90%;
+    }
+    /* @media screen and (min-width: 767px){ */
+    .table-row, .table-headers{
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
+    }
+    
     
     @media screen and (max-width: 600px){
         .stats {
@@ -757,17 +793,6 @@
             vehicleTitle.style.display = "block";
             partsTable.style.display = "block";
         });
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-        const decodeButton = document.getElementById("decode-button");
-        const vehicleTitle = document.getElementById("vehicle-title");
-        const partsTable = document.getElementById("parts-table");
-
-        decodeButton.addEventListener("click", function(event) {
-            event.preventDefault();
-            vehicleTitle.style.display = "block";
-            partsTable.style.display = "block";
-        });
 
         // Add event listener for delete buttons
         const deleteButtons = document.querySelectorAll(".delete-button");
@@ -775,10 +800,15 @@
             button.addEventListener("click", function(event) {
                 event.preventDefault();
                 const tableRow = button.closest(".table-row");
-                tableRow.style.display = "none";
+                tableRow.style.position = "relative";
+                tableRow.classList.add("fade-out");
+
+                // Remove the row after the animation completes
+                tableRow.addEventListener("animationend", () => {
+                    tableRow.remove();
+                });
             });
         });
     });
-
 </script>
 {% endblock %}
