@@ -791,11 +791,11 @@ class parts(View):
         return redirect('parts')
 
     def get(self, request):
-        total_parts_count = part.objects.filter(user=request.user).count()
-        max_cores = core.objects.filter(interchange=OuterRef('hollander_interchange')).order_by().values('interchange').annotate(max_price=Max('price'))
-        parts_with_max_core = part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
-        total_max_core_price = parts_with_max_core.aggregate(total=Sum('max_core_price'))['total']
-        total_max_core_price = Decimal(total_max_core_price).quantize(Decimal('0.00'))
+        # total_parts_count = part.objects.filter(user=request.user).count()
+        # max_cores = core.objects.filter(interchange=OuterRef('hollander_interchange')).order_by().values('interchange').annotate(max_price=Max('price'))
+        # parts_with_max_core = part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
+        # total_max_core_price = parts_with_max_core.aggregate(total=Sum('max_core_price'))['total']
+        # total_max_core_price = Decimal(total_max_core_price).quantize(Decimal('0.00'))
         # del request.session['table_data']
         table_data = request.session.get('table_data', '')
         parts = part.objects.filter(user=request.user).order_by('id')
@@ -803,8 +803,6 @@ class parts(View):
             'table_data': table_data,
             'parts': parts,
             'messages': json.loads(request.user.messages),
-            'total_parts_count': total_parts_count,
-            'total_max_core_price': total_max_core_price,
         }
         return render(request, 'parts.html', context)
     

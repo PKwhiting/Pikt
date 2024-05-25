@@ -3,11 +3,12 @@
 {% load static %}
 <div class="dashboard-container">
     <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
-        <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="Overview"
-                class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
+        <div class="in-page-menu w-tab-menu" role="tablist">
+            <a data-w-tab="Overview" class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
                 href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
                 <div>All Vehicles</div>
-            </a><a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+            </a>
+            <a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
                 id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
                 aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
                 <div>Tasks</div>
@@ -241,6 +242,7 @@
                                     </div>
                                 </a>
                             </div>
+                            {% include 'pagination.html' %}
                         </div>
                     </div>
                 </div>
@@ -304,195 +306,27 @@
             <div data-w-tab="Files" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-2">
                 <div class="w-layout-grid main-grid">
-                    <!-- <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
-                            <div class="content-storage">
-                                <div>
-                                    <div class="storage-square"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d37ee33fcb3f67627f_hard-drive.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill"></div>
-                                    </div>
-                                    <h4>Drive Storage</h4>
-                                </div>
-                                <div>
-                                    <div class="percentage-info">
-                                        <div class="small-description">60 GB</div>
-                                        <div class="small-description">100&nbsp;GB</div>
-                                    </div>
-                                    <div class="percentage-bar-wrapper">
-                                        <div class="percentage-bar bg-primary-blue"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a><a href="#" class="module-link w-inline-block">
-                            <div class="content-storage">
-                                <div>
-                                    <div class="storage-square"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883eff0807bad77363c90_hard-drive.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill bg-primary-rose"></div>
-                                    </div>
-                                    <h4>Cloud Storage</h4>
-                                </div>
-                                <div class="percentage-info">
-                                    <div class="small-description">30 GB</div>
-                                    <div class="small-description">50&nbsp;GB</div>
-                                </div>
-                                <div>
-                                    <div class="percentage-bar-wrapper">
-                                        <div class="percentage-bar bg-primary-rose"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div id="w-node-_75c0a142-7cc7-2dfb-adf6-ae0e4bed8b34-ef2958bf" class="module">
-                            <div class="content-percentage">
-                                <div class="content-storage">
-                                    <div class="storage-square"><img width="24" loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058831413ede764f64a258d_pie-chart.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill bg-primary-green"></div>
-                                    </div>
-                                    <h4>User Storage</h4>
-                                    <div class="small-description">Check your storage on your dashboard.</div>
-                                </div><img loading="lazy"
-                                    src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/608ac26976322417838e72f4_Dash%20Chart%2003.svg"
-                                    alt="" class="data-visualisation-storage">
-                            </div>
-                        </div>
-                    </div>
-                    <h3 class="main-grid-title">Folders</h3>
-                    <div class="w-layout-grid _4-grid"><a href="#" class="module-link w-inline-block">
-                            <div class="content-folder">
-                                <div class="storage-folder-content">
-                                    <div class="storage-square"><img width="24" loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill"></div>
-                                    </div>
-                                    <div class="project-avatars"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da5bf3949e3151291c5_Dash%20-%20Avatar%2008-min.jpg"
-                                            alt="" class="project-avatar first"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaf4e4096750a7795e_Dash%20-%20Avatar%2004-min.jpg"
-                                            alt="" class="project-avatar"></div>
-                                </div>
-                                <div>
-                                    <h4>Resources</h4>
-                                    <div class="folder-info">
-                                        <div class="small-description">15 files</div>
-                                        <div class="small-description">15 GB</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a><a href="#" class="module-link w-inline-block">
-                            <div class="content-folder">
-                                <div class="storage-folder-content">
-                                    <div class="storage-square"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d30a1fe8e9228d47ed_folder.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill"></div>
-                                    </div>
-                                    <div class="project-avatars"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3da6bf39491be81291c6_Dash%20-%20Avatar%2009-min.jpg"
-                                            alt="" class="project-avatar first"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605b3cfaebf62f4f1b3ef035_Dash%20-%20Avatar%2007-min.jpg"
-                                            alt="" class="project-avatar"></div>
-                                </div>
-                                <div>
-                                    <h4>Research</h4>
-                                    <div class="folder-info">
-                                        <div class="small-description">10 files</div>
-                                        <div class="small-description">5 GB</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa71312-ef2958bf" class="w-layout-grid _2-grid">
-                            <div class="module">
-                                <div class="content-chart">
-                                    <div class="chart-square"><img loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882d03baf8a2d544bd28f_dollar-sign.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill"></div>
-                                    </div>
-                                    <div class="div-block">
-                                        <div class="caption">Budget</div>
-                                        <div class="numbers-wrapper">
-                                            <h3 class="number">$12,500</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="module">
-                                <div class="content-chart">
-                                    <div class="chart-square"><img width="24" loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill bg-primary-green"></div>
-                                    </div>
-                                    <div class="div-block">
-                                        <div class="caption">Hours</div>
-                                        <div class="numbers-wrapper">
-                                            <h3 class="number">719</h3>
-                                            <div class="negative-value">(- 10%)</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="w-node-e9e0a3b4-7fb6-5b87-776a-feb40fa7132b-ef2958bf" class="module">
-                                <div class="content-chart">
-                                    <div class="chart-square"><img width="24" loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill bg-primary-orange"></div>
-                                    </div>
-                                    <div class="div-block">
-                                        <div class="caption">Deliveries</div>
-                                        <div class="numbers-wrapper">
-                                            <h3 class="number">10.5K</h3>
-                                            <div class="positive-value">(+ 19%)</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="module">
-                                <div class="content-chart">
-                                    <div class="chart-square"><img width="24" loading="lazy"
-                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
-                                            alt="" class="icon">
-                                        <div class="light-fill bg-primary-yellow"></div>
-                                    </div>
-                                    <div class="div-block">
-                                        <div class="caption">Target&nbsp;Ratio</div>
-                                        <div class="numbers-wrapper">
-                                            <h3 class="number">95%</h3>
-                                            <div class="positive-value">(+ 10%)</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div>
                         <div class="table-header" style="justify-content: flex-start; padding: 24px 0px 16px;">
                             <div style="margin-right: 5px;">
                                 <input type="text" class="text-field w-input" maxlength="256" name="First-name" data-name="First name"
-                                    placeholder="VIN" id="First-name" required="">
+                                    placeholder="VIN" id="vin-input" required="">
                             </div>
-                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="#"
+                            <a id="decode-button" href="#"
                                 class="button button-small button-outline w-inline-block"
-                                style="margin-right: 5px">
+                                style="margin-right: 5px; padding: 6px 18px;">
                                 <div>Decode</div>
                             </a>
-                            <div style="padding: 12px;
-                        border-radius: 6px;
-                        background-color: #fff;
-                        box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);">
-                            <h6 class="no-space-bottom">2015 Honda Civic EX 1.8L</h6>
-                        </div>
+                            <div id="vehicle-title" style="padding: 12px;
+                                border-radius: 6px;
+                                background-color: #fff;
+                                box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);
+                                display: none;">
+                                <h6 class="no-space-bottom">2015 Honda Civic EX 1.8L</h6>
+                            </div>
                         </div>
                     </div>
-                    <div class="table-module">
+                    <div class="table-module" id="parts-table" style="display: none;">
                         <div class="table-header" style="justify-content: space-between;">
                             <h4 class="no-space-bottom">Parts</h4>
                             <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="{% url 'inventory_addition_success' %}"
@@ -703,6 +537,7 @@
                                     </div>
                                 </a>
                             </div>
+                            {% include 'pagination.html' %}
                         </div>
                     </div>
                 </div>
@@ -710,13 +545,26 @@
         </div>
     </div>
 </div>
+
 <style>
-    .table-title, .status {
+    /* .table-title, .status {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-    
+    } */
 </style>
-{% endblock %}
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const decodeButton = document.getElementById("decode-button");
+        const vehicleTitle = document.getElementById("vehicle-title");
+        const partsTable = document.getElementById("parts-table");
+
+        decodeButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            vehicleTitle.style.display = "block";
+            partsTable.style.display = "block";
+        });
+    });
+</script>
+{% endblock %}
