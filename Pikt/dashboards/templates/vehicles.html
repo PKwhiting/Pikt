@@ -91,15 +91,22 @@
                     </div>
                     <div class="w-layout-grid grid">
                         <div class="style-guide-padding" style="display: block; padding: 0;">
-                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="width: 100%;">
+                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="width: 100%; position: static">
                                 <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle"
-                                    style="opacity: 1; filter: grayscale(0%);" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
-                                    aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0">
-                                    <img style="height: 25px; align-self: center; margin-right: 5px;" src="/static/icons/filter-black.svg" loading="lazy" alt="">
-                                    <div>Filters</div><img
-                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
-                                        loading="lazy" alt="" class="nav-dropdown-icon"
-                                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                                    style="z-index: -1; opacity: 1; filter: grayscale(0%); position: static;" id="w-dropdown-toggle-0"
+                                    aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button"
+                                    tabindex="0">
+                                    <div>
+                                        <div style="display: flex;">
+                                            <img style="height: 25px; align-self: center; margin-right: 5px;"
+                                                src="/static/icons/filter-black.svg" loading="lazy" alt="">
+                                            <div style="margin-top: 2px;">Filters</div>
+                                        </div>  
+                                        <img
+                                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                                            loading="lazy" alt="" class="nav-dropdown-icon"
+                                            style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                                    </div>
                                 </div>
                                 <div class="dropdown-list w-dropdown-list"
                                     style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
@@ -123,7 +130,7 @@
                                         </div>
                                         <div>
                                             <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="VIN" id="First-name" required="">
+                                                data-name="First name" placeholder="Mileage" id="First-name" required="">
                                         </div>
                                     </div>
                                 </div>
