@@ -23,7 +23,7 @@
             <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0">
                 <div class="w-layout-grid main-grid">
-                    <div class="w-layout-grid _4-grid">
+                    <div class="w-layout-grid _4-grid stats">
                         <div class="module">
                             <div class="content-chart">
                                 <div class="chart-square"><img loading="lazy"
@@ -89,156 +89,190 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-module">
-                        <div class="table-header">
-                            <img style="height: 25px; align-self: center; margin-bottom: 15px;" src="/static/icons/filter-black.svg" loading="lazy" alt="">
-                            <div>
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                    data-name="First name" placeholder="Year" id="First-name" required="">
-                            </div>
-                            <div>
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                    data-name="First name" placeholder="Make" id="First-name" required="">
-                            </div>
-                            <div>
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                    data-name="First name" placeholder="Model" id="First-name" required="">
-                            </div>
-                            <div>
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                    data-name="First name" placeholder="Stock Number" id="First-name" required="">
-                            </div>
-                            <div>
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                    data-name="First name" placeholder="VIN" id="First-name" required="">
+                    <div class="w-layout-grid grid">
+                        <div class="style-guide-padding" style="display: block; padding: 0;">
+                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="width: 100%;">
+                                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle"
+                                    style="opacity: 1; filter: grayscale(0%);" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0"
+                                    aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0">
+                                    <img style="height: 25px; align-self: center; margin-right: 5px;" src="/static/icons/filter-black.svg" loading="lazy" alt="">
+                                    <div>Filters</div><img
+                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                                        loading="lazy" alt="" class="nav-dropdown-icon"
+                                        style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                                </div>
+                                <div class="dropdown-list w-dropdown-list"
+                                    style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
+                                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                                    <div class="table-headers w-layout-grid" style="grid-column-gap: 5px;">
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                                data-name="First name" placeholder="Year" id="First-name" required="">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                                data-name="First name" placeholder="Make" id="First-name" required="">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                                data-name="First name" placeholder="Model" id="First-name" required="">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                                data-name="First name" placeholder="Stock Number" id="First-name" required="">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                                data-name="First name" placeholder="VIN" id="First-name" required="">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="table-content">
+                    </div>
+                    <div class="table-module">
+                        <div class="table-content" style="margin-top: 10px;">
                             <div class="table-list">
                                 <div class="w-layout-grid table-headers">
-                                    <div class="caption-large">Stock #</div>
+                                    <div class="caption-large">VIN</div>
                                     <div class="caption-large">Make</div>
                                     <div class="caption-large">Model</div>
                                     <div class="caption-large">Year</div>
+                                    <div class="caption-large">Mileage</div>
                                 </div>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">ABC123</div>
+                                        <div class="table-title">4T1T11AK5RU210076</div>
                                         <div>Toyota</div>
                                         <div>Camry</div>
                                         <div>2020</div>
+                                        <div>45,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">DEF456</div>
+                                        <div class="table-title">4T1C11AK4RU893906</div>
                                         <div>Honda</div>
                                         <div>Accord</div>
                                         <div>2019</div>
+                                        <div>60,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">GHI789</div>
+                                        <div class="table-title">4T1C11AK4RU893750</div>
                                         <div>BMW</div>
                                         <div>3 Series</div>
                                         <div>2022</div>
+                                        <div>30,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">JKL012</div>
+                                        <div class="table-title">JF2SKAJC1RH407990</div>
                                         <div>Mercedes</div>
                                         <div>C Class</div>
                                         <div>2021</div>
+                                        <div>25,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">MNO345</div>
+                                        <div class="table-title">KMTF34PA5NU096216</div>
                                         <div>Audi</div>
                                         <div>Q7</div>
                                         <div>2020</div>
+                                        <div>40,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">PQR678</div>
+                                        <div class="table-title">WBXJG7C0XM5T20801</div>
                                         <div>Hyundai</div>
                                         <div>Sonata</div>
                                         <div>2019</div>
+                                        <div>55,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">STU901</div>
+                                        <div class="table-title">WDDZF6EB8HA214460</div>
                                         <div>Ford</div>
                                         <div>Fusion</div>
                                         <div>2022</div>
+                                        <div>20,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">VWX234</div>
+                                        <div class="table-title">WA1LAAF77HD053264</div>
                                         <div>Chevrolet</div>
                                         <div>Malibu</div>
                                         <div>2021</div>
+                                        <div>30,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">YZA567</div>
+                                        <div class="table-title">3GCPWBEH4MG127665</div>
                                         <div>Nissan</div>
                                         <div>Altima</div>
                                         <div>2020</div>
+                                        <div>35,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">BCD890</div>
+                                        <div class="table-title">SAJAE4BG5HA948814</div>
                                         <div>Subaru</div>
                                         <div>Impreza</div>
                                         <div>2019</div>
+                                        <div>50,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">EFG123</div>
+                                        <div class="table-title">JH4CU2F6XCC002316</div>
                                         <div>Volkswagen</div>
                                         <div>Passat</div>
                                         <div>2022</div>
+                                        <div>15,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">HIJ456</div>
+                                        <div class="table-title">5UXTA6C03M9F30488</div>
                                         <div>Volvo</div>
                                         <div>S60</div>
                                         <div>2021</div>
+                                        <div>25,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">KLM789</div>
+                                        <div class="table-title">3VW5DAAT7JM502394</div>
                                         <div>Mazda</div>
                                         <div>6</div>
                                         <div>2020</div>
+                                        <div>40,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">NOP012</div>
+                                        <div class="table-title">1FA6P8JZ9K5553243</div>
                                         <div>Jeep</div>
                                         <div>Grand Cherokee</div>
                                         <div>2019</div>
+                                        <div>55,000</div>
                                     </div>
                                 </a>
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">QRS345</div>
+                                        <div class="table-title">KMHT36AH3MU008812</div>
                                         <div>Tesla</div>
                                         <div>Model 3</div>
                                         <div>2022</div>
+                                        <div>10,000</div>
                                     </div>
                                 </a>
                             </div>
@@ -306,17 +340,19 @@
             <div data-w-tab="Files" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-2">
                 <div class="w-layout-grid main-grid">
-                    <div>
-                        <div class="table-header" style="justify-content: flex-start; padding: 24px 0px 16px;">
+                    <div class="w-layout-grid _2-1-grid" style="grid-row-gap: 12px;">
+                        <div style="display: grid; grid-template-columns: 6fr 1fr;">
                             <div style="margin-right: 5px;">
                                 <input type="text" class="text-field w-input" maxlength="256" name="First-name" data-name="First name"
                                     placeholder="VIN" id="vin-input" required="">
                             </div>
                             <a id="decode-button" href="#"
                                 class="button button-small button-outline w-inline-block"
-                                style="margin-right: 5px; padding: 6px 18px;">
+                                style="padding: 6px 18px; height: fit-content;">
                                 <div>Decode</div>
                             </a>
+                        </div>
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87ae-a2dac75e" >
                             <div id="vehicle-title" style="padding: 12px;
                                 border-radius: 6px;
                                 background-color: #fff;
@@ -327,30 +363,38 @@
                         </div>
                     </div>
                     <div class="table-module" id="parts-table" style="display: none;">
-                        <div class="table-header" style="justify-content: space-between;">
+                        <div class="table-headers" style="justify-content: space-between;">
                             <h4 class="no-space-bottom">Parts</h4>
                             <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="{% url 'inventory_addition_success' %}"
-                                class="button bg-primary-green w-inline-block">
-                                <div>Add Inventory</div>
+                                class="button bg-primary-green w-inline-block"
+                                style="display: flex;">
+                                <div style="margin-right: 2px;">Add Inventory</div>
+                                <img style="height: 20px" src="{% static 'icons/arrow-right-white.svg' %}" loading="lazy" alt="" class="pagination-arrow">
                             </a>
                         </div>
                         <div class="table-content">
-                            <div class="table-list">
+                            <div class="table-list" >
                                 <div class="w-layout-grid table-headers">
                                     <div class="caption-large">Part name</div>
+                                    <div class="caption-large">Stock Number</div>
                                     <div class="caption-large">Price</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Interchange</div>
                                 </div>
-                                <a href="#" class="table-row-link w-inline-block">
+                                <div href="#" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
                                         <div class="table-title">Engine</div>
-                                        <div>$390.00</div>
+                                        <div>STK78456</div>
+                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="390.00"
+                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                        </div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
-                                            <div class="indication-color bg-primary-orange"></div>
+                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
                                             <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
                                                 <option value="1">1.8L, VIN 2 (6th digit, gasoline, Sdn), Cal emissions</option>
@@ -359,12 +403,23 @@
                                                 <option value="4">1.8L, VIN 3 (6th digit, gasoline, Cpe), Fed emissions</option>
                                             </select>
                                         </div>
+                                        <div style="display: flex; align-self: inherit">
+                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                </a>
-                                <a href="#" class="table-row-link w-inline-block">
+                                </div>
+                                <div href="#" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
                                         <div class="table-title">Alternator</div>
-                                        <div>$70.00</div>
+                                        <div>STK78457</div>
+                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="70.00"
+                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                        </div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
@@ -372,12 +427,23 @@
                                             <div class="indication-color bg-primary-green"></div>
                                             <div>663924</div>
                                         </div>
+                                        <div style="display: flex; align-self: inherit">
+                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                </a>
-                                <a href="#" class="table-row-link w-inline-block">
+                                </div>
+                                <div href="#" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
                                         <div class="table-title">A/C Compressor</div>
-                                        <div>$65.00</div>
+                                        <div>STK78458</div>
+                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="65.00"
+                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                        </div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
@@ -385,17 +451,29 @@
                                             <div class="indication-color bg-primary-green"></div>
                                             <div>666504</div>
                                         </div>
+                                        <div style="display: flex; align-self: inherit">
+                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                </a>
-                                <a href="#" class="table-row-link w-inline-block">
+                                    
+                                </div>
+                                <div href="#" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
                                         <div class="table-title">Bumper Assy (Front)</div>
-                                        <div>$125.00</div>
+                                        <div>STK78459</div>
+                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="125.00"
+                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                        </div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
-                                            <div class="indication-color bg-primary-orange"></div>
+                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
                                             <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
                                                 <option value="1">Sdn, EX</option>
@@ -404,28 +482,50 @@
                                                 <option value="4">Cpe, EX-L (leather)</option>
                                             </select>
                                         </div>
+                                        <div style="display: flex; align-self: inherit">
+                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                </a>
-                                <a href="#" class="table-row-link w-inline-block">
+                                </div>
+                                <div href="#" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
                                         <div class="table-title">Bumper Assy (Rear)</div>
-                                        <div>$285.00</div>
+                                        <div>STK78460</div>
+                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="285.00"
+                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                        </div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
-                                            <div class="indication-color bg-primary-orange"></div>
+                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
                                             <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
                                                 <option value="1">Sdn, 1.8L</option>
                                                 <option value="2">Cpe, 1.8L</option>
                                             </select>
                                         </div>
+                                        <div style="display: flex; align-self: inherit">
+                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                </a>
+                                </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Starter</div>
-                                    <div>$110.00</div>
+                                    <div>STK78461</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="110.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
@@ -433,15 +533,26 @@
                                         <div class="indication-color bg-primary-green"></div>
                                         <div>6682943</div>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Seat (Front)</div>
-                                    <div>$45.00</div>
+                                    <div>STK78462</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="45.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
                                     <div class="status">
-                                        <div class="indication-color bg-primary-orange"></div>
+                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
                                         <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                             <option value="" disabled selected>Select Interchange</option>
                                             <option value="1">(bucket), (air bag), cloth, (manual), Cpe, 1.8L, LH</option>
@@ -450,10 +561,21 @@
                                             <option value="4">(bucket), (air bag), leather, manual, Sdn, LH</option>
                                         </select>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Rack and Pinion</div>
-                                    <div>$70.00</div>
+                                    <div>STK78463</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="70.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
@@ -461,15 +583,26 @@
                                         <div class="indication-color bg-primary-green"></div>
                                         <div>669839</div>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Radiator</div>
-                                    <div>$75.00</div>
+                                    <div>STK78464</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="75.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
                                     <div class="status">
-                                        <div class="indication-color bg-primary-orange"></div>
+                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
                                         <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                             <option value="" disabled selected>Select Interchange</option>
                                             <option value="1">1.8L, Denso manufacturer, AT (CVT)</option>
@@ -477,10 +610,20 @@
                                             <option value="3">1.8L, Toyo manufacturer (AT, CVT)</option>
                                         </select>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Power Steering Pump</div>
-                                    <div>$51.00</div>
+                                    <div>STK78465</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="51.00" style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
@@ -488,46 +631,73 @@
                                         <div class="indication-color bg-primary-green"></div>
                                         <div>663927</div>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Door (Front) (Left)</div>
-                                    <div>$615.00</div>
+                                    <div>STK78466</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="615.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
                                     <div class="status">
-                                        <div class="indication-color bg-primary-orange"></div>
+                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
                                         <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                             <option value="" disabled selected>Select Interchange</option>
                                             <option value="1">(electric), Sdn, 1.8L, EX, LH</option>
                                             <option value="2">(electric), Sdn, 1.8L, EX-L (leather), LH</option>
                                         </select>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
+                                    
                                 </div>
                                 <div class="w-layout-grid table-row">
                                     <div class="table-title">Door (Front) (Right)</div>
-                                    <div>$615.00</div>
+                                    <div>STK78467</div>
+                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="615.00"
+                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    </div>
                                     <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                         data-name="Part description" placeholder="Description" id="part-description" required=""
                                         style="max-width: 90%;">
                                     <div class="status">
-                                        <div class="indication-color bg-primary-orange"></div>
+                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
                                         <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                             <option value="" disabled selected>Select Interchange</option>
                                             <option value="1">(electric), Sdn, 1.8L, EX, RH</option>
                                             <option value="2">(electric), Sdn, 1.8L, EX-L (leather), RH</option>
                                         </select>
                                     </div>
+                                    <div style="display: flex; align-self: inherit">
+                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
+                                        </a>
+                                    </div>
                                 </div>
                                 <a href="#" class="table-row-link w-inline-block" style="display: none;">
-                                    <div class="w-layout-grid table-row">
+                                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr .25fr;">
                                         <div class="table-title">Bumper Assy (Rear)</div>
                                         <div>$285.00</div>
                                         <input type="text" class="text-field w-input" maxlength="256" name="part-description"
                                             data-name="Part description" placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
-                                            <div class="indication-color bg-primary-orange"></div>
+                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
                                             <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
                                                 <option value="1">Sdn, 1.8L</option>
@@ -546,12 +716,27 @@
     </div>
 </div>
 
-<style>
-    /* .table-title, .status {
+<style scoped>
+    .table-title, .status {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    } */
+    }
+    .w-select {
+        width: 90%;
+    }
+    @media screen and (min-width: 767px){
+        .table-row, .table-headers{
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
+        }
+    }
+    
+    @media screen and (max-width: 600px){
+        .stats {
+            display: none;
+        }
+        
+    }
 </style>
 
 <script>
@@ -566,5 +751,27 @@
             partsTable.style.display = "block";
         });
     });
+    document.addEventListener("DOMContentLoaded", function() {
+        const decodeButton = document.getElementById("decode-button");
+        const vehicleTitle = document.getElementById("vehicle-title");
+        const partsTable = document.getElementById("parts-table");
+
+        decodeButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            vehicleTitle.style.display = "block";
+            partsTable.style.display = "block";
+        });
+
+        // Add event listener for delete buttons
+        const deleteButtons = document.querySelectorAll(".delete-button");
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                event.preventDefault();
+                const tableRow = button.closest(".table-row");
+                tableRow.style.display = "none";
+            });
+        });
+    });
+
 </script>
 {% endblock %}

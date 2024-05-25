@@ -1,181 +1,66 @@
 <div class="dashboard-container">
     <div class="w-layout-grid main-grid">
         <div class="w-layout-grid grid">
-            <div class="style-guide-padding">
-                <h6>Filters</h6>
-                <form id="filter-form" class="w-layout-grid _3-grid" style="grid-row-gap: 5px !important;"
-                    onsubmit="event.preventDefault(); submitFilterForm();">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                        <div style="display: flex;">
-                            <div style="margin-right: 10px; width: 50%">
-                                <select name="year_start" id="Year-Start" class="text-field w-select" required=""
-                                    onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
+            <div class="style-guide-padding" style="display: block; padding: 0;">
+                <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="width: 100%;">
+                    <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle"
+                        style="opacity: 1; filter: grayscale(0%);" id="w-dropdown-toggle-0"
+                        aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button"
+                        tabindex="0">
+                        <img style="height: 25px; align-self: center; margin-right: 5px;"
+                            src="/static/icons/filter-black.svg" loading="lazy" alt="">
+                        <div>Filters</div><img
+                            src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/60586d393a273570ab97cc78_chevron-down.svg"
+                            loading="lazy" alt="" class="nav-dropdown-icon"
+                            style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                    </div>
+                    <div class="dropdown-list w-dropdown-list"
+                        style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
+                        id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                        <div class="table-headers w-layout-grid" style="grid-column-gap: 5px;">
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Year" id="First-name" required="">
                             </div>
-                            <div style="width: 50%;">
-                                <!-- <h6>Year End</h6> -->
-                                <select name="year_end" id="Year-End" class="text-field w-select" required=""
-                                    onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Make" id="First-name" required="">
                             </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Model" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Stock Number" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Part Type" id="First-name" required="">
+                            </div>
+                            <div>
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="Part Category" id="First-name" required="">
+                            </div>
+                            <label class="w-checkbox switch-field" style="margin-right: auto; margin-left: auto;">
+                                <input id="interchange-checkbox" type="checkbox" class="switch">
+                                <span class="checkbox-label w-form-label" for="interchange-checkbox"
+                                    style="margin-left: 5px;">
+                                    <div>No Interchange</div>
+                                </span>
+                            </label>
+                            <label class="w-checkbox switch-field" style="margin-right: auto; margin-left: auto;">
+                                <input id="core-checkbox" type="checkbox" class="switch">
+                                <span class="checkbox-label w-form-label" for="core-checkbox" style="margin-left: 5px;">
+                                    <div>Core Available</div>
+                                </span>
+                            </label>
                         </div>
                     </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make"
-                                name="vehicle_make" id="Vehicle-Make" required="" onkeyup="submitFilterForm()">
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model"
-                                name="vehicle_model" id="Vehicle-Model" required="" onkeyup="submitFilterForm()">
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                        <div>
-                            <!-- <h6>Part Type</h6> -->
-                            <select name="part_type" id="Part-Type" class="text-field w-select" required
-                                onchange="submitFilterForm()">
-                                <option value="" selected disabled>Select Part Type</option>
-                                {% for part in part_types %}
-                                {% if part in form.type.value %}
-                                <option value="{{ part }}" selected>{{ part }}</option>
-                                {% else %}
-                                <option value="{{ part }}">{{ part }}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <!-- <h6>Part Grade</h6> -->
-                        <select name="grade" id="Parts-Grade" class="text-field w-select" required
-                            onchange="submitFilterForm()">
-                            <option value="" selected disabled>Select Part Grade</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                        </select>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"
-                        class="button bg-primary-rose w-inline-block"
-                        style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                        <div>Clear</div>
-                    </a>
-                </form>
+                </div>
             </div>
         </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h6>Filters</h6>
-                <form id="filter-form-modal" class="w-layout-grid _3-grid"
-                    onsubmit="event.preventDefault(); submitFilterModalForm();">
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc879e-a2dac75e">
-                        <div style="display: flex;">
-                            <div style="margin-right: 10px; width: 50%">
-                                <select name="year_start" id="Year-Start-Modal" class="text-field w-select" required=""
-                                    onchange="submitFilterModalForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div style="width: 50%;">
-                                <!-- <h6>Year End</h6> -->
-                                <select name="year_end" id="Year-End-Modal" class="text-field w-select" required=""
-                                    onchange="submitFilterForm()">
-                                    <option value="" selected disabled>Select Year</option>
-                                    {% for year in years %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Make"
-                                name="vehicle_make" id="Vehicle-Make-Modal" required=""
-                                onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a1-a2dac75e">
-                        <div>
-                            <!-- <h6>Vehicle Model</h6> -->
-                            <input type="text" class="text-field w-input" maxlength="256" placeholder="Vehicle Model"
-                                name="vehicle_model" id="Vehicle-Model-Modal" required=""
-                                onkeyup="submitFilterModalForm()">
-                        </div>
-                    </div>
-                    <!-- <div>
-                        <div>
-                            <h6>Vehicle Model</h6>
-                            <select name="vehicle_model" id="vehicle_model" class="text-field w-select" required="">
-                                <option value="" selected disabled>Select Model</option>
-                                {% for make, models in makes_models.items %}
-                                <optgroup label="{{ make }}">
-                                    {% for model in models %}
-                                    <option value="{{ model }}">{{ model }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div> -->
-                    <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87a7-a2dac75e">
-                        <div>
-                            <!-- <h6>Part Type</h6> -->
-                            <select name="part_type" id="Part-Type-Modal" class="text-field w-select" required
-                                onchange="submitFilterModalForm()">
-                                <option value="" selected disabled>Select Part Type</option>
-                                {% for part in part_types %}
-                                {% if part in form.type.value %}
-                                <option value="{{ part }}" selected>{{ part }}</option>
-                                {% else %}
-                                <option value="{{ part }}">{{ part }}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <!-- <h6>Part Grade</h6> -->
-                        <select name="grade" id="Parts-Grade-Modal" class="text-field w-select" required
-                            onchange="submitFilterModalForm()">
-                            <option value="" selected disabled>Select Part Grade</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                        </select>
-                    </div>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"
-                        class="button bg-primary-orange w-inline-block"
-                        style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="clearFilters()">
-                        <div>Clear</div>
-                    </a>
-                    <a id="w-node-_4a591f9f-f950-9529-d551-da13bb960451-a2dac75e" href="#"
-                        class="button bg-primary-green w-inline-block"
-                        style="width: 100%; display: flex; align-items: center; height: 37px;" onclick="closeModal()">
-                        <div>Filter</div>
-                    </a>
-                </form>
-            </div>
 
-        </div>
         <div class="table-module" id="table-container">
             <div style="display: flex; margin-top: 12px; margin-left: 2px;">
                 <div style="margin-right: 15px">
@@ -544,29 +429,7 @@
                     </a>
 
                 </div>
-                <div class="pagination"
-                    style="display: flex; width: 100%; justify-content: flex-end; margin-bottom: 20px; margin-top: 20px;">
-                    <span class="step-links" style="margin-right: 20px">
-                        {% if parts.has_previous %}
-                        <!-- <a href="?page=1">&laquo; first</a> -->
-                        <a style="width: 50px" href="?page={{ parts.previous_page_number }}"><input type="button"
-                                value="<" class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value="<" class="button button-small w-button" disabled>
-                        {% endif %}
-
-                        <span class="current" style="width: 50px">
-                            {{ parts.number }} of {{ parts.paginator.num_pages }}
-                        </span>
-
-                        {% if parts.has_next %}
-                        <a href="?page={{ parts.next_page_number }}"><input type="button" value=">"
-                                class="button button-small w-button"></a>
-                        {% else %}
-                        <input type="button" value=">" class="button button-small w-button" disabled>
-                        {% endif %}
-                    </span>
-                </div>
+                {% include "pagination.html" %}
             </div>
             <!-- <div class="table-bottom-caption">
                 <div>Showing all items from Work Performance dataset</div>
@@ -651,9 +514,9 @@
     }
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
+    // span.onclick = function () {
+    //     modal.style.display = "none";
+    // }
 
 
     // When the user clicks anywhere outside of the modal, close it
@@ -832,5 +695,206 @@
         color: black;
         text-decoration: none;
         cursor: pointer;
+    }
+
+    @supports(-webkit-appearance: none) or (-moz-appearance: none) {
+
+        input[type='checkbox'],
+        input[type='radio'] {
+            --active: #84ADC7;
+            --active-inner: #fff;
+            --focus: 2px rgba(39, 94, 254, .3);
+            --border: #BBC1E1;
+            --border-hover: #275EFE;
+            --background: #fff;
+            --disabled: #F6F8FF;
+            --disabled-inner: #E1E6F9;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            height: 21px;
+            outline: none;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            margin: 0;
+            cursor: pointer;
+            border: 1px solid var(--bc, var(--border));
+            background: var(--b, var(--background));
+            transition: background .3s, border-color .3s, box-shadow .2s;
+
+            &:after {
+                content: '';
+                display: block;
+                left: 0;
+                top: 0;
+                position: absolute;
+                transition: transform var(--d-t, .3s) var(--d-t-e, ease), opacity var(--d-o, .2s);
+            }
+
+            &:checked {
+                --b: var(--active);
+                --bc: var(--active);
+                --d-o: .3s;
+                --d-t: .6s;
+                --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+            }
+
+            &:disabled {
+                --b: var(--disabled);
+                cursor: not-allowed;
+                opacity: .9;
+
+                &:checked {
+                    --b: var(--disabled-inner);
+                    --bc: var(--border);
+                }
+
+                &+label {
+                    cursor: not-allowed;
+                }
+            }
+
+            &:hover {
+                &:not(:checked) {
+                    &:not(:disabled) {
+                        --bc: var(--border-hover);
+                    }
+                }
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 var(--focus);
+            }
+
+            &:not(.switch) {
+                width: 21px;
+
+                &:after {
+                    opacity: var(--o, 0);
+                }
+
+                &:checked {
+                    --o: 1;
+                }
+            }
+
+            &+label {
+                font-size: 14px;
+                line-height: 21px;
+                display: inline-block;
+                vertical-align: top;
+                cursor: pointer;
+                margin-left: 4px;
+            }
+        }
+
+        input[type='checkbox'] {
+            &:not(.switch) {
+                border-radius: 7px;
+
+                &:after {
+                    width: 5px;
+                    height: 9px;
+                    border: 2px solid var(--active-inner);
+                    border-top: 0;
+                    border-left: 0;
+                    left: 7px;
+                    top: 4px;
+                    transform: rotate(var(--r, 20deg));
+                }
+
+                &:checked {
+                    --r: 43deg;
+                }
+            }
+
+            &.switch {
+                width: 38px;
+                border-radius: 11px;
+
+                &:after {
+                    left: 2px;
+                    top: 2px;
+                    border-radius: 50%;
+                    width: 15px;
+                    height: 15px;
+                    background: var(--ab, var(--border));
+                    transform: translateX(var(--x, 0));
+                }
+
+                &:checked {
+                    --ab: var(--active-inner);
+                    --x: 17px;
+                }
+
+                &:disabled {
+                    &:not(:checked) {
+                        &:after {
+                            opacity: .6;
+                        }
+                    }
+                }
+            }
+        }
+
+        input[type='radio'] {
+            border-radius: 50%;
+
+            &:after {
+                width: 19px;
+                height: 19px;
+                border-radius: 50%;
+                background: var(--active-inner);
+                opacity: 0;
+                transform: scale(var(--s, .7));
+            }
+
+            &:checked {
+                --s: .5;
+            }
+        }
+    }
+
+    // Demo
+
+    ul {
+        margin: 12px;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+        max-width: 320px;
+
+        li {
+            margin: 16px 0;
+            position: relative;
+        }
+    }
+
+    html {
+        box-sizing: border-box;
+    }
+
+    * {
+        box-sizing: inherit;
+
+        &:before,
+        &:after {
+            box-sizing: inherit;
+        }
+    }
+
+    // Center & dribbble
+    body {
+        min-height: 100vh;
+        font-family: 'Inter', Arial, sans-serif;
+        color: #8A91B4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #F6F8FF;
+
+        @media(max-width: 800px) {
+            padding: 20px;
+        }
     }
 </style>
