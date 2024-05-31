@@ -44,6 +44,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '0.0.0.0:10000', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'Authentication',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'Authentication',
     'dashboards',
     'company',
 ]
@@ -149,3 +149,14 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login'
 
 LOGOUT_REDIRECT_URL = '/login/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = os.environ.get('GMAIL_EMAIL')
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+SMTP_PORT = 465
+EMAIL_HOST_USER = os.environ.get('GMAIL_EMAIL')
+EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+ACCOUNT_EMAIL_VERIFICATION = "none"

@@ -55,40 +55,18 @@
                         loading="lazy" alt="" class="nav-icon">
                         <div>Parts</div>
                     </a>
-                    {% if user.role == "Admin" %}
-                        <a href="/dashboards/yard/" class="nav-link w-inline-block"><img
-                            style="height: 25px;"
-                            src="{% static 'icons/field.png' %}"
-                            loading="lazy" alt="" class="nav-icon">
-                            <div>Yard Layout</div>
-                        </a>
-                    {% endif %}
-                    <a href="/dashboards/add-vehicle/" class="nav-link w-inline-block"><img
-                        style="height: 25px;"
-                        src="{% static 'icons/add-car.png' %}"
-                        loading="lazy" alt="" class="nav-icon">
-                        <div>Add Vehicle</div>
-                    </a>
                     <a href="/dashboards/sales/" class="nav-link w-inline-block"><img
                         style="height: 25px;"
                         src="{% static 'icons/dollar-sign.svg' %}"
                         loading="lazy" alt="" class="nav-icon">
                         <div>Sales</div>
                     </a>
-                    
-                    <!-- <a href="/dashboards/parts/" class="nav-link w-inline-block"><img
+                    <!-- <a href="/dashboards/yard/" class="nav-link w-inline-block"><img
                             style="height: 25px;"
-                            src="{% static 'icons/engine.svg' %}"
+                            src="{% static 'icons/field.png' %}"
                             loading="lazy" alt="" class="nav-icon">
-                        <div>Parts</div>
-                    </a>
-                
-                    <a href="/dashboards/orders/" class="nav-link w-inline-block"><img
-                        style="height: 25px;"
-                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605882dc6380b2ff7a6e9171_shopping-cart.svg"
-                        loading="lazy" alt="" class="nav-icon">
-                    <div>Orders</div>
-                    </a> -->
+                            <div>Yard Layout</div>
+                        </a> -->
                     {% if user.role == "Admin" %}
                         <a href="/company/" class="nav-link w-inline-block"><img
                             style="height: 25px;"

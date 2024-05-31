@@ -12,6 +12,10 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 import json
 from .forms import FunnelSubmissionForm
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.views import PasswordResetView
+from django import forms
+from django.contrib.auth.views import PasswordResetDoneView
 
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -104,14 +108,8 @@ class registerView(View):
         request.user.messages = json.dumps(messages)
         request.user.save()
         return redirect('/dashboards/vehicles/')
+    
 
-class passwordResetView(View):
-    def get(self, request):
-        return render(request, 'password-reset.html')
-
-    def post(self, request):
-        return render(request, 'password-reset.html')
- 
 class accountView(View):
     def get(self, request):
         return render(request, 'account.html', context)
