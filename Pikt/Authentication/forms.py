@@ -1,6 +1,7 @@
 from django import forms
 from .models import funnelSubmission
 
+
 class FunnelSubmissionForm(forms.ModelForm):
     YARD_SIZE_CHOICES = [
         ('', 'Select Yard Size...'),
@@ -28,3 +29,13 @@ class FunnelSubmissionForm(forms.ModelForm):
     class Meta:
         model = funnelSubmission
         fields = ['name', 'email', 'yard_size', 'company', 'message']
+
+class RegisterForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'text-field w-input'}), label='')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'text-field w-input'}), label='')
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email', 'class': 'text-field w-input'}), label='')
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First Name', 'class': 'text-field w-input'}), label='')
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Last Name', 'class': 'text-field w-input'}), label='')
+    company = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Company', 'class': 'text-field w-input'}), label='')
+    
+

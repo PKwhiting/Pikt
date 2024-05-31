@@ -11,39 +11,14 @@
 <body class="authentication-page">
     <div class="authentication-module">
         <h2>Sign up</h2>
-        <div class="authentication-form-block w-form">
-            <form id="wf-form-Form" name="wf-form-Form" data-name="Form" method="post" class="authentication-form"
-                aria-label="Form">
-                {% csrf_token %}
-                <div class="w-layout-grid authentication-grid">
-                    <input type="text" class="authentication-field w-input" maxlength="256" name="first_name"
-                        data-name="First Name" placeholder="First Name" id="First-Name" required="">
-                    <input type="text" class="authentication-field w-input" maxlength="256" name="last_name"
-                        data-name="Last Name" placeholder="Last Name" id="Last-Name" required="">
-                    <input type="text" class="authentication-field w-input" maxlength="256" name="Username"
-                        data-name="Username" placeholder="Username" id="Username" required="">
-                    <input type="email" class="authentication-field w-input" maxlength="256" name="Email"
-                        data-name="Email" placeholder="Email" id="Email" required="">
-                    <input type="password" class="authentication-field w-input" maxlength="256" name="Password"
-                        data-name="Password" placeholder="Password" id="Password-3" required="">
-                    <input type="submit" value="Create account" data-wait="Please wait..."
-                        id="w-node-_4ebb5952-efb6-c0fb-2224-5e5b2d558992-d2190923"
-                        class="button button-small w-button"><a href="/login" class="small-link">or
-                        sign in instead</a>
-                </div>
-            </form>
-            <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
-                <div>Thank you! Your account has successfully been created.</div>
-            </div>
-            <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
-                <div>Oops! Something went wrong while creating your account.</div>
-            </div>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
             {% if error %}
-                <div class="form-error" tabindex="-1" role="region" aria-label="Form failure">
-                    <div>{{ error }}</div>
-                </div>
+                <li>{{ error }}</li>
             {% endif %}
-        </div>
+            {{ form.as_p }}
+            <button class="button" type="submit">Sign up</button>
+        </form>
     </div><a href="/" class="back-to-home w-inline-block"><img
             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058beecd1bd3048e62f48d8_arrow-left.svg"
             loading="lazy" alt="" class="back-icon">

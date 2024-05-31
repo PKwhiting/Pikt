@@ -518,8 +518,13 @@
                         <div class="authentication-form-block w-form">
                             <form method="post">
                                 {% csrf_token %}
-                                {{ form }}
-                                <input type="submit" value="Submit">
+                                {{ form.as_p }}
+                                <select id="role" name="role" class="text-field w-input" style="color: #999" required>
+                                    <option value="" disabled selected>Role</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="User">User</option>
+                                </select>
+                                <input class="button" style="border: none;" type="submit" value="Add User">
                             </form>
                            
                             <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
@@ -583,7 +588,7 @@
 </div>
 
 
-<style>
+<!-- <style>
     form ul {
         list-style-type: none !important;
         margin: 0 !important;
@@ -600,5 +605,5 @@
         border-radius: 50%;
         object-fit: cover;
     } */
-</style>
+</style> -->
 {% endblock %}

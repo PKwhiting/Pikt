@@ -11,7 +11,7 @@ from company.models import Company, Location
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 import json
-from .forms import FunnelSubmissionForm
+from .forms import FunnelSubmissionForm, RegisterForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.views import PasswordResetView
 from django import forms
@@ -86,28 +86,39 @@ class loginView(View):
 
 class registerView(View):
     def get(self, request):
-        return render(request, 'register.html')
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
     
     def post(self, request):
-        username = request.POST['Username']
-        password = request.POST['Password']
-        email = request.POST['Email']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        icon = '../static/images/default-avatar.webp'
-        if User.objects.filter(username=username).exists():
-            return render(request, 'register.html', {'error': 'A user with this username already exists'})
-        company = Company.objects.create(name=f'{first_name} {last_name} Company', logo=icon)
-        company.save
-        location = Location.objects.create(company=company, name=f'Location 1', latitude=40.143443276343255, longitude=-111.62128987127304)
-        user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role='Admin', location=location, company=company)
-        
-        login(request, user)
-        messages = json.loads(request.user.messages)
-        messages.append('Welcome to Pikt!')
-        request.user.messages = json.dumps(messages)
-        request.user.save()
-        return redirect('/dashboards/vehicles/')
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            company = form.cleaned_data['company']
+            icon = '../static/images/default-avatar.webp'
+            if User.objects.filter(email=email).exists():
+                form.add_error('email', 'A user with this email already exists')
+                return render(request, 'register.html', {'form': form})
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'A user with this username already exists')
+                return render(request, 'register.html', {'form': form})
+            if Company.objects.filter(name=company).exists():
+                form.add_error('company', 'A company with this name already exists')
+                return render(request, 'register.html', {'form': form})
+            company = Company.objects.create(name=company)
+            company.save
+            user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role='admin', company=company)
+            login(request, user)
+            messages = json.loads(request.user.messages)
+            messages.append('Welcome to Pikt!')
+            request.user.messages = json.dumps(messages)
+            request.user.save()
+            return redirect('/dashboards/vehicles/')
+        return render(request, 'register.html', {'form': form})
+
     
 
 class accountView(View):

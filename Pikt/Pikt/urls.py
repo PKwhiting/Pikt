@@ -26,13 +26,11 @@ def trigger_error(request):
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
-    # path('password-reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('sentry-debug/', trigger_error),
     path('admin/', admin.site.urls),
     path('', views.homeView.as_view()),
     path('login/', views.loginView.as_view(), name='login'),
     path('register/', views.registerView.as_view(), name='register'),
-    # path("password_reset/", views.PasswordResetView.as_view(), name="password_reset"),
     path('account/', views.accountView.as_view(), name='account'),
     path('dashboards/', include('dashboards.urls')),
     path('company/', include('company.urls')),
