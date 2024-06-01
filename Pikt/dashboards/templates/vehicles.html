@@ -4,8 +4,9 @@
 <div class="dashboard-container">
     <div data-duration-in="300" data-duration-out="100" data-current="Overview" data-easing="ease" class="w-tabs">
         <div class="in-page-menu w-tab-menu" role="tablist">
-            <a data-w-tab="Overview" class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
-                href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
+            <a data-w-tab="Overview" class="in-page-menu-link w-inline-block w-tab-link w--current"
+                id="w-tabs-0-data-w-tab-0" href="#w-tabs-0-data-w-pane-0" role="tab"
+                aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
                 <div>All Vehicles</div>
             </a>
             <a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
@@ -18,6 +19,11 @@
                 aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
                 <div>Inventory Vehicle</div>
             </a>
+            <a data-w-tab="Part Types" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+                id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
+                aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
+                <div>Part Types</div>
+            </a>
         </div>
         <div class="tabs-content w-tab-content">
             <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
@@ -26,10 +32,8 @@
                     <div class="w-layout-grid _4-grid stats">
                         <div class="module">
                             <div class="content-chart">
-                                <div class="chart-square"><img loading="lazy"
-                                        src="/static/icons/car.svg"
-                                        style="height: 25px;"
-                                        alt="" class="icon">
+                                <div class="chart-square"><img loading="lazy" src="/static/icons/car.svg"
+                                        style="height: 25px;" alt="" class="icon">
                                     <div class="light-fill"></div>
                                 </div>
                                 <div class="div-block">
@@ -91,20 +95,21 @@
                     </div>
                     <div class="w-layout-grid grid">
                         <div class="style-guide-padding" style="display: block; padding: 0;">
-                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown" style="width: 100%; position: static">
-                                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f" class="nav-link-dropdown w-dropdown-toggle"
-                                    style="z-index: -1; opacity: 1; filter: grayscale(0%); position: static;" id="w-dropdown-toggle-0"
-                                    aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button"
-                                    tabindex="0">
+                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown"
+                                style="width: 100%; position: static">
+                                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f"
+                                    class="nav-link-dropdown w-dropdown-toggle"
+                                    style="z-index: -1; opacity: 1; filter: grayscale(0%); position: static;"
+                                    id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu"
+                                    aria-expanded="false" role="button" tabindex="0">
                                     <div style="width: 100%; display: flex; justify-content: space-between;">
                                         <div style="display: flex;">
                                             <img style="height: 25px; align-self: center; margin-right: 5px;"
                                                 src="/static/icons/filter-black.svg" loading="lazy" alt="">
                                             <div style="margin-top: 2px;">Filters</div>
-                                        </div>  
-                                        <img
-                                            src="/static/icons/dropdown-black.svg"
-                                            loading="lazy" alt="" class="nav-dropdown-icon"
+                                        </div>
+                                        <img src="/static/icons/dropdown-black.svg" loading="lazy" alt=""
+                                            class="nav-dropdown-icon"
                                             style="position: static; height: 25px;transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
                                     </div>
                                 </div>
@@ -113,24 +118,29 @@
                                     id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
                                     <div class="table-headers w-layout-grid" style="grid-column-gap: 5px;">
                                         <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="Year" id="First-name" required="">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="First-name" data-name="First name" placeholder="Year"
+                                                id="First-name" required="">
                                         </div>
                                         <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="Make" id="First-name" required="">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="First-name" data-name="First name" placeholder="Make"
+                                                id="First-name" required="">
                                         </div>
                                         <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="Model" id="First-name" required="">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="First-name" data-name="First name" placeholder="Model"
+                                                id="First-name" required="">
                                         </div>
                                         <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="Stock Number" id="First-name" required="">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="First-name" data-name="First name" placeholder="Stock Number"
+                                                id="First-name" required="">
                                         </div>
                                         <div>
-                                            <input type="text" class="text-field w-input" maxlength="256" name="First-name"
-                                                data-name="First name" placeholder="Mileage" id="First-name" required="">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="First-name" data-name="First name" placeholder="Mileage"
+                                                id="First-name" required="">
                                         </div>
                                     </div>
                                 </div>
@@ -147,141 +157,23 @@
                                     <div class="caption-large">Year</div>
                                     <div class="caption-large">Mileage</div>
                                 </div>
+                                {% if vehicles %}
+                                {% for vehicle in vehicles %}
                                 <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
                                     <div class="w-layout-grid table-row">
-                                        <div class="table-title">4T1T11AK5RU210076</div>
-                                        <div>Toyota</div>
-                                        <div>Camry</div>
-                                        <div>2020</div>
-                                        <div>45,000</div>
+                                        <div class="table-title">{{vehicle.vin}}</div>
+                                        <div>{{vehicle.make}}</div>
+                                        <div>{{vehicle.model}}</div>
+                                        <div>{{vehicle.year}}</div>
+                                        <div>{{vehicle.mileage}}</div>
                                     </div>
                                 </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">4T1C11AK4RU893906</div>
-                                        <div>Honda</div>
-                                        <div>Accord</div>
-                                        <div>2019</div>
-                                        <div>60,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">4T1C11AK4RU893750</div>
-                                        <div>BMW</div>
-                                        <div>3 Series</div>
-                                        <div>2022</div>
-                                        <div>30,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">JF2SKAJC1RH407990</div>
-                                        <div>Mercedes</div>
-                                        <div>C Class</div>
-                                        <div>2021</div>
-                                        <div>25,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">KMTF34PA5NU096216</div>
-                                        <div>Audi</div>
-                                        <div>Q7</div>
-                                        <div>2020</div>
-                                        <div>40,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">WBXJG7C0XM5T20801</div>
-                                        <div>Hyundai</div>
-                                        <div>Sonata</div>
-                                        <div>2019</div>
-                                        <div>55,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">WDDZF6EB8HA214460</div>
-                                        <div>Ford</div>
-                                        <div>Fusion</div>
-                                        <div>2022</div>
-                                        <div>20,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">WA1LAAF77HD053264</div>
-                                        <div>Chevrolet</div>
-                                        <div>Malibu</div>
-                                        <div>2021</div>
-                                        <div>30,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">3GCPWBEH4MG127665</div>
-                                        <div>Nissan</div>
-                                        <div>Altima</div>
-                                        <div>2020</div>
-                                        <div>35,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">SAJAE4BG5HA948814</div>
-                                        <div>Subaru</div>
-                                        <div>Impreza</div>
-                                        <div>2019</div>
-                                        <div>50,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">JH4CU2F6XCC002316</div>
-                                        <div>Volkswagen</div>
-                                        <div>Passat</div>
-                                        <div>2022</div>
-                                        <div>15,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">5UXTA6C03M9F30488</div>
-                                        <div>Volvo</div>
-                                        <div>S60</div>
-                                        <div>2021</div>
-                                        <div>25,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">3VW5DAAT7JM502394</div>
-                                        <div>Mazda</div>
-                                        <div>6</div>
-                                        <div>2020</div>
-                                        <div>40,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">1FA6P8JZ9K5553243</div>
-                                        <div>Jeep</div>
-                                        <div>Grand Cherokee</div>
-                                        <div>2019</div>
-                                        <div>55,000</div>
-                                    </div>
-                                </a>
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">KMHT36AH3MU008812</div>
-                                        <div>Tesla</div>
-                                        <div>Model 3</div>
-                                        <div>2022</div>
-                                        <div>10,000</div>
-                                    </div>
-                                </a>
+                                {% endfor %}
+                                {% else %}
+                                <div class="w-layout-grid table-row">
+                                    <div class="table-title">No vehicles found</div>
+                                </div>
+                                {% endif %}
                             </div>
                             {% include 'pagination.html' %}
                         </div>
@@ -296,21 +188,6 @@
                         <div class="kanban-color-bar in-progress"></div>
                         <div class="kanban-card">
                             <div>2007 Honda Accord</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2009 Buick LeSabre</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2010 Audi A4</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2008 Ford F-150</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2014 Ram 1500</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2008 Chevrolet Suburban</div>
                         </div>
                     </div>
                     <div class="kanban-wrapper">
@@ -329,18 +206,7 @@
                         <div class="kanban-card">
                             <div>1997 Jeep Grand Cherokee</div>
                         </div>
-                        <div class="kanban-card">
-                            <div>2015 Volvo S60</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>1999 Volkswagen Passat</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2002 Subaru Impreza</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2015 Nissan Altima</div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -350,16 +216,15 @@
                     <div class="w-layout-grid _2-1-grid" style="grid-row-gap: 12px;">
                         <div style="display: grid; grid-template-columns: 6fr 1fr;">
                             <div style="margin-right: 5px;">
-                                <input type="text" class="text-field w-input" maxlength="256" name="First-name" data-name="First name"
-                                    placeholder="VIN" id="vin-input" required="">
+                                <input type="text" class="text-field w-input" maxlength="256" name="First-name"
+                                    data-name="First name" placeholder="VIN" id="vin-input" required="">
                             </div>
-                            <a id="decode-button" href="#"
-                                class="button button-small button-outline w-inline-block"
+                            <a id="decode-button" href="#" class="button button-small button-outline w-inline-block"
                                 style="padding: 6px 18px; height: fit-content;">
                                 <div>Decode</div>
                             </a>
                         </div>
-                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87ae-a2dac75e" >
+                        <div id="w-node-c0adb514-f4ff-0d6d-6bd8-03d2a5bc87ae-a2dac75e">
                             <div id="vehicle-title" style="padding: 12px;
                                 border-radius: 6px;
                                 background-color: #fff;
@@ -370,379 +235,88 @@
                         </div>
                     </div>
                     <div class="table-module" id="parts-table" style="display: none;">
-                        <div class="table-headers" style="display: flex; justify-content: space-between; background: white;">
+                        <div class="table-headers"
+                            style="display: flex; justify-content: space-between; background: white;">
                             <h2 class="no-space-bottom">Parts</h2>
-                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e" href="{% url 'inventory_addition_success' %}"
-                                class="button bg-primary-green w-inline-block"
-                                style="display: flex;">
+                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e"
+                                href="{% url 'inventory_addition_success' %}"
+                                class="button bg-primary-green w-inline-block" style="display: flex;">
                                 <div style="margin-right: 2px;">Add Inventory</div>
-                                <img style="height: 20px" src="{% static 'icons/arrow-right-white.svg' %}" loading="lazy" alt="" class="pagination-arrow">
+                                <img style="height: 20px" src="{% static 'icons/arrow-right-white.svg' %}"
+                                    loading="lazy" alt="" class="pagination-arrow">
                             </a>
                         </div>
                         <div class="table-content" style="margin-top: 18px;">
-                            <div class="table-list" >
+                            <div class="table-list">
                                 <div class="w-layout-grid table-headers">
                                     <div class="caption-large">Part name</div>
                                     <div class="caption-large">Stock Number</div>
                                     <div class="caption-large">Price</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Location</div>
-                                    <div class="caption-large">Interchange</div>
+                                    <!-- <div class="caption-large">Interchange</div> -->
                                 </div>
                                 <div href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">Engine</div>
-                                        <div>STK78456</div>
-                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="390.00"
-                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                    {% for part, stock_number in part_preference %}
+                                        <div class="w-layout-grid table-row">
+                                            <div class="table-title">{{ part }}</div>
+                                            <div>
+                                                {{ stock_number }}  
+                                            </div>
+                                            <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                                <label for="cost"
+                                                    style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                                <input type="number" id="cost" step=".10"
+                                                    class="table-input text-field w-input cost-input" value="390.00"
+                                                    style="padding-left: 15px; margin-bottom: 0px"
+                                                    onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                            </div>
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="part-description" data-name="Part description"
+                                                placeholder="Description" id="part-description" required=""
+                                                style="max-width: 90%;">
+                                            <input type="text" class="text-field w-input" maxlength="256"
+                                                name="part-location" data-name="Part location" placeholder="Location"
+                                                id="part-location" required="" style="max-width: 90%;">
+                                            <!-- <div class="status">
+                                                <select id="interchange" name="interchange" data-name="Interchange"
+                                                    required="" class="text-field w-select">
+                                                    <option value="" disabled selected>Select Interchange</option>
+                                                    <option value="1">1.8L, VIN 2 (6th digit, gasoline, Sdn), Cal emissions
+                                                    </option>
+                                                    <option value="2">1.8L, VIN 2 (6th digit, gasoline, Sdn), Fed emissions
+                                                    </option>
+                                                    <option value="3">1.8L, VIN 3 (6th digit, gasoline, Cpe), Cal emissions
+                                                    </option>
+                                                    <option value="4">1.8L, VIN 3 (6th digit, gasoline, Cpe), Fed emissions
+                                                    </option>
+                                                </select>
+                                            </div> -->
+                                            <div style="display: flex; align-self: inherit">
+                                                <a href="#"
+                                                    class="button button-small bg-primary-rose w-button delete-button"
+                                                    style="padding: 8px 8px;">
+                                                    <img style="height: 20px; max-width: none;"
+                                                        src="/static/icons/trash.svg" loading="lazy" alt="">
+                                                </a>
+                                            </div>
+
                                         </div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                            data-name="Part location" placeholder="Location" id="part-location" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                                <option value="" disabled selected>Select Interchange</option>
-                                                <option value="1">1.8L, VIN 2 (6th digit, gasoline, Sdn), Cal emissions</option>
-                                                <option value="2">1.8L, VIN 2 (6th digit, gasoline, Sdn), Fed emissions</option>
-                                                <option value="3">1.8L, VIN 3 (6th digit, gasoline, Cpe), Cal emissions</option>
-                                                <option value="4">1.8L, VIN 3 (6th digit, gasoline, Cpe), Fed emissions</option>
-                                            </select>
-                                        </div>
-                                        <div style="display: flex; align-self: inherit">
-                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                            </a>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <div href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">Alternator</div>
-                                        <div>STK78457</div>
-                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="70.00"
-                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                        </div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                            data-name="Part location" placeholder="Location" id="part-location" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>663924</div>
-                                        </div>
-                                        <div style="display: flex; align-self: inherit">
-                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                            </a>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <div href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">A/C Compressor</div>
-                                        <div>STK78458</div>
-                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="65.00"
-                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                        </div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                            data-name="Part location" placeholder="Location" id="part-location" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>666504</div>
-                                        </div>
-                                        <div style="display: flex; align-self: inherit">
-                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                            </a>
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                </div>
-                                <div href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">Bumper Assy (Front)</div>
-                                        <div>STK78459</div>
-                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="125.00"
-                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                        </div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                            data-name="Part location" placeholder="Location" id="part-location" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                                <option value="" disabled selected>Select Interchange</option>
-                                                <option value="1">Sdn, EX</option>
-                                                <option value="2">Sdn, EX-L</option>
-                                                <option value="3">Cpe, EX</option>
-                                                <option value="4">Cpe, EX-L (leather)</option>
-                                            </select>
-                                        </div>
-                                        <div style="display: flex; align-self: inherit">
-                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                            </a>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <div href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">Bumper Assy (Rear)</div>
-                                        <div>STK78460</div>
-                                        <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                            <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                            <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="285.00"
-                                                style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                        </div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                            data-name="Part location" placeholder="Location" id="part-location" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                                <option value="" disabled selected>Select Interchange</option>
-                                                <option value="1">Sdn, 1.8L</option>
-                                                <option value="2">Cpe, 1.8L</option>
-                                            </select>
-                                        </div>
-                                        <div style="display: flex; align-self: inherit">
-                                            <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                            </a>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Starter</div>
-                                    <div>STK78461</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="110.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>6682943</div>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Seat (Front)</div>
-                                    <div>STK78462</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="45.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                            <option value="" disabled selected>Select Interchange</option>
-                                            <option value="1">(bucket), (air bag), cloth, (manual), Cpe, 1.8L, LH</option>
-                                            <option value="2">(bucket), (air bag), cloth, (manual), Sdn, 1.8L, LH</option>
-                                            <option value="3">(bucket), (air bag), leather, manual, Cpe, LH</option>
-                                            <option value="4">(bucket), (air bag), leather, manual, Sdn, LH</option>
-                                        </select>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Rack and Pinion</div>
-                                    <div>STK78463</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="70.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>669839</div>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Radiator</div>
-                                    <div>STK78464</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="75.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                            <option value="" disabled selected>Select Interchange</option>
-                                            <option value="1">1.8L, Denso manufacturer, AT (CVT)</option>
-                                            <option value="2">1.8L, Denso manufacturer, MT</option>
-                                            <option value="3">1.8L, Toyo manufacturer (AT, CVT)</option>
-                                        </select>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Power Steering Pump</div>
-                                    <div>STK78465</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="51.00" style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>663927</div>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Door (Front) (Left)</div>
-                                    <div>STK78466</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="615.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                            <option value="" disabled selected>Select Interchange</option>
-                                            <option value="1">(electric), Sdn, 1.8L, EX, LH</option>
-                                            <option value="2">(electric), Sdn, 1.8L, EX-L (leather), LH</option>
-                                        </select>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">Door (Front) (Right)</div>
-                                    <div>STK78467</div>
-                                    <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                        <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                        <input type="number" id="cost" step=".10" class="table-input text-field w-input cost-input" value="615.00"
-                                            style="padding-left: 15px; margin-bottom: 0px" onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                    </div>
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                        data-name="Part description" placeholder="Description" id="part-description" required=""
-                                        style="max-width: 90%;">
-                                    <input type="text" class="text-field w-input" maxlength="256" name="part-location"
-                                        data-name="Part location" placeholder="Location" id="part-location" required=""
-                                        style="max-width: 90%;">
-                                    <div class="status">
-                                        <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                        <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
-                                            <option value="" disabled selected>Select Interchange</option>
-                                            <option value="1">(electric), Sdn, 1.8L, EX, RH</option>
-                                            <option value="2">(electric), Sdn, 1.8L, EX-L (leather), RH</option>
-                                        </select>
-                                    </div>
-                                    <div style="display: flex; align-self: inherit">
-                                        <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                            <img style="height: 20px; max-width: none;" src="/static/icons/trash.svg" loading="lazy" alt="">
-                                        </a>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                                 <a href="#" class="table-row-link w-inline-block" style="display: none;">
-                                    <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr .25fr;">
+                                    <div class="w-layout-grid table-row"
+                                        style="grid-template-columns: 1fr 1fr 1fr 1fr .25fr;">
                                         <div class="table-title">Bumper Assy (Rear)</div>
                                         <div>$285.00</div>
-                                        <input type="text" class="text-field w-input" maxlength="256" name="part-description"
-                                            data-name="Part description" placeholder="Description" id="part-description" required=""
+                                        <input type="text" class="text-field w-input" maxlength="256"
+                                            name="part-description" data-name="Part description"
+                                            placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
                                             <!-- <div class="indication-color bg-primary-orange"></div> -->
-                                            <select id="interchange" name="interchange" data-name="Interchange" required="" class="text-field w-select">
+                                            <select id="interchange" name="interchange" data-name="Interchange"
+                                                required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
                                                 <option value="1">Sdn, 1.8L</option>
                                                 <option value="2">Cpe, 1.8L</option>
@@ -756,40 +330,74 @@
                     </div>
                 </div>
             </div>
+           
+
+
+            <div data-w-tab="Part Types" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+                aria-labelledby="w-tabs-0-data-w-tab-2">
+                <div class="w-layout-grid main-grid">
+                    <div class="table-module">
+                        <form id="parts-form" method="post" action="{% url 'vehicles' %}">
+                            {% csrf_token %}
+                            <div class="account-delete"  style="margin-left: 24px; margin-right: 24px; border: none; padding; none;">
+                                <div class="content-width-small space-bottom-small">
+                                    <h4>Included Part Types</h4>
+                                    <div class="form-caption">Choose which part types you would like to be included when inventorying a vehicle</div>
+                                </div>
+                                <button type="submit" class="button button-small w-button">Save</button>
+                            </div>
+                            {% for checkbox in form.parts %}
+                            <div class="full-table-row">
+                                <div>
+                                    {{ checkbox.choice_label }}
+                                </div>
+                                {{ checkbox.tag }}
+                            </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <style scoped>
-    .table-title, .status {
+    .table-title,
+    .status {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
     .w-select {
         width: 90%;
     }
-    @media screen and (min-width: 767px){
-        .table-row, .table-headers {
+
+    @media screen and (min-width: 767px) {
+
+        .table-row,
+        .table-headers {
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
         }
     }
-    
-    @media screen and (max-width: 600px){
+
+    @media screen and (max-width: 600px) {
         .stats {
             display: none;
         }
     }
 
-        /* Animation for row deletion */
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
+    /* Animation for row deletion */
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
         }
+
+        to {
+            opacity: 0;
+        }
+    }
 
     .fade-out {
         animation: fadeOut .5s forwards;
@@ -797,46 +405,385 @@
     }
 
 
-    .table-title, .status {
+    .table-title,
+    .status {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
     .w-select {
         width: 90%;
     }
-    @media screen and (min-width: 767px){
-        .table-row, .table-headers{
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr .25fr;
+
+    @media screen and (min-width: 767px) {
+
+        .table-row,
+        .table-headers {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
         }
 
     }
-    
-    
-    @media screen and (max-width: 600px){
+
+
+    @media screen and (max-width: 600px) {
         .stats {
             display: none;
         }
-        
+
+    }
+    @media screen and (max-width: 991px) {
+        #filter-button {
+            display: block !important;
+        }
+    }
+
+    .form-row {
+        margin-bottom: 10px;
+    }
+
+    .selection span {
+        border-style: none !important;
+    }
+
+    .select2 {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 38px !important;
+    }
+
+    .select2-selection__arrow {
+        margin-right: 5px !important;
+    }
+
+    .select2-selection {
+        height: 38px !important;
+        border: 1px solid #e3e3e3 !important;
+    }
+
+    span.select2-selection.select2-selection--single {
+        border: 1px solid #e1e6f0 !important;
+        margin-right: 5px !important;
+    }
+
+    span.select2-selection.select2-selection--multiple {
+        border: 1px solid #e1e6f0 !important;
+        max-height: 100px;
+        max-width: 28.75vw !important;
+        overflow-y: auto;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1000;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border-radius: 16px;
+        width: 60%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @supports(-webkit-appearance: none) or (-moz-appearance: none) {
+
+        input[type='checkbox'],
+        input[type='radio'] {
+            --active: #84ADC7;
+            --active-inner: #fff;
+            --focus: 2px rgba(39, 94, 254, .3);
+            --border: #BBC1E1;
+            --border-hover: #275EFE;
+            --background: #fff;
+            --disabled: #F6F8FF;
+            --disabled-inner: #E1E6F9;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            height: 21px;
+            outline: none;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            margin: 0;
+            cursor: pointer;
+            border: 1px solid var(--bc, var(--border));
+            background: var(--b, var(--background));
+            transition: background .3s, border-color .3s, box-shadow .2s;
+
+            &:after {
+                content: '';
+                display: block;
+                left: 0;
+                top: 0;
+                position: absolute;
+                transition: transform var(--d-t, .3s) var(--d-t-e, ease), opacity var(--d-o, .2s);
+            }
+
+            &:checked {
+                --b: var(--active);
+                --bc: var(--active);
+                --d-o: .3s;
+                --d-t: .6s;
+                --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+            }
+
+            &:disabled {
+                --b: var(--disabled);
+                cursor: not-allowed;
+                opacity: .9;
+
+                &:checked {
+                    --b: var(--disabled-inner);
+                    --bc: var(--border);
+                }
+
+                &+label {
+                    cursor: not-allowed;
+                }
+            }
+
+            &:hover {
+                &:not(:checked) {
+                    &:not(:disabled) {
+                        --bc: var(--border-hover);
+                    }
+                }
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 var(--focus);
+            }
+
+            &:not(.switch) {
+                width: 21px;
+
+                &:after {
+                    opacity: var(--o, 0);
+                }
+
+                &:checked {
+                    --o: 1;
+                }
+            }
+
+            &+label {
+                font-size: 14px;
+                line-height: 21px;
+                display: inline-block;
+                vertical-align: top;
+                cursor: pointer;
+                margin-left: 4px;
+            }
+        }
+
+        input[type='checkbox'] {
+            &:not(.switch) {
+                border-radius: 7px;
+
+                &:after {
+                    width: 5px;
+                    height: 9px;
+                    border: 2px solid var(--active-inner);
+                    border-top: 0;
+                    border-left: 0;
+                    left: 7px;
+                    top: 4px;
+                    transform: rotate(var(--r, 20deg));
+                }
+
+                &:checked {
+                    --r: 43deg;
+                }
+            }
+
+            &.switch {
+                width: 38px;
+                border-radius: 11px;
+
+                &:after {
+                    left: 2px;
+                    top: 2px;
+                    border-radius: 50%;
+                    width: 15px;
+                    height: 15px;
+                    background: var(--ab, var(--border));
+                    transform: translateX(var(--x, 0));
+                }
+
+                &:checked {
+                    --ab: var(--active-inner);
+                    --x: 17px;
+                }
+
+                &:disabled {
+                    &:not(:checked) {
+                        &:after {
+                            opacity: .6;
+                        }
+                    }
+                }
+            }
+        }
+
+        input[type='radio'] {
+            border-radius: 50%;
+
+            &:after {
+                width: 19px;
+                height: 19px;
+                border-radius: 50%;
+                background: var(--active-inner);
+                opacity: 0;
+                transform: scale(var(--s, .7));
+            }
+
+            &:checked {
+                --s: .5;
+            }
+        }
+    }
+
+    // Demo
+
+    ul {
+        margin: 12px;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+        max-width: 320px;
+
+        li {
+            margin: 16px 0;
+            position: relative;
+        }
+    }
+
+    html {
+        box-sizing: border-box;
+    }
+
+    * {
+        box-sizing: inherit;
+
+        &:before,
+        &:after {
+            box-sizing: inherit;
+        }
+    }
+
+    // Center & dribbble
+    body {
+        min-height: 100vh;
+        font-family: 'Inter', Arial, sans-serif;
+        color: #8A91B4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #F6F8FF;
+
+        @media(max-width: 800px) {
+            padding: 20px;
+        }
     }
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const decodeButton = document.getElementById("decode-button");
         const vehicleTitle = document.getElementById("vehicle-title");
         const partsTable = document.getElementById("parts-table");
 
-        decodeButton.addEventListener("click", function(event) {
+        decodeButton.addEventListener("click", async function (event) {
             event.preventDefault();
-            vehicleTitle.style.display = "block";
-            partsTable.style.display = "block";
+            const vinInput = document.getElementById('vin-input').value;
+            if (vinInput) {
+                try {
+                    const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vinInput}?format=json`);
+                    const data = await response.json();
+                    if (data.Results) {
+                        try {
+                            batterytype = data.Results.find(result => result.Variable === "Battery Type").Value;
+                        } catch (error) {
+                            batterytype = false;
+                        }
+
+                        if (batterytype) {
+                            const make = data.Results.find(result => result.Variable === "Make").Value;
+                            const model = data.Results.find(result => result.Variable === "Model").Value;
+                            const year = data.Results.find(result => result.Variable === "Model Year").Value;
+                            const series = data.Results.find(result => result.Variable === "Series").Value;
+                            const trim = data.Results.find(result => result.Variable === "Trim").Value;
+                            const doors = data.Results.find(result => result.Variable === "Doors").Value;
+                            const transmissionStyle = data.Results.find(result => result.Variable === "Transmission Style").Value;
+                            const bodyClass = data.Results.find(result => result.Variable === "Body Class").Value;
+                            const batterySize = data.Results.find(result => result.Variable === "Battery Energy (kWh) From").Value;
+                            const fuelType = data.Results.find(result => result.Variable === "Fuel Type - Primary").Value;
+                            const numCylinders = data.Results.find(result => result.Variable === "Engine Number of Cylinders").Value;
+                            vehicleTitle.innerHTML = `<h6 class="no-space-bottom">EV ${year} ${make} ${model} ${trim ? trim : series ? series : ''}</h6>`;
+                        } else {
+                            const make = data.Results.find(result => result.Variable === "Make").Value;
+                            const model = data.Results.find(result => result.Variable === "Model").Value;
+                            const year = data.Results.find(result => result.Variable === "Model Year").Value;
+                            const series = data.Results.find(result => result.Variable === "Series").Value;
+                            const trim = data.Results.find(result => result.Variable === "Trim").Value;
+                            const doors = data.Results.find(result => result.Variable === "Doors").Value;
+                            const transmissionStyle = data.Results.find(result => result.Variable === "Transmission Style").Value;
+                            const bodyClass = data.Results.find(result => result.Variable === "Body Class").Value;
+                            const engineDisplacement = data.Results.find(result => result.Variable === "Displacement (L)").Value;
+                            const fuelType = data.Results.find(result => result.Variable === "Fuel Type - Primary").Value;
+                            const numCylinders = data.Results.find(result => result.Variable === "Engine Number of Cylinders").Value;
+                            vehicleTitle.innerHTML = `<h6 class="no-space-bottom">${year} ${make} ${model} ${trim ? trim : series ? series : ''}</h6>`;
+                        }
+                        vehicleTitle.style.display = "block";
+                        partsTable.style.display = "block";
+                    }
+                } catch (error) {
+                    console.log(error)
+                    console.error('Error decoding VIN:', error);
+                }
+            }
         });
 
         // Add event listener for delete buttons
         const deleteButtons = document.querySelectorAll(".delete-button");
         deleteButtons.forEach(button => {
-            button.addEventListener("click", function(event) {
+            button.addEventListener("click", function (event) {
                 event.preventDefault();
                 const tableRow = button.closest(".table-row");
                 tableRow.style.position = "relative";
@@ -849,5 +796,108 @@
             });
         });
     });
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("filter-button");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks the button, open the modal 
+
+
+    // When the user clicks on <span> (x), close the modal
+    // span.onclick = function () {
+    //     modal.style.display = "none";
+    // }
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+
+    function clearFilters() {
+        // Clear select elements
+        document.getElementById('Year-Start').selectedIndex = 0;
+        document.getElementById('Year-Start').selectedIndex = 0;
+        document.getElementById('Part-Type').selectedIndex = 0;
+        document.getElementById('Parts-Grade').selectedIndex = 0;
+        document.getElementById('Vehicle-Model').value = '';
+        document.getElementById('Vehicle-Make').value = '';
+
+        document.getElementById('Year-Start-Modal').selectedIndex = 0;
+        document.getElementById('Year-Start-Modal').selectedIndex = 0;
+        document.getElementById('Part-Type-Modal').selectedIndex = 0;
+        document.getElementById('Parts-Grade-Modal').selectedIndex = 0;
+        document.getElementById('Vehicle-Model-Modal').value = '';
+        document.getElementById('Vehicle-Make-Modal').value = '';
+
+        // If you are using any plugins like Select2, you may need to trigger a change event
+        // so that the visual component updates correctly.
+        $('#Year-Start').val(null).trigger('change');
+        $('#Year-End').val(null).trigger('change');
+        $('#Part-Type').val(null).trigger('change');
+        $('#Parts-Grade').val(null).trigger('change');
+        $('#Year-Start-Modal').val(null).trigger('change');
+        $('#Year-End-Modal').val(null).trigger('change');
+        $('#Part-Type-Modal').val(null).trigger('change');
+        $('#Parts-Grade-Modal').val(null).trigger('change');
+        // Trigger the filter form submission to refresh the results
+        submitFilterForm();
+        submitFilterModalForm();
+    }
+
+
+    function submitFilterForm() {
+        var formData = new FormData(document.forms[0]);
+        var queryParams = new URLSearchParams();
+
+        for (var pair of formData.entries()) {
+            queryParams.append(pair[0], pair[1]);
+        }
+
+        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('table-container').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function submitFilterModalForm() {
+        var formData = new FormData(document.forms[1]);
+        var queryParams = new URLSearchParams();
+
+        for (var pair of formData.entries()) {
+            queryParams.append(pair[0], pair[1]);
+        }
+
+        fetch("{% url 'parts' %}?" + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('table-container').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
+
+ 
 {% endblock %}

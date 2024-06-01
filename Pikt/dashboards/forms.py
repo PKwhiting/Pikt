@@ -1,6 +1,6 @@
 from django import forms
 from .models import part
-from .models import Vehicle
+from .models import Vehicle, PartPreference
 
 
 class VehicleForm(forms.ModelForm):
@@ -67,4 +67,38 @@ class PartForm(forms.ModelForm):
                     'year': years
                 }
         return vehicle_fitments
+    
+from .const.const import PARTS_CONST
 
+class PartPreferenceForm(forms.ModelForm):
+    parts = forms.MultipleChoiceField(
+        choices=[(part, part) for part in PARTS_CONST],
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label=''
+    )
+
+    class Meta:
+        model = PartPreference
+        fields = ['parts']
+
+    def __init__(self, *args, **kwargs):
+        initial = kwargs.get('initial', {})
+        if 'parts' not in initial:
+            if 'instance' in kwargs and kwargs['instance']:
+                initial['parts'] = kwargs['instance'].get_parts_list()
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+        # Set initial for the parts field explicitly
+        if 'parts' in self.fields:
+            self.fields['parts'].initial = initial.get('parts', [])
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        print("--============-0))))0")
+        print(self.cleaned_data)
+        instance.set_parts_list(self.cleaned_data['parts'])
+        if commit:
+            instance.save()
+        return instance
+    

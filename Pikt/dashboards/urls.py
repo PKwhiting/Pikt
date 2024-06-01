@@ -26,6 +26,7 @@ urlpatterns = [
     path('generate-quote/<int:customer_id>/', views.generate_quote, name='generate_quote'),
     path('part-search/', views.part_search, name='part_search'),
     path('send-invoice/<int:customer_id>/', views.send_invoice, name='send_invoice'),
-    path('vehicles/', views.vehicles.as_view(), name='vehicles'),
+    path('vehicles/', views.VehiclesView.as_view(), name='vehicles'),
     path('inventory-addition-success/', views.inventory_addition_success, name='inventory_addition_success'),
+    path('save-part-types/', views.SavePartTypesView.as_view(), name='save_part_types'),
 ]

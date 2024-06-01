@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import part, Order, Vehicle, Inventory
+from .models import part, Order, Vehicle, Inventory, PartPreference
 from company.models import Location
 from django.core import serializers
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -901,20 +901,79 @@ def send_invoice(request, customer_id):
 
     return JsonResponse({'message': 'Invoice sent successfully!'})
 
-class vehicles(LoginRequiredMixin, View):
+from .forms import PartPreferenceForm
+from .models import part
+class VehiclesView(LoginRequiredMixin, View):
     def get(self, request):
-        vehicles = Vehicle.objects.filter(user=request.user)
+        vehicles = Vehicle.objects.filter(company=request.user.company)
+        part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
+        selected_parts = part_preference.get_parts_list()
+        form = PartPreferenceForm(initial={'parts': selected_parts})
+
+        from .models import part
+        highest_stock_number = part.get_highest_stock_number()
+        parts_with_stock_numbers = []
+
+        for i, part_type in enumerate(selected_parts, start=1):
+            stock_number = highest_stock_number + i
+            parts_with_stock_numbers.append((part_type, stock_number))
+
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
-            'years' : range(2024, 1969, -1),
+            'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
             'vehicles': vehicles,
+            'form': form,
+            'part_preference': parts_with_stock_numbers
         }
         request.user.messages = []
         request.user.save()
         return render(request, 'vehicles.html', context)
-    
+
+    def post(self, request):
+        part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
+        form = PartPreferenceForm(request.POST, instance=part_preference)
+        if form.is_valid():
+            form.save()
+            vehicles = Vehicle.objects.filter(company=request.user.company)
+            part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
+            selected_parts = part_preference.get_parts_list()
+            form = PartPreferenceForm(initial={'parts': selected_parts})
+            return redirect('vehicles')  # Redirect to the same page or any other page
+        else:
+            vehicles = Vehicle.objects.filter(company=request.user.company)
+            part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
+            selected_parts = part_preference.get_parts_list()
+            form = PartPreferenceForm(initial={'parts': selected_parts})
+            from .models import part
+            highest_stock_number = part.get_highest_stock_number()
+            parts_with_stock_numbers = []
+
+            for i, part_type in enumerate(selected_parts, start=1):
+                stock_number = highest_stock_number + i
+                parts_with_stock_numbers.append((part_type, stock_number))
+            context = {
+                'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
+                'years': range(2024, 1969, -1),
+                'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
+                'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+                'messages': json.loads(request.user.messages),
+                'vehicles': vehicles,
+                'form': form,
+                'part_preference': parts_with_stock_numbers
+            }
+            request.user.messages = []
+            request.user.save()
+            return render(request, 'vehicles.html', context)
+        
+
 def inventory_addition_success(request):
     return render(request, 'add-inventory-success.html')
+
+class SavePartTypesView(LoginRequiredMixin, View):
+    def post(self, request):
+        selected_parts = request.POST.getlist('parts')
+        # Handle the selected parts (e.g., save to the database or session)
+        return JsonResponse({'status': 'success', 'selected_parts': selected_parts})

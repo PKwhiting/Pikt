@@ -94,6 +94,15 @@ class part(models.Model):
             return core.objects.get(interchange=self.hollander_interchange)
         except core.DoesNotExist:
             return None
+    
+    
+    @staticmethod
+    def get_highest_stock_number():
+        from django.db.models import Max
+        highest_stock_number = part.objects.aggregate(Max('stock_number'))['stock_number__max']
+        if highest_stock_number is None:
+            return 100500
+        return int(highest_stock_number)
 
 class Order(models.Model):
     sku = models.CharField(max_length=36)
@@ -115,8 +124,10 @@ class Order(models.Model):
 
         super(Order, self).save(*args, **kwargs)
 
+from company.models import Company
 class Vehicle(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
     vin = models.CharField(max_length=17, null=True, blank=True)
     stock_number = models.CharField(max_length=256)
     year = models.IntegerField(blank=True, null=True)
@@ -216,3 +227,16 @@ class Customer(models.Model):
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='customers')
     def __str__(self):
         return self.name
+
+class PartPreference(models.Model):
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='part_preferences')
+    parts = models.TextField(blank=True, help_text="Comma-separated list of parts")
+
+    def get_parts_list(self):
+        if self.parts:
+            return self.parts.split(',')
+        return []
+
+    def set_parts_list(self, parts_list):
+        self.parts = ','.join(parts_list)
+
