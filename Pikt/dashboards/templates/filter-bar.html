@@ -1,0 +1,54 @@
+<div class="w-layout-grid grid">
+    <div class="style-guide-padding" style="display: block; padding: 0;">
+        <div data-hover="false" data-delay="0" class="dropdown w-dropdown"
+            style="width: 100%; position: static">
+            <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f"
+                class="nav-link-dropdown w-dropdown-toggle"
+                style="z-index: -1; opacity: 1; filter: grayscale(0%); position: static;"
+                id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu"
+                aria-expanded="false" role="button" tabindex="0">
+                <div style="width: 100%; display: flex; justify-content: space-between;">
+                    <div style="display: flex;">
+                        <img style="height: 25px; align-self: center; margin-right: 5px;"
+                            src="/static/icons/filter-black.svg" loading="lazy" alt="">
+                        <div style="margin-top: 2px;">Filters</div>
+                    </div>
+                    <img src="/static/icons/dropdown-black.svg" loading="lazy" alt=""
+                        class="nav-dropdown-icon"
+                        style="position: static; height: 25px;transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                </div>
+            </div>
+            <div class="dropdown-list w-dropdown-list"
+                style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
+                id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
+                <div class="table-headers" style="padding-left: 12px; padding-right: 12px;">
+                    <form method="get" action="{% url 'filter_vehicles' %}" oninput="submitVehicleFilterForm()" style="display: flex; flex-direction: row; grid-column-gap: 5px;">
+                        {% for field in filterForm %}
+                                {{ field }}
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function submitVehicleFilterForm() {
+        currentRequest = $.ajax({
+            url: "{% url 'filter_vehicles' %}",
+            data: 
+                { 
+                    'vin': document.getElementById('id_vin').value, 
+                    'year': document.getElementById('id_year').value, 
+                    'make': document.getElementById('id_make').value, 
+                    'model': document.getElementById('id_model').value 
+                },
+            success: function (data) {
+                $('#vehicle-list').html(data.html);
+            },
+            complete: function () {
+                currentRequest = null;
+            }
+        });
+        }
+</script>

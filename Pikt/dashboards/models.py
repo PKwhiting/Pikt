@@ -48,43 +48,34 @@ class image(models.Model):
     def __str__(self):
         return self.name
 
-class part(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True)
-    vehicle_year = models.IntegerField(null=True, blank=True)
-    vehicle_make = models.CharField(max_length=50, null=True, blank=True)
-    vehicle_model = models.CharField(max_length=50, null=True, blank=True)
-    vehicle_trim = models.CharField(max_length=50, null=True, blank=True)
-    vehicle_engine = models.CharField(max_length=50, null=True, blank=True)
-    vehicle_color = models.CharField(max_length=50, null=True, blank=True)
-    vehicle_vin = models.CharField(max_length=50, null=True, blank=True)
-    type = models.CharField(max_length=50, null=True, blank=True)
-    category = models.CharField(max_length=50, null=True, blank=True)
-    fitment_location = models.CharField(max_length=255, null=True, blank=True)
-    grade = models.CharField(max_length=1, choices=PART_GRADES)
+class Part(models.Model):
     stock_number = models.CharField(max_length=50, null=True, blank=True)
-    hollander_interchange = models.CharField(max_length=5000, null=True, blank=True)
-    notes = models.CharField(max_length=255, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True)
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True)
+    vehicle = models.ForeignKey('dashboards.Vehicle', on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    grade = models.CharField(max_length=1, choices=PART_GRADES)
+    interchange = models.CharField(max_length=5000, null=True, blank=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True) # in ounces
     height = models.IntegerField(null=True, blank=True) # in inches
     width = models.IntegerField(null=True, blank=True) # in inches
     length = models.IntegerField(null=True, blank=True) # in inches
     status = models.CharField(max_length=50, choices=PART_STATUS, default='Pending')
-    vehicle_fitment = models.CharField(max_length=500)
     cost = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
-    part_image_1 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_2 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_3 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_4 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_5 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_6 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_7 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_8 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_9 = models.ImageField(upload_to='images/', null=True, blank=True)
-    part_image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_1 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_2 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_3 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_4 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_5 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_6 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_7 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_8 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_9 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
-    ebay_link = models.CharField(max_length=255, null=True, blank=True)
-    sku = models.UUIDField(default=uuid.uuid4, editable=True, unique=True, null=True, blank=True)
     def __str__(self):
         return f'{self.stock_number} {self.hollander_interchange} {self.vehicle_model} {self.vehicle_trim} {self.vehicle_engine} {self.type}'
         
@@ -99,14 +90,14 @@ class part(models.Model):
     @staticmethod
     def get_highest_stock_number():
         from django.db.models import Max
-        highest_stock_number = part.objects.aggregate(Max('stock_number'))['stock_number__max']
+        highest_stock_number = Part.objects.aggregate(Max('stock_number'))['stock_number__max']
         if highest_stock_number is None:
             return 100500
         return int(highest_stock_number)
 
 class Order(models.Model):
     sku = models.CharField(max_length=36)
-    part_object = models.ForeignKey(part, on_delete=models.PROTECT, null=True, blank=True)
+    part_object = models.ForeignKey(Part, on_delete=models.PROTECT, null=True, blank=True)
     customer_name = models.CharField(max_length=255)
     customer_address = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -129,7 +120,7 @@ class Vehicle(models.Model):
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
     vin = models.CharField(max_length=17, null=True, blank=True)
-    stock_number = models.CharField(max_length=256)
+    stock_number = models.CharField(max_length=256, null=True, blank=True)
     year = models.IntegerField(blank=True, null=True)
     make = models.CharField(max_length=256, blank=True, null=True)
     model = models.CharField(max_length=256, blank=True, null=True)

@@ -29,4 +29,6 @@ urlpatterns = [
     path('vehicles/', views.VehiclesView.as_view(), name='vehicles'),
     path('inventory-addition-success/', views.inventory_addition_success, name='inventory_addition_success'),
     path('save-part-types/', views.SavePartTypesView.as_view(), name='save_part_types'),
+    path('filter-vehicles/', views.FilterVehicles.as_view(), name='filter_vehicles'),
+    path('create_parts/', views.create_parts, name='create_parts')
 ]

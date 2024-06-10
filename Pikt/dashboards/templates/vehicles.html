@@ -9,19 +9,19 @@
                 aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
                 <div>All Vehicles</div>
             </a>
-            <a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
+            <!-- <a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
                 id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
                 aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
                 <div>Tasks</div>
-            </a>
+            </a> -->
             <a data-w-tab="Files" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
                 id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
                 aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
                 <div>Inventory Vehicle</div>
             </a>
             <a data-w-tab="Part Types" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
-                id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
-                aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
+                id="w-tabs-0-data-w-tab-3" href="#w-tabs-0-data-w-pane-3" role="tab"
+                aria-controls="w-tabs-0-data-w-pane-3" aria-selected="false">
                 <div>Part Types</div>
             </a>
         </div>
@@ -29,7 +29,7 @@
             <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0">
                 <div class="w-layout-grid main-grid">
-                    <div class="w-layout-grid _4-grid stats">
+                    <!-- <div class="w-layout-grid _4-grid stats">
                         <div class="module">
                             <div class="content-chart">
                                 <div class="chart-square"><img loading="lazy" src="/static/icons/car.svg"
@@ -92,92 +92,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="w-layout-grid grid">
-                        <div class="style-guide-padding" style="display: block; padding: 0;">
-                            <div data-hover="false" data-delay="0" class="dropdown w-dropdown"
-                                style="width: 100%; position: static">
-                                <div data-w-id="47f88ec0-ed82-4189-0832-39236d3f989f"
-                                    class="nav-link-dropdown w-dropdown-toggle"
-                                    style="z-index: -1; opacity: 1; filter: grayscale(0%); position: static;"
-                                    id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu"
-                                    aria-expanded="false" role="button" tabindex="0">
-                                    <div style="width: 100%; display: flex; justify-content: space-between;">
-                                        <div style="display: flex;">
-                                            <img style="height: 25px; align-self: center; margin-right: 5px;"
-                                                src="/static/icons/filter-black.svg" loading="lazy" alt="">
-                                            <div style="margin-top: 2px;">Filters</div>
-                                        </div>
-                                        <img src="/static/icons/dropdown-black.svg" loading="lazy" alt=""
-                                            class="nav-dropdown-icon"
-                                            style="position: static; height: 25px;transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-                                    </div>
-                                </div>
-                                <div class="dropdown-list w-dropdown-list"
-                                    style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
-                                    id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                                    <div class="table-headers w-layout-grid" style="grid-column-gap: 5px;">
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="First-name" data-name="First name" placeholder="Year"
-                                                id="First-name" required="">
-                                        </div>
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="First-name" data-name="First name" placeholder="Make"
-                                                id="First-name" required="">
-                                        </div>
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="First-name" data-name="First name" placeholder="Model"
-                                                id="First-name" required="">
-                                        </div>
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="First-name" data-name="First name" placeholder="Stock Number"
-                                                id="First-name" required="">
-                                        </div>
-                                        <div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="First-name" data-name="First name" placeholder="Mileage"
-                                                id="First-name" required="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-module">
-                        <div class="table-content" style="margin-top: 10px;">
-                            <div class="table-list">
-                                <div class="w-layout-grid table-headers">
-                                    <div class="caption-large">VIN</div>
-                                    <div class="caption-large">Make</div>
-                                    <div class="caption-large">Model</div>
-                                    <div class="caption-large">Year</div>
-                                    <div class="caption-large">Mileage</div>
-                                </div>
-                                {% if vehicles %}
-                                {% for vehicle in vehicles %}
-                                <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row">
-                                        <div class="table-title">{{vehicle.vin}}</div>
-                                        <div>{{vehicle.make}}</div>
-                                        <div>{{vehicle.model}}</div>
-                                        <div>{{vehicle.year}}</div>
-                                        <div>{{vehicle.mileage}}</div>
-                                    </div>
-                                </a>
-                                {% endfor %}
-                                {% else %}
-                                <div class="w-layout-grid table-row">
-                                    <div class="table-title">No vehicles found</div>
-                                </div>
-                                {% endif %}
-                            </div>
-                            {% include 'pagination.html' %}
-                        </div>
-                    </div>
+                    </div> -->
+                    {% include 'filter-bar.html' %}
+                    {% include 'vehicle-list.html' %}
                 </div>
             </div>
             <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
@@ -238,7 +155,7 @@
                         <div class="table-headers"
                             style="display: flex; justify-content: space-between; background: white;">
                             <h2 class="no-space-bottom">Parts</h2>
-                            <a id="w-node-_4a591f9f-f950-9529-d551-da13bb96044e-a2dac75e"
+                            <a id="add-inventory-button"
                                 href="{% url 'inventory_addition_success' %}"
                                 class="button bg-primary-green w-inline-block" style="display: flex;">
                                 <div style="margin-right: 2px;">Add Inventory</div>
@@ -254,54 +171,48 @@
                                     <div class="caption-large">Price</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Location</div>
-                                    <!-- <div class="caption-large">Interchange</div> -->
+                                    <div class="caption-large">Grade</div>
                                 </div>
-                                <div href="#" class="table-row-link w-inline-block">
-                                    {% for part, stock_number in part_preference %}
-                                        <div class="w-layout-grid table-row">
-                                            <div class="table-title">{{ part }}</div>
-                                            <div>
-                                                {{ stock_number }}  
+                                <div id="parts-list">
+                                    {% for part, stock_number in prefered_parts %}
+                                            <div class="w-layout-grid table-row" id="{{ stock_number }}">
+                                                <div class="table-title" id="part-{{ stock_number }}-name"
+                                                style="margin-bottom: 8px">
+                                                    {{ part }}
+                                                </div>
+                                                <div>
+                                                    <input 
+                                                    type="text" id="part-{{ stock_number }}-stock-number" 
+                                                    name="part-stock-number" 
+                                                    class="table-input text-field w-input"
+                                                    style="max-width: 90%;"
+                                                    value="{{ stock_number }}" readonly>  
+                                                </div>
+                                                <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
+                                                    <label for="price-{{ stock_number }}"
+                                                        style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
+                                                    <input type="number" id="part-{{ stock_number }}-price" step=".10"
+                                                        name="part-price"
+                                                        class="table-input text-field w-input price-input" value="390.00"
+                                                        style="padding-left: 15px; margin-bottom: 0px"
+                                                        onchange="this.value = parseFloat(this.value).toFixed(2);">
+                                                </div>
+                                                <input type="text" id="part-{{ stock_number }}-description" class="text-field w-input" maxlength="256"
+                                                    name="part-description" data-name="Part description"
+                                                    placeholder="Description" id="part-description" required=""
+                                                    style="max-width: 90%;">
+                                                <input type="text" id="part-{{ stock_number }}-location" class="text-field w-input" maxlength="256"
+                                                    name="part-location" data-name="Part location" placeholder="Location"
+                                                    id="part-location" required="" style="max-width: 90%;">
+                                                <div style="display: flex; align-self: inherit">
+                                                    <a href="#"
+                                                        class="button button-small bg-primary-rose w-button delete-button"
+                                                        style="padding: 8px 8px;">
+                                                        <img style="height: 20px; max-width: none;"
+                                                            src="/static/icons/trash.svg" loading="lazy" alt="">
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                                <label for="cost"
-                                                    style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                                <input type="number" id="cost" step=".10"
-                                                    class="table-input text-field w-input cost-input" value="390.00"
-                                                    style="padding-left: 15px; margin-bottom: 0px"
-                                                    onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                            </div>
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="part-description" data-name="Part description"
-                                                placeholder="Description" id="part-description" required=""
-                                                style="max-width: 90%;">
-                                            <input type="text" class="text-field w-input" maxlength="256"
-                                                name="part-location" data-name="Part location" placeholder="Location"
-                                                id="part-location" required="" style="max-width: 90%;">
-                                            <!-- <div class="status">
-                                                <select id="interchange" name="interchange" data-name="Interchange"
-                                                    required="" class="text-field w-select">
-                                                    <option value="" disabled selected>Select Interchange</option>
-                                                    <option value="1">1.8L, VIN 2 (6th digit, gasoline, Sdn), Cal emissions
-                                                    </option>
-                                                    <option value="2">1.8L, VIN 2 (6th digit, gasoline, Sdn), Fed emissions
-                                                    </option>
-                                                    <option value="3">1.8L, VIN 3 (6th digit, gasoline, Cpe), Cal emissions
-                                                    </option>
-                                                    <option value="4">1.8L, VIN 3 (6th digit, gasoline, Cpe), Fed emissions
-                                                    </option>
-                                                </select>
-                                            </div> -->
-                                            <div style="display: flex; align-self: inherit">
-                                                <a href="#"
-                                                    class="button button-small bg-primary-rose w-button delete-button"
-                                                    style="padding: 8px 8px;">
-                                                    <img style="height: 20px; max-width: none;"
-                                                        src="/static/icons/trash.svg" loading="lazy" alt="">
-                                                </a>
-                                            </div>
-
-                                        </div>
                                     {% endfor %}
                                 </div>
                                 <a href="#" class="table-row-link w-inline-block" style="display: none;">
@@ -339,7 +250,7 @@
                     <div class="table-module">
                         <form id="parts-form" method="post" action="{% url 'vehicles' %}">
                             {% csrf_token %}
-                            <div class="account-delete"  style="margin-left: 24px; margin-right: 24px; border: none; padding; none;">
+                            <div class="account-delete"  style="margin-left: 24px; margin-right: 24px; margin-top: 0px; border: none; padding; none;">
                                 <div class="content-width-small space-bottom-small">
                                     <h4>Included Part Types</h4>
                                     <div class="form-caption">Choose which part types you would like to be included when inventorying a vehicle</div>
@@ -807,12 +718,6 @@
     // When the user clicks the button, open the modal 
 
 
-    // When the user clicks on <span> (x), close the modal
-    // span.onclick = function () {
-    //     modal.style.display = "none";
-    // }
-
-
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
         if (event.target == modal) {
@@ -897,6 +802,53 @@
             })
             .catch(error => console.error('Error:', error));
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("parts-table");
+        const addInventoryButton = document.getElementById("add-inventory-button");
+
+        addInventoryButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const rows = document.querySelectorAll(".table-row");
+            const partsData = [];
+
+            var allParts = {};
+            var partElements = document.getElementById('parts-list').children;
+            var firstPartId = partElements[0].id;
+            stockNumber = parseInt(firstPartId, 10);
+            for (let i = 0; i < partElements.length; i++) {
+                var partDict = {
+                    type : partElements[i].querySelector(`#part-${stockNumber}-name`).value,
+                    stockNumber: stockNumber,
+                    price: partElements[i].querySelector(`#part-${stockNumber}-price`).value,
+                    description: partElements[i].querySelector(`#part-${stockNumber}-description`).value,
+                    location: partElements[i].querySelector(`#part-${stockNumber}-location`).value
+                };
+                allParts[stockNumber] = partDict;
+                stockNumber = stockNumber + 1
+            }
+            console.log(allParts)
+            const currentRequest = $.ajax({
+                url: "{% url 'create_parts' %}",
+                type: 'POST',
+                data: { 'parts': JSON.stringify(allParts) },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                complete: function () {
+                    console.log("add function here")
+                }
+            });
+
+
+        });
+    });
+
+
 </script>
 
  

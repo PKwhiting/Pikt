@@ -1,0 +1,70 @@
+<div class="table-module" id="vehicle-list">
+    <div class="table-content" style="margin-top: 10px;">
+        <div class="table-list">
+            <div class="w-layout-grid table-headers">
+                <div class="caption-large">VIN</div>
+                <div class="caption-large">Make</div>
+                <div class="caption-large">Model</div>
+                <div class="caption-large">Year</div>
+                <div class="caption-large">Mileage</div>
+            </div>
+            {% if vehicles %}
+            {% for vehicle in vehicles %}
+            <a href="{% url 'single_vehicle' %}" class="table-row-link w-inline-block">
+                <div class="w-layout-grid table-row">
+                    <div class="table-title">{{vehicle.vin}}</div>
+                    <div>{{vehicle.make}}</div>
+                    <div>{{vehicle.model}}</div>
+                    <div>{{vehicle.year}}</div>
+                    <div>{{vehicle.mileage}}</div>
+                </div>
+            </a>
+            {% endfor %}
+            {% else %}
+            <div class="w-layout-grid table-row">
+                <div class="table-title">No vehicles found</div>
+            </div>
+            {% endif %}
+        </div>
+        {% include 'pagination.html' %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let debounceTimeout;
+        let currentRequest = null;
+
+        function debounce(func, delay) {
+            return function (...args) {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function searchCustomers(query) {
+            if (currentRequest) {
+                currentRequest.abort();
+            }
+
+            currentRequest = $.ajax({
+                url: "{% url 'customer_list' %}",
+                data: { 'q': query },
+                success: function (data) {
+                    $('#customer-list').html(data.html);
+                },
+                complete: function () {
+                    currentRequest = null;
+                }
+            });
+        }
+
+        const debouncedSearch = debounce(function () {
+            const query = document.getElementById('search').value.trim();
+            searchCustomers(query);
+        }, 50);
+
+        document.getElementById('search').addEventListener('input', debouncedSearch);
+    });
+</script>

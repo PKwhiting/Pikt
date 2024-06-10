@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import part, Order, Vehicle, Inventory, PartPreference
+from .models import Part, Order, Vehicle, Inventory, PartPreference
 from company.models import Location
 from django.core import serializers
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -88,12 +88,12 @@ class delete_message(View):
 
 class rootView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = part.objects.filter(user=request.user).order_by('-created_at')[:3]
+        parts = Part.objects.filter(user=request.user).order_by('-created_at')[:3]
         # get the price of all parts from the user that have a status of 'sold'
-        sold_parts = part.objects.filter(user=request.user, status='Sold')
+        sold_parts = Part.objects.filter(user=request.user, status='Sold')
         total_revenue = round(sold_parts.aggregate(Sum('price'))['price__sum'], 2) if sold_parts.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
-        shipped_parts = part.objects.filter(user=request.user, status='Shipped')
-        unsold_parts = part.objects.filter(user=request.user, status__in=['Pending', 'Listed'])
+        shipped_parts = Part.objects.filter(user=request.user, status='Shipped')
+        unsold_parts = Part.objects.filter(user=request.user, status__in=['Pending', 'Listed'])
         average_price = unsold_parts.aggregate(Avg('price'))['price__avg'] if unsold_parts.aggregate(Avg('price'))['price__avg'] is not None else '0.00'
         last_15_days = []
         for i in range(15, -1, -1):
@@ -159,7 +159,7 @@ class rootView(LoginRequiredMixin,View):
  
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = part.objects.filter(user=request.user) if request.user.is_authenticated else []
+        parts = Part.objects.filter(user=request.user) if request.user.is_authenticated else []
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
@@ -177,7 +177,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
             vehicle_model = request.GET.get('vehicle_model')
             part_type = request.GET.get('part_type')
             part_grade = request.GET.get('grade')
-            parts = part.objects.filter(user=request.user)
+            parts = Part.objects.filter(user=request.user)
             if year_start:
                 parts = parts.filter(vehicle_year__gte=year_start)
             if year_end:
@@ -193,7 +193,7 @@ class defaultDashboardView(LoginRequiredMixin,View):
             context['parts'] = parts
             return HttpResponse(render_to_string('parts-table.html', context))
         if context['parts'].count() > 0:
-            parts_list = part.objects.filter(user=request.user).order_by('id')
+            parts_list = Part.objects.filter(user=request.user).order_by('id')
             paginator = Paginator(parts_list, 20)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -360,10 +360,10 @@ def add_part(request):
         form = PartForm(post, request.FILES)
         if form.is_valid():
             part = form.save(commit=False)
-            part.vehicle_fitment = form.cleaned_data['vehicle_fitment']
-            part.weight = form.cleaned_data['weight']
-            part.user = request.user
-            part.save()
+            Part.vehicle_fitment = form.cleaned_data['vehicle_fitment']
+            Part.weight = form.cleaned_data['weight']
+            Part.user = request.user
+            Part.save()
             form.save()
             messages = json.loads(request.user.messages)
             messages.append('Part added successfully')
@@ -392,7 +392,7 @@ def add_part(request):
     context['messages'] = json.loads(request.user.messages)
     request.user.messages = []
     request.user.save()
-    return render(request, 'add-part.html', context)
+    return render(request, 'add-Part.html', context)
 
 @login_required  
 def add_vehicle(request):
@@ -549,7 +549,7 @@ def edit_part(request, part_id):
     }
     request.user.messages = []
     request.user.save()
-    return render(request, 'edit-part.html', context)
+    return render(request, 'edit-Part.html', context)
 
 def edit_vehicle(request, vehicle_id):
     # vehicle_instance = get_object_or_404(Vehicle, id=vehicle_id)
@@ -607,12 +607,12 @@ class single_part(LoginRequiredMixin, View):
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
             'part': selected_part,
-            'potential_profit': (selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01')),
-            'roi': round(((selected_part.price or Decimal('0.01')) - (selected_part.cost or Decimal('0.01'))) / (selected_part.cost or Decimal('0.01')) * 100, 2)   
+            'potential_profit': (selected_Part.price or Decimal('0.01')) - (selected_Part.cost or Decimal('0.01')),
+            'roi': round(((selected_Part.price or Decimal('0.01')) - (selected_Part.cost or Decimal('0.01'))) / (selected_Part.cost or Decimal('0.01')) * 100, 2)   
         }
         request.user.messages = []
         request.user.save()
-        return render(request, 'single-part.html', context)
+        return render(request, 'single-Part.html', context)
 
 class single_vehicle(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -766,7 +766,7 @@ class parts(View):
                 data = df.to_dict(orient='records')
 
                 for row in data:
-                    new_part, created = part.objects.get_or_create(
+                    new_part, created = Part.objects.get_or_create(
                         stock_number=row['STOCK_NUMBER'],
                         defaults={
                             'user': request.user,
@@ -791,14 +791,14 @@ class parts(View):
         return redirect('parts')
 
     def get(self, request):
-        # total_parts_count = part.objects.filter(user=request.user).count()
+        # total_parts_count = Part.objects.filter(user=request.user).count()
         # max_cores = core.objects.filter(interchange=OuterRef('hollander_interchange')).order_by().values('interchange').annotate(max_price=Max('price'))
-        # parts_with_max_core = part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
+        # parts_with_max_core = Part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
         # total_max_core_price = parts_with_max_core.aggregate(total=Sum('max_core_price'))['total']
         # total_max_core_price = Decimal(total_max_core_price).quantize(Decimal('0.00'))
         # del request.session['table_data']
         table_data = request.session.get('table_data', '')
-        parts = part.objects.filter(user=request.user).order_by('id')
+        parts = Part.objects.filter(user=request.user).order_by('id')
         context = {
             'table_data': table_data,
             'parts': parts,
@@ -841,6 +841,7 @@ def customer_list(request):
         customers = Customer.objects.all()
 
     if is_ajax(request):
+        print(request)
         html = render_to_string('customer-list.html', {'customers': customers})
         return JsonResponse({'html': html})
 
@@ -863,7 +864,7 @@ def generate_quote(request, customer_id):
 def part_search(request):
     query = request.GET.get('q')
     if query:
-        parts = part.objects.filter(
+        parts = Part.objects.filter(
             Q(vehicle_year__icontains=query) |
             Q(vehicle_make__icontains=query) |
             Q(vehicle_model__icontains=query) |
@@ -872,7 +873,7 @@ def part_search(request):
             Q(hollander_interchange__icontains=query)
         )
     else:
-        parts = part.objects.all()
+        parts = Part.objects.all()
 
     if is_ajax(request):
         html = render_to_string('part-list.html', {'parts': parts})
@@ -901,22 +902,25 @@ def send_invoice(request, customer_id):
 
     return JsonResponse({'message': 'Invoice sent successfully!'})
 
-from .forms import PartPreferenceForm
-from .models import part
+from .forms import PartPreferenceForm, VehicleFilterForm
+from .models import Part
+from django.views.generic.detail import SingleObjectMixin
 class VehiclesView(LoginRequiredMixin, View):
     def get(self, request):
         vehicles = Vehicle.objects.filter(company=request.user.company)
         part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
         selected_parts = part_preference.get_parts_list()
         form = PartPreferenceForm(initial={'parts': selected_parts})
+        filterForm = VehicleFilterForm()
 
-        from .models import part
-        highest_stock_number = part.get_highest_stock_number()
+        highest_stock_number = Part.get_highest_stock_number()
         parts_with_stock_numbers = []
 
         for i, part_type in enumerate(selected_parts, start=1):
             stock_number = highest_stock_number + i
             parts_with_stock_numbers.append((part_type, stock_number))
+            enumerated_part_preference = list(enumerate(parts_with_stock_numbers))
+
 
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
@@ -926,13 +930,19 @@ class VehiclesView(LoginRequiredMixin, View):
             'messages': json.loads(request.user.messages),
             'vehicles': vehicles,
             'form': form,
-            'part_preference': parts_with_stock_numbers
+            'filterForm': filterForm,
+            'prefered_parts': parts_with_stock_numbers,
+            'test': 'TEST TEST TEST'
         }
         request.user.messages = []
         request.user.save()
         return render(request, 'vehicles.html', context)
 
     def post(self, request):
+        print(request.headers)
+        # requestType = request.headers['x-request-type']
+        print("H--")
+        # print(requestType)
         part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
         form = PartPreferenceForm(request.POST, instance=part_preference)
         if form.is_valid():
@@ -948,7 +958,7 @@ class VehiclesView(LoginRequiredMixin, View):
             selected_parts = part_preference.get_parts_list()
             form = PartPreferenceForm(initial={'parts': selected_parts})
             from .models import part
-            highest_stock_number = part.get_highest_stock_number()
+            highest_stock_number = Part.get_highest_stock_number()
             parts_with_stock_numbers = []
 
             for i, part_type in enumerate(selected_parts, start=1):
@@ -972,8 +982,39 @@ class VehiclesView(LoginRequiredMixin, View):
 def inventory_addition_success(request):
     return render(request, 'add-inventory-success.html')
 
+def create_parts(request):
+    if request.method == 'POST':
+        parts = json.loads(request.POST.get('parts'))
+        for stock_number, part_data in parts.items():
+            description = part_data['description'] if part_data['description'] else ''
+            location = part_data['location'] if part_data['location'] else ''
+            Part.objects.create(
+                type=part_data['type'],
+                stock_number=part_data['stockNumber'],
+                price=part_data['price'],
+                notes=description,
+                user=request.user
+            )
+        return JsonResponse({'status': 'success'})
+
 class SavePartTypesView(LoginRequiredMixin, View):
     def post(self, request):
         selected_parts = request.POST.getlist('parts')
         # Handle the selected parts (e.g., save to the database or session)
         return JsonResponse({'status': 'success', 'selected_parts': selected_parts})
+
+
+class FilterVehicles(View):
+    def get(self, request, *args, **kwargs):
+        vehicles = Vehicle.objects.filter(company = request.user.company)
+        # filter only searches for single characters, it needs to search for characters and strings
+        if request.GET.get('stock_number'):
+            vehicles = vehicles.filter(vin__icontains=request.GET.get('vin'))
+        if request.GET.get('make'):
+            vehicles = vehicles.filter(make__icontains=request.GET.get('make'))
+        if request.GET.get('model'):
+            vehicles = vehicles.filter(model__icontains=request.GET.get('model'))
+        if request.GET.get('year'):
+            vehicles = vehicles.filter(year__icontains=request.GET.get('year'))
+        html = render_to_string('vehicle-list.html', {'vehicles': vehicles})
+        return JsonResponse({'html': html})
