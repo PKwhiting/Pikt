@@ -1008,6 +1008,7 @@ def create_parts(request):
         )
         PartFormSet = modelformset_factory(Part, form=PartForm, extra=0)
         formset = PartFormSet(request.POST)
+        print(formset)
         if formset.is_valid():
             instances = formset.save(commit=False)
             for instance in instances:

@@ -171,6 +171,7 @@
                                     <div class="caption-large">Price</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Location</div>
+                                    <div class="caption-large">Grade</div>
                                 </div>
                                 <div id="parts-list">
                                     <form method="post" action="{% url 'create_parts' %}" id="parts-form">
@@ -185,9 +186,9 @@
                                         {{ part_formset.management_form }}
                                         <div id="parts-list">
                                             {% for form in part_formset %}
-                                            <div class="w-layout-grid table-row" id="form-{{ forloop.counter0 }}">
+                                            <div class="w-layout-grid table-row" id="form-{{ forloop.counter0 }}" style="padding: 0px 12px;">
                                                 {{ form.as_p }}
-                                                <div style="display: flex; align-self: inherit; margin-top: 12px;">
+                                                <div style="display: flex; align-self: inherit; margin-bottom: 12px;">
                                                     <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
                                                         <img style="height: 20px; max-width: none;" src="{% static 'icons/trash.svg' %}" loading="lazy" alt="">
                                                     </a>
@@ -357,7 +358,7 @@
 
         .table-row,
         .table-headers {
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr .25fr;
         }
 
     }
@@ -685,7 +686,8 @@
                         document.getElementById('vehicle-model').value = model;
                         document.getElementById('vehicle-trim').value = trim;
 
-                        vehicleTitle.innerHTML = `<h6 class="no-space-bottom">${year} ${make} ${model} ${trim}</h6>`;
+                        const trimText = trim !== null ? ` ${trim}` : '';
+                        vehicleTitle.innerHTML = `<h6 class="no-space-bottom">${year} ${make} ${model}${trimText}</h6>`;
                         vehicleTitle.style.display = "block";
                         partsTable.style.display = "block";
                     }

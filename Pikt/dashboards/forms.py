@@ -118,16 +118,26 @@ class PartPreferenceForm(forms.ModelForm):
             instance.save()
         return instance
     
+from .models import PART_GRADES
 class PartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'price', 'description', 'location']
+        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade']
         widgets = {
-            'type': forms.TextInput(attrs={'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
-            'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
-            'price': forms.NumberInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;', 'step': '0.10', 'value': '0.00'}),
-            'description': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
-            'location': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
+            'type': forms.TextInput(attrs={'Placeholder': 'Type', 'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
+            'stock_number': forms.TextInput(attrs={'Placeholder': 'Type', 'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
+            'price': forms.NumberInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;', 'step': '0.5', 'value': '0.00'}),
+            'description': forms.TextInput(attrs={'Placeholder': 'Description', 'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
+            'location': forms.TextInput(attrs={'Placeholder': 'Location', 'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
+            'grade': forms.Select(attrs={'class': 'text-field w-select', 'style': 'width: 90%; margin-top: 8px;'}),
+        }
+        labels = {
+            'type': '',
+            'stock_number': '',
+            'price': '',
+            'description': '',
+            'location': '',
+            'grade': '',
         }
 
 class VehicleForm(forms.ModelForm):

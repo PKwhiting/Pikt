@@ -53,7 +53,7 @@ class Part(models.Model):
     vehicle = models.ForeignKey('dashboards.Vehicle', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
-    grade = models.CharField(max_length=1, choices=PART_GRADES)
+    grade = models.CharField(max_length=1, choices=PART_GRADES, null=True, blank=True)
     interchange = models.CharField(max_length=5000, null=True, blank=True)
     description = models.CharField(max_length=255, null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True) # in ounces
