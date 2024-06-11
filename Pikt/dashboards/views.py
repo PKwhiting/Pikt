@@ -905,6 +905,8 @@ def send_invoice(request, customer_id):
 from .forms import PartPreferenceForm, VehicleFilterForm
 from .models import Part
 from django.views.generic.detail import SingleObjectMixin
+from django.forms import modelformset_factory
+from .forms import PartForm
 class VehiclesView(LoginRequiredMixin, View):
     def get(self, request):
         vehicles = Vehicle.objects.filter(company=request.user.company)
@@ -918,9 +920,16 @@ class VehiclesView(LoginRequiredMixin, View):
 
         for i, part_type in enumerate(selected_parts, start=1):
             stock_number = highest_stock_number + i
-            parts_with_stock_numbers.append((part_type, stock_number))
-            enumerated_part_preference = list(enumerate(parts_with_stock_numbers))
+            parts_with_stock_numbers.append({'type': part_type, 'stock_number': stock_number})
 
+        # Create initial data for the formset
+        initial_data = [
+            {'type': part['type'], 'stock_number': part['stock_number']}
+            for part in parts_with_stock_numbers
+        ]
+
+        PartFormSet = modelformset_factory(Part, form=PartForm, extra=len(selected_parts))
+        formset = PartFormSet(queryset=Part.objects.none(), initial=initial_data)
 
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
@@ -932,17 +941,13 @@ class VehiclesView(LoginRequiredMixin, View):
             'form': form,
             'filterForm': filterForm,
             'prefered_parts': parts_with_stock_numbers,
-            'test': 'TEST TEST TEST'
+            'part_formset': formset
         }
         request.user.messages = []
         request.user.save()
         return render(request, 'vehicles.html', context)
 
     def post(self, request):
-        print(request.headers)
-        # requestType = request.headers['x-request-type']
-        print("H--")
-        # print(requestType)
         part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
         form = PartPreferenceForm(request.POST, instance=part_preference)
         if form.is_valid():
@@ -984,18 +989,37 @@ def inventory_addition_success(request):
 
 def create_parts(request):
     if request.method == 'POST':
-        parts = json.loads(request.POST.get('parts'))
-        for stock_number, part_data in parts.items():
-            description = part_data['description'] if part_data['description'] else ''
-            location = part_data['location'] if part_data['location'] else ''
-            Part.objects.create(
-                type=part_data['type'],
-                stock_number=part_data['stockNumber'],
-                price=part_data['price'],
-                notes=description,
-                user=request.user
-            )
-        return JsonResponse({'status': 'success'})
+        vehicle_data = {
+            'vin': request.POST.get('vin'),
+            'year': request.POST.get('year'),
+            'make': request.POST.get('make'),
+            'model': request.POST.get('model'),
+            'trim': request.POST.get('trim'),
+        }
+        vehicle, created = Vehicle.objects.get_or_create(
+            company=request.user.company,
+            creator=request.user,
+            vin=vehicle_data['vin'],
+            year=vehicle_data['year'],
+            make=vehicle_data['make'],
+            model=vehicle_data['model'],
+            trim=vehicle_data['trim'],
+            defaults=vehicle_data
+        )
+        PartFormSet = modelformset_factory(Part, form=PartForm, extra=0)
+        formset = PartFormSet(request.POST)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.user = request.user
+                instance.company = request.user.company
+                instance.vehicle = vehicle
+                instance.save()
+
+            add_user_message(request, 'Parts added successfully.')
+        else:
+            add_user_message(request, 'Failed to add parts. Please try again.')
+        return redirect('vehicles')
 
 class SavePartTypesView(LoginRequiredMixin, View):
     def post(self, request):

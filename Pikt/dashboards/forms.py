@@ -118,3 +118,19 @@ class PartPreferenceForm(forms.ModelForm):
             instance.save()
         return instance
     
+class PartForm(forms.ModelForm):
+    class Meta:
+        model = Part
+        fields = ['type', 'stock_number', 'price', 'description', 'location']
+        widgets = {
+            'type': forms.TextInput(attrs={'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
+            'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
+            'price': forms.NumberInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;', 'step': '0.10', 'value': '0.00'}),
+            'description': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
+            'location': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
+        }
+
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['vin', 'year', 'make', 'model', 'trim']

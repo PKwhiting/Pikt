@@ -85,13 +85,15 @@
                 <div class="tablet">
                     <div class="header-content" style="margin: 20px">
                         <a href="/account" class="banner-avatar-wrapper w-inline-block">
-                            <img
-                                    src="{{ user.icon.url }}"
-                                    loading="lazy" alt="" class="banner-avatar-image">
-                                <div>
-                                    <h5 class="banner-avatar-name">{{ user.first_name }} {{ user.last_name }}</h5>
-                                    <div class="banner-avatar-caption">Account settings</div>
-                                </div>
+                            {% if user.icon %}
+                                <img
+                                        src="{{ user.icon.url }}"
+                                        loading="lazy" alt="" class="banner-avatar-image">
+                            {% endif %}
+                            <div>
+                                <h5 class="banner-avatar-name">{{ user.first_name }} {{ user.last_name }}</h5>
+                                <div class="banner-avatar-caption">Account settings</div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -157,17 +159,6 @@
                         <img
                             src="{% static 'images/logo_transparent_large_black.png' %}"
                             loading="lazy" alt="" class="banner-logo">
-                    </a>
-                </div>
-                <div class="header-content">
-                    <a href="/account" class="banner-avatar-wrapper w-inline-block">
-                        <img
-                                src="{{ user.icon.url }}"
-                                loading="lazy" alt="" class="banner-avatar-image">
-                            <div>
-                                <h5 class="banner-avatar-name">{{ user.first_name }} {{ user.last_name }}</h5>
-                                <div class="banner-avatar-caption">Account settings</div>
-                            </div>
                     </a>
                 </div>
             </div>

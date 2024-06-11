@@ -155,13 +155,13 @@
                         <div class="table-headers"
                             style="display: flex; justify-content: space-between; background: white;">
                             <h2 class="no-space-bottom">Parts</h2>
-                            <a id="add-inventory-button"
-                                href="{% url 'inventory_addition_success' %}"
-                                class="button bg-primary-green w-inline-block" style="display: flex;">
-                                <div style="margin-right: 2px;">Add Inventory</div>
-                                <img style="height: 20px" src="{% static 'icons/arrow-right-white.svg' %}"
-                                    loading="lazy" alt="" class="pagination-arrow">
-                            </a>
+                            {% if prefered_parts %}
+                                <button type="submit" form="parts-form" class="button bg-primary-green w-inline-block" style="display: flex;" id="add-inventory-button">
+                                    <div style="margin-right: 2px;">Add Parts</div>
+                                    <img style="height: 20px" src="{% static 'icons/arrow-right-white.svg' %}" loading="lazy" alt="" class="pagination-arrow">
+                                </button>
+                            {% endif %}
+                            
                         </div>
                         <div class="table-content" style="margin-top: 18px;">
                             <div class="table-list">
@@ -171,14 +171,40 @@
                                     <div class="caption-large">Price</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Location</div>
-                                    <div class="caption-large">Grade</div>
                                 </div>
                                 <div id="parts-list">
-                                    {% for part, stock_number in prefered_parts %}
+                                    <form method="post" action="{% url 'create_parts' %}" id="parts-form">
+                                        <div id="vehicle-details" style="display: none;">
+                                            <input type="hidden" name="vin" id="vehicle-vin">
+                                            <input type="hidden" name="year" id="vehicle-year">
+                                            <input type="hidden" name="make" id="vehicle-make">
+                                            <input type="hidden" name="model" id="vehicle-model">
+                                            <input type="hidden" name="trim" id="vehicle-trim">
+                                        </div>
+                                        {% csrf_token %}
+                                        {{ part_formset.management_form }}
+                                        <div id="parts-list">
+                                            {% for form in part_formset %}
+                                            <div class="w-layout-grid table-row" id="form-{{ forloop.counter0 }}">
+                                                {{ form.as_p }}
+                                                <div style="display: flex; align-self: inherit; margin-top: 12px;">
+                                                    <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
+                                                        <img style="height: 20px; max-width: none;" src="{% static 'icons/trash.svg' %}" loading="lazy" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </form>
+                                    <!-- {% for part, stock_number in prefered_parts %}
                                             <div class="w-layout-grid table-row" id="{{ stock_number }}">
-                                                <div class="table-title" id="part-{{ stock_number }}-name"
-                                                style="margin-bottom: 8px">
-                                                    {{ part }}
+                                                <div>
+                                                    <input 
+                                                    type="text" id="part-{{ stock_number }}-name" 
+                                                    name="part-name" 
+                                                    class="table-input text-field w-input"
+                                                    style="max-width: 90%;"
+                                                    value="{{ part }}" readonly>  
                                                 </div>
                                                 <div>
                                                     <input 
@@ -213,9 +239,9 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                    {% endfor %}
+                                    {% endfor %} -->
                                 </div>
-                                <a href="#" class="table-row-link w-inline-block" style="display: none;">
+                                <!-- <a href="#" class="table-row-link w-inline-block" style="display: none;">
                                     <div class="w-layout-grid table-row"
                                         style="grid-template-columns: 1fr 1fr 1fr 1fr .25fr;">
                                         <div class="table-title">Bumper Assy (Rear)</div>
@@ -225,7 +251,7 @@
                                             placeholder="Description" id="part-description" required=""
                                             style="max-width: 90%;">
                                         <div class="status">
-                                            <!-- <div class="indication-color bg-primary-orange"></div> -->
+                                            <div class="indication-color bg-primary-orange"></div>
                                             <select id="interchange" name="interchange" data-name="Interchange"
                                                 required="" class="text-field w-select">
                                                 <option value="" disabled selected>Select Interchange</option>
@@ -234,9 +260,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                </a>
+                                </a> -->
                             </div>
-                            {% include 'pagination.html' %}
+                            <!-- include 'pagination.html' -->
                         </div>
                     </div>
                 </div>
@@ -648,207 +674,47 @@
                     const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vinInput}?format=json`);
                     const data = await response.json();
                     if (data.Results) {
-                        try {
-                            batterytype = data.Results.find(result => result.Variable === "Battery Type").Value;
-                        } catch (error) {
-                            batterytype = false;
-                        }
+                        const make = data.Results.find(result => result.Variable === "Make").Value;
+                        const model = data.Results.find(result => result.Variable === "Model").Value;
+                        const year = data.Results.find(result => result.Variable === "Model Year").Value;
+                        const trim = data.Results.find(result => result.Variable === "Trim").Value;
 
-                        if (batterytype) {
-                            const make = data.Results.find(result => result.Variable === "Make").Value;
-                            const model = data.Results.find(result => result.Variable === "Model").Value;
-                            const year = data.Results.find(result => result.Variable === "Model Year").Value;
-                            const series = data.Results.find(result => result.Variable === "Series").Value;
-                            const trim = data.Results.find(result => result.Variable === "Trim").Value;
-                            const doors = data.Results.find(result => result.Variable === "Doors").Value;
-                            const transmissionStyle = data.Results.find(result => result.Variable === "Transmission Style").Value;
-                            const bodyClass = data.Results.find(result => result.Variable === "Body Class").Value;
-                            const batterySize = data.Results.find(result => result.Variable === "Battery Energy (kWh) From").Value;
-                            const fuelType = data.Results.find(result => result.Variable === "Fuel Type - Primary").Value;
-                            const numCylinders = data.Results.find(result => result.Variable === "Engine Number of Cylinders").Value;
-                            vehicleTitle.innerHTML = `<h6 class="no-space-bottom">EV ${year} ${make} ${model} ${trim ? trim : series ? series : ''}</h6>`;
-                        } else {
-                            const make = data.Results.find(result => result.Variable === "Make").Value;
-                            const model = data.Results.find(result => result.Variable === "Model").Value;
-                            const year = data.Results.find(result => result.Variable === "Model Year").Value;
-                            const series = data.Results.find(result => result.Variable === "Series").Value;
-                            const trim = data.Results.find(result => result.Variable === "Trim").Value;
-                            const doors = data.Results.find(result => result.Variable === "Doors").Value;
-                            const transmissionStyle = data.Results.find(result => result.Variable === "Transmission Style").Value;
-                            const bodyClass = data.Results.find(result => result.Variable === "Body Class").Value;
-                            const engineDisplacement = data.Results.find(result => result.Variable === "Displacement (L)").Value;
-                            const fuelType = data.Results.find(result => result.Variable === "Fuel Type - Primary").Value;
-                            const numCylinders = data.Results.find(result => result.Variable === "Engine Number of Cylinders").Value;
-                            vehicleTitle.innerHTML = `<h6 class="no-space-bottom">${year} ${make} ${model} ${trim ? trim : series ? series : ''}</h6>`;
-                        }
+                        document.getElementById('vehicle-vin').value = vinInput;
+                        document.getElementById('vehicle-year').value = year;
+                        document.getElementById('vehicle-make').value = make;
+                        document.getElementById('vehicle-model').value = model;
+                        document.getElementById('vehicle-trim').value = trim;
+
+                        vehicleTitle.innerHTML = `<h6 class="no-space-bottom">${year} ${make} ${model} ${trim}</h6>`;
                         vehicleTitle.style.display = "block";
                         partsTable.style.display = "block";
                     }
                 } catch (error) {
-                    console.log(error)
                     console.error('Error decoding VIN:', error);
                 }
             }
         });
 
-        // Add event listener for delete buttons
-        const deleteButtons = document.querySelectorAll(".delete-button");
-        deleteButtons.forEach(button => {
-            button.addEventListener("click", function (event) {
-                event.preventDefault();
-                const tableRow = button.closest(".table-row");
-                tableRow.style.position = "relative";
-                tableRow.classList.add("fade-out");
+        function updateTotalForms() {
+            const totalFormsInput = document.getElementById('id_form-TOTAL_FORMS');
+            const currentCount = document.querySelectorAll('.table-row').length;
+            totalFormsInput.value = currentCount;
+        }
 
-                // Remove the row after the animation completes
-                tableRow.addEventListener("animationend", () => {
-                    tableRow.remove();
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const row = this.closest('.table-row');
+                row.classList.add('fade-out');
+                row.addEventListener('animationend', function () {
+                    row.remove();
+                    updateTotalForms();
                 });
             });
         });
+        updateTotalForms();
     });
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("filter-button");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    // When the user clicks the button, open the modal 
-
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-
-    function clearFilters() {
-        // Clear select elements
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Year-Start').selectedIndex = 0;
-        document.getElementById('Part-Type').selectedIndex = 0;
-        document.getElementById('Parts-Grade').selectedIndex = 0;
-        document.getElementById('Vehicle-Model').value = '';
-        document.getElementById('Vehicle-Make').value = '';
-
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Year-Start-Modal').selectedIndex = 0;
-        document.getElementById('Part-Type-Modal').selectedIndex = 0;
-        document.getElementById('Parts-Grade-Modal').selectedIndex = 0;
-        document.getElementById('Vehicle-Model-Modal').value = '';
-        document.getElementById('Vehicle-Make-Modal').value = '';
-
-        // If you are using any plugins like Select2, you may need to trigger a change event
-        // so that the visual component updates correctly.
-        $('#Year-Start').val(null).trigger('change');
-        $('#Year-End').val(null).trigger('change');
-        $('#Part-Type').val(null).trigger('change');
-        $('#Parts-Grade').val(null).trigger('change');
-        $('#Year-Start-Modal').val(null).trigger('change');
-        $('#Year-End-Modal').val(null).trigger('change');
-        $('#Part-Type-Modal').val(null).trigger('change');
-        $('#Parts-Grade-Modal').val(null).trigger('change');
-        // Trigger the filter form submission to refresh the results
-        submitFilterForm();
-        submitFilterModalForm();
-    }
-
-
-    function submitFilterForm() {
-        var formData = new FormData(document.forms[0]);
-        var queryParams = new URLSearchParams();
-
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('table-container').innerHTML = html;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    function submitFilterModalForm() {
-        var formData = new FormData(document.forms[1]);
-        var queryParams = new URLSearchParams();
-
-        for (var pair of formData.entries()) {
-            queryParams.append(pair[0], pair[1]);
-        }
-
-        fetch("{% url 'parts' %}?" + queryParams.toString(), {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('table-container').innerHTML = html;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("parts-table");
-        const addInventoryButton = document.getElementById("add-inventory-button");
-
-        addInventoryButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            const rows = document.querySelectorAll(".table-row");
-            const partsData = [];
-
-            var allParts = {};
-            var partElements = document.getElementById('parts-list').children;
-            var firstPartId = partElements[0].id;
-            stockNumber = parseInt(firstPartId, 10);
-            for (let i = 0; i < partElements.length; i++) {
-                var partDict = {
-                    type : partElements[i].querySelector(`#part-${stockNumber}-name`).value,
-                    stockNumber: stockNumber,
-                    price: partElements[i].querySelector(`#part-${stockNumber}-price`).value,
-                    description: partElements[i].querySelector(`#part-${stockNumber}-description`).value,
-                    location: partElements[i].querySelector(`#part-${stockNumber}-location`).value
-                };
-                allParts[stockNumber] = partDict;
-                stockNumber = stockNumber + 1
-            }
-            console.log(allParts)
-            const currentRequest = $.ajax({
-                url: "{% url 'create_parts' %}",
-                type: 'POST',
-                data: { 'parts': JSON.stringify(allParts) },
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    console.log(data);
-                },
-                complete: function () {
-                    console.log("add function here")
-                }
-            });
-
-
-        });
-    });
-
-
+    
 </script>
 
  

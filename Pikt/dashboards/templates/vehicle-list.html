@@ -26,45 +26,6 @@
             </div>
             {% endif %}
         </div>
-        {% include 'pagination.html' %}
+        <!-- include 'pagination.html' -->
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let debounceTimeout;
-        let currentRequest = null;
-
-        function debounce(func, delay) {
-            return function (...args) {
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(() => func.apply(this, args), delay);
-            };
-        }
-
-        function searchCustomers(query) {
-            if (currentRequest) {
-                currentRequest.abort();
-            }
-
-            currentRequest = $.ajax({
-                url: "{% url 'customer_list' %}",
-                data: { 'q': query },
-                success: function (data) {
-                    $('#customer-list').html(data.html);
-                },
-                complete: function () {
-                    currentRequest = null;
-                }
-            });
-        }
-
-        const debouncedSearch = debounce(function () {
-            const query = document.getElementById('search').value.trim();
-            searchCustomers(query);
-        }, 50);
-
-        document.getElementById('search').addEventListener('input', debouncedSearch);
-    });
-</script>
