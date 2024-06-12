@@ -75,9 +75,6 @@ class Part(models.Model):
     image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
-    def __str__(self):
-        return f'{self.stock_number} - {self.type} - {self.company.name}'
-
     
     
     @staticmethod
@@ -182,10 +179,6 @@ class Vehicle(models.Model):
     image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     # Assuming images are handled with a separate model or method
-
-    def __str__(self):
-        return self.vin
-
 
 class Inventory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)

@@ -98,74 +98,10 @@
                 </div>
                 <div data-w-tab="Parts" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-1">
-                    <!-- <div class="table-module">
-                        <div class="table-header">
-                            <h4 class="no-space-bottom">Orders (Shipped)</h4>
-                        </div>
-                        <div class="table-content">
-                            <div class="table-list">
-                                <div class="w-layout-grid table-headers _5-columns">
-                                    <div class="caption-large">Order</div>
-                                    <div class="caption-large">Status</div>
-                                    <div class="caption-large">customer</div>
-                                    <div class="caption-large">Total</div>
-                                    <div class="caption-large">Date</div>
-                                </div><a href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row _5-columns">
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646a7-a83755f0"
-                                            class="table-title">#10423</div>
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>Shipped</div>
-                                        </div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646ad-a83755f0">Johan D.</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646af-a83755f0">$140.99</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646b1-a83755f0">05/05/21</div>
-                                    </div>
-                                </a><a href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row _5-columns">
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646b5-a83755f0"
-                                            class="table-title">#10422</div>
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>Shipped</div>
-                                        </div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bb-a83755f0">James A.</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bd-a83755f0">$220.99</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646bf-a83755f0">05/05/21</div>
-                                    </div>
-                                </a><a href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row _5-columns">
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646c3-a83755f0"
-                                            class="table-title">#10421</div>
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>Shipped</div>
-                                        </div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646c9-a83755f0">Rose G.</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646cb-a83755f0">$109.00</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646cd-a83755f0">05/05/21</div>
-                                    </div>
-                                </a><a href="#" class="table-row-link w-inline-block">
-                                    <div class="w-layout-grid table-row _5-columns">
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d1-a83755f0"
-                                            class="table-title">#10420</div>
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-green"></div>
-                                            <div>Shipped</div>
-                                        </div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d7-a83755f0">Michael D.</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646d9-a83755f0">$2,120.00</div>
-                                        <div id="w-node-ce82a503-a921-dbb0-380c-686dd0d646db-a83755f0">05/05/21</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="table-bottom-caption">
-                            <div>All orders are updated every 30 seconds</div>
-                        </div>
-                    </div> -->
-                    {% include "parts-nav.html" %}
+                    <div class="w-layout-grid main-grid">
+                        {% include "filter-bar.html" %}
+                        {% include 'filtered-table.html' %}
+                    </div>
                 </div>
                 <div data-w-tab="Processing" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                     aria-labelledby="w-tabs-0-data-w-tab-2">

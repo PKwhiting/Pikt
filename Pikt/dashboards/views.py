@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from .models import Part, Order, Vehicle, Inventory, PartPreference
 from company.models import Location
@@ -157,9 +158,11 @@ class rootView(LoginRequiredMixin,View):
         request.user.save()
         return render(request, 'dashboard.html', context)
  
+from .forms import PartFilterForm
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = Part.objects.filter(user=request.user) if request.user.is_authenticated else []
+        parts = Part.objects.filter(company=request.user.company)
+        filter_form = PartFilterForm()
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
@@ -169,35 +172,12 @@ class defaultDashboardView(LoginRequiredMixin,View):
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
+            'table_items': parts,
+            'filterForm': filter_form,
+            'item_action': 'single_part',
+            'filter_form_action': reverse('filter_parts'),
+            'filter_form_headers': list(filter_form.fields.keys()),
         }
-        if is_ajax(request):
-            year_start = request.GET.get('year_start')
-            year_end = request.GET.get('year_end')
-            vehicle_make = request.GET.get('vehicle_make')
-            vehicle_model = request.GET.get('vehicle_model')
-            part_type = request.GET.get('part_type')
-            part_grade = request.GET.get('grade')
-            parts = Part.objects.filter(user=request.user)
-            if year_start:
-                parts = parts.filter(vehicle_year__gte=year_start)
-            if year_end:
-                parts = parts.filter(vehicle_year__lte=year_end)
-            if vehicle_model:
-                parts = parts.filter(vehicle_model__icontains=vehicle_model)
-            if vehicle_make:
-                parts = parts.filter(vehicle_make__icontains=vehicle_make)
-            if part_type:
-                parts = parts.filter(type__iexact=part_type)
-            if part_grade:
-                parts = parts.filter(grade__iexact=part_grade)
-            context['parts'] = parts
-            return HttpResponse(render_to_string('parts-table.html', context))
-        if context['parts'].count() > 0:
-            parts_list = Part.objects.filter(user=request.user).order_by('id')
-            paginator = Paginator(parts_list, 20)
-            page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-            context['parts'] = page_obj
         request.user.messages = []
         request.user.save()
         return render(request, 'parts.html', context)
@@ -466,21 +446,59 @@ def add_vehicle(request):
     return render(request, 'add-vehicle.html', context)
 
 @login_required
-def delete_part(request, part_id):
-    part_to_delete = get_object_or_404(part, id=part_id)
+def delete_item(request, item_id):
+    print("99999999")
+    print(request)
+
+    if 'part' in request.build_absolute_uri():
+        item_to_delete = get_object_or_404(Part, id=item_id)
+        redirect_url = '/dashboards/parts/'
+    else:
+        item_to_delete = get_object_or_404(Vehicle, id=item_id)
+        redirect_url = '/dashboards/vehicles/'
     try:
-        part_to_delete.delete()
+        item_to_delete.delete()
+        message = 'Deletion was successful.'
     except IntegrityError:
-        messages = json.loads(request.user.messages)
-        messages.append('This part cannot be deleted because it is being used elsewhere')
-        request.user.messages = json.dumps(messages)
-        request.user.save()
-        return redirect('single_part', part_id=part_id)
+        message = 'Deletion was unsuccessful.'
     messages = json.loads(request.user.messages)
-    messages.append('Part deleted successfully')
+    messages.append(message)
     request.user.messages = json.dumps(messages)
     request.user.save()
-    return redirect('/dashboards/vehicles/')
+    return redirect(redirect_url)
+from .forms import EditPartForm, EditVehicleForm
+class edit_item(LoginRequiredMixin, View):
+    def get(self, request, item_id):
+        if 'part' in request.build_absolute_uri():
+            item_to_edit = get_object_or_404(Part, id=item_id)
+            form = EditPartForm(instance=item_to_edit)
+            item_edit_url = 'edit_part'
+            item_delete_url = 'delete_part'
+        else:
+            item_to_edit = get_object_or_404(Vehicle, id=item_id)
+            form = EditVehicleForm(instance=item_to_edit)
+            item_edit_url = 'edit_vehicle'
+            item_delete_url = 'delete_vehicle'
+        context = {
+            'item': item_to_edit,
+            'form': form,
+            'item_edit_url': item_edit_url,
+            'item_delete_url': item_delete_url
+        }
+        return render(request, 'edit-item.html', context)
+
+    def post(self, request, item_id):
+        # get the form from the request
+        if 'part' in request.build_absolute_uri():
+            item_to_edit = get_object_or_404(Part, id=item_id)
+            form = EditPartForm(request.POST, request.FILES, instance=item_to_edit)
+        else:
+            item_to_edit = get_object_or_404(Vehicle, id=item_id)
+            form = EditVehicleForm(request.POST, request.FILES, instance=item_to_edit)
+        if form.is_valid():
+            form.save()
+        return redirect('/dashboards/vehicles/')
+    
 
 @login_required
 def delete_vehicle(request, vehicle_id):
@@ -494,7 +512,7 @@ def delete_vehicle(request, vehicle_id):
     return redirect('/dashboards/vehicles/')
 
 def edit_part(request, part_id):
-    part_instance = get_object_or_404(part, id=part_id)
+    part_instance = get_object_or_404(Part, id=part_id)
 
     # if saving edits toa part
     if request.method == 'POST':
@@ -597,22 +615,34 @@ def edit_vehicle(request, vehicle_id):
     request.user.save()
     return render(request, 'edit-vehicle.html', context)
 
-class single_part(LoginRequiredMixin, View):
-    def get(self, request, part_id=None, *args, **kwargs):
-        selected_part = get_object_or_404(part, id=part_id)
+class single_item(LoginRequiredMixin, View):
+    def get(self, request, item_id=None, *args, **kwargs):
+        item_type = None
+        if 'part' in request.build_absolute_uri():
+            model = Part
+            item_edit_url = 'edit_part'
+            item_delete_url = 'delete_part'
+            item_type = 'part'
+        elif 'vehicle' in request.build_absolute_uri():
+            model = Vehicle
+            item_edit_url = 'edit_vehicle'
+            item_delete_url = 'delete_vehicle'
+            item_type = 'vehicle'
+        item = get_object_or_404(model, id=item_id)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years' : range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
-            'part': selected_part,
-            'potential_profit': (selected_Part.price or Decimal('0.01')) - (selected_Part.cost or Decimal('0.01')),
-            'roi': round(((selected_Part.price or Decimal('0.01')) - (selected_Part.cost or Decimal('0.01'))) / (selected_Part.cost or Decimal('0.01')) * 100, 2)   
+            'item': item,
+            'item_edit_url': item_edit_url,
+            'item_delete_url': item_delete_url,
+            'item_type': item_type
         }
         request.user.messages = []
         request.user.save()
-        return render(request, 'single-Part.html', context)
+        return render(request, 'single-item.html', context)
 
 class single_vehicle(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -937,9 +967,12 @@ class VehiclesView(LoginRequiredMixin, View):
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
-            'vehicles': vehicles,
+            'table_items': vehicles,
             'form': form,
             'filterForm': filterForm,
+            'filter_form_action': reverse('filter_vehicles'),
+            'item_action': 'single_vehicle',
+            'filter_form_headers': ['vin', 'make', 'model', 'year', 'mileage'],
             'prefered_parts': parts_with_stock_numbers,
             'part_formset': formset
         }
@@ -1033,7 +1066,7 @@ class FilterVehicles(View):
     def get(self, request, *args, **kwargs):
         vehicles = Vehicle.objects.filter(company = request.user.company)
         # filter only searches for single characters, it needs to search for characters and strings
-        if request.GET.get('stock_number'):
+        if request.GET.get('vin'):
             vehicles = vehicles.filter(vin__icontains=request.GET.get('vin'))
         if request.GET.get('make'):
             vehicles = vehicles.filter(make__icontains=request.GET.get('make'))
@@ -1041,5 +1074,37 @@ class FilterVehicles(View):
             vehicles = vehicles.filter(model__icontains=request.GET.get('model'))
         if request.GET.get('year'):
             vehicles = vehicles.filter(year__icontains=request.GET.get('year'))
-        html = render_to_string('vehicle-list.html', {'vehicles': vehicles})
+        context = {
+            'table_items': vehicles, 
+            'filter_form_headers': ['vin', 'make', 'model', 'year', 'mileage'], 
+            'filter_form_action': 'filter_vehicles',
+            'table_items': vehicles,
+            'item_action': 'single_vehicle',
+        }
+        html = render_to_string('filtered-table.html', context)
+        return JsonResponse({'html': html})
+
+class FilterParts(View):
+    def get(self, request, *args, **kwargs):
+        print("=======================================================================")
+        parts = Part.objects.filter(company = request.user.company)
+        # filter only searches for single characters, it needs to search for characters and strings
+        if request.GET.get('type'):
+            parts = parts.filter(type__icontains=request.GET.get('type'))
+        if request.GET.get('stock_number'):
+            parts = parts.filter(stock_number__icontains=request.GET.get('stock_number'))
+        if request.GET.get('price'):
+            print(request.GET.get('price'))
+            parts = parts.filter(price__icontains=request.GET.get('price'))
+        if request.GET.get('grade'):
+            parts = parts.filter(grade__icontains=request.GET.get('grade'))
+
+        context = {
+            'table_items': parts,
+            'filter_form_headers': ['stock_number', 'type', 'grade', 'price'],
+            'filter_form_action': 'filter_parts',
+            'table_items': parts,
+            'item_action': 'single_part',
+        }
+        html = render_to_string('filtered-table.html', context)
         return JsonResponse({'html': html})

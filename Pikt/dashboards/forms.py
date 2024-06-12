@@ -24,19 +24,18 @@ class VehicleFilterForm(forms.ModelForm):
             'make': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Make'}),
             'model': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Model'}),
         }
-        # labels = {
-        #     'stock_number': '',
-        #     'year': '',
-        #     'make': '',
-        #     'model': '',
-        # }
-        # required = {
-        #     'year': False,
-        #     'make': False,
-        #     'model': False
-        # }
-    def set_values(self):
-        print("TACOS")
+
+class PartFilterForm(forms.ModelForm):
+
+    class Meta:
+        model = Part
+        fields = ['stock_number', 'type', 'grade', 'price']
+        widgets = {
+            'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Stock Number'}),
+            'type': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Type'}),
+            'grade': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Grade'}, choices=[('Part Grade','Part Grade')]),
+            'price': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Price'}),
+        }
 
 class PartForm(forms.ModelForm):
     image_1 = forms.ImageField(required=False)
@@ -144,3 +143,13 @@ class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = ['vin', 'year', 'make', 'model', 'trim']
+
+class EditPartForm(forms.ModelForm):
+    class Meta:
+        model = Part
+        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange']
+
+class EditVehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['vin', 'year', 'make', 'model', 'trim', 'location', 'engine', 'mileage', 'transmission', 'body_type', 'drivetrain', 'primary_damage', 'secondary_damage']

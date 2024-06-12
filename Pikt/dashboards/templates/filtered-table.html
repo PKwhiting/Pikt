@@ -1,0 +1,29 @@
+{% load tags %}
+<div class="table-module" id="vehicle-list">
+
+    <div class="table-content" style="margin-top: 10px;">
+        <div class="table-list">
+            <div class="w-layout-grid table-headers">
+                {% for header in filter_form_headers %}
+                    <div class="caption-large">{{ header }}</div>
+                {% endfor %}
+            </div>
+            {% if table_items %}
+            {% for item in table_items %}
+            <a href="{% url item_action item.id %}" class="table-row-link w-inline-block">
+                <div class="w-layout-grid table-row">
+                    {% for field in filter_form_headers %}
+                        <div>{{ item|getattribute:field|default_if_none:"-" }}</div>
+                    {% endfor %}
+                </div>
+            </a>
+            {% endfor %}
+            {% else %}
+            <div class="w-layout-grid table-row">
+                <div class="table-title">No matches found</div>
+            </div>
+            {% endif %}
+        </div>
+        <!-- include 'pagination.html' -->
+    </div>
+</div>
