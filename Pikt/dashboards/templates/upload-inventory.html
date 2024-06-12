@@ -1,24 +1,4 @@
 <div class="table-module">
-    <div style="margin-left: 25px; margin-right: 25px;">
-        <div class="account">
-            <div class="div-block" style="width: 70%;">
-                <div class="caption">File must have columns: 'INTERCHANGE', 'STOCK_NUMBER', 'NAME', 'CATEGORY',
-                    'VIN'</div>
-                <div class="numbers-wrapper">
-                    <h3 class="number">Upload Inventory</h3>
-                </div>
-            </div>
-            <form id="inventoryForm" action="{% url 'upload_inventory' %}" method="post"
-                enctype="multipart/form-data" style="display: none;">
-                {% csrf_token %}
-                <input type="file" id="inventory" name="inventory" accept=".xlsx, .xls, .csv">
-            </form>
-            <button onclick="document.getElementById('inventory').click()"
-                class="button button-small button-outline w-button">
-                <div>Select File</div>
-            </button>
-        </div>
-    </div>
     {% if table_data %}
     <div class="table-content">
         <div class="table-list">

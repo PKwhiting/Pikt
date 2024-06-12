@@ -161,7 +161,7 @@ class rootView(LoginRequiredMixin,View):
 from .forms import PartFilterForm
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = Part.objects.filter(company=request.user.company)
+        parts = Part.objects.filter(company=request.user.company, sold=False)
         filter_form = PartFilterForm()
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
@@ -773,69 +773,6 @@ class yard(LoginRequiredMixin, View):
             return JsonResponse({'success': True}, safe=False)
 
 
-import pandas as pd
-class parts(View):
-    def post(self, request):
-        if 'inventory' in request.FILES:
-            file = request.FILES['inventory']
-            try:
-                # Read the file into a pandas DataFrame
-                if file.name.endswith('.csv'):
-                    df = pd.read_csv(file)
-                elif file.name.endswith('.xlsx'):
-                    df = pd.read_excel(file, engine='openpyxl')
-                elif file.name.endswith('.xls'):
-                    df = pd.read_excel(file, engine='xlrd')
-                else:
-                    add_user_message(request, 'Invalid file format. Please upload a CSV or Excel file.')
-                    return redirect('upload_inventory')
-                
-                df = df.iloc[:, :5]
-
-                # Convert DataFrame to a list of dictionaries
-                data = df.to_dict(orient='records')
-
-                for row in data:
-                    new_part, created = Part.objects.get_or_create(
-                        stock_number=row['STOCK_NUMBER'],
-                        defaults={
-                            'user': request.user,
-                            'hollander_interchange': row['INTERCHANGE'],
-                            'type': row['NAME'],
-                            'category': row['CATEGORY'],
-                            'vehicle_vin': row['VIN'],
-                        }
-                    )
-                    if created:
-                        print(f"Created new part: {new_part}")
-                    else:
-                        print(f"Part already exists: {new_part}")
-
-                # Save the DataFrame to the session to display it in the template
-                request.session['table_data'] = data
-                add_user_message(request, 'Inventory uploaded successfully.')
-
-            except Exception as e:
-                add_user_message(request, f'Error: {e}')
-                return redirect('parts')
-        return redirect('parts')
-
-    def get(self, request):
-        # total_parts_count = Part.objects.filter(user=request.user).count()
-        # max_cores = core.objects.filter(interchange=OuterRef('hollander_interchange')).order_by().values('interchange').annotate(max_price=Max('price'))
-        # parts_with_max_core = Part.objects.filter(user=request.user).annotate(max_core_price=Subquery(max_cores.values('max_price')))
-        # total_max_core_price = parts_with_max_core.aggregate(total=Sum('max_core_price'))['total']
-        # total_max_core_price = Decimal(total_max_core_price).quantize(Decimal('0.00'))
-        # del request.session['table_data']
-        table_data = request.session.get('table_data', '')
-        parts = Part.objects.filter(user=request.user).order_by('id')
-        context = {
-            'table_data': table_data,
-            'parts': parts,
-            'messages': json.loads(request.user.messages),
-        }
-        return render(request, 'parts.html', context)
-    
 # define the sales view and render sales.html
 class sales(LoginRequiredMixin, View):
     def get(self, request):
@@ -1091,7 +1028,7 @@ class FilterVehicles(View):
 
 class FilterParts(View):
     def get(self, request, *args, **kwargs):
-        parts = Part.objects.filter(company = request.user.company)
+        parts = Part.objects.filter(company=request.user.company, sold=False)
         # filter only searches for single characters, it needs to search for characters and strings
         if request.GET.get('type'):
             parts = parts.filter(type__icontains=request.GET.get('type'))
