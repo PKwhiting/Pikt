@@ -447,12 +447,12 @@ def add_vehicle(request):
 
 @login_required
 def delete_item(request, item_id):
-    if 'part' in request.build_absolute_uri():
-        item_to_delete = get_object_or_404(Part, id=item_id)
-        redirect_url = '/dashboards/parts/'
-    else:
+    if 'vehicle' in request.build_absolute_uri():
         item_to_delete = get_object_or_404(Vehicle, id=item_id)
         redirect_url = '/dashboards/vehicles/'
+    else:
+        item_to_delete = get_object_or_404(Part, id=item_id)
+        redirect_url = '/dashboards/parts/'
     try:
         item_to_delete.delete()
         message = 'Deletion was successful.'
@@ -466,16 +466,16 @@ def delete_item(request, item_id):
 from .forms import EditPartForm, EditVehicleForm
 class edit_item(LoginRequiredMixin, View):
     def get(self, request, item_id):
-        if 'part' in request.build_absolute_uri():
-            item_to_edit = get_object_or_404(Part, id=item_id)
-            form = EditPartForm(instance=item_to_edit)
-            item_edit_url = 'edit_part'
-            item_delete_url = 'delete_part'
-        else:
+        if 'vehicle' in request.build_absolute_uri():
             item_to_edit = get_object_or_404(Vehicle, id=item_id)
             form = EditVehicleForm(instance=item_to_edit)
             item_edit_url = 'edit_vehicle'
             item_delete_url = 'delete_vehicle'
+        else:
+            item_to_edit = get_object_or_404(Part, id=item_id)
+            form = EditPartForm(instance=item_to_edit)
+            item_edit_url = 'edit_part'
+            item_delete_url = 'delete_part'
         context = {
             'item': item_to_edit,
             'form': form,
@@ -486,14 +486,14 @@ class edit_item(LoginRequiredMixin, View):
 
     def post(self, request, item_id):
         # get the form from the request
-        if 'part' in request.build_absolute_uri():
-            item_to_edit = get_object_or_404(Part, id=item_id)
-            form = EditPartForm(request.POST, request.FILES, instance=item_to_edit)
-            redirect_url = '/dashboards/parts/'
-        else:
+        if 'vehicle' in request.build_absolute_uri():
             item_to_edit = get_object_or_404(Vehicle, id=item_id)
             form = EditVehicleForm(request.POST, request.FILES, instance=item_to_edit)
             redirect_url = '/dashboards/vehicles/'
+        else:
+            item_to_edit = get_object_or_404(Part, id=item_id)
+            form = EditPartForm(request.POST, request.FILES, instance=item_to_edit)
+            redirect_url = '/dashboards/parts/'
         if form.is_valid():
             form.save()
         return redirect(redirect_url)
@@ -617,16 +617,17 @@ def edit_vehicle(request, vehicle_id):
 class single_item(LoginRequiredMixin, View):
     def get(self, request, item_id=None, *args, **kwargs):
         item_type = None
-        if 'part' in request.build_absolute_uri():
-            model = Part
-            item_edit_url = 'edit_part'
-            item_delete_url = 'delete_part'
-            item_type = 'part'
-        elif 'vehicle' in request.build_absolute_uri():
+        if 'vehicle' in request.build_absolute_uri():
             model = Vehicle
             item_edit_url = 'edit_vehicle'
             item_delete_url = 'delete_vehicle'
             item_type = 'vehicle'
+        else:
+            model = Part
+            item_edit_url = 'edit_part'
+            item_delete_url = 'delete_part'
+            item_type = 'part'
+        
         item = get_object_or_404(model, id=item_id)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
