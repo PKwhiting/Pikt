@@ -3,8 +3,11 @@
 {% load static %}
 {% block content %}
 <div class="dashboard-container">
-    <h1>{{ item.year }} {{ item.make }} {{ item.model }} {{ item.type }}</h1>
     <form method="POST" action="{% url item_edit_url item.pk %}">
+        <div style="display: flex; justify-content: space-between">
+            <h1>{{ item.year }} {{ item.make }} {{ item.model }} {{ item.type }}</h1>
+            <button class="button button-small bg-primary-green w-button" style="margin-bottom: 16px;" type="submit">Save</button>
+        </div>
         {% csrf_token %}
         <div id="w-node-_16eaae77-e4e7-5162-b306-e6410af62ec5-b47b752d" class="module">
             {% for field in form %}
@@ -14,9 +17,10 @@
                 </div>
             {% endfor %}
         </div>
+        
     </form>
     <div class="account-delete">
-        <button class="button button-small bg-primary-green w-button" type="submit">Save</button>
+        <button style="display: hidden"></button>
         <form action="{% url item_delete_url item.id %}" method="get">
             {% csrf_token %}
             <input type="submit" value="Delete" style="margin-top: 5px;"

@@ -17,25 +17,46 @@ class VehicleFilterForm(forms.ModelForm):
 
     class Meta:
         model = Vehicle
-        fields = ['vin', 'year', 'make', 'model']
+        fields = ['vin', 'year', 'make', 'model', 'trim', 'location']
         widgets = {
             'vin': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'VIN'}),
             'year': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Year'}),
             'make': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Make'}),
             'model': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Model'}),
+            'trim': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Trim'}),
+            'location': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Location'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['vin'].label = ""
+        self.fields['year'].label = ""
+        self.fields['make'].label = ""
+        self.fields['model'].label = ""
+        self.fields['trim'].label = ""
+        self.fields['location'].label = ""
 
 class PartFilterForm(forms.ModelForm):
 
     class Meta:
         model = Part
-        fields = ['stock_number', 'type', 'grade', 'price']
+        fields = ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'mercari_listed']
         widgets = {
             'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Stock Number'}),
             'type': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Type'}),
             'grade': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Grade'}, choices=[('Part Grade','Part Grade')]),
             'price': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Price'}),
+            'ebay_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Ebay Listed'}),
+            'mercari_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;'}),
         }
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['price'].label = ""
+            self.fields['stock_number'].label = ""
+            self.fields['type'].label = ""
+            self.fields['grade'].label = ""
+            self.fields['ebay_listed'].label = "Ebay"
+            self.fields['mercari_listed'].label = "Mercari"
 
 class PartForm(forms.ModelForm):
     image_1 = forms.ImageField(required=False)
@@ -110,8 +131,6 @@ class PartPreferenceForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        print("--============-0))))0")
-        print(self.cleaned_data)
         instance.set_parts_list(self.cleaned_data['parts'])
         if commit:
             instance.save()
@@ -147,7 +166,7 @@ class VehicleForm(forms.ModelForm):
 class EditPartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange']
+        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange', 'ebay_listed', 'mercari_listed', 'marketplace_listed']
 
 class EditVehicleForm(forms.ModelForm):
     class Meta:

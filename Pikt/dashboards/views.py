@@ -447,9 +447,6 @@ def add_vehicle(request):
 
 @login_required
 def delete_item(request, item_id):
-    print("99999999")
-    print(request)
-
     if 'part' in request.build_absolute_uri():
         item_to_delete = get_object_or_404(Part, id=item_id)
         redirect_url = '/dashboards/parts/'
@@ -492,12 +489,14 @@ class edit_item(LoginRequiredMixin, View):
         if 'part' in request.build_absolute_uri():
             item_to_edit = get_object_or_404(Part, id=item_id)
             form = EditPartForm(request.POST, request.FILES, instance=item_to_edit)
+            redirect_url = '/dashboards/parts/'
         else:
             item_to_edit = get_object_or_404(Vehicle, id=item_id)
             form = EditVehicleForm(request.POST, request.FILES, instance=item_to_edit)
+            redirect_url = '/dashboards/vehicles/'
         if form.is_valid():
             form.save()
-        return redirect('/dashboards/vehicles/')
+        return redirect(redirect_url)
     
 
 @login_required
@@ -943,7 +942,7 @@ class VehiclesView(LoginRequiredMixin, View):
         part_preference, created = PartPreference.objects.get_or_create(company=request.user.company)
         selected_parts = part_preference.get_parts_list()
         form = PartPreferenceForm(initial={'parts': selected_parts})
-        filterForm = VehicleFilterForm()
+        filter_form = VehicleFilterForm()
 
         highest_stock_number = Part.get_highest_stock_number()
         parts_with_stock_numbers = []
@@ -969,10 +968,10 @@ class VehiclesView(LoginRequiredMixin, View):
             'messages': json.loads(request.user.messages),
             'table_items': vehicles,
             'form': form,
-            'filterForm': filterForm,
+            'filterForm': filter_form,
             'filter_form_action': reverse('filter_vehicles'),
             'item_action': 'single_vehicle',
-            'filter_form_headers': ['vin', 'make', 'model', 'year', 'mileage'],
+            'filter_form_headers': list(filter_form.fields.keys()),
             'prefered_parts': parts_with_stock_numbers,
             'part_formset': formset
         }
@@ -1074,9 +1073,14 @@ class FilterVehicles(View):
             vehicles = vehicles.filter(model__icontains=request.GET.get('model'))
         if request.GET.get('year'):
             vehicles = vehicles.filter(year__icontains=request.GET.get('year'))
+        if request.GET.get('trim'):
+            vehicles = vehicles.filter(trim__icontains=request.GET.get('trim'))
+        if request.GET.get('location'):
+
+            vehicles = vehicles.filter(location__icontains=request.GET.get('location'))
         context = {
             'table_items': vehicles, 
-            'filter_form_headers': ['vin', 'make', 'model', 'year', 'mileage'], 
+            'filter_form_headers': ['vin', 'year', 'make', 'model', 'trim', 'location'], 
             'filter_form_action': 'filter_vehicles',
             'table_items': vehicles,
             'item_action': 'single_vehicle',
@@ -1086,7 +1090,6 @@ class FilterVehicles(View):
 
 class FilterParts(View):
     def get(self, request, *args, **kwargs):
-        print("=======================================================================")
         parts = Part.objects.filter(company = request.user.company)
         # filter only searches for single characters, it needs to search for characters and strings
         if request.GET.get('type'):
@@ -1098,10 +1101,14 @@ class FilterParts(View):
             parts = parts.filter(price__icontains=request.GET.get('price'))
         if request.GET.get('grade'):
             parts = parts.filter(grade__icontains=request.GET.get('grade'))
+        if request.GET.get('ebay_listed'):
+            parts = parts.filter(ebay_listed=bool(request.GET.get('ebay_listed')))
+        if request.GET.get('mercari_listed'):
+            parts = parts.filter(mercari_listed=bool(request.GET.get('mercari_listed')))
 
         context = {
             'table_items': parts,
-            'filter_form_headers': ['stock_number', 'type', 'grade', 'price'],
+            'filter_form_headers': ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'mercari_listed'],
             'filter_form_action': 'filter_parts',
             'table_items': parts,
             'item_action': 'single_part',
