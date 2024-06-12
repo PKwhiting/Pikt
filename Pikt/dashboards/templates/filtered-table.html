@@ -3,7 +3,7 @@
 
     <div class="table-content" style="margin-top: 10px;">
         <div class="table-list">
-            <div class="w-layout-grid table-headers" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+            <div class="w-layout-grid table-headers">
                 {% for header in filter_form_headers %}
                     <div class="caption-large">{{ header }}</div>
                 {% endfor %}
@@ -11,7 +11,7 @@
             {% if table_items %}
             {% for item in table_items %}
             <a href="{% url item_action item.id %}" class="table-row-link w-inline-block">
-                <div class="w-layout-grid table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+                <div class="w-layout-grid table-row">
                     {% for field in filter_form_headers %}
                         <div>{{ item|getattribute:field|default_if_none:"-"|safe }}</div>
                     {% endfor %}
@@ -27,23 +27,3 @@
         <!-- include 'pagination.html' -->
     </div>
 </div>
-<style>
-    @media screen and (max-width:1300px) {
-        .table-headers {
-            grid-template-columns: 1fr 1fr 1fr !important;
-
-        }
-        .table-row {
-            grid-template-columns: 1fr 1fr 1fr !important;
-        }
-    }
-    @media screen and (max-width:767px) {
-        .table-headers {
-            grid-template-columns: 1fr !important;
-
-        }
-        .table-row {
-            grid-template-columns: 1fr !important;
-        }
-    }
-</style>

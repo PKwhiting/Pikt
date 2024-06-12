@@ -1104,12 +1104,12 @@ class FilterParts(View):
             parts = parts.filter(grade__icontains=request.GET.get('grade'))
         if request.GET.get('ebay_listed'):
             parts = parts.filter(ebay_listed=bool(request.GET.get('ebay_listed')))
-        if request.GET.get('mercari_listed'):
-            parts = parts.filter(mercari_listed=bool(request.GET.get('mercari_listed')))
+        if request.GET.get('marketplace_listed'):
+            parts = parts.filter(marketplace_listed=bool(request.GET.get('marketplace_listed')))
 
         context = {
             'table_items': parts,
-            'filter_form_headers': ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'mercari_listed'],
+            'filter_form_headers': ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'marketplace_listed'],
             'filter_form_action': 'filter_parts',
             'table_items': parts,
             'item_action': 'single_part',

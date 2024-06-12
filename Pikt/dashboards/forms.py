@@ -40,14 +40,14 @@ class PartFilterForm(forms.ModelForm):
 
     class Meta:
         model = Part
-        fields = ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'mercari_listed']
+        fields = ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'marketplace_listed']
         widgets = {
             'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Stock Number'}),
             'type': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Type'}),
             'grade': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Grade'}, choices=[('Part Grade','Part Grade')]),
             'price': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Price'}),
             'ebay_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Ebay Listed'}),
-            'mercari_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;'}),
+            'marketplace_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;'}),
         }
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -56,7 +56,7 @@ class PartFilterForm(forms.ModelForm):
             self.fields['type'].label = ""
             self.fields['grade'].label = ""
             self.fields['ebay_listed'].label = "Ebay"
-            self.fields['mercari_listed'].label = "Mercari"
+            self.fields['marketplace_listed'].label = "Facebook Marketplace"
 
 class PartForm(forms.ModelForm):
     image_1 = forms.ImageField(required=False)
