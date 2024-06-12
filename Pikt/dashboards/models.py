@@ -113,7 +113,6 @@ class Vehicle(models.Model):
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
     vin = models.CharField(max_length=17, null=True, blank=True)
-    stock_number = models.CharField(max_length=256, null=True, blank=True)
     year = models.IntegerField(blank=True, null=True)
     make = models.CharField(max_length=256, blank=True, null=True)
     model = models.CharField(max_length=256, blank=True, null=True)

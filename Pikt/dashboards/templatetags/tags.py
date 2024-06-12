@@ -30,7 +30,7 @@ def getattribute(obj, attr):
 def model_fields(obj):
     fields = []
     for field in obj._meta.fields:
-        if 'image' not in field.name and field.name != 'id' and field.name != 'vehicle':
+        if 'image' not in field.name and field.name != 'id' and field.name != 'vehicle' and field.name != 'latitude' and field.name != 'longitude' and field.name != 'category' and 'marker' not in field.name and 'row' not in field.name and 'fee' not in field.name and 'code' not in field.name and 'color' not in field.name and 'date' not in field.name and 'seller' not in field.name and 'bid' not in field.name and 'cost' not in field.name:  
             field_name = field.name.replace('_', ' ')
             field_value = getattr(obj, field.name)
             fields.append({'name': field_name, 'value': field_value})
