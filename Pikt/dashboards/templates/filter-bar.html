@@ -22,8 +22,8 @@
             <div class="dropdown-list w-dropdown-list"
                 style="transform: translate3d(0px, -20px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0; border-radius: 8px;"
                 id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0">
-                <div style="padding-left: 12px; padding-right: 12px;">
-                    <form method="get" action="{{ filter_form_action }}" oninput="submitFilterForm()" style="display: grid; flex-direction: row; grid-column-gap: 5px;" class="table-headers">
+                <div style="padding-left: 12px; padding-right: 12px; padding-bottom: 12px;">
+                    <form method="get" action="{{ filter_form_action }}" oninput="submitFilterForm()" style="display: grid; flex-direction: row; grid-column-gap: 5px;" class="table-headers" id="filter-table-headers">
                         {% for field in filterForm %}
                             {% if field.name == 'ebay_listed' or field.name == 'marketplace_listed' %}
                                 {{ field|custom_switch|safe }}
@@ -61,6 +61,21 @@
     }
 </script>
 <style>
+    #filter-table-headers {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    @media screen and (max-width:1300px) {
+        #filter-table-headers {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+    }
+    @media screen and (max-width:767px) {
+        #filter-table-headers {
+            grid-template-columns: 1fr;
+        }
+
+    }
     @media screen and (max-width: 991px) {
         #filter-button {
             display: block !important;

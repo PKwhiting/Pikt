@@ -1034,9 +1034,8 @@ class FilterParts(View):
             parts = parts.filter(type__icontains=request.GET.get('type'))
         if request.GET.get('stock_number'):
             parts = parts.filter(stock_number__icontains=request.GET.get('stock_number'))
-        if request.GET.get('price'):
-            print(request.GET.get('price'))
-            parts = parts.filter(price__icontains=request.GET.get('price'))
+        if request.GET.get('location'):
+            parts = parts.filter(location__icontains=request.GET.get('location'))
         if request.GET.get('grade'):
             parts = parts.filter(grade__icontains=request.GET.get('grade'))
         if request.GET.get('ebay_listed'):
@@ -1046,7 +1045,7 @@ class FilterParts(View):
 
         context = {
             'table_items': parts,
-            'filter_form_headers': ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'marketplace_listed'],
+            'filter_form_headers': ['stock_number', 'type', 'location', 'grade', 'ebay_listed', 'marketplace_listed'],
             'filter_form_action': 'filter_parts',
             'table_items': parts,
             'item_action': 'single_part',
