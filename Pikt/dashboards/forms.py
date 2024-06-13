@@ -40,10 +40,11 @@ class PartFilterForm(forms.ModelForm):
 
     class Meta:
         model = Part
-        fields = ['stock_number', 'type', 'grade', 'price', 'ebay_listed', 'marketplace_listed']
+        fields = ['stock_number', 'type', 'location', 'grade', 'price', 'ebay_listed', 'marketplace_listed']
         widgets = {
             'stock_number': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Stock Number'}),
             'type': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Type'}),
+            'location': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Location'}),
             'grade': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Grade'}, choices=[('Part Grade','Part Grade')]),
             'price': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Part Price'}),
             'ebay_listed': forms.CheckboxInput(attrs={'class': 'switch', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Ebay Listed'}),
@@ -52,6 +53,7 @@ class PartFilterForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields['price'].label = ""
+            self.fields['location'].label = ""
             self.fields['stock_number'].label = ""
             self.fields['type'].label = ""
             self.fields['grade'].label = ""
