@@ -165,7 +165,7 @@
                         </div>
                         <div class="table-content" style="margin-top: 18px;">
                             <div class="table-list">
-                                <div class="w-layout-grid table-headers">
+                                <div class="w-layout-grid table-headers" id="parts-list-headers">
                                     <div class="caption-large">Part name</div>
                                     <div class="caption-large">Stock Number</div>
                                     <div class="caption-large">Price</div>
@@ -173,8 +173,8 @@
                                     <div class="caption-large">Location</div>
                                     <div class="caption-large">Grade</div>
                                 </div>
-                                <div id="parts-list">
-                                    <form method="post" action="{% url 'create_parts' %}" id="parts-form">
+                                <div>
+                                    <form method="post" action="{% url 'create_parts' %}" id="add-parts-form">
                                         <div id="vehicle-details" style="display: none;">
                                             <input type="hidden" name="vin" id="vehicle-vin">
                                             <input type="hidden" name="year" id="vehicle-year">
@@ -186,7 +186,7 @@
                                         {{ part_formset.management_form }}
                                         <div id="parts-list">
                                             {% for form in part_formset %}
-                                            <div class="w-layout-grid table-row" id="form-{{ forloop.counter0 }}" style="padding: 0px 12px;">
+                                            <div class="parts-list-row w-layout-grid table-row" id="form-{{ forloop.counter0 }}" style="padding: 0px 12px;">
                                                 {{ form.as_p }}
                                                 <div style="display: flex; align-self: inherit; margin-bottom: 12px;">
                                                     <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
@@ -301,29 +301,47 @@
 </div>
 
 <style scoped>
+    #parts-list-headers {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr .25fr;
+    }
+    #parts-list > div.parts-list-row {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr .25fr;
+    }
     .table-headers {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr !important;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        padding: 16px 16px;
     }
     .table-row {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr!important;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
     @media screen and (max-width:1300px) {
+        #parts-list-headers {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        #parts-list > div.parts-list-row {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
         .table-headers {
-            grid-template-columns: 1fr 1fr 1fr !important;
-
+            grid-template-columns: 1fr 1fr 1fr;
         }
         .table-row {
-            grid-template-columns: 1fr 1fr 1fr !important;
+            grid-template-columns: 1fr 1fr 1fr;
         }
     }
     @media screen and (max-width:767px) {
+        #parts-list-headers {
+            grid-template-columns: 1fr 1fr;
+        }
+        #parts-list > div.parts-list-row {
+            grid-template-columns: 1fr 1fr;
+        }
         .table-headers {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr;
 
         }
         .table-row {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr;
         }
     }
     .table-title,
@@ -335,14 +353,6 @@
 
     .w-select {
         width: 90%;
-    }
-
-    @media screen and (min-width: 767px) {
-
-        .table-row,
-        .table-headers {
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .25fr;
-        }
     }
 
     @media screen and (max-width: 600px) {
@@ -377,15 +387,6 @@
 
     .w-select {
         width: 90%;
-    }
-
-    @media screen and (min-width: 767px) {
-
-        .table-row,
-        .table-headers {
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr .25fr;
-        }
-
     }
 
 

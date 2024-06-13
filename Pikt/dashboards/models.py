@@ -48,6 +48,7 @@ class image(models.Model):
 
 class Part(models.Model):
     stock_number = models.CharField(max_length=50, null=True, blank=True)
+    part_number = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True)
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True)
     vehicle = models.ForeignKey('dashboards.Vehicle', on_delete=models.CASCADE, null=True, blank=True)

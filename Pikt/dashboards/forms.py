@@ -166,7 +166,7 @@ class VehicleForm(forms.ModelForm):
 class EditPartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold']
+        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold']
         widgets = {
             'type': forms.TextInput(attrs={'placeholder': 'Type', 'class': 'text-field w-input'}),
             'stock_number': forms.TextInput(attrs={'placeholder': 'Stock Number', 'class': 'text-field w-input'}),
@@ -175,6 +175,7 @@ class EditPartForm(forms.ModelForm):
             'location': forms.TextInput(attrs={'placeholder': 'Location', 'class': 'text-field w-input'}),
             'grade': forms.Select(attrs={'class': 'text-field w-input'} ),
             'interchange': forms.TextInput(attrs={'placeholder': 'Interchange', 'class': 'text-field w-input'}),
+            'part_number': forms.TextInput(attrs={'placeholder': 'Part Number', 'class': 'text-field w-input'}),
             'ebay_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
             'mercari_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
             'marketplace_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
