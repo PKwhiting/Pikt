@@ -51,6 +51,7 @@ class rootView(View):
         return render(request, 'company.html', context)
     
     def post(self, request):
+        print("INSIDE POST")
         if request.user.role != 'Admin':
             return redirect(request.META.get('HTTP_REFERER', 'vehicles'))
         form = RegisterForm(request.POST)
@@ -69,11 +70,17 @@ class rootView(View):
             company = request.user.company
             icon = '../static/images/default-avatar.webp'
             if User.objects.filter(email=email).exists():
-                form.add_error('email', 'A user with this email already exists')
-                return render(request, 'company.html', {'form': form})
+                messages = json.loads(request.user.messages)
+                messages.append('User was not added. A user with that email already exists!')
+                request.user.messages = json.dumps(messages)
+                request.user.save()
+                return redirect('/company/')
             if User.objects.filter(username=username).exists():
-                form.add_error('username', 'A user with this username already exists')
-                return render(request, 'company.html', {'form': form})
+                messages = json.loads(request.user.messages)
+                messages.append(f'User was not added. A user with that username already exists!')
+                request.user.messages = json.dumps(messages)
+                request.user.save()
+                return redirect('/company/')
             
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role=role, company=company)
 
@@ -96,8 +103,13 @@ class rootView(View):
             messages.append('User added successfully!')
             request.user.messages = json.dumps(messages)
             request.user.save()
-            return redirect('/company/', {'form': form})
-        return render(request, 'company.html', {'form': form})
+            return redirect('/company/')
+
+        messages = json.loads(request.user.messages)
+        messages.append(f'User was not added! {form.errors}')
+        request.user.messages = json.dumps(messages)
+        request.user.save()
+        return redirect('/company/')
 
     def render_form(self, request, form):
         company = request.user.company
