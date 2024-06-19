@@ -147,13 +147,13 @@
     function clearPartSelection(row) {
         const partSearchInput = row.querySelector('.part-search');
         const costInput = row.querySelector('.cost-input');
-        const warrantyInput = row.querySelector('.warranty-input');
+        // const warrantyInput = row.querySelector('.warranty-input');
         const clearButton = row.querySelector('.clear-part-selection');
         const partList = row.querySelector('.part-list');
 
         partSearchInput.value = '';
         costInput.value = '';
-        warrantyInput.value = 'NO WARRANTY';
+        // warrantyInput.value = 'NO WARRANTY';
         partList.innerHTML = '';
         clearButton.style.display = 'none';
         updateTotalAmount();
