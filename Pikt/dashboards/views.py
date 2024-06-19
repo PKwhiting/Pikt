@@ -58,6 +58,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from .forms import CustomerForm
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -773,24 +774,71 @@ class yard(LoginRequiredMixin, View):
             return JsonResponse({'success': True}, safe=False)
 
 
-# define the sales view and render sales.html
-class sales(LoginRequiredMixin, View):
+class SalesView(LoginRequiredMixin, View):
     def get(self, request):
+        start_date_str = request.GET.get('startDate')
+        end_date_str = request.GET.get('endDate')
+
+        if start_date_str and end_date_str:
+            start_date = timezone.make_aware(datetime.strptime(start_date_str, '%Y-%m-%d'))
+            end_date = timezone.make_aware(datetime.strptime(end_date_str, '%Y-%m-%d'))
+        else:
+            # Default to the last 15 days
+            end_date = timezone.now()
+            start_date = end_date - timedelta(days=15)
+
         orders = Order.objects.all()
         customers = Customer.objects.filter(company=request.user.company)
+        
+        sold_parts = Part.objects.filter(company=request.user.company, sold=True, sold_date__isnull=False, sold_date__range=[start_date, end_date])
+
+        sales_data = {}
+        for part in sold_parts:
+            date_str = part.sold_date.strftime('%b %d')
+            if date_str not in sales_data:
+                sales_data[date_str] = 0
+            sales_data[date_str] += float(part.price)
+
+        # Create a list of all dates in the range
+        date_range = [(start_date + timedelta(days=i)).strftime('%b %d') for i in range((end_date - start_date).days + 1)]
+        chart_sales = [sales_data.get(date, 0) for date in date_range]
+
+        if is_ajax(request):
+            context = {
+                'chart_title': 'Sales',
+                'chart_data': json.dumps(chart_sales),
+                'chart_dates': json.dumps(date_range),
+            }
+            return JsonResponse(context)
+        form = CustomerForm()
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
-            'years' : range(2024, 1969, -1),
+            'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'messages': json.loads(request.user.messages),
             'orders': orders,
             'customers': customers,
+            'chart_title': 'Sales',
+            'chart_data': json.dumps(chart_sales),
+            'chart_dates': json.dumps(date_range),
+            'form': form,
         }
         request.user.messages = []
         request.user.save()
         return render(request, 'sales.html', context)
 
+    def post(self, request):
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            customer = form.save(commit=False)
+            customer.company = request.user.company
+            customer.save()
+            return redirect('sales')  # Redirect to the sales view or another appropriate view
+        else:
+            # Handle form errors or re-render the page with errors
+            return render(request, 'sales.html', {'form': form})
+        
 def customer_list(request):
     query = request.GET.get('q')
     if query:
@@ -808,7 +856,6 @@ def customer_list(request):
         customers = Customer.objects.all()
 
     if is_ajax(request):
-        print(request)
         html = render_to_string('customer-list.html', {'customers': customers})
         return JsonResponse({'html': html})
 
@@ -831,14 +878,26 @@ def generate_quote(request, customer_id):
 def part_search(request):
     query = request.GET.get('q')
     if query:
-        parts = Part.objects.filter(
-            Q(vehicle_year__icontains=query) |
-            Q(vehicle_make__icontains=query) |
-            Q(vehicle_model__icontains=query) |
-            Q(type__icontains=query) |
-            Q(grade__icontains=query) |
-            Q(hollander_interchange__icontains=query)
-        )
+        # Split the query into individual terms
+        query_terms = query.split()
+
+        # Initialize the Q object for filtering parts
+        parts_query = Q()
+        for term in query_terms:
+            term_query = (
+                Q(stock_number__icontains=term) |
+                Q(part_number__icontains=term) |
+                Q(type__icontains=term) |
+                Q(grade__icontains=term) |
+                Q(interchange__icontains=term) |
+                Q(vehicle__year__icontains=term) |
+                Q(vehicle__make__icontains=term) |
+                Q(vehicle__model__icontains=term)
+            )
+            # Combine the term queries with AND
+            parts_query &= term_query
+
+        parts = Part.objects.filter(parts_query)
     else:
         parts = Part.objects.all()
 

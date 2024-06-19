@@ -55,12 +55,12 @@
                         loading="lazy" alt="" class="nav-icon">
                         <div>Parts</div>
                     </a>
-                    <!-- <a href="/dashboards/sales/" class="nav-link w-inline-block"><img
+                    <a href="/dashboards/sales/" class="nav-link w-inline-block"><img
                         style="height: 25px;"
                         src="{% static 'icons/dollar-sign.svg' %}"
                         loading="lazy" alt="" class="nav-icon">
                         <div>Sales</div>
-                    </a> -->
+                    </a>
                     <!-- <a href="/dashboards/yard/" class="nav-link w-inline-block"><img
                             style="height: 25px;"
                             src="{% static 'icons/field.png' %}"
@@ -212,22 +212,22 @@
     });
 </script>
 <style>
-    .in-page-menu-container {
-        overflow-x: auto; /* Enable horizontal scrolling */
-        white-space: nowrap; /* Prevent text wrapping */
-    }
-
     .in-page-menu {
         display: flex; /* Align items in a row */
         flex-wrap: nowrap; /* Prevent wrapping */
         width: max-content; /* Ensure the container takes only as much space as needed */
+        overflow-x: scroll;
+        white-space: nowrap;
+        width: 100%;
     }
 
     .in-page-menu-link {
-        flex: 0 0 auto; /* Prevent links from shrinking or growing */
-        display: inline-block; /* Add padding if needed */
-        white-space: nowrap; /* Prevent text wrapping */
+        flex: 0 0 auto; 
+        display: inline-block; 
+        white-space: nowrap; 
         margin-right: 5px;
+        width: 175px;
+        text-align: center;
     }
 
 

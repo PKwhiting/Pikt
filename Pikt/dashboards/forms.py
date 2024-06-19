@@ -1,7 +1,8 @@
 from django import forms
 from .models import Part
-from .models import Vehicle, PartPreference
-from .const.const import PARTS_CONST
+from .models import Vehicle, PartPreference, Customer
+from .const.const import PARTS_CONST, STATE_CHOICES
+
 
 
 class VehicleForm(forms.ModelForm):
@@ -202,3 +203,42 @@ class EditVehicleForm(forms.ModelForm):
             'secondary_damage': forms.TextInput(attrs={'Placeholder': 'Secondary Damage', 'class': 'text-field w-input'}),
         }
 
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['name', 'owner', 'address', 'city', 'state', 'zip_code', 'phone', 'email']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Customer Name'}),
+            'owner': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Owner Name'}),
+            'address': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Address'}),
+            'city': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'City'}),
+            'state': forms.Select(attrs={'class': 'text-field w-input',} ),
+            'zip_code': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Zip Code'}),
+            'phone': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Phone'}),
+            'email': forms.EmailInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Email'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = ""
+        self.fields['name'].required = True
+
+        self.fields['owner'].label = ""
+
+        self.fields['address'].label = ""
+        self.fields['address'].required = True
+
+        self.fields['city'].label = ""
+        self.fields['city'].required = True
+
+        self.fields['state'].label = ""
+        self.fields['state'].required = True
+        self.fields['state'].choices = [('', 'Select State')] + self.fields['state'].choices[1:]
+
+        self.fields['zip_code'].required = True
+        self.fields['zip_code'].label = ""
+
+        self.fields['phone'].required = True
+        self.fields['phone'].label = ""
+
+        self.fields['email'].label = ""

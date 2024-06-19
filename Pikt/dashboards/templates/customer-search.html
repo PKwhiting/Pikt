@@ -2,8 +2,51 @@
     <div>
         <div>
             <input type="text" class="text-field w-input" maxlength="256" style="border-radius:20px;"
-                name="First-name" data-name="First name" placeholder="Search" id="search" required="">
+                name="customer-search" data-name="customer-search" placeholder="Search" id="search" oninput="searchCustomers(this)">
         </div>
     </div>
-    {% include "customer-list.html" %}
+    <div id="customer-list" style="display: grid; grid-row-gap: 5px;">
+        <button id="toggle-form-btn" class="button button-outline w-button full-table-row">
+            Add Customer
+            <img loading="lazy" src="/static/icons/add-user.svg" style="height: 25px;" alt="" class="icon">
+        </button>
+        <div class="table-module">
+            <div id="customer-form" class="full-table-row" style="display: none;">
+                <form method="post" action="{% url 'sales' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div style="display: flex; justify-self: center">
+                        <button type="submit" class="button w-button" style="width: 100%">Save Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="customer-search" style="display: grid; grid-row-gap: 5px;">
+            {% include "customer-list.html" %}
+        </div>
+    </div>
 </div>
+
+<script>
+    document.getElementById('toggle-form-btn').addEventListener('click', function() {
+        var form = document.getElementById('customer-form');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+
+    function searchCustomers(query) {
+        $.ajax({
+            url: "{% url 'customer_search' %}",
+            data: { 'q': query.value },
+            success: function(data) {
+                $('#customer-search').html(data.html);
+            },
+            error: function(error) {
+                console.error('Error fetching customer list:', error);
+            }
+        });
+    };
+</script>

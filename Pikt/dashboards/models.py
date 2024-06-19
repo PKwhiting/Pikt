@@ -10,6 +10,8 @@ from django.core.exceptions import ObjectDoesNotExist
 import random
 import string
 from company.models import Location
+from django.utils import timezone
+from .const.const import STATE_ABBRV_CHOICES
 
 PART_GRADES = (
     ('A', 'A'),
@@ -68,6 +70,7 @@ class Part(models.Model):
     mercari_listed = models.BooleanField(default=False)
     marketplace_listed = models.BooleanField(default=False)
     sold = models.BooleanField(default=False) 
+    sold_date = models.DateTimeField(null=True, blank=True)
     image_1 = models.ImageField(upload_to='images/', null=True, blank=True)
     image_2 = models.ImageField(upload_to='images/', null=True, blank=True)
     image_3 = models.ImageField(upload_to='images/', null=True, blank=True)
@@ -79,6 +82,17 @@ class Part(models.Model):
     image_9 = models.ImageField(upload_to='images/', null=True, blank=True)
     image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # Check if the 'sold' field is set to True and 'sold_date' is not already set
+        if self.sold and self.sold_date is None:
+            self.sold_date = timezone.now()  # Set sold_date to current time
+
+        # If the 'sold' field is set to False, clear the 'sold_date'
+        elif not self.sold:
+            self.sold_date = None
+
+        super().save(*args, **kwargs)
 
     
     
@@ -195,11 +209,12 @@ class core(models.Model):
 
     
 class Customer(models.Model):
+    STATE_CHOICES = STATE_ABBRV_CHOICES
     name = models.CharField(max_length=255, null=True, blank=True)
     owner = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
-    state = models.CharField(max_length=2, null=True, blank=True)
+    state = models.CharField(max_length=2, choices=STATE_CHOICES, null=True, blank=True)
     zip_code = models.CharField(max_length=10, null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(max_length=255, null=True, blank=True)

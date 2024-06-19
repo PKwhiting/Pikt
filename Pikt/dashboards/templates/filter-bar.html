@@ -47,7 +47,6 @@
         if (currentRequest) {
             currentRequest.abort();
         }
-        console.log("{{ filter_form_action }}")
         currentRequest = $.ajax({
             url: "{{ filter_form_action }}",
             data: queryParams,

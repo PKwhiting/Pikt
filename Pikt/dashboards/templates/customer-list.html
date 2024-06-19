@@ -1,23 +1,22 @@
-<div id="customer-list" style="display: grid; grid-row-gap: 5px;">
-    {% if customers %}
-    {% for customer in customers %}
-    <a href="/user">
-        <div class="table-module">
-            <div class="full-table-row">
-                <div>
-                    <h6 class="no-space-bottom">{{ customer.name }} - {{ customer.owner }}</h6>
-                    <div class="small-text text-grey-3 mobile">{{ customer.email }} - {{ customer.phone }}</div>
-                </div>
-                <a href="/dashboards/generate-quote/{{ customer.id }}" class="button button-small button-outline w-button mobile" data-id="{{ customer.id }}">Generate Quote</a>
-                <a href="/dashboards/generate-quote/{{ customer.id }}" class="button button-small button-outline w-button" data-id="{{ customer.id }}">
-                    <img loading="lazy" src="/static/icons/invoice-black.svg" style="height: 25px;" alt="" class="icon">
-                </a>
-                
+{% if customers %}
+{% for customer in customers %}
+<a href="/user">
+    <div class="table-module">
+        <div class="full-table-row">
+            <div>
+                <h6 class="no-space-bottom">{{ customer.name }} - {{ customer.owner }}</h6>
+                <div class="small-text text-grey-3 mobile">{{ customer.email }} - {{ customer.phone }}</div>
             </div>
+            <a href="/dashboards/generate-quote/{{ customer.id }}" class="button button-small button-outline w-button mobile" data-id="{{ customer.id }}">Generate Quote</a>
+            <!-- <a href="/dashboards/generate-quote/{{ customer.id }}" class="button button-small button-outline w-button" data-id="{{ customer.id }}">
+                <img loading="lazy" src="/static/icons/invoice-black.svg" style="height: 25px;" alt="" class="icon">
+            </a> -->
+            
         </div>
-    </a>
-    {% endfor %}
-    {% else %}
-    <p>No customers found.</p>
-    {% endif %}
-</div>
+    </div>
+</a>
+{% endfor %}
+{% else %}
+<p>No customers found.</p>
+{% endif %}
+

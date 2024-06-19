@@ -1,5 +1,6 @@
 from django import forms
 from Authentication.models import User
+from .models import Company
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -39,3 +40,34 @@ class UserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'address_line1', 'address_line2', 'city', 'state', 'zip_code', 'phone_number', 'email', 'logo', 'website']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Company Name'}),
+            'address_line1': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Address Line 1'}),
+            'address_line2': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Address Line 2'}),
+            'city': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'City'}),
+            'state': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;'}),
+            'zip_code': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Zip Code'}),
+            'phone_number': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Phone Number'}),
+            'email': forms.EmailInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Email'}),
+            'logo': forms.FileInput(attrs={'class': 'file-field w-input', 'style': 'width: 100%; margin-top: 8px;'}),
+            'website': forms.TextInput(attrs={'class': 'text-field w-input', 'style': 'width: 100%; margin-top: 8px;', 'placeholder': 'Website'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['state'].choices = [('', 'Select State')] + self.fields['state'].choices[1:]
+        self.fields['name'].label = "Company Name"
+        self.fields['address_line1'].label = "Address Line 1"
+        self.fields['address_line2'].label = "Address Line 2"
+        self.fields['city'].label = "City"
+        self.fields['state'].label = "State"
+        self.fields['zip_code'].label = "Zip Code"
+        self.fields['phone_number'].label = "Phone Number"
+        self.fields['email'].label = "Email"
+        self.fields['logo'].label = "Logo"
+        self.fields['website'].label = "Website"

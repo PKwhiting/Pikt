@@ -1,0 +1,177 @@
+<div id="sales-chart" style="padding: 16px;">
+    <div class="chart__container" style="overflow-x: hidden;">
+        <div class="card-header" style="">
+            <h4>{{ chart_title }}</h4>
+            <div class="header-detail">Real Time</div>
+        </div>
+        <div class="w-layout-grid _4-grid form-grid space-bottom-small" >
+            <div style="display: flex; column-gap: 5px">
+                <div>
+                    <h6>Start Date</h6>
+                    <input class="text-field w-input" type="date" id="startDate" name="startDate" label="Start Date">
+                </div>
+                <div>
+                    <h6>End Date</h6>
+                    <input class="text-field w-input" type="date" id="endDate" name="endDate">
+                </div>
+            </div>
+            
+        </div>
+        <canvas id="chart" style="width: 100%; height: 50%; max-height: 250px; max-width: 100%"></canvas>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date();
+        var pastDate = new Date(today);
+        pastDate.setDate(pastDate.getDate() - 15); // Set to 15 days before today
+
+        // Format dates as YYYY-MM-DD
+        today = today.toISOString().substr(0, 10);
+        pastDate = pastDate.toISOString().substr(0, 10);
+
+        var startDateInput = document.getElementById('startDate');
+        var endDateInput = document.getElementById('endDate');
+
+        startDateInput.value = pastDate;
+        endDateInput.value = today;
+        
+        var newMinDate = new Date(startDateInput.value);
+        newMinDate.setDate(newMinDate.getDate() + 1);
+        endDateInput.min = newMinDate.toISOString().substr(0, 10);
+
+        var newMaxDate = new Date(endDateInput.value);
+        newMaxDate.setDate(newMaxDate.getDate() - 1);
+        startDateInput.max = newMaxDate.toISOString().substr(0, 10);
+
+        startDateInput.addEventListener('change', function() {
+            var newMaxDate = new Date(startDateInput.value);
+            newMaxDate.setDate(newMaxDate.getDate() + 1);
+            endDateInput.min = newMaxDate.toISOString().substr(0, 10);
+            updateChart();
+        });
+
+        endDateInput.addEventListener('change', function() {
+            var newMaxDate = new Date(endDateInput.value);
+            newMaxDate.setDate(newMaxDate.getDate() - 1);
+            startDateInput.max = newMaxDate.toISOString().substr(0, 10);
+            updateChart();
+        });
+
+        var chart;
+
+        function updateChart() {
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+
+            if (startDate && endDate) {
+                $.ajax({
+                    url: '?startDate=' + startDate + '&endDate=' + endDate,
+                    dataType: 'json',
+                    success: function(data) {
+                        let chartDates = JSON.parse(data.chart_dates);
+                        let chartData = JSON.parse(data.chart_data);
+                        reinitializeChart(chartDates, chartData, data.chart_title);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+        }
+
+        function reinitializeChart(chartDates, chartData) {
+            let ctx = document.getElementById("chart").getContext('2d');
+
+            if (chart && chart instanceof Chart) {
+                chart.destroy();
+            }
+
+            var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+            gradientStroke.addColorStop(0, "#ff6c00");
+            gradientStroke.addColorStop(1, "#ff3b74");
+
+            var gradientBkgrd = ctx.createLinearGradient(0, 100, 0, 400);
+            gradientBkgrd.addColorStop(0, "rgba(244,94,132,0.2)");
+            gradientBkgrd.addColorStop(1, "rgba(249,135,94,0)");
+
+            var gradientStroke2 = ctx.createLinearGradient(500, 0, 50, 0);
+            gradientStroke2.addColorStop(0, "#00bfff"); // Light blue
+            gradientStroke2.addColorStop(1, "#87cefa"); // Light sky blue
+
+            var gradientBkgrd2 = ctx.createLinearGradient(0, 50, 0, 400);
+            gradientBkgrd2.addColorStop(0, "rgba(135,206,250,0.2)"); // Light sky blue with 20% opacity
+            gradientBkgrd2.addColorStop(1, "rgba(0,191,255,0)"); // Light blue with 0% opacity
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartDates,
+                    datasets: [{
+                        label: "{{ chart_title|safe }}",
+                        backgroundColor: gradientBkgrd,
+                        borderColor: gradientStroke,
+                        data: chartData,
+                        pointBorderColor: "rgba(255,255,255,0)",
+                        pointBackgroundColor: "rgba(255,255,255,0)",
+                        pointBorderWidth: 0,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: gradientStroke,
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 4,
+                        pointRadius: 5,
+                        borderWidth: 5,
+                        pointHitRadius: 16,
+                        tension: 0.4 
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: '#fff',
+                            displayColors: false,
+                            titleColor: '#000',
+                            bodyColor: '#000',
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += '$' + context.parsed.y;
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                stepSize: 5,
+                                callback: function(value, index, values) {
+                                    if (value >= 0) {
+                                        return '$' + value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        reinitializeChart({{ chart_dates|safe }}, {{ chart_data|safe }});
+    });
+</script>

@@ -35,17 +35,17 @@
                 </div>
             </div>
             <div class="w-layout-grid table-headers-invoice"
-                style="display: grid; grid-template-columns: 3.25fr 1fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
+                style="display: grid; grid-template-columns: 3.25fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
                 <div class="caption-large">Part</div>
-                <div class="caption-large">Warranty</div>
+                <!-- <div class="caption-large">Warranty</div> -->
                 <div class="caption-large">Price</div>
             </div>
             <div id="invoice-rows">
             </div>
             <div class="invoice-total" 
-            style="display: grid; grid-template-columns: 3.25fr 1fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
+            style="display: grid; grid-template-columns: 3.25fr 1fr .25fr; grid-column-gap: 5px; padding: 16px 10px;">
                 <div class="table-title">Total amount</div>
-                <div></div>
+                <!-- <div></div> -->
                 <div class="table-title" id="total-amount" style="margin-left: 5px;">$0.00</div>
                 <div></div>
             </div>
@@ -59,9 +59,9 @@
     <div class="w-layout-grid grid" style="margin-top: 5px;">
         <div style="display: flex; justify-content: flex-end;">
             <div style="display: flex; align-self: inherit">
-                <a id="send-invoice" class="button bg-primary-green w-inline-block" style="padding: 8px 8px; margin-left: 5px;">
+                <!-- <a id="send-invoice" class="button bg-primary-green w-inline-block" style="padding: 8px 8px; margin-left: 5px;">
                     Send Invoice
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
@@ -84,17 +84,17 @@
         window.print();
     });
 
-    document.getElementById('send-invoice').addEventListener('click', function (event) {
-        event.preventDefault();
-        sendInvoice();
-    });
+    // document.getElementById('send-invoice').addEventListener('click', function (event) {
+    //     event.preventDefault();
+    //     sendInvoice();
+    // });
 
     function addNewPartRow() {
         var invoiceRows = document.getElementById('invoice-rows');
         var newRow = document.createElement('div');
         newRow.className = 'w-layout-grid table-row-invoice';
         newRow.style.display = 'grid';
-        newRow.style.gridTemplateColumns = '3fr 1fr 1fr .25fr';
+        newRow.style.gridTemplateColumns = '3fr 1fr .25fr';
         newRow.style.gridColumnGap = '5px';
         newRow.style.padding = '16px 0px';
         newRow.style.borderBottom = 'none';
@@ -105,12 +105,7 @@
                 <div class="part-list" style="position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; width: 100%;"></div>
                 <img class="clear-part-selection" style="height: 20px; position: absolute; right: 5px; top: 9px; display: none;" src="/static/icons/simple-cancel-red.svg" loading="lazy" alt="" class="nav-icon edit-icon">
             </div>
-            <div>
-                <select class="table-input text-field w-input warranty-input" style="margin-bottom: 0px">
-                    <option value="NO WARRANTY">NO WARRANTY</option>
-                    <option value="WARRANTY">WARRANTY</option>
-                </select>
-            </div>
+            
             <div style="position: relative;">
                 <label for="cost" style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
                 <input type="number" id="cost" class="table-input text-field w-input cost-input" placeholder="Cost" style="padding-left: 15px; margin-bottom: 0px">
@@ -146,7 +141,7 @@
         newRow.querySelector('.cost-input').addEventListener('input', updateTotalAmount);
 
         // Add event listener to the warranty dropdown
-        newRow.querySelector('.warranty-input').addEventListener('change', updateTotalAmount);
+        // newRow.querySelector('.warranty-input').addEventListener('change', updateTotalAmount);
     }
 
     function clearPartSelection(row) {
@@ -246,13 +241,13 @@
         let totalAmount = 0;
         document.querySelectorAll('.table-row-invoice').forEach(function (row) {
             const costInput = row.querySelector('.cost-input');
-            const warrantyInput = row.querySelector('.warranty-input');
+            // const warrantyInput = row.querySelector('.warranty-input');
             const costValue = parseFloat(costInput.value);
             let cost = isNaN(costValue) ? 0 : costValue;
 
-            if (warrantyInput.value === 'WARRANTY') {
-                cost *= 1.1; // Add 10% if warranty is selected
-            }
+            // if (warrantyInput.value === 'WARRANTY') {
+            //     cost *= 1.1; // Add 10% if warranty is selected
+            // }
 
             totalAmount += cost;
         });
