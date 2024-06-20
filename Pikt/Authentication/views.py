@@ -17,6 +17,9 @@ from django.contrib.auth.views import PasswordResetView
 from django import forms
 from django.contrib.auth.views import PasswordResetDoneView
 
+from dashboards.models import PartPreference
+
+
 context = {
     'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
     'years' : range(2024, 1969, -1),
@@ -109,8 +112,11 @@ class registerView(View):
                 form.add_error('company', 'A company with this name already exists')
                 return render(request, 'register.html', {'form': form})
             company = Company.objects.create(name=company)
+            PartPreference.objects.create(company=company, parts="A/C Compressor,Alternator,Axle Assy Fr (4WD w. Housing),Axle Assy Rear (w. Housing),Battery,Brake/Clutch Pedal,Brake Booster,Brake Rotor/Drum, Rear,Bumper Assy (Front) includes cover,Bumper Assy (Rear) includes cover,Caliper,Clutch Master Cylinder,Control Arm, Front Lower,Control Arm, Front Upper,Control Arm, Rear Lower,Control Arm, Rear Upper,Door Back (door above rear bumper),Door Front,Engine,Engine Computer,Engine Wiring Harness,Fender,Front Axle Assembly (4WD w Housing),Front Bumper Assembly (includes cover),Master Cylinder,Transmission,Windshield")
             company.save
-            user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, role='admin', company=company)
+            user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, icon=icon, company=company)
+            user.role = "Admin"
+            user.save()
             login(request, user)
             messages = json.loads(request.user.messages)
             messages.append('Welcome to Pikt!')
