@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'django_extensions',
     'company',
+    'invoicing',
 ]
 os.getenv('DJANGO_SECRET_KEY')
 CLOUDINARY_STORAGE = {

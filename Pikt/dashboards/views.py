@@ -861,19 +861,6 @@ def customer_list(request):
 
     return render(request, 'customer-search.html', {'customers': customers})
 
-def generate_quote(request, customer_id):
-    customer = get_object_or_404(Customer, id=customer_id)
-    context = {
-            'main_logo': os.path.join(settings.BASE_DIR, 'logo_transparent_large_black.png'),
-            'years' : range(2024, 1969, -1),
-            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
-            'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
-            'messages': json.loads(request.user.messages),
-            'orders': orders,
-            'customer': customer,
-        }
-    return render(request, 'invoice.html', context)
-
 
 def part_search(request):
     query = request.GET.get('q')
@@ -906,27 +893,6 @@ def part_search(request):
         return JsonResponse({'html': html})
 
     return render(request, 'part-search.html', {'parts': parts})
-
-def send_invoice(request, customer_id):
-    customer = get_object_or_404(Customer, id=customer_id)
-    print(customer)
-    context = {
-        'user': request.user,
-        'customer': customer,
-    }
-    html_string = render_to_string('invoice_email.html', context)
-    pdf_file = pdfkit.from_string(html_string, False)
-
-    email = EmailMessage(
-        subject='Your Invoice',
-        body='Please find the attached invoice.',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[customer.email],
-    )
-    email.attach('invoice.pdf', pdf_file, 'application/pdf')
-    email.send()
-
-    return JsonResponse({'message': 'Invoice sent successfully!'})
 
 from .forms import PartPreferenceForm, VehicleFilterForm
 from .models import Part

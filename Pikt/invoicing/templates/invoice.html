@@ -14,7 +14,7 @@
     <div class="module">
         <div class="invoice">
             <div class="invoice-header">
-                <div class="text-grey-3">Invoice #14020</div>
+                <div class="text-grey-3">Invoice {{ invoice.id }}</div>
             </div>
             <div class="w-layout-grid invoice-contacts">
                 <div>
@@ -22,7 +22,7 @@
                     <h5>{{ user.company.name }}</h5>
                     <div class="invoice-contact-details">{{ user.company.address_line1 }} {{ user.company.address_line2 }}<br>{{ user.company.city }}, {{ user.company.state }}<br>{{ user.company.phone_number }}<br>{{ user.company.email }}</div>
                     <div class="caption">Invoice ID</div>
-                    <div>Invoice #14020</div>
+                    <div>Invoice {{ invoice.id }}</div>
                 </div>
                 <div class="text-right-invoice">
                     <div class="caption">Invoiced to</div>
@@ -30,7 +30,7 @@
                     <div class="invoice-contact-details">{{ customer.address }}<br>{{ customer.city }}, {{ customer.state }}<br>{{ customer.phone }}<br>{{ customer.email }}</div>
                     <div class="caption">Due date</div>
                     <div>
-                        <input class="button button-outline" type="date" id="dueDate" name="date" style="">
+                        <input class="button button-outline" type="date" id="due-date" name="date" style="">
                     </div>
                 </div>
             </div>
@@ -59,16 +59,16 @@
     <div class="w-layout-grid grid" style="margin-top: 5px;">
         <div style="display: flex; justify-content: flex-end;">
             <div style="display: flex; align-self: inherit">
-                <!-- <a id="send-invoice" class="button bg-primary-green w-inline-block" style="padding: 8px 8px; margin-left: 5px;">
+                <a id="send-invoice" class="button bg-primary-green w-inline-block" style="padding: 8px 8px; margin-left: 5px;">
                     Send Invoice
-                </a> -->
+                </a>
             </div>
         </div>
     </div>
 </div>
 <script>
     window.onload = function () {
-        var dueDate = document.getElementById('dueDate');
+        var dueDate = document.getElementById('due-date');
         var date = new Date();
         date.setDate(date.getDate() + 1);
         dueDate.value = date.toISOString().substr(0, 10);
@@ -84,10 +84,10 @@
         window.print();
     });
 
-    // document.getElementById('send-invoice').addEventListener('click', function (event) {
-    //     event.preventDefault();
-    //     sendInvoice();
-    // });
+    document.getElementById('send-invoice').addEventListener('click', function (event) {
+        event.preventDefault();
+        sendInvoice();
+    });
 
     function addNewPartRow() {
         var invoiceRows = document.getElementById('invoice-rows');
@@ -255,20 +255,44 @@
     }
 
     function sendInvoice() {
-        const customerId = {{ customer.id }};
-        fetch(`/send-invoice/${customerId}/`, {
+        const invoiceId = {{ invoice.id }};
+        const parts = [];
+
+        document.querySelectorAll('.table-row-invoice').forEach(function (row) {
+            const partDescription = row.querySelector('.part-search').value;
+            const partCost = parseFloat(row.querySelector('.cost-input').value);
+            if (partDescription && !isNaN(partCost)) {
+                parts.push({ description: partDescription, cost: partCost });
+            }
+        });
+
+        const data = {
+            invoiceId: invoiceId,
+            parts: parts,
+        };
+
+        const dueDate = document.getElementById('due-date').value;
+        if (dueDate) {
+            data.dueDate = dueDate;
+        }
+
+        const InvoiceId = {{ invoice.id }};
+        fetch(`/send-invoice/${InvoiceId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(data => {
-            if (data.message) {
-                alert(data.message);
+            console.log(data)
+            if (data.status === 'success') {
+                // redirect to sales page
+                window.location.href = '/dashboards/sales';
             } else {
-                alert('Something went wrong. Please try again.');
+                console.error('Failed to send invoice:', data.error);
             }
         });
     }
