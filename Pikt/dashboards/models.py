@@ -43,10 +43,22 @@ SELLER_TYPE = [
         ('Vendor', 'Vendor'),
     ]
 
+PART_DIRECTIONS = [
+    ('Left', 'Left'),
+    ('Right', 'Right'),
+    ('Front', 'Front'),
+    ('Back', 'Back'),
+    ('Top', 'Top'),
+    ('Bottom', 'Bottom'),
+    ('Center', 'Center'),
+]
+
 # Create your models here.
 class image(models.Model):
     image = models.ImageField(upload_to='images/')
     name = models.CharField(max_length=50)
+
+
 
 class Part(models.Model):
     stock_number = models.CharField(max_length=50, null=True, blank=True)
@@ -58,6 +70,7 @@ class Part(models.Model):
     location = models.CharField(max_length=255, null=True, blank=True)
     grade = models.CharField(max_length=1, choices=PART_GRADES, null=True, blank=True)
     interchange = models.CharField(max_length=5000, null=True, blank=True)
+    direction = models.CharField(max_length=50, choices=PART_DIRECTIONS, null=True, blank=True)
     description = models.CharField(max_length=255, null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True) # in ounces
     height = models.IntegerField(null=True, blank=True) # in inches

@@ -1009,7 +1009,13 @@ def create_parts(request):
                 instance.user = request.user
                 instance.company = request.user.company
                 instance.vehicle = vehicle
-                instance.save()
+                
+                if not Part.objects.filter(stock_number=instance.stock_number).exists():
+                    instance.save()
+                else:
+                    highest_stock_number = Part.get_highest_stock_number()
+                    instance.stock_number = highest_stock_number + 1
+                    instance.save()
 
             add_user_message(request, 'Parts added successfully.')
         else:

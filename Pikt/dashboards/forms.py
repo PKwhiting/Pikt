@@ -141,11 +141,12 @@ from .models import PART_GRADES
 class PartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade']
+        fields = ['type', 'stock_number', 'price', 'direction', 'description', 'location', 'grade']
         widgets = {
             'type': forms.TextInput(attrs={'Placeholder': 'Type', 'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
             'stock_number': forms.TextInput(attrs={'Placeholder': 'Type', 'class': 'text-field w-input', 'readonly': 'readonly', 'style': 'width: 90%; margin-top: 8px;'}),
             'price': forms.NumberInput(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;', 'step': '0.5', 'value': '0.00'}),
+            'direction': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
             'description': forms.TextInput(attrs={'Placeholder': 'Description', 'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
             'location': forms.TextInput(attrs={'Placeholder': 'Location', 'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
             'grade': forms.Select(attrs={'class': 'text-field w-input', 'style': 'width: 90%; margin-top: 8px;'}),
@@ -154,10 +155,16 @@ class PartForm(forms.ModelForm):
             'type': '',
             'stock_number': '',
             'price': '',
+            'direction': '',
             'description': '',
             'location': '',
             'grade': '',
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['direction'].choices = [('', 'Select Direction')] + self.fields['direction'].choices[1:]
+        self.fields['grade'].choices = [('', 'Select Grade')] + self.fields['grade'].choices[1:]
 
 class VehicleForm(forms.ModelForm):
     class Meta:
@@ -167,10 +174,11 @@ class VehicleForm(forms.ModelForm):
 class EditPartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'price', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold']
+        fields = ['type', 'stock_number', 'direction','price', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold']
         widgets = {
             'type': forms.TextInput(attrs={'placeholder': 'Type', 'class': 'text-field w-input'}),
             'stock_number': forms.TextInput(attrs={'placeholder': 'Stock Number', 'class': 'text-field w-input'}),
+            'direction': forms.Select(attrs={'class': 'text-field w-input'} ),
             'price': forms.TextInput(attrs={'placeholder': 'Price', 'class': 'text-field w-input'}),
             'description': forms.TextInput(attrs={'placeholder': 'Description', 'class': 'text-field w-input'}),
             'location': forms.TextInput(attrs={'placeholder': 'Location', 'class': 'text-field w-input'}),
@@ -182,6 +190,13 @@ class EditPartForm(forms.ModelForm):
             'marketplace_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
             'sold': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['direction'].choices = [('', 'Select Direction')] + self.fields['direction'].choices[1:]
+        self.fields['grade'].choices = [('', 'Select Grade')] + self.fields['grade'].choices[1:]
+
 
 class EditVehicleForm(forms.ModelForm):
     class Meta:

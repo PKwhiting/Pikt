@@ -9,11 +9,6 @@
                 aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
                 <div>All Vehicles</div>
             </a>
-            <!-- <a data-w-tab="Tasks" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
-                id="w-tabs-0-data-w-tab-1" href="#w-tabs-0-data-w-pane-1" role="tab"
-                aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false">
-                <div>Tasks</div>
-            </a> -->
             <a data-w-tab="Files" class="in-page-menu-link w-inline-block w-tab-link" tabindex="-1"
                 id="w-tabs-0-data-w-tab-2" href="#w-tabs-0-data-w-pane-2" role="tab"
                 aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false">
@@ -29,102 +24,8 @@
             <div data-w-tab="Overview" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0">
                 <div class="w-layout-grid main-grid">
-                    <!-- <div class="w-layout-grid _4-grid stats">
-                        <div class="module">
-                            <div class="content-chart">
-                                <div class="chart-square"><img loading="lazy" src="/static/icons/car.svg"
-                                        style="height: 25px;" alt="" class="icon">
-                                    <div class="light-fill"></div>
-                                </div>
-                                <div class="div-block">
-                                    <div class="caption">Vehicles</div>
-                                    <div class="numbers-wrapper">
-                                        <h3 class="number">652</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module">
-                            <div class="content-chart">
-                                <div class="chart-square"><img width="24" loading="lazy"
-                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883083baf8ae9a34bd3e6_clock.svg"
-                                        alt="" class="icon">
-                                    <div class="light-fill bg-primary-green"></div>
-                                </div>
-                                <div class="div-block">
-                                    <div class="caption">Daily Inventories</div>
-                                    <div class="numbers-wrapper">
-                                        <h3 class="number">17</h3>
-                                        <div class="negative-value">-10%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="w-node-_7208daec-035a-49f2-4e9b-4a6236ac5087-ef2958bf" class="module">
-                            <div class="content-chart">
-                                <div class="chart-square"><img width="24" loading="lazy"
-                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605883bbba1d7412377fefe7_truck.svg"
-                                        alt="" class="icon">
-                                    <div class="light-fill bg-primary-orange"></div>
-                                </div>
-                                <div class="div-block">
-                                    <div class="caption">Deliveries</div>
-                                    <div class="numbers-wrapper">
-                                        <h3 class="number">153</h3>
-                                        <div class="positive-value">+19%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module">
-                            <div class="content-chart">
-                                <div class="chart-square"><img width="24" loading="lazy"
-                                        src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/605884b47ee33f1eb5676cce_target.svg"
-                                        alt="" class="icon">
-                                    <div class="light-fill bg-primary-yellow"></div>
-                                </div>
-                                <div class="div-block">
-                                    <div class="caption">Daily Purchases</div>
-                                    <div class="numbers-wrapper">
-                                        <h3 class="number">23</h3>
-                                        <div class="positive-value">+10%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     {% include 'filter-bar.html' %}
                     {% include 'filtered-table.html' %}
-                </div>
-            </div>
-            <div data-w-tab="Tasks" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
-                aria-labelledby="w-tabs-0-data-w-tab-1">
-                <div class="kanban">
-                    <div class="kanban-wrapper">
-                        <h4>To Be Inventoried</h4>
-                        <div class="kanban-color-bar in-progress"></div>
-                        <div class="kanban-card">
-                            <div>2007 Honda Accord</div>
-                        </div>
-                    </div>
-                    <div class="kanban-wrapper">
-                        <h4>Processing</h4>
-                        <div class="kanban-color-bar next-up"></div>
-                        <div class="kanban-card">
-                            <div>2009 Chevrolet 1500</div>
-                        </div>
-                        <div class="kanban-card">
-                            <div>2015 Cadillac Escilade</div>
-                        </div>
-                    </div>
-                    <div class="kanban-wrapper">
-                        <h4>Recently Completed</h4>
-                        <div class="kanban-color-bar done"></div>
-                        <div class="kanban-card">
-                            <div>1997 Jeep Grand Cherokee</div>
-                        </div>
-
-                    </div>
                 </div>
             </div>
             <div data-w-tab="Files" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
@@ -169,6 +70,7 @@
                                     <div class="caption-large">Part name</div>
                                     <div class="caption-large">Stock Number</div>
                                     <div class="caption-large">Price</div>
+                                    <div class="caption-large">Direction</div>
                                     <div class="caption-large">Description</div>
                                     <div class="caption-large">Location</div>
                                     <div class="caption-large">Grade</div>
@@ -189,88 +91,23 @@
                                             <div class="parts-list-row w-layout-grid table-row" id="form-{{ forloop.counter0 }}" style="padding: 0px 12px;">
                                                 {{ form.as_p }}
                                                 <div style="display: flex; align-self: inherit; margin-bottom: 12px;">
-                                                    <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px;">
-                                                        <img style="height: 20px; max-width: none;" src="{% static 'icons/trash.svg' %}" loading="lazy" alt="">
+                                                    <a href="#" class="button button-small bg-primary-rose w-button delete-button" style="padding: 8px 8px; margin-right: 5px;">
+                                                        <img style="height: 25px; max-width: none;" src="{% static 'icons/trash.svg' %}" loading="lazy" alt="">
+                                                    </a>
+                                                    <a href="#" class="button button-small bg-primary-green w-button add-button" style="padding: 8px 8px;">
+                                                        <img style="height: 25px; max-width: none;" src="{% static 'icons/add-square-white.svg' %}" loading="lazy" alt="">
                                                     </a>
                                                 </div>
                                             </div>
                                             {% endfor %}
                                         </div>
                                     </form>
-                                    <!-- {% for part, stock_number in prefered_parts %}
-                                            <div class="w-layout-grid table-row" id="{{ stock_number }}">
-                                                <div>
-                                                    <input 
-                                                    type="text" id="part-{{ stock_number }}-name" 
-                                                    name="part-name" 
-                                                    class="table-input text-field w-input"
-                                                    style="max-width: 90%;"
-                                                    value="{{ part }}" readonly>  
-                                                </div>
-                                                <div>
-                                                    <input 
-                                                    type="text" id="part-{{ stock_number }}-stock-number" 
-                                                    name="part-stock-number" 
-                                                    class="table-input text-field w-input"
-                                                    style="max-width: 90%;"
-                                                    value="{{ stock_number }}" readonly>  
-                                                </div>
-                                                <div style="position: relative; max-width: 90%; margin-bottom: 10px;">
-                                                    <label for="price-{{ stock_number }}"
-                                                        style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%);">$</label>
-                                                    <input type="number" id="part-{{ stock_number }}-price" step=".10"
-                                                        name="part-price"
-                                                        class="table-input text-field w-input price-input" value="390.00"
-                                                        style="padding-left: 15px; margin-bottom: 0px"
-                                                        onchange="this.value = parseFloat(this.value).toFixed(2);">
-                                                </div>
-                                                <input type="text" id="part-{{ stock_number }}-description" class="text-field w-input" maxlength="256"
-                                                    name="part-description" data-name="Part description"
-                                                    placeholder="Description" id="part-description" required=""
-                                                    style="max-width: 90%;">
-                                                <input type="text" id="part-{{ stock_number }}-location" class="text-field w-input" maxlength="256"
-                                                    name="part-location" data-name="Part location" placeholder="Location"
-                                                    id="part-location" required="" style="max-width: 90%;">
-                                                <div style="display: flex; align-self: inherit">
-                                                    <a href="#"
-                                                        class="button button-small bg-primary-rose w-button delete-button"
-                                                        style="padding: 8px 8px;">
-                                                        <img style="height: 20px; max-width: none;"
-                                                            src="/static/icons/trash.svg" loading="lazy" alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                    {% endfor %} -->
                                 </div>
-                                <!-- <a href="#" class="table-row-link w-inline-block" style="display: none;">
-                                    <div class="w-layout-grid table-row"
-                                        style="grid-template-columns: 1fr 1fr 1fr 1fr .25fr;">
-                                        <div class="table-title">Bumper Assy (Rear)</div>
-                                        <div>$285.00</div>
-                                        <input type="text" class="text-field w-input" maxlength="256"
-                                            name="part-description" data-name="Part description"
-                                            placeholder="Description" id="part-description" required=""
-                                            style="max-width: 90%;">
-                                        <div class="status">
-                                            <div class="indication-color bg-primary-orange"></div>
-                                            <select id="interchange" name="interchange" data-name="Interchange"
-                                                required="" class="text-field w-select">
-                                                <option value="" disabled selected>Select Interchange</option>
-                                                <option value="1">Sdn, 1.8L</option>
-                                                <option value="2">Cpe, 1.8L</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </a> -->
                             </div>
-                            <!-- include 'pagination.html' -->
                         </div>
                     </div>
                 </div>
             </div>
-           
-
-
             <div data-w-tab="Part Types" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-2">
                 <div class="w-layout-grid main-grid">
@@ -302,13 +139,13 @@
 
 <style scoped>
     #parts-list-headers {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr .25fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr .5fr;
     }
     #parts-list > div.parts-list-row {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr .25fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr .5fr;
     }
     .table-headers {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns:  1fr 1fr 1fr 1fr 1fr 1fr;
         padding: 16px 16px;
     }
     .table-row {
@@ -729,6 +566,23 @@
             totalFormsInput.value = currentCount;
         }
 
+        function updateFormIndices() {
+            document.querySelectorAll('.table-row').forEach((row, index) => {
+                row.querySelectorAll('input, select, textarea').forEach(element => {
+                    const name = element.getAttribute('name');
+                    if (name) {
+                        const newName = name.replace(/form-\d+-/, `form-${index}-`);
+                        element.setAttribute('name', newName);
+                        const id = element.getAttribute('id');
+                        if (id) {
+                            const newId = id.replace(/form-\d+-/, `form-${index}-`);
+                            element.setAttribute('id', newId);
+                        }
+                    }
+                });
+            });
+        }
+
         document.querySelectorAll('.delete-button').forEach(button => {
             button.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -737,13 +591,66 @@
                 row.addEventListener('animationend', function () {
                     row.remove();
                     updateTotalForms();
+                    updateFormIndices();
                 });
             });
         });
+
+        document.querySelectorAll('.add-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const row = this.closest('.table-row');
+                const clone = row.cloneNode(true);
+
+                const stockNumberInputs = document.querySelectorAll('[name$="stock_number"]');
+                const stockNumbers = Array.from(stockNumberInputs).map(input => parseInt(input.value));
+                const newStockNumber = Math.max(...stockNumbers) + 1;
+                const stockNumberInput = clone.querySelector('[name$="stock_number"]');
+                stockNumberInput.value = newStockNumber;
+
+
+                row.parentNode.insertBefore(clone, row.nextSibling);
+                
+                attachEventListeners(clone);
+                updateTotalForms();
+                updateFormIndices();
+            });
+        });
+
+        function attachEventListeners(row) {
+            row.querySelector('.delete-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                const rowToDelete = this.closest('.table-row');
+                rowToDelete.classList.add('fade-out');
+                rowToDelete.addEventListener('animationend', function () {
+                    rowToDelete.remove();
+                    updateTotalForms();
+                    updateFormIndices();
+                });
+            });
+
+            row.querySelector('.add-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                const rowToAdd = this.closest('.table-row');
+                const newClone = rowToAdd.cloneNode(true);
+
+                // Increment the stock number
+                const stockNumberInput = newClone.querySelector('[name$="stock_number"]');
+                const currentStockNumber = parseInt(stockNumberInput.value);
+                const newStockNumber = currentStockNumber + 1;
+                stockNumberInput.value = newStockNumber;
+
+                rowToAdd.parentNode.insertBefore(newClone, rowToAdd.nextSibling);
+                attachEventListeners(newClone);
+                updateTotalForms();
+                updateFormIndices();
+            });
+        }
+
         updateTotalForms();
+        updateFormIndices();
     });
-    
+
 </script>
 
- 
 {% endblock %}
