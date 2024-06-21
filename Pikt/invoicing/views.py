@@ -75,6 +75,7 @@ def send_invoice(request, invoice_id):
         parts.append(part)
     
     parts_total = sum([part.price for part in parts])
+    invoice.total = parts_total
     
     context = {
         'parts': parts,
@@ -92,10 +93,10 @@ def send_invoice(request, invoice_id):
 
 
     email = EmailMessage(
-        subject='Your Invoice',
+        subject=f'Invoice from {request.user.company.name}',
         body='Please find the attached invoice.',
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[invoice.destination.email],  # Assuming `customer` has an `email` field
+        to=[invoice.destination.email],  
     )
     email.attach('invoice.pdf', pdf_file, 'application/pdf')
     email.send()

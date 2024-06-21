@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'company',
     'invoicing',
+    'ebay',
 ]
 os.getenv('DJANGO_SECRET_KEY')
 CLOUDINARY_STORAGE = {

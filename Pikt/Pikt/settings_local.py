@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'dashboards',
     'company',
     'invoicing',
+    'ebay',
 ]
 
 MIDDLEWARE = [

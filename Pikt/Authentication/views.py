@@ -126,9 +126,15 @@ class registerView(View):
         return render(request, 'register.html', {'form': form})
 
     
-
+from dashboards.models import Customer
+from invoicing.models import Invoice
 class accountView(View):
     def get(self, request):
+        context = {
+            'customer_count': Customer.objects.all().count(),
+            'invoices_total': "{:.2f}".format(sum(invoice.total for invoice in Invoice.objects.filter(company=request.user.company) if invoice.total is not None)),
+            'invoices': Invoice.objects.filter(company=request.user.company)
+        }
         return render(request, 'account.html', context)
     
     def post(self, request):

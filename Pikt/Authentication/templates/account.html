@@ -4,19 +4,25 @@
 
 <div class="utility-container">
     <div data-duration-in="300" data-duration-out="100" data-current="General" data-easing="ease" class="w-tabs">
-        <!-- <div class="in-page-menu w-tab-menu" role="tablist"><a data-w-tab="General"
+        <div class="in-page-menu w-tab-menu" role="tablist">
+            <a data-w-tab="General"
                 class="in-page-menu-link w-inline-block w-tab-link w--current" id="w-tabs-0-data-w-tab-0"
                 href="#w-tabs-0-data-w-pane-0" role="tab" aria-controls="w-tabs-0-data-w-pane-0" aria-selected="true">
                 <div>General</div>
-            </a><a data-w-tab="Billing" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
+            </a>
+            {% if user.role == "Admin" %}
+            <a data-w-tab="Invoicing" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-1"
                 href="#w-tabs-0-data-w-pane-1" role="tab" aria-controls="w-tabs-0-data-w-pane-1" aria-selected="false"
                 tabindex="-1">
-                <div>Billing</div>
-            </a><a data-w-tab="Security" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+                <div>Invoicing</div>
+            </a>
+            {% endif %}
+            <!-- <a data-w-tab="Integrations" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                 href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false"
                 tabindex="-1">
-                <div>Security</div>
-            </a></div> -->
+                <div>Integrations</div>
+            </a> -->
+        </div>
         <div class="tabs-content w-tab-content">
             <div data-w-tab="General" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-0" style="opacity: 1; transition: opacity 300ms ease 0s;">
@@ -87,18 +93,19 @@
                     </form>
                 </div>
             </div>
-            <!-- <div data-w-tab="Billing" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
+            <div data-w-tab="Invoicing" class="w-tab-pane" id="w-tabs-0-data-w-pane-1" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-1" style="">
                 <div class="w-layout-grid main-grid">
                     <div class="w-layout-grid _2-grid">
                         <div class="module">
                             <div class="content-chart">
                                 <div class="div-block">
-                                    <div class="caption">Monthly Payment</div>
+                                    <div class="caption">Invoices Total</div>
                                     <div class="billing-wrapper">
-                                        <h2 class="billing-subscription-title">$49/month</h2><img loading="lazy"
+                                        <h2 class="billing-subscription-title">${{ invoices_total }}</h2>
+                                        <!-- <img loading="lazy"
                                             src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6059f76fc86814f3829da807_Billing%20Analytics.svg"
-                                            alt="" class="billing-storage-anaytic">
+                                            alt="" class="billing-storage-anaytic"> -->
                                     </div>
                                 </div>
                             </div>
@@ -113,14 +120,14 @@
                                 <div class="div-block">
                                     <div class="caption">Total Clients</div>
                                     <div class="numbers-wrapper">
-                                        <h3 class="number">200.152</h3>
-                                        <div class="positive-value">+ 25%</div>
+                                        <h3 class="number">{{ customer_count }}</h3>
+                                        <!-- <div class="positive-value">+ 25%</div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="table-module">
+                    <!-- <div class="table-module">
                         <div class="account-table-header">
                             <h4 class="no-space-bottom">Payment methods</h4><a href="#" class="small-link">Add
                                 method</a>
@@ -147,13 +154,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="alert-module" style="opacity: 1; display: flex;">
-                        <div>Invoice #123 is processing and will be billed on the 10th of April</div><a href="#"
-                            class="alert-module-link w-inline-block"><img loading="lazy"
-                                src="https://assets.website-files.com/6057ab51530cb39d3fdac75d/6058bf1274d92808ed9a6a84_x.svg"
-                                alt=""></a>
-                    </div>
+                    </div> -->
                     <div class="table-module">
                         <div class="table-header">
                             <h4 class="no-space-bottom">Invoices</h4>
@@ -163,60 +164,27 @@
                                 <div class="caption-large">Invoice ID</div>
                                 <div class="caption-large">Amount</div>
                                 <div class="caption-large">Date</div>
-                                <div class="caption-large">Status</div>
-                            </div><a href="/utilities/invoice" class="table-row-link w-inline-block">
+                                <div class="caption-large">Customer</div>
+                            </div>
+                            {% for invoice in invoices %}
+                            <a class="table-row-link w-inline-block">
                                 <div class="w-layout-grid table-row">
                                     <div id="w-node-_83c4a0e1-f485-283c-b349-88a7bb253212-52dfa1bd" class="table-title">
-                                        Invoice #123</div>
-                                    <div>$19.00</div>
-                                    <div id="w-node-_83c4a0e1-f485-283c-b349-88a7bb25321c-52dfa1bd">April 10, 2020
+                                        Invoice #{{ invoice.id }}</div>
+                                    <div>${{ invoice.total|default_if_none:0 }}</div>
+                                    <div id="w-node-_83c4a0e1-f485-283c-b349-88a7bb25321c-52dfa1bd">{{ invoice.due_date }}
                                     </div>
                                     <div class="status">
                                         <div class="indication-color bg-primary-blue"></div>
-                                        <div>Processing</div>
-                                    </div>
-                                </div>
-                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
-                                <div class="w-layout-grid table-row">
-                                    <div id="w-node-_7554596d-8125-9c6f-6e05-8fc98275bae3-52dfa1bd" class="table-title">
-                                        Invoice #122</div>
-                                    <div>$19.00</div>
-                                    <div id="w-node-_7554596d-8125-9c6f-6e05-8fc98275bae7-52dfa1bd">March 10, 2020
-                                    </div>
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>Paid</div>
-                                    </div>
-                                </div>
-                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
-                                <div class="w-layout-grid table-row">
-                                    <div id="w-node-d3f5eb17-8347-99ee-a5b7-ab9be5d639d0-52dfa1bd" class="table-title">
-                                        Invoice #121</div>
-                                    <div>$19.00</div>
-                                    <div id="w-node-d3f5eb17-8347-99ee-a5b7-ab9be5d639d4-52dfa1bd">February 10, 2020
-                                    </div>
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>Paid</div>
-                                    </div>
-                                </div>
-                            </a><a href="/utilities/invoice" class="table-row-link w-inline-block">
-                                <div class="w-layout-grid table-row">
-                                    <div id="w-node-_05945664-2d52-1320-4747-e61a22e235fa-52dfa1bd" class="table-title">
-                                        Invoice #120</div>
-                                    <div>$19.00</div>
-                                    <div id="w-node-_05945664-2d52-1320-4747-e61a22e235fe-52dfa1bd">January 10, 2020
-                                    </div>
-                                    <div class="status">
-                                        <div class="indication-color bg-primary-green"></div>
-                                        <div>Paid</div>
+                                        <div>{{ invoice.destination.name}}</div>
                                     </div>
                                 </div>
                             </a>
+                            {% endfor %}
                         </div>
                     </div>
-                    <div class="divider"></div>
-                    <div class="w-layout-grid _2-grid">
+                    <!-- <div class="divider"></div> -->
+                    <!-- <div class="w-layout-grid _2-grid">
                         <div class="content-width-medium">
                             <h6>Auto renewal</h6>
                             <div class="form-caption">All subscriptions are set to automatically renew, unless you
@@ -246,9 +214,9 @@
                                 subscription plan</div><a href="/utilities/pricing" class="small-link">Cancel your
                                 subscription</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-            </div> -->
+            </div>
             <!-- <div data-w-tab="Security" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-2" style="">
                 <div class="w-layout-grid main-grid">
