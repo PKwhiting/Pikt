@@ -12,12 +12,13 @@ from .const import PRODUCT_COMBINED_FIELDS
 from dashboards.const.const import PARTS_CATEGORY_DICT
 import csv
 from django.http import HttpResponse
+from .utils import add_user_message, get_ebay_application_token, get_ebay_user_token, set_ebay_user_token, get_encoded_credentials
+from dotenv import load_dotenv
+import base64
+from django.contrib.auth import get_user_model
+from company.models import Company
+User = get_user_model()
 
-def add_user_message(request, message):
-    messages = json.loads(request.user.messages)
-    messages.append(message)
-    request.user.messages = json.dumps(messages)
-    request.user.save()
 
 class SaveEbayPoliciesView(LoginRequiredMixin, View):
     def post(self, request):
@@ -63,3 +64,20 @@ class EbayDataFeedView(LoginRequiredMixin, View):
     def post(self, request):
         add_user_message(request, 'Data feed no longer supported')
         return redirect('parts')
+    
+class RedirectView(View):
+    def get(self, request):
+        from ebay.utils import get_ebay_application_token, get_ebay_user_token, set_ebay_user_token, get_encoded_credentials
+        load_dotenv()
+        print(request)
+        authorization_code = request.GET.get('code')
+        expires_in = request.GET.get('expires_in')
+
+        encoded_credentials = get_encoded_credentials()
+        response = get_ebay_user_token(authorization_code, encoded_credentials)
+        if response.status_code == 200:
+            set_ebay_user_token(request, response)
+            add_user_message(request, "Ebay integration complete")
+        else:
+            add_user_message(request, "Ebay consent failed")
+        return redirect('dashboard')

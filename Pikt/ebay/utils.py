@@ -35,7 +35,6 @@ def set_ebay_user_token(request, response):
     ebay_credentials.refresh_token = response_data['refresh_token']
     ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
     ebay_credentials.save()
-    add_user_message(request, "Ebay integration complete")
 
 def get_ebay_application_token(authorization_code, encoded_credentials):
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
