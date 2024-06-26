@@ -67,12 +67,8 @@ class EbayDataFeedView(LoginRequiredMixin, View):
     
 class RedirectView(View):
     def get(self, request):
-        from ebay.utils import get_ebay_application_token, get_ebay_user_token, set_ebay_user_token, get_encoded_credentials
         load_dotenv()
-        print(request)
         authorization_code = request.GET.get('code')
-        expires_in = request.GET.get('expires_in')
-
         encoded_credentials = get_encoded_credentials()
         response = get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:

@@ -43,6 +43,6 @@ urlpatterns = [
     path('save-ebay-policies/', ebay_views.SaveEbayPoliciesView.as_view(), name='save_ebay_policies'),
     path('set-parts-ebay-listed/', ebay_views.SetPartsEbayListedView.as_view(), name='mark_as_ebay_listed'),
     path('ebay-data-feed', ebay_views.EbayDataFeedView.as_view(), name='ebay_data_feed'),
-    path('ebay_consent/redirect/', views.RedirectView.as_view(), name='redirect'),
+    path('ebay_consent/redirect/', ebay_views.RedirectView.as_view(), name='redirect'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
