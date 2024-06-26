@@ -16,7 +16,6 @@ urlpatterns = [
     path('delete_vehicle/<int:item_id>/', views.delete_item, name='delete_vehicle'),
     path('edit_vehicle/<int:item_id>/', views.edit_item.as_view(), name='edit_vehicle'),
     path('ebay_consent/', views.ebayConsent.as_view(), name='ebay_consent'),
-    path('ebay_consent/redirect/', views.RedirectView.as_view(), name='redirect'),
     path('orders/', views.orders.as_view(), name='orders'),
     path('yard/', views.yard.as_view(), name='yard'),
     path('parts/', views.defaultDashboardView.as_view(), name='parts'),
