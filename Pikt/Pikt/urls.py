@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from invoicing import views as invoicing_views
+from ebay import views as ebay_views
 
 def trigger_error(request):
     division_by_zero = 1 / 0
@@ -39,5 +40,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('dashboards/generate-quote/<int:customer_id>/', invoicing_views.generate_quote, name='generate_quote'),
     path('send-invoice/<int:invoice_id>/', invoicing_views.send_invoice, name='send_invoice'),
+    path('save-ebay-policies/', ebay_views.SaveEbayPoliciesView.as_view(), name='save_ebay_policies'),
+    path('set-parts-ebay-listed/', ebay_views.SetPartsEbayListedView.as_view(), name='mark_as_ebay_listed'),
+    path('ebay-data-feed', ebay_views.EbayDataFeedView.as_view(), name='ebay_data_feed')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

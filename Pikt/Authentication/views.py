@@ -128,12 +128,34 @@ class registerView(View):
     
 from dashboards.models import Customer
 from invoicing.models import Invoice
+from ebay.models import EbayPolicy, EbayCredentials
+from ebay.forms import EbayPolicyForm, EbayMIPCredentialsForm
 class accountView(View):
     def get(self, request):
+        payment_ebay_policy_form = EbayPolicyForm(initial={'company': request.user.company, 'policy_type': 'Payment'})
+        payment_ebay_policy_form.fields['company'].widget = forms.HiddenInput()
+        return_ebay_policy_form = EbayPolicyForm(initial={'company': request.user.company, 'policy_type': 'Return'})
+        return_ebay_policy_form.fields['company'].widget = forms.HiddenInput()
+        shipping_ebay_policy_form = EbayPolicyForm(initial={'company': request.user.company, 'policy_type': 'Shipping'})
+        shipping_ebay_policy_form.fields['company'].widget = forms.HiddenInput()
+
+        ebay_mip_credentials_form = EbayMIPCredentialsForm()
+        
+
+        ebay_credentials_exist = False
+        if EbayCredentials.objects.filter(company=request.user.company).exists():
+            ebay_credentials_exist = True
+
         context = {
             'customer_count': Customer.objects.all().count(),
             'invoices_total': "{:.2f}".format(sum(invoice.total for invoice in Invoice.objects.filter(company=request.user.company) if invoice.total is not None)),
-            'invoices': Invoice.objects.filter(company=request.user.company)
+            'invoices': Invoice.objects.filter(company=request.user.company),
+            'payment_ebay_policy_form': payment_ebay_policy_form,
+            'return_ebay_policy_form': return_ebay_policy_form,
+            'shipping_ebay_policy_form': shipping_ebay_policy_form,
+            'ebay_mip_credentials_form': ebay_mip_credentials_form,
+            'ebay_credentials_exist': ebay_credentials_exist,
+            'messages': json.loads(request.user.messages),
         }
         return render(request, 'account.html', context)
     

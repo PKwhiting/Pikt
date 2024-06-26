@@ -160,16 +160,23 @@ class rootView(LoginRequiredMixin,View):
         return render(request, 'dashboard.html', context)
  
 from .forms import PartFilterForm
+from ebay.models import UploadTemplate, EbayPolicy
+import csv
+from ebay.const import PRODUCT_COMBINED_FIELDS
+from .const.const import PARTS_CATEGORY_DICT
+
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
         parts = Part.objects.filter(company=request.user.company, sold=False)
         filter_form = PartFilterForm()
+        unlisted_parts = parts.filter(company=request.user.company, ebay_listed=False, sold=False)
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),
             'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
             'makes': ['Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Citroen', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'General Motors', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Pagani', 'Peugeot', 'Porsche', 'Ram', 'Renault', 'Rolls Royce', 'Saab', 'Subaru', 'Suzuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
             'parts': parts,
+            'unlisted_parts': unlisted_parts,
             'messages': json.loads(request.user.messages),
             'makes_models': MAKES_MODELS,
             'part_types': PARTS_CONST,
@@ -182,6 +189,62 @@ class defaultDashboardView(LoginRequiredMixin,View):
         request.user.messages = []
         request.user.save()
         return render(request, 'parts.html', context)
+
+    def post(self, request):
+        part_ids = request.POST.getlist('part_ids')
+        if part_ids:
+            parts = Part.objects.filter(id__in=part_ids)
+            
+            upload_template = UploadTemplate.objects.get(name="PRODUCT_COMBINED")
+            template_file_path = upload_template.csv.path
+
+            # Read the template file and prepare the filled CSV file
+            filled_csv_file_path = os.path.join(settings.MEDIA_ROOT, 'filled_product_combined.csv')
+
+            with open(template_file_path, 'r') as template_file, open(filled_csv_file_path, 'w', newline='') as filled_csv_file:
+                reader = csv.DictReader(template_file)
+                writer = csv.DictWriter(filled_csv_file, fieldnames=PRODUCT_COMBINED_FIELDS.keys())
+                writer.writeheader()
+
+                for part in parts:
+                    row = PRODUCT_COMBINED_FIELDS.copy()
+                    row.update({
+                        'SKU': part.stock_number,
+                        'Localized For': 'en_US',
+                        'Title': part.type,
+                        'Product Description': part.description if part.description != '' else part.type,
+                        'Condition': 'USED_EXCELLENT' if part.grade == 'A' else 'USED_VERY_GOOD' if part.grade == 'B' else 'USED_GOOD' if part.grade == 'C' else 'USED_ACCEPTABLE',
+                        'List Price': part.price,
+                        'Total Ship To Home Quantity': 1,
+                        'Shipping Policy': EbayPolicy.objects.get(company=request.user.company, policy_type='Shipping').policy_name,
+                        'Payment Policy': EbayPolicy.objects.get(company=request.user.company, policy_type='Payment').policy_name,
+                        'Return Policy': EbayPolicy.objects.get(company=request.user.company, policy_type='Return').policy_name,
+                        'Attribute Name 1': 'Part Grade',
+                        'Attribute Value 1': part.grade,
+                        'Category': PARTS_CATEGORY_DICT[part.type],
+                        'Picture URL 1': part.image_1.url if part.image_1 else '',
+                        'Picture URL 2': part.image_2.url if part.image_2 else '',
+                        'Picture URL 3': part.image_3.url if part.image_3 else '',
+                        'Picture URL 4': part.image_4.url if part.image_4 else '',
+                        'Picture URL 5': part.image_5.url if part.image_5 else '',
+                        'Picture URL 6': part.image_6.url if part.image_6 else '',
+                        'Picture URL 7': part.image_7.url if part.image_7 else '',
+                        'Picture URL 8': part.image_8.url if part.image_8 else '',
+                        'Picture URL 9': part.image_9.url if part.image_9 else '',
+                        'Picture URL 10': part.image_10.url if part.image_10 else '',
+                    })
+                    writer.writerow(row)
+            
+            # Return the filled CSV file as a download response
+            with open(filled_csv_file_path, 'r') as filled_csv_file:
+                response = HttpResponse(filled_csv_file, content_type='text/csv')
+                response['Content-Disposition'] = f'attachment; filename="filled_product_combined.csv"'
+                return response
+
+        else:
+            # Handle the case where no parts were selected.
+            return redirect('parts')
+
 
 class yardView(LoginRequiredMixin,View):
     def get(self, request):
@@ -698,11 +761,12 @@ class ebayConsent(View):
 class RedirectView(View):
     def get(self, request):
         load_dotenv()
+        print(request)
         authorization_code = request.GET.get('code')
+        expires_in = request.GET.get('expires_in')
+
         encoded_credentials = self.get_encoded_credentials()
-
         response = self.get_ebay_user_token(authorization_code, encoded_credentials)
-
         if response.status_code == 200:
             self.handle_success_response(request, response)
         else:
@@ -713,31 +777,31 @@ class RedirectView(View):
 
     def get_encoded_credentials(self):
         credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'
+        print('credentials', credentials)
         return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
 
     def get_ebay_user_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.environ.get("EBAY_RUNAME")}
-        return requests.post(os.environ.get("EBAY_TOKEN_URL"), headers=headers, data=data)
+        return requests.post('https://api.ebay.com/identity/v1/oauth2/token', headers=headers, data=data)
     
     def get_ebay_application_token(self, authorization_code, encoded_credentials):
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
         data = {'grant_type': 'client_credentials'}
-        return requests.post(os.environ.get("EBAY_TOKEN_URL"), headers=headers, data=data)
+        return requests.post('https://api.ebay.com/identity/v1/oauth2/token', headers=headers, data=data)
 
 
     def handle_success_response(self, request, response):
+        from ebay.models import EbayCredentials
         response_data = response.json()
-        request.user.ebay_user_token = response_data['access_token']
-        request.user.ebay_user_refresh_token = response_data['refresh_token']
-        self.set_token_expiration(request, response_data)
+        ebay_credentials = EbayCredentials.objects.get_or_create(company=request.user.company)
+        ebay_credentials.token = response_data['access_token']
+        ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
+        ebay_credentials.refresh_token = response_data['refresh_token']
+        ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
+        ebay_credentials.save()
         add_user_message(request, "Ebay integration complete")
 
-    def set_token_expiration(self, request, response_data):
-        now = timezone.now()
-        request.user.ebay_user_token_expiration = now + timedelta(seconds=response_data['expires_in'])
-        request.user.ebay_user_refresh_token_expiration = now + timedelta(seconds=response_data['refresh_token_expires_in'])
-        request.user.save()
 
     def add_user_message(self, request, message):
         messages = json.loads(request.user.messages)

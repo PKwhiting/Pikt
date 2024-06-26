@@ -1,5 +1,5 @@
 {% extends "root.html" %}
-
+{% load static %}
 {% block content %}
 
 <div class="utility-container">
@@ -16,12 +16,12 @@
                 tabindex="-1">
                 <div>Invoicing</div>
             </a>
-            {% endif %}
-            <!-- <a data-w-tab="Integrations" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
+            <a data-w-tab="Integrations" class="in-page-menu-link w-inline-block w-tab-link" id="w-tabs-0-data-w-tab-2"
                 href="#w-tabs-0-data-w-pane-2" role="tab" aria-controls="w-tabs-0-data-w-pane-2" aria-selected="false"
                 tabindex="-1">
                 <div>Integrations</div>
-            </a> -->
+            </a>
+            {% endif %}
         </div>
         <div class="tabs-content w-tab-content">
             <div data-w-tab="General" class="w-tab-pane w--tab-active" id="w-tabs-0-data-w-pane-0" role="tabpanel"
@@ -217,83 +217,88 @@
                     </div> -->
                 </div>
             </div>
-            <!-- <div data-w-tab="Security" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
+            <div data-w-tab="Integrations" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
                 aria-labelledby="w-tabs-0-data-w-tab-2" style="">
                 <div class="w-layout-grid main-grid">
-                    <div class="text-button-combo">
-                        <div class="content-width-small">
-                            <h6>Two Factor Authentication</h6>
-                            <div class="form-caption">Two-Factor Authentication (2FA) can be used to help protect
-                                your account</div>
-                        </div><a href="#" class="button button-small w-button">Enable</a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="w-layout-grid _2-grid">
-                        <div class="content-width-small">
-                            <div class="space-bottom">
-                                <h4>Change password</h4>
-                                <div class="form-caption">You can always change your password for security reasons
-                                    or reset your password in case you forgot it.</div>
-                            </div><a href="/authentication/password-reset"
-                                class="button button-small button-outline w-button">Forgot password?</a>
-                        </div>
-                        <div class="form-wrap w-form">
-                            <form action="/account" id="wf-form-Form" name="wf-form-Form" data-name="Form" method="get" aria-label="Form">
-                                <div class="w-layout-grid password-reset-grid">
-                                    <div>
-                                        <h6>Current password</h6><input type="password" class="text-field w-input"
-                                            maxlength="256" name="Current-Password" data-name="Current Password"
-                                            placeholder="" id="Current-Password" required="">
-                                    </div>
-                                    <div>
-                                        <h6>New pasword</h6><input type="password" class="text-field w-input"
-                                            maxlength="256" name="New-password" data-name="New password" placeholder=""
-                                            id="New-password" required="">
-                                    </div>
-                                    <div>
-                                        <h6>Confirm new password</h6><input type="password" class="text-field w-input"
-                                            maxlength="256" name="Comfirm-Password" data-name="Comfirm Password"
-                                            placeholder="" id="Comfirm-Password" required="">
-                                    </div><input type="submit" value="Update password" data-wait="Please wait..."
-                                        class="button button-small w-button">
-                                </div>
-                            </form>
-                            <div class="form-success w-form-done" tabindex="-1" role="region" aria-label="Form success">
-                                <div>Password was succesfully changed.</div>
-                            </div>
-                            <div class="form-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
-                                <div>Oops! Something went wrong.</div>
+                    {% if ebay_credentials_exist %}
+                    <div class="module">
+                        <div class="full-table-row" style="padding: 0;">
+                            <h4 class="no-space-bottom">Ebay Integration Complete</h4>
+                            <div>
+                                <img style="height: 40px" src="{% static 'icons/check.svg' %}" loading="lazy" alt="" class="nav-icon">
                             </div>
                         </div>
                     </div>
-                    <div class="divider"></div>
-                    <div class="table-module">
+                    {% else %}
+                    <div class="module">
+                        <div class="full-table-row" style="padding: 0;">
+                            <h4 class="no-space-bottom">Integrate Ebay</h4>
+                            <div>
+                                <a href="{% url 'ebay_consent' %}" class="button button-small button-outline w-button" target="_blank">Setup</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="table-module">
                         <div class="account-table-header">
-                            <h4 class="no-space-bottom">Additional security</h4>
+                            <h4 class="no-space-bottom">Configure Ebay Integration</h4>
                         </div>
                         <div class="full-table-row">
                             <div>
-                                <h6 class="no-space-bottom">SMS&nbsp;recovery</h6>
-                                <div class="small-text text-grey-3">Number ending with 1234</div>
-                            </div><a href="#" class="button button-small w-button">Disable SMS</a>
+                                <h6 class="no-space-bottom">Step 1</h6>
+                                <div class="small-text text-grey-3">Click setup and create your ebay business policies. Enter policy names below.</div>
+                            </div><a href="https://www.bizpolicy.ebay.com/businesspolicy/manage" class="button button-small button-outline w-button" target="_blank">Setup</a>
                         </div>
+                        <div class="module-link" style="box-shadow: none">
+                            <div class="ebay-integration-form">
+                                <form id="ebay_policy_form" action="{% url 'save_ebay_policies' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="">
+                                        <div id="payment_form_section" class="w-layout-grid form-grid space-bottom-small">
+                                            {{ payment_ebay_policy_form.as_p }}
+                                        </div>
+                                        <div id="shipping_form_section" class="w-layout-grid form-grid space-bottom-small">
+                                            {{ shipping_ebay_policy_form.as_p }}
+                                        </div>
+                                        <div id="return_form_section" class="w-layout-grid form-grid space-bottom-small">
+                                            {{ return_ebay_policy_form.as_p }}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
                         <div class="full-table-row-divider"></div>
                         <div class="full-table-row">
                             <div>
-                                <h6 class="no-space-bottom">Autheticator app</h6>
-                                <div class="small-text text-grey-3">Google Authenticator</div>
-                            </div><a href="#" class="button button-small button-outline w-button">Configure</a>
+                                <h6 class="no-space-bottom">Step 2</h6>
+                                <div class="small-text text-grey-3">Set your Feed schema to the Ebay format with a file type of CSV.</div>
+                            </div><a href="https://www.mip.ebay.com/settings/channelmanagement" class="button button-small button-outline w-button" target="_blank">Configure</a>
+                        </div>
+                        <div class="full-table-row">
+                            <div>
+                                <h6 class="no-space-bottom">Step 3</h6>
+                                <div class="small-text text-grey-3">Get your data feed username and password.</div>
+                            </div><a href="https://www.mip.ebay.com/settings/channelmanagement" class="button button-small button-outline w-button" target="_blank">Configure</a>
+                        </div>
+                        <div>
+                            {{ ebay_mip_credentials_form.as_p }}
                         </div>
                         <div class="full-table-row-divider"></div>
                         <div class="full-table-row">
-                            <div>
-                                <h6 class="no-space-bottom">SSL Certificate</h6>
-                                <div class="small-text text-grey-3">Secure Sockets Layer</div>
-                            </div><a href="#" class="button button-small button-outline w-button">Configure</a>
+                            <div></div>
+                            <button class="button button-small button-primary w-button" form="ebay_policy_form" type="submit">Submit</button>
                         </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="table-module">
+                        
+                        <div class="full-table-row">
+                            <div>
+                                <h6 class="no-space-bottom">Upload Your First CSV</h6>
+                            </div><a href="https://www.mip.ebay.com/feeds/product" class="button button-small button-outline w-button">Upload</a>
+                        </div>
+                    </div> -->
+                    {% endif %}
+                    <!-- <div class="divider"></div> -->
+                    <!-- <div class="table-module">
                         <div class="account-table-header">
                             <h4 class="no-space-bottom">Your devices</h4><a href="/authentication/sign-in"
                                 class="small-link">Log out on all devices</a>
@@ -330,16 +335,23 @@
                                 </div>
                             </div><a href="#" class="small-text">Log out</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>
+<style>
+    .ebay-integration-form label {
+        font-size: 14px;
+    }
+</style>
 <script>
     document.getElementById('avatar').addEventListener('change', function () {
         document.getElementById('avatarForm').submit();
     });
+
+
 </script>
 
 

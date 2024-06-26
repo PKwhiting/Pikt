@@ -1,38 +1,58 @@
-<div class="table-module">
-    {% if table_data %}
-    <div class="table-content">
-        <div class="table-list">
-            <div class="w-layout-grid table-headers _5-columns">
-                <div class="caption-large">Interchange</div>
-                <div class="caption-large">Stock Number</div>
-                <div class="caption-large">Name</div>
-                <div class="caption-large">Category</div>
-                <div class="caption-large">VIN</div>
+<form id="upload-form" method="post" action="">
+    {% csrf_token %}
+    <div class="table-module">
+        <div class="table-header">
+            <h4 class="no-space-bottom">Unlisted Parts on Ebay</h4>
+            <div>
+                <button type="button" class="button button-small w-button" id="upload-inventory-button">
+                    <div>Upload</div>
+                </button>
+                <button type="button" class="button button-small w-button" id="mark-ebay-listed-button">
+                    <div>Mark as eBay Listed</div>
+                </button>
             </div>
-            {% for row in table_data %}
-            <a href="#" class="table-row-link w-inline-block">
-                <div class="w-layout-grid table-row _5-columns">
-                    <div id="w-node-_5521c124-0f92-8dbc-1ac2-8e7319e308ce-a83755f0"
-                        class="table-title">{{ row.INTERCHANGE }}</div>
-                    <div class="status">
-                        <!-- <div class="indication-color bg-primary-green"></div> -->
-                        <div>{{ row.STOCK_NUMBER }}</div>
-                    </div>
-                    <div id="w-node-_615c3cff-330e-8cea-cda9-fd603b82f842-a83755f0">{{ row.NAME }}
-                    </div>
-                    <div id="w-node-_4f66ef2c-f5e4-013a-33f4-d541a0a4cfc2-a83755f0">{{ row.NAME }}
-                    </div>
-                    <div id="w-node-d4d54e6d-8393-a477-68d3-d0b23521355f-a83755f0">{{ row.VIN }}
-                    </div>
+        </div>
+        <div class="table-content">
+            <div class="table-list">
+                <div class="w-layout-grid table-headers _6-columns">
+                    <div class="caption-large">Upload</div>
+                    <div class="caption-large">Stock Number</div>
+                    <div class="caption-large">Part Type</div>
+                    <div class="caption-large">Grade</div>
+                    <div class="caption-large">Price</div>
+                    <div class="caption-large">Direction</div>
                 </div>
-            </a>
-            {% endfor %}
+                {% for part in unlisted_parts %}
+                    <div class="w-layout-grid table-row _6-columns part-row">
+                        <input id="{{ part.id }}" type="checkbox" name="part_ids" value="{{ part.id }}" class="part-checkbox">
+                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e41023e-a83755f0">{{ part.stock_number }}</div>
+                        <div>{{ part.type }}</div>
+                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410244-a83755f0">{{ part.grade }}</div>
+                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410246-a83755f0">${{ part.price }}</div>
+                        <div id="w-node-bc317098-9fe4-14f7-1fe4-46924e410248-a83755f0">{{ part.direction }}</div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-    {% endif %}
-</div>
-<!-- <script>
-    document.getElementById('inventory').addEventListener('change', function () {
-        document.getElementById('inventoryForm').submit();
+</form>
+
+<script>
+    document.getElementById('upload-inventory-button').addEventListener('click', function() {
+        if (document.querySelectorAll('.part-checkbox:checked').length > 0) {
+            const form = document.getElementById('upload-form');
+            form.action = '{% url "ebay_data_feed" %}';
+            form.submit();
+        } else {
+            alert('Please select at least one part to upload.');
+        }
     });
-</script> -->
+
+    document.getElementById('mark-ebay-listed-button').addEventListener('click', function() {
+        const form = document.getElementById('upload-form');
+        form.action = '{% url "mark_as_ebay_listed" %}';
+        form.submit();
+    });
+</script>
+
+<iframe name="hidden_iframe" style="display:none;"></iframe>
