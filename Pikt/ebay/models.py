@@ -34,7 +34,7 @@ class EbayMIPCredentials(models.Model):
     password = models.CharField(max_length=100, null=True, blank=True)
 
 # make  a model that stores ebay credentials:
-class EbayCredentials(models.Model):
+class EbayCredential(models.Model):
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE)
     token = models.CharField(max_length=1000, null=True, blank=True)
     token_expiration = models.DateTimeField(null=True, blank=True)

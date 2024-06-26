@@ -128,7 +128,7 @@ class registerView(View):
     
 from dashboards.models import Customer
 from invoicing.models import Invoice
-from ebay.models import EbayPolicy, EbayCredentials
+from ebay.models import EbayPolicy, EbayCredential
 from ebay.forms import EbayPolicyForm, EbayMIPCredentialsForm
 class accountView(View):
     def get(self, request):
@@ -143,7 +143,7 @@ class accountView(View):
         
 
         ebay_credentials_exist = False
-        if EbayCredentials.objects.filter(company=request.user.company).exists():
+        if EbayCredential.objects.filter(company=request.user.company).exists():
             ebay_credentials_exist = True
 
         context = {
