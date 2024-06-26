@@ -758,56 +758,24 @@ class ebayConsent(View):
         consent_url = "https://auth.ebay.com/oauth2/authorize?client_id=PKWhitin-Pikt-PRD-be5696659-6f69cb6d&response_type=code&redirect_uri=PK_Whiting-PKWhitin-Pikt-P-wnidgnd&scope=https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/sell.marketing.readonly https://api.ebay.com/oauth/api_scope/sell.marketing https://api.ebay.com/oauth/api_scope/sell.inventory.readonly https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account.readonly https://api.ebay.com/oauth/api_scope/sell.account https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly https://api.ebay.com/oauth/api_scope/sell.fulfillment https://api.ebay.com/oauth/api_scope/sell.analytics.readonly https://api.ebay.com/oauth/api_scope/sell.finances https://api.ebay.com/oauth/api_scope/sell.payment.dispute https://api.ebay.com/oauth/api_scope/commerce.identity.readonly https://api.ebay.com/oauth/api_scope/sell.reputation https://api.ebay.com/oauth/api_scope/sell.reputation.readonly https://api.ebay.com/oauth/api_scope/commerce.notification.subscription https://api.ebay.com/oauth/api_scope/commerce.notification.subscription.readonly https://api.ebay.com/oauth/api_scope/sell.stores https://api.ebay.com/oauth/api_scope/sell.stores.readonly"
         return HttpResponseRedirect(consent_url)
 
+
 class RedirectView(View):
     def get(self, request):
+        from ebay.utils import get_ebay_application_token, get_ebay_user_token, set_ebay_user_token, get_encoded_credentials
         load_dotenv()
         print(request)
         authorization_code = request.GET.get('code')
         expires_in = request.GET.get('expires_in')
 
-        encoded_credentials = self.get_encoded_credentials()
-        response = self.get_ebay_user_token(authorization_code, encoded_credentials)
+        encoded_credentials = get_encoded_credentials()
+        response = get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:
-            self.handle_success_response(request, response)
+            set_ebay_user_token(request, response)
         else:
             add_user_message(request, "Ebay consent failed")
 
         context['messages'] = json.loads(request.user.messages)
         return redirect('dashboard')
-
-    def get_encoded_credentials(self):
-        credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'
-        print('credentials', credentials)
-        return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
-
-    def get_ebay_user_token(self, authorization_code, encoded_credentials):
-        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
-        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.environ.get("EBAY_RUNAME")}
-        return requests.post('https://api.ebay.com/identity/v1/oauth2/token', headers=headers, data=data)
-    
-    def get_ebay_application_token(self, authorization_code, encoded_credentials):
-        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
-        data = {'grant_type': 'client_credentials'}
-        return requests.post('https://api.ebay.com/identity/v1/oauth2/token', headers=headers, data=data)
-
-
-    def handle_success_response(self, request, response):
-        from ebay.models import EbayCredentials
-        response_data = response.json()
-        ebay_credentials = EbayCredentials.objects.get_or_create(company=request.user.company)
-        ebay_credentials.token = response_data['access_token']
-        ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
-        ebay_credentials.refresh_token = response_data['refresh_token']
-        ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
-        ebay_credentials.save()
-        add_user_message(request, "Ebay integration complete")
-
-
-    def add_user_message(self, request, message):
-        messages = json.loads(request.user.messages)
-        messages.append(message)
-        request.user.messages = json.dumps(messages)
-        request.user.save()
 
 class yard(LoginRequiredMixin, View):
     def get(self, request, part_id=None, *args, **kwargs):

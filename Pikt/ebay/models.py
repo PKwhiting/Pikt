@@ -40,4 +40,3 @@ class EbayCredentials(models.Model):
     token_expiration = models.DateTimeField(null=True, blank=True)
     refresh_token = models.CharField(max_length=1000, null=True, blank=True)
     refresh_token_expiration = models.DateTimeField(null=True, blank=True)
-
