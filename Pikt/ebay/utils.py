@@ -29,7 +29,7 @@ def get_ebay_user_token(authorization_code, encoded_credentials):
 def set_ebay_user_token(request, response):
     load_dotenv()
     response_data = response.json()
-    ebay_credentials = EbayCredential.objects.get_or_create(company=request.user.company)
+    ebay_credentials, created = EbayCredential.objects.get_or_create(company=request.user.company)
     ebay_credentials.token = response_data['access_token']
     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
     ebay_credentials.refresh_token = response_data['refresh_token']
