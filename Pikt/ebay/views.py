@@ -17,6 +17,14 @@ from dotenv import load_dotenv
 import base64
 from django.contrib.auth import get_user_model
 from company.models import Company
+import requests
+from datetime import datetime, timedelta
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+from .models import EbayCredential
+from .serializers import InventoryItemSerializer
 User = get_user_model()
 
 
@@ -77,3 +85,53 @@ class RedirectView(View):
         else:
             add_user_message(request, "Ebay consent failed")
         return redirect('dashboard')
+    
+
+class BulkCreateOrReplaceInventoryItemView(APIView):
+    def post(self, request):
+        serializer = InventoryItemSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            credentials = EbayCredential.objects.filter(company=request.user.company).first()
+            if not credentials:
+                return Response({'error': 'eBay credentials not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if credentials.token_expiration <= datetime.now():
+                if not self.refresh_token(credentials):
+                    return Response({'error': 'Failed to refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+            headers = {
+                'Authorization': f'Bearer {credentials.token}',
+                'Content-Language': 'en-US',
+                'Content-Type': 'application/json'
+            }
+            data = {
+                "requests": serializer.data
+            }
+            response = requests.post('https://api.ebay.com/sell/inventory/v1/bulk_create_or_replace_inventory_item',
+                                     headers=headers, json=data)
+            if response.status_code in [200, 201, 207]:
+                return Response(response.json(), status=response.status_code)
+            else:
+                return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def refresh_token(self, credentials):
+        url = 'https://api.ebay.com/identity/v1/oauth2/token'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic {base64_encoded_client_id:client_secret}',
+        }
+        data = {
+            'grant_type': 'refresh_token',
+            'refresh_token': credentials.refresh_token,
+            'scope': 'https://api.ebay.com/oauth/api_scope/sell.inventory',
+        }
+        response = requests.post(url, headers=headers, data=data)
+        if response.status_code == 200:
+            token_data = response.json()
+            credentials.token = token_data['access_token']
+            credentials.token_expiration = datetime.now() + timedelta(seconds=token_data['expires_in'])
+            credentials.save()
+            return True
+        else:
+            return False
