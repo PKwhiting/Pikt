@@ -64,8 +64,7 @@ def get_ebay_user_token_from_refresh_token(refresh_token, encoded_credentials):
     return requests.post("https://api.ebay.com/identity/v1/oauth2/token", headers=headers, data=data)
 
 def handle_user_success_response(user, response):
-    print("HANDLING USER SUCCESS RESPONSE")
-    ebay_credentials = EbayCredential.objects.get_or_create(company=user.company)
+    ebay_credentials, create = EbayCredential.objects.get_or_create(company=user.company)
     response_data = response.json()
     ebay_credentials.token = response_data['access_token']
     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
