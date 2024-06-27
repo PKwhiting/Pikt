@@ -54,7 +54,7 @@ def update_user_token(request):
     refresh_token = request.user.ebay_user_refresh_token
     response = get_ebay_user_token_from_refresh_token(refresh_token, encoded_credentials)
     if response.status_code == 200:
-        handle_user_success_response(request.user, response)
+        set_user_token(request.user, response)
     else:
         add_user_message(request, "Ebay token refresh failed")
 
@@ -63,15 +63,22 @@ def get_ebay_user_token_from_refresh_token(refresh_token, encoded_credentials):
     data = {'grant_type': 'refresh_token','refresh_token': refresh_token}
     return requests.post("https://api.ebay.com/identity/v1/oauth2/token", headers=headers, data=data)
 
-def handle_user_success_response(user, response):
+def set_user_token(user, response):
     ebay_credentials, create = EbayCredential.objects.get_or_create(company=user.company)
     response_data = response.json()
     ebay_credentials.token = response_data['access_token']
     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
-    ebay_credentials.refresh_token = response_data['refresh_token']
-    ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
     ebay_credentials.save()
-    add_user_message(user, "Ebay integration complete")
+
+# def handle_user_success_response(user, response):
+#     ebay_credentials, create = EbayCredential.objects.get_or_create(company=user.company)
+#     response_data = response.json()
+#     ebay_credentials.token = response_data['access_token']
+#     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
+#     ebay_credentials.refresh_token = response_data['refresh_token']
+#     ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
+#     ebay_credentials.save()
+#     add_user_message(user, "Ebay integration complete")
 
 def get_credentials(user):
         credentials = EbayCredential.objects.filter(company=user.company).first()
@@ -80,7 +87,6 @@ def get_credentials(user):
         return credentials
 
 def refresh_user_token(request):
-    print("REFRESHING USER TOKEN")
     load_dotenv()
     credentials = get_credentials(request.user)
     if credentials.token_expiration <= timezone.now():
@@ -89,3 +95,18 @@ def refresh_user_token(request):
         else:
             add_user_message(request, "Please re-authenticate your ebay credentials")
 
+def get_get_headers(user):
+    credentials = get_credentials(user)
+    return {
+        'Authorization': f'Bearer {credentials.token}',
+        'Content-Language': 'en-US',
+        'Content-Type': 'application/json'
+    }
+
+def get_post_headers(user):
+    credentials = get_credentials(user)
+    return {
+        'Authorization': f'Bearer {credentials.token}',
+        'Content-Language': 'en-US',
+        'Content-Type': 'application/json'
+    }
