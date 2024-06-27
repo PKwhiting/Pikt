@@ -26,6 +26,7 @@ from django.conf import settings
 from .models import EbayCredential
 from .serializers import InventoryItemSerializer, BulkInventoryItemSerializer
 from django.utils import timezone
+from .utils import refresh_user_token
 
 User = get_user_model()
 
@@ -40,31 +41,7 @@ class EbayAPIBaseView(APIView):
             raise Exception("Ebay credentials not found")
         return credentials
 
-    def refresh_token(self, credentials):
-        url = "https://api.ebay.com/identity/v1/oauth2/token"
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-        payload = {
-            'grant_type': 'refresh_token',
-            'refresh_token': credentials.refresh_token,
-            'scope': 'https://api.ebay.com/oauth/api_scope/sell.inventory'
-        }
-        auth = (settings.EBAY_APP_ID, settings.EBAY_CERT_ID)
-
-        response = requests.post(url, headers=headers, data=payload, auth=auth)
-        if response.status_code == 200:
-            data = response.json()
-            credentials.token = data['access_token']
-            credentials.token_expiration = timezone.now() + timezone.timedelta(seconds=data['expires_in'])
-            credentials.save()
-            return True
-        return False
-
     def get_headers(self, credentials):
-        if credentials.token_expiration <= timezone.now():
-            if not self.refresh_token(credentials):
-                raise Exception("Failed to refresh token")
         return {
             'Authorization': f'Bearer {credentials.token}',
             'Content-Language': 'en-US',
@@ -72,6 +49,7 @@ class EbayAPIBaseView(APIView):
         }
 
     def make_request(self, method, request, query):
+        refresh_user_token(request)
         credentials = self.get_credentials(request.user)
         headers = self.get_headers(credentials)
         serializer = self.serializer(query)

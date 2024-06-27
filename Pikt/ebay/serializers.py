@@ -67,7 +67,7 @@ class InventoryItemSerializer(serializers.Serializer):
     product = ProductSerializer()
 
     def to_representation(self, instance):
-        image_urls = [img.image.url for img in instance.part_images.all()]
+        image_urls = []
         for i in range(1, 11):
             image_field = getattr(instance, f"image_{i}", None)
             if image_field:
@@ -84,7 +84,7 @@ class InventoryItemSerializer(serializers.Serializer):
             "product": {
                 "title": instance.type,
                 "description": instance.description,
-                "imageUrls": image_urls
+                "imageUrls": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.autocar.co.uk%2Fcar-news%2Fbest-cars%2Ftop-10-best-super-luxury-cars&psig=AOvVaw0k0My9AW17OkDdEUKdA1n8&ust=1719536753832000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNj0vdzL-oYDFQAAAAAdAAAAABAn"]
             }
         }
 
