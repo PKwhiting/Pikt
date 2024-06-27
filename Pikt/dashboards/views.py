@@ -164,12 +164,19 @@ from ebay.models import UploadTemplate, EbayPolicy
 import csv
 from ebay.const import PRODUCT_COMBINED_FIELDS
 from .const.const import PARTS_CATEGORY_DICT
+from .models import PartImage
 
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = Part.objects.filter(company=request.user.company, sold=False)
+        parts = Part.objects.filter(company=request.user.company)
+        
         filter_form = PartFilterForm()
-        unlisted_parts = parts.filter(company=request.user.company, ebay_listed=False, sold=False)
+        unlisted_parts = parts.filter(
+            ebay_listed=False,
+            sold=False,
+            part_images__isnull=False
+        ).distinct()
+
         context = {
             'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
             'years': range(2024, 1969, -1),

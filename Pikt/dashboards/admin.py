@@ -7,6 +7,7 @@ from .models import Inventory
 from .models import core
 from .models import Customer
 from .models import PartPreference
+from .models import PartImage
 
 # Register your models here.
 admin.site.register(image)
@@ -17,3 +18,4 @@ admin.site.register(Inventory)
 admin.site.register(core)
 admin.site.register(Customer)
 admin.site.register(PartPreference)
+admin.site.register(PartImage)

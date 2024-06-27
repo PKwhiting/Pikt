@@ -84,16 +84,6 @@ class Part(models.Model):
     marketplace_listed = models.BooleanField(default=False)
     sold = models.BooleanField(default=False) 
     sold_date = models.DateTimeField(null=True, blank=True)
-    image_1 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_2 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_3 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_4 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_5 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_6 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_7 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_8 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_9 = models.ImageField(upload_to='images/', null=True, blank=True)
-    image_10 = models.ImageField(upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -106,6 +96,10 @@ class Part(models.Model):
             self.sold_date = None
 
         super().save(*args, **kwargs)
+    
+class PartImage(models.Model):
+    part = models.ForeignKey(Part, related_name='part_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
 
     
     

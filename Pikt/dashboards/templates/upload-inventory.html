@@ -41,7 +41,7 @@
     document.getElementById('upload-inventory-button').addEventListener('click', function() {
         if (document.querySelectorAll('.part-checkbox:checked').length > 0) {
             const form = document.getElementById('upload-form');
-            form.action = '{% url "ebay_data_feed" %}';
+            form.action = '{% url "bulk_create_or_replace_inventory_item" %}';
             form.submit();
         } else {
             alert('Please select at least one part to upload.');

@@ -35,6 +35,7 @@ urlpatterns = [
     path('register/', views.registerView.as_view(), name='register'),
     path('account/', views.accountView.as_view(), name='account'),
     path('dashboards/', include('dashboards.urls')),
+    path('ebay/', include('ebay.urls')),
     path('company/', include('company.urls')),
     path('account/upload_avatar/', views.uploadAvatarView.as_view(), name='upload_avatar'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
