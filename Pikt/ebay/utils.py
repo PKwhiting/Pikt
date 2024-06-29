@@ -310,8 +310,8 @@ class EbayAPIRequestView(APIView):
             errors = response_data.get('errors', [])
             for error in errors:
                 logger.error(f"Error {error.get('errorId')}: {error.get('message')}")
-                add_user_message(self.request, f"Error {error.get('errorId')}: {error.get('message')}")
-            raise Exception(f"API request failed with status code {response.status_code}")
+            #     add_user_message(self.request, f"Error {error.get('errorId')}: {error.get('message')}")
+            # raise Exception(f"API request failed with status code {response.status_code}")
 
     def construct_request(self, method, request):
         try:
