@@ -256,26 +256,10 @@ def delete_ebay_item_offer(user, offer_id):
             'Accept-Encoding': 'gzip',
             'Content-Type': 'application/json'
         }
-    try:
-        response = requests.delete(url, headers=headers)
+    response = requests.delete(url, headers=headers)
+    ebay_request_object = Request(user=user, company=user.company, url=url, body=f"offer id: {offer_id}", response=response.json())
+    ebay_request_object.save()
 
-        ebay_request_object = Request(user=user, company=user.company, url=url, body=f"offer id: {offer_id}", response=response.json())
-        ebay_request_object.save()
-    except requests.HTTPError as http_err:
-        logging.error(f"HTTP error occurred: {http_err}")  # Log HTTP error
-        raise Exception(f"Failed to delete offer {offer_id}: {http_err}")
-    except requests.ConnectionError as conn_err:
-        logging.error(f"Connection error occurred: {conn_err}")  # Log connection error
-        raise Exception(f"Failed to delete offer {offer_id}: {conn_err}")
-    except requests.Timeout as timeout_err:
-        logging.error(f"Timeout error occurred: {timeout_err}")  # Log timeout error
-        raise Exception(f"Failed to delete offer {offer_id}: {timeout_err}")
-    except requests.RequestException as req_err:
-        logging.error(f"Request error occurred: {req_err}")  # Log general request error
-        raise Exception(f"Failed to delete offer {offer_id}: {req_err}")
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}")  # Log any other unexpected errors
-        raise Exception(f"An unexpected error occurred: {str(e)}")
     
     
 
