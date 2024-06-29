@@ -56,3 +56,12 @@ class EbayMarketplace(models.Model):
     tree_id = models.IntegerField(null=True, blank=True)
     tree_version = models.IntegerField(null=True, blank=True)
     expiration = models.DateTimeField(null=True, blank=True)
+
+class Request(models.Model):
+    user = models.ForeignKey('Authentication.User', on_delete=models.CASCADE)
+    company = models.ForeignKey('company.Company', on_delete=models.CASCADE)
+    url = models.CharField(max_length=1000, null=True, blank=True)
+    body = models.TextField(max_length=10000, null=True, blank=True)
+    response = models.TextField(max_length=10000, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

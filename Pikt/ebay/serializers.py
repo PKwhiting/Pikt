@@ -67,12 +67,11 @@ class InventoryItemSerializer(serializers.Serializer):
     availability = AvailabilitySerializer(required=False)
     product = ProductSerializer()
 
+    def get_image_urls(self, instance):
+        return [part_image.image.url for part_image in instance.part_images.all()]
+
     def to_representation(self, instance):
-        image_urls = []
-        for i in range(1, 11):
-            image_field = getattr(instance, f"image_{i}", None)
-            if image_field:
-                image_urls.append(image_field.url)
+        image_urls = self.get_image_urls(instance)
         return {
             "sku": instance.stock_number,
             "locale": "en_US",

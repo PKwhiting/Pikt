@@ -4,7 +4,7 @@ import os
 import json
 from django.utils import timezone
 from datetime import datetime, timedelta
-from ebay.models import EbayCredential
+from ebay.models import EbayCredential, Request
 from dotenv import load_dotenv
 import base64
 import requests
@@ -313,12 +313,14 @@ class EbayAPIRequestView(APIView):
             #     add_user_message(self.request, f"Error {error.get('errorId')}: {error.get('message')}")
             # raise Exception(f"API request failed with status code {response.status_code}")
 
-    def construct_request(self, method, request):
+    def construct_request(self, method, request, ebay_request_object):
         try:
             refresh_user_token(request)
             credentials = self.get_credentials(request.user)
             headers = self.get_headers(credentials)
             data = self.prepare_data()
+            ebay_request_object.body = data
+            ebay_request_object.save()
             response = requests.request(method, self.url, headers=headers, json=data)
             return response
         except requests.RequestException as e:
@@ -332,7 +334,11 @@ class EbayAPIRequestView(APIView):
         self.request = request
         try:
             self.validate_query(self.query)
-            response = self.construct_request(method, request)
+            ebay_request_object = Request(user=request.user, company=request.user.company, url=self.url)
+            ebay_request_object.save()
+            response = self.construct_request(method, request, ebay_request_object)
+            ebay_request_object.response = response.json()
+            ebay_request_object.save()
             self.handle_response_messages(response)
             return response
         except ValueError as e:
