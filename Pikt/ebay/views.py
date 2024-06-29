@@ -263,7 +263,7 @@ class ListPartsView(LoginRequiredMixin, View):
     def process_offers(self, request, parts):
         offers_response = BulkCreateOffersView().post(request, parts)
         if not self.is_successful_response(offers_response):
-            raise Exception("Failed to create offers")
+            raise Exception(f"Failed to create offers: {offers_response.json()}")
         return offers_response
 
     def update_parts_with_offer_ids(self, parts, response_data):
@@ -283,7 +283,7 @@ class ListPartsView(LoginRequiredMixin, View):
                 part.ebay_listed = True
                 part.save()
         if not self.is_successful_response(publish_response):
-            raise Exception("Failed to publish offers")
+            raise Exception(f"Failed to publish offers: {publish_response.json()}")
 
     def is_successful_response(self, response):
         return response.status_code in [200, 201, 204]
