@@ -129,15 +129,23 @@ def get_marketplace_details(user, marketplace_id):
     url = f"https://api.ebay.com/commerce/taxonomy/v1/get_default_category_tree_id?marketplace_id={marketplace_id}"
     headers = get_get_headers(user)
     response = requests.get(url, headers=headers)
-    response = response.json()
-    return response['categoryTreeId'], response['categoryTreeVersion']
+    json_data = response.json()
+    ebay_request_object = Request(user=user, company=user.company, url=url, body=f'Marketplace ID: {marketplace_id}', response=json_data)
+    ebay_request_object.save()
+    return json_data['categoryTreeId'], json_data['categoryTreeVersion']
 
 def get_ebay_marketplace_id():
     return 'EBAY_MOTORS_US'
 
 def get_category_tree_id(user):
     marketplace_id = get_ebay_marketplace_id()
-    ebay_marketplace = EbayMarketplace.objects.get(marketplace=marketplace_id)
+    ebay_marketplace = EbayMarketplace.objects.filter(marketplace=marketplace_id)
+    if not ebay_marketplace:
+        ebay_marketplace = EbayMarketplace(marketplace=marketplace_id)
+        ebay_marketplace.tree_id, ebay_marketplace.tree_version = get_marketplace_details(user, marketplace_id)
+        ebay_marketplace.expiration = timezone.now() + timedelta(days=100)
+        ebay_marketplace.save()
+        return ebay_marketplace.tree_id
     if ebay_marketplace.expiration <= timezone.now():
         ebay_marketplace.tree_id, ebay_marketplace.tree_version = get_marketplace_details(user, marketplace_id)
         ebay_marketplace.expiration = timezone.now() + timedelta(days=100)
@@ -151,7 +159,10 @@ from django.http import HttpResponse
 from django.views import View
 from .models import Request
 def get_category_suggestions(user, query):
+    print("RIGHT HERE")
     category_tree_id = get_category_tree_id(user)
+    print("CATEGORY TREE ID: ", category_tree_id)
+    print("QUERY: ", query)
     url = f"https://api.ebay.com/commerce/taxonomy/v1/category_tree/{category_tree_id}/get_category_suggestions?q=car truck {query}"
     credentials = get_credentials(user)
     headers =  {
@@ -161,6 +172,7 @@ def get_category_suggestions(user, query):
         }
     response = requests.get(url, headers=headers)
     json_data = response.json()
+
     ebay_request_object = Request(user=user, company=user.company, url=url, body=f'query: {query}, category tree id: {category_tree_id}', response=json_data)
     ebay_request_object.save()
     
@@ -246,7 +258,9 @@ def delete_ebay_item_offer(user, offer_id):
         }
     try:
         response = requests.delete(url, headers=headers)
-        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+
+        ebay_request_object = Request(user=user, company=user.company, url=url, body=f"offer id: {offer_id}", response=response.json())
+        ebay_request_object.save()
     except requests.HTTPError as http_err:
         logging.error(f"HTTP error occurred: {http_err}")  # Log HTTP error
         raise Exception(f"Failed to delete offer {offer_id}: {http_err}")

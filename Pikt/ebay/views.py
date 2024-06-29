@@ -178,7 +178,7 @@ class BulkCreateOffersView(EbayAPIRequestView):
         for part in query:
             if part.ebay_category_id == '' or not part.ebay_category_id:
                 specification, create = PartEbayCategorySpecification.objects.get_or_create(part_type=part.type)
-                if create:
+                if create or specification.ebay_category_id is None or specification.ebay_category_id == '':
                     specification.ebay_category_id = get_category_suggestions(request.user, part.type)
                     specification.save()
                     part.ebay_category_id = specification.ebay_category_id
