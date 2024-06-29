@@ -149,6 +149,7 @@ import io
 import zipfile
 from django.http import HttpResponse
 from django.views import View
+from .models import Request
 def get_category_suggestions(user, query):
     category_tree_id = get_category_tree_id(user)
     url = f"https://api.ebay.com/commerce/taxonomy/v1/category_tree/{category_tree_id}/get_category_suggestions?q=car truck {query}"
@@ -158,9 +159,10 @@ def get_category_suggestions(user, query):
             'Accept-Encoding': 'gzip',
             'Content-Type': 'application/json'
         }
-
     response = requests.get(url, headers=headers)
     json_data = response.json()
+    ebay_request_object = Request(user=user, company=user.company, url=url, body=f'query: {query}, category tree id: {category_tree_id}', response=json_data)
+    ebay_request_object.save()
     
     first_category_id = json_data['categorySuggestions'][0]['category']['categoryId']
     return first_category_id
@@ -176,6 +178,10 @@ def get_location_id(user):
     response = requests.get(url, headers=headers)
     json_data = response.json()
     merchant_location_key = json_data["locations"][0]["merchantLocationKey"]
+
+    ebay_request_object = Request(user=user, company=user.company, url=url, response=json_data)
+    ebay_request_object.save()
+
     return merchant_location_key
 
 

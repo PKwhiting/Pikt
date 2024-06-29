@@ -65,3 +65,10 @@ class Request(models.Model):
     response = models.TextField(max_length=10000, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def body_json(self):
+        import json
+        try:
+            return json.dumps(json.loads(self.body), indent=4)
+        except:
+            return self.body
