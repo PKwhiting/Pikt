@@ -258,7 +258,7 @@ class ListPartsView(LoginRequiredMixin, View):
     def process_inventory_items(self, request, parts):
         inventory_response = BulkCreateOrReplaceInventoryItemView().post(request, query=parts)
         if not self.is_successful_response(inventory_response):
-            raise Exception("Failed to create inventory items")
+            raise Exception(f"Failed to create inventory items: {inventory_response.json()}")
 
     def process_offers(self, request, parts):
         offers_response = BulkCreateOffersView().post(request, parts)
