@@ -99,7 +99,7 @@ class InventoryItemSerializer(serializers.Serializer):
                 "brand": instance.brand if instance.brand is not None and instance.brand.strip() else instance.vehicle.make,
                 "mpn": instance.part_number if instance.part_number else instance.stock_number,
                 "description": instance.description if instance.description is not None and instance.description.strip() else f'{instance.type} {instance.stock_number}',
-                "imageUrls": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.autocar.co.uk%2Fcar-news%2Fbest-cars%2Ftop-10-best-super-luxury-cars&psig=AOvVaw0k0My9AW17OkDdEUKdA1n8&ust=1719536753832000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNj0vdzL-oYDFQAAAAAdAAAAABAn"],
+                "imageUrls": image_urls,
                 "aspects": {
                     "brand": [instance.brand if instance.brand is not None and instance.brand.strip() else instance.vehicle.make],
                     "MPN": [instance.part_number] if instance.part_number else [instance.stock_number],
