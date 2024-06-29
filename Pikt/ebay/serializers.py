@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from decimal import Decimal
 
 class DimensionSerializer(serializers.Serializer):
     height = serializers.FloatField()
@@ -59,7 +60,7 @@ class ProductSerializer(serializers.Serializer):
 class InventoryItemSerializer(serializers.Serializer):
     sku = serializers.CharField(max_length=50)
     locale = serializers.ChoiceField(choices=["en_US", "en_CA", "fr_CA", "en_AU", "en_GB", "de_DE"])
-    condition = serializers.ChoiceField(choices=["NEW", "LIKE_NEW", "NEW_OTHER", "NEW_WITH_DEFECTS", "MANUFACTURER_REFURBISHED", "EXCELLENT_REFURBISHED", "VERY_GOOD_REFURBISHED", "GOOD_REFURBISHED", "SELLER_REFURBISHED", "USED_GOOD","USED_ACCEPTABLE","FOR_PARTS_OR_NOT_WORKING","USED_EXCELLENT","USED_VERY_GOOD", "USED", "USED_ACCEPTABLE", "CERTIFIED_REFURBISHED"])
+    condition = serializers.ChoiceField(choices=["USED_EXCELLENT", "FOR_PARTS_OR_NOT_WORKING"])
     conditionDescription = serializers.CharField(max_length=1000, required=False)
     conditionDescriptors = ConditionDescriptorSerializer(many=True, required=False)
     packageWeightAndSize = PackageWeightAndSizeSerializer(required=False)
@@ -75,30 +76,37 @@ class InventoryItemSerializer(serializers.Serializer):
         return {
             "sku": instance.stock_number,
             "locale": "en_US",
-            "condition": "USED_GOOD",
+            "condition": "USED_EXCELLENT" if instance.grade == "A" or instance.grade == "B" else "FOR_PARTS_OR_NOT_WORKING",
             "availability": {
                 "shipToLocationAvailability": {
                     "quantity": 1
                 }
             },
+            "packageWeightAndSize": {
+                "dimensions": {
+                    "unit": "INCH",
+                    "height": instance.height,
+                    "length": instance.length,
+                    "width": instance.width
+                },
+                "weight": {
+                    "unit": "POUND",
+                    "value": instance.weight
+                }
+            },
             "product": {
                 "title": instance.type,
-                "description": instance.description,
-                "imageUrls": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.autocar.co.uk%2Fcar-news%2Fbest-cars%2Ftop-10-best-super-luxury-cars&psig=AOvVaw0k0My9AW17OkDdEUKdA1n8&ust=1719536753832000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNj0vdzL-oYDFQAAAAAdAAAAABAn"]
+                "brand": instance.brand if instance.brand is not None and instance.brand.strip() else instance.vehicle.make,
+                "mpn": instance.part_number if instance.part_number else instance.stock_number,
+                "description": instance.description if instance.description is not None and instance.description.strip() else f'{instance.type} {instance.stock_number}',
+                "imageUrls": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.autocar.co.uk%2Fcar-news%2Fbest-cars%2Ftop-10-best-super-luxury-cars&psig=AOvVaw0k0My9AW17OkDdEUKdA1n8&ust=1719536753832000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNj0vdzL-oYDFQAAAAAdAAAAABAn"],
+                "aspects": {
+                    "brand": [instance.brand if instance.brand is not None and instance.brand.strip() else instance.vehicle.make],
+                    "MPN": [instance.part_number] if instance.part_number else [instance.stock_number],
+                    "UPC": ["Does Not Apply"],
+                }
             }
         }
-
-class BulkInventoryItemSerializer(serializers.Serializer):
-    requests = InventoryItemSerializer(many=True)
-
-    def to_representation(self, queryset):
-        return {
-            "requests": [InventoryItemSerializer(instance).data for instance in queryset]
-        }
-
-    def create(self, validated_data):
-        # Additional processing if needed
-        return validated_data
 
 class AmountSerializer(serializers.Serializer):
     currency = serializers.CharField(max_length=3)
@@ -205,6 +213,64 @@ class EbayOfferDetailsWithKeysSerializer(serializers.Serializer):
     storeCategoryNames = serializers.ListField(child=serializers.CharField(max_length=100), required=False)
     tax = serializers.JSONField(required=False)
 
+    def to_representation(self, instance):
+        image_urls = [img.image.url for img in instance.part_images.all()]
+        return {
+            "sku": instance.stock_number,
+            "availableQuantity": 1,
+            "categoryId": instance.ebay_category_id,
+            # "charity": {},
+            # "extendedProducerResponsibility": {},
+            "format": "FIXED_PRICE",
+            # "hideBuyerDetails": "",
+            # "includeCatalogProductDetails": "",
+            # "listingDescription": "",
+            "listingDuration": "GTC",
+            "listingPolicies": {
+            #     "bestOfferTerms": {},
+            #     "eBayPlusIfEligible": "",
+                "fulfillmentPolicyId": instance.company.ebay_credentials.fulfillment_policy.policy_id,
+                "paymentPolicyId": instance.company.ebay_credentials.payment_policy.policy_id,
+            #     "productCompliancePolicyIds": [],
+            #     "regionalProductCompliancePolicies": {},
+                "returnPolicyId": instance.company.ebay_credentials.return_policy.policy_id,
+            #     "shippingCostOverrides": [],
+            #     "takeBackPolicyId": ""
+            },
+            # "listingStartDate": "",
+            # "lotSize": "",
+            "marketplaceId": "EBAY_MOTORS",
+            "merchantLocationKey": instance.company.ebay_merchant_location_key,
+            "pricingSummary": {
+            #     "auctionReservePrice": "",
+            #     "auctionStartPrice": "",
+            #     "minimumAdvertisedPrice": "",
+            #     "originallySoldForRetailPriceOn": "",
+            #     "originalRetailPrice": "",
+                "price": {
+                    "currency": "USD",
+                    "value": float(instance.price) if instance.price > Decimal('1.00') else "1000.00"
+                },
+            #     "pricingVisibility": ""
+            },
+            # "quantityLimitPerBuyer": "",
+            # "regulatory": {
+            #     "economicOperator": "",
+            #     "energyEfficiencyLabel": "",
+            #     "hazmat": "",
+            #     "repairScore": ""
+            # },
+            # "secondaryCategoryId": "",
+            # "storeCategoryNames": "",
+            # "tax": "",
+            # "product": {
+            #     "title": "",
+            #     "description": "",
+            #     "imageUrls": ""
+            # }
+        }
+
+
 class BulkEbayOfferDetailsWithKeysSerializer(serializers.Serializer):
     requests = EbayOfferDetailsWithKeysSerializer(many=True)
 
@@ -216,3 +282,27 @@ class BulkEbayOfferDetailsWithKeysSerializer(serializers.Serializer):
     def create(self, validated_data):
         # Additional processing if needed
         return validated_data
+
+class BulkInventoryItemSerializer(serializers.Serializer):
+    requests = InventoryItemSerializer(many=True)
+
+    def to_representation(self, queryset):
+        return {
+            "requests": [InventoryItemSerializer(instance).data for instance in queryset]
+        }
+
+    def create(self, validated_data):
+        # Additional processing if needed
+        return validated_data
+    
+class BulkOfferSerializer(serializers.Serializer):
+    offerId = serializers.CharField(max_length=100)
+
+class BulkPublishOfferRequestSerializer(serializers.Serializer):
+    requests = BulkOfferSerializer(many=True)
+
+    def to_representation(self, queryset):
+        requests = [{"offerId": instance.ebay_offer_id} for instance in queryset]
+        return {
+            "requests": requests
+        }

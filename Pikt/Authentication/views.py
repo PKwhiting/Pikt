@@ -143,7 +143,7 @@ class accountView(View):
         
 
         ebay_credentials_exist = False
-        if EbayCredential.objects.filter(company=request.user.company).exists():
+        if EbayCredential.objects.filter(company_ref=request.user.company).exists():
             ebay_credentials_exist = True
 
         context = {

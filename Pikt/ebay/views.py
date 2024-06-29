@@ -26,45 +26,15 @@ from django.conf import settings
 from .models import EbayCredential
 from .serializers import InventoryItemSerializer, BulkInventoryItemSerializer
 from django.utils import timezone
-from .utils import refresh_user_token
+import sentry_sdk
+from sentry_sdk import capture_exception
+from parts.models import PartEbayCategorySpecification
+from .utils import EbayAPIRequestView, refresh_user_token, get_get_headers, get_post_headers, get_category_tree_id, get_category_suggestions, get_location_id, get_first_fulfillment_policies, get_first_payment_policies, get_first_return_policies, delete_ebay_item_offer
+from .serializers import BulkEbayOfferDetailsWithKeysSerializer, BulkPublishOfferRequestSerializer
+import logging
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
-
-class EbayAPIBaseView(APIView):
-    url = None
-    serializer = None
-    success_message = None
-    failure_message = None
-    def get_credentials(self, user):
-        credentials = EbayCredential.objects.filter(company=user.company).first()
-        if not credentials:
-            raise Exception("Ebay credentials not found")
-        return credentials
-
-    def get_headers(self, credentials):
-        return {
-            'Authorization': f'Bearer {credentials.token}',
-            'Content-Language': 'en-US',
-            'Content-Type': 'application/json'
-        }
-
-    def make_request(self, method, request, query):
-        refresh_user_token(request)
-        credentials = self.get_credentials(request.user)
-        headers = self.get_headers(credentials)
-        serializer = self.serializer(query)
-        data = serializer.data
-        response = requests.request(method, self.url, headers=headers, json=data)
-
-        if response.status_code in [200, 201, 207]:
-            if self.success_message:
-                add_user_message(request, self.success_message)
-        else:
-            if self.failure_message:
-                add_user_message(request, self.failure_message)
-
-        return response
-
 
 class SaveEbayPoliciesView(LoginRequiredMixin, View):
     def post(self, request):
@@ -118,53 +88,209 @@ class RedirectView(View):
         encoded_credentials = get_encoded_credentials()
         response = get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:
-            set_ebay_user_token(request, response)
+            ebay_credentials = set_ebay_user_token(request, response)
             add_user_message(request, "Ebay integration complete")
         else:
             add_user_message(request, "Ebay consent failed")
+            return redirect('dashboard')
+
+        # create the ebay policies
+        try:
+            response = get_first_fulfillment_policies(request.user)
+            if response is not None:
+                fulfillment_policy_id, fulfillment_policy_name = response
+                shipping_policy, create = EbayPolicy.objects.get_or_create(
+                    company=request.user.company, 
+                    policy_type='Shipping',   
+                )
+                shipping_policy.policy_name=fulfillment_policy_name, 
+                shipping_policy.policy_id=fulfillment_policy_id
+                shipping_policy.save()
+                ebay_credentials.fulfillment_policy = shipping_policy
+                ebay_credentials.save()
+                
+            else:
+                add_user_message(request, "Ebay shipping policies not found")
+        except Exception as e:
+            capture_exception(e)
+
+        try:
+            response = get_first_payment_policies(request.user)
+            if response is not None:
+                payment_policy_id, payment_policy_name = response
+                payment_policy, create = EbayPolicy.objects.get_or_create(
+                    company=request.user.company, 
+                    policy_type='Payment',   
+                )
+                payment_policy.policy_name=payment_policy_name
+                payment_policy.policy_id=payment_policy_id
+                payment_policy.save()
+                ebay_credentials.payment_policy = payment_policy
+                ebay_credentials.save()
+            else:
+                add_user_message(request, "Ebay payment policies not found")
+        except Exception as e:
+            capture_exception(e)
+
+        try:
+            response = get_first_return_policies(request.user)
+            if response is not None:
+                return_policy_id, return_policy_name = response
+                return_policy, create = EbayPolicy.objects.get_or_create(
+                    company=request.user.company, 
+                    policy_type='Return',   
+                )
+                return_policy.policy_name=return_policy_name
+                return_policy.policy_id=return_policy_id
+                return_policy.save()
+                ebay_credentials.return_policy = return_policy
+                ebay_credentials.save()
+            else:
+                add_user_message(request, "Ebay return policies not found")
+        except Exception as e:
+            capture_exception(e)
+        
+        if not request.user.company.ebay_merchant_location_key:
+            location_id = get_location_id(request.user)
+            request.user.company.ebay_merchant_location_key = location_id
+            request.user.company.save()
+
         return redirect('dashboard')
     
 
-class BulkCreateOrReplaceInventoryItemView(EbayAPIBaseView):
+class BulkCreateOrReplaceInventoryItemView(EbayAPIRequestView):
     url = 'https://api.ebay.com/sell/inventory/v1/bulk_create_or_replace_inventory_item'
     serializer = BulkInventoryItemSerializer
     success_message = "Inventory uploaded to Ebay successfully"
     failure_message = "Failed to upload inventory to Ebay"
 
-    def post(self, request):
-        part_ids = request.POST.getlist('part_ids')
-        if not part_ids:
-            return Response({"error": "part_ids are required"}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, query=None):
+        self.query = query
+        return self.make_request('POST', request)
 
-        parts = Part.objects.filter(id__in=part_ids)
-        if not parts.exists():
-            return Response({"error": "No parts found with the given IDs"}, status=status.HTTP_404_NOT_FOUND)
-
-        self.make_request('POST', request, query=parts)
-
-        return redirect('parts')
-
-from .serializers import BulkEbayOfferDetailsWithKeysSerializer
-class BulkCreateOffersView(EbayAPIBaseView):
-    url = 'https://api.ebay.com/sell/inventory/v1/bulk_publish_offers'
+class BulkCreateOffersView(EbayAPIRequestView):
+    url = 'https://api.ebay.com/sell/inventory/v1/bulk_create_offer'
     serializer = BulkEbayOfferDetailsWithKeysSerializer
     success_message = "Offers published to Ebay successfully"
     failure_message = "Failed to publish offers to Ebay"
 
+    def post(self, request, query=None):
+        for part in query:
+            if part.ebay_category_id == '' or not part.ebay_category_id:
+                specification, create = PartEbayCategorySpecification.objects.get_or_create(part_type=part.type)
+                if create:
+                    specification.ebay_category_id = get_category_suggestions(request.user, part.type)
+                    specification.save()
+                    part.ebay_category_id = specification.ebay_category_id
+                    part.save()
+                else:
+                    part.ebay_category_id = specification.ebay_category_id
+                    part.save()
+
+        self.query = query
+        return self.make_request('POST', request)
+
+class BulkPublishOffersView(EbayAPIRequestView):
+    url = 'https://api.ebay.com/sell/inventory/v1/bulk_publish_offer'
+    serializer = BulkPublishOfferRequestSerializer
+    success_message = "Offers published to Ebay successfully"
+    failure_message = "Failed to publish offers to Ebay"
+
+    def post(self, request, query=None):
+        self.query = query
+        return self.make_request('POST', request)
+
+
+class ListPartsView(LoginRequiredMixin, View):
     def post(self, request):
+        try:
+            part_ids = self.get_part_ids(request)
+            parts = self.get_parts(part_ids)
+
+            # filter through the parts and remove the ones that are ebay_listed
+            parts = parts.exclude(ebay_listed=True)
+
+            if parts.count() == 0:
+                logger.info("All parts are already listed")
+                return redirect('parts')
+
+
+            if not parts.exists():
+                return self.error_response("No valid parts found", status=status.HTTP_404_NOT_FOUND)
+
+            self.ensure_no_existing_offers(request, parts)
+
+            self.process_inventory_items(request, parts)
+
+            offers_response = self.process_offers(request, parts)
+
+            self.update_parts_with_offer_ids(parts, offers_response.json())
+
+            # reinitialize parts list with updated offer ids
+            parts = self.get_parts(part_ids)
+            self.publish_offers(request, parts)
+
+
+            return redirect('parts')
+        except ValueError as e:
+            return self.error_response(str(e))
+        except Exception as e:
+            capture_exception(e)
+            return self.error_response(f"An unexpected error occurred: {str(e)}")
+            
+        
+    def get_part_ids(self, request):
         part_ids = request.POST.getlist('part_ids')
         if not part_ids:
-            return Response({"error": "part_ids are required"}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValueError("part_ids are required")
+        return part_ids
 
-        parts = Part.objects.filter(id__in=part_ids)
-        if not parts.exists():
-            return Response({"error": "No parts found with the given IDs"}, status=status.HTTP_404_NOT_FOUND)
+    def get_parts(self, part_ids):
+        return Part.objects.filter(id__in=part_ids)
+    
+    def ensure_no_existing_offers(self, request, parts):
+        for part in parts:
+            if part.ebay_offer_id:
+                delete_ebay_item_offer(request.user, part.ebay_offer_id)
+                part.ebay_offer_id = None
+                part.save()
 
-        self.make_request('POST', request, query=parts)
+    def process_inventory_items(self, request, parts):
+        inventory_response = BulkCreateOrReplaceInventoryItemView().post(request, query=parts)
+        if not self.is_successful_response(inventory_response):
+            raise Exception("Failed to create inventory items")
 
+    def process_offers(self, request, parts):
+        offers_response = BulkCreateOffersView().post(request, parts)
+        if not self.is_successful_response(offers_response):
+            raise Exception("Failed to create offers")
+        return offers_response
+
+    def update_parts_with_offer_ids(self, parts, response_data):
+        offers = [(response["sku"], response["offerId"]) for response in response_data["responses"]]
+        skus = [sku for sku, _ in offers]
+ 
+        for sku, offer_id in offers:
+            part = parts.get(stock_number=sku)
+            part.ebay_offer_id = offer_id
+            part.save()
+
+
+    def publish_offers(self, request, parts):
+        publish_response = BulkPublishOffersView().post(request, parts)
+        if self.is_successful_response(publish_response):
+            for part in parts:
+                part.ebay_listed = True
+                part.save()
+        if not self.is_successful_response(publish_response):
+            raise Exception("Failed to publish offers")
+
+    def is_successful_response(self, response):
+        return response.status_code in [200, 201, 204]
+
+    def error_response(self, message):
+        add_user_message(self.request, message)
         return redirect('parts')
-
-
 
 
 

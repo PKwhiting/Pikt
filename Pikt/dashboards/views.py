@@ -90,74 +90,7 @@ class delete_message(View):
 
 class rootView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = Part.objects.filter(user=request.user).order_by('-created_at')[:3]
-        # get the price of all parts from the user that have a status of 'sold'
-        sold_parts = Part.objects.filter(user=request.user, status='Sold')
-        total_revenue = round(sold_parts.aggregate(Sum('price'))['price__sum'], 2) if sold_parts.aggregate(Sum('price'))['price__sum'] is not None else '0.00'
-        shipped_parts = Part.objects.filter(user=request.user, status='Shipped')
-        unsold_parts = Part.objects.filter(user=request.user, status__in=['Pending', 'Listed'])
-        average_price = unsold_parts.aggregate(Avg('price'))['price__avg'] if unsold_parts.aggregate(Avg('price'))['price__avg'] is not None else '0.00'
-        last_15_days = []
-        for i in range(15, -1, -1):
-            last_15_days.append((datetime.now() - timedelta(days=i)).strftime('%b-%d'))
-
-        start_date = datetime.now() - timedelta(days=15)
-
-        # Get the number of vehicles created each day for the last 15 days
-        vehicles_created_each_day = Vehicle.objects.filter(
-            location=request.user.location,
-            created_at__gte=start_date
-        ).annotate(
-            date=TruncDate('created_at')
-        ).values(
-            'date'
-        ).annotate(
-            total_created=Count('id')
-        ).order_by('date')
-
-        # Convert QuerySet to a format suitable for the graph
-        vehicles_created_each_day_data = []
-        for i in range(15, -1, -1):
-            date = (datetime.now() - timedelta(days=i)).date()
-            # Try to find a match in our query results
-            match = next((item for item in vehicles_created_each_day if item['date'] == date), None)
-            total_created = match['total_created'] if match else 0
-            vehicles_created_each_day_data.append(
-                total_created,
-            )
-
-        current_month = datetime.now().month
-        current_year = datetime.now().year
-
-
-        vehicles_bought_this_month = Vehicle.objects.filter(
-            user=request.user,
-            created_at__month=current_month,
-            created_at__year=current_year
-        ).count()
-
-
-        recent_vehicles = Vehicle.objects.filter(user=request.user).order_by('-created_at')[:5]
-
-        context = {
-            'main_logo': os.path.join(settings.BASE_DIR, 'assets', 'logo_transparent_large_black.png'),
-            'years' : range(2024, 1969, -1),
-            'colors': ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Brown', 'Green', 'Yellow', 'Gold', 'Orange', 'Purple'],
-            'messages': json.loads(request.user.messages),
-            'parts': parts,
-            'sold_parts': sold_parts.count(),
-            'shipped_parts': shipped_parts.count(),
-            'total_revenue': total_revenue,
-            'average_price': round(average_price,2) if average_price != '0.00' else '0.00',
-            'chartLabels': json.dumps(last_15_days),
-            'chartData': vehicles_created_each_day_data,
-            'mtd_purchases': vehicles_bought_this_month,
-            'recent_vehicles': recent_vehicles,
-        }
-
-        request.user.messages = []
-        request.user.save()
-        return render(request, 'dashboard.html', context)
+        return redirect('vehicles')
  
 from .forms import PartFilterForm
 from ebay.models import UploadTemplate, EbayPolicy

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'company',
     'invoicing',
     'ebay',
+    'parts'
 ]
 
 MIDDLEWARE = [

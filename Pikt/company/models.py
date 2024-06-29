@@ -53,6 +53,7 @@ STATE_CHOICES = (
     ('WY', 'Wyoming'),
 )
 # Create your models here.
+from ebay.models import EbayCredential
 class Company(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     address_line1 = models.CharField(max_length=100, blank=True)
@@ -65,6 +66,8 @@ class Company(models.Model):
     logo = models.ImageField(upload_to='company_logos', null=True, blank=True)
     website = models.CharField(max_length=100, blank=True)
     is_core_buyer = models.BooleanField(default=False)
+    ebay_merchant_location_key = models.CharField(max_length=100, blank=True, null=True)
+    ebay_credentials = models.ForeignKey(EbayCredential, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -27,6 +27,10 @@ class EbayPolicy(models.Model):
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE)
     policy_type  = models.CharField(max_length=100, choices=POLICY_TYPES)
     policy_name = models.CharField(max_length=100, null=True, blank=True)
+    policy_id = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.company.name + ' - ' + self.policy_type)
 
 class EbayMIPCredentials(models.Model):
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE)
@@ -35,11 +39,20 @@ class EbayMIPCredentials(models.Model):
 
 # make  a model that stores ebay credentials:
 class EbayCredential(models.Model):
-    company = models.ForeignKey('company.Company', on_delete=models.CASCADE)
+    company_ref = models.ForeignKey('company.Company', on_delete=models.CASCADE)
     token = models.CharField(max_length=5000, null=True, blank=True)
     token_expiration = models.DateTimeField(null=True, blank=True)
     refresh_token = models.CharField(max_length=5000, null=True, blank=True)
     refresh_token_expiration = models.DateTimeField(null=True, blank=True)
+    fulfillment_policy = models.ForeignKey(EbayPolicy, on_delete=models.CASCADE, null=True, blank=True, related_name='fulfillment_policy')
+    payment_policy = models.ForeignKey(EbayPolicy, on_delete=models.CASCADE, null=True, blank=True, related_name='payment_policy')
+    return_policy = models.ForeignKey(EbayPolicy, on_delete=models.CASCADE, null=True, blank=True, related_name='return_policy')
 
     def __str__(self):
-        return str(self.company.name)
+        return str(self.company_ref.name)
+    
+class EbayMarketplace(models.Model):
+    marketplace = models.CharField(max_length=100, null=True, blank=True)
+    tree_id = models.IntegerField(null=True, blank=True)
+    tree_version = models.IntegerField(null=True, blank=True)
+    expiration = models.DateTimeField(null=True, blank=True)

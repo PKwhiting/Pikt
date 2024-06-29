@@ -63,6 +63,7 @@ class image(models.Model):
 class Part(models.Model):
     stock_number = models.CharField(max_length=50, null=True, blank=True)
     part_number = models.CharField(max_length=50, null=True, blank=True)
+    brand = models.CharField(max_length=255, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True)
     company = models.ForeignKey('company.Company', on_delete=models.CASCADE, null=True, blank=True)
     vehicle = models.ForeignKey('dashboards.Vehicle', on_delete=models.CASCADE, null=True, blank=True)
@@ -80,6 +81,8 @@ class Part(models.Model):
     cost = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
     ebay_listed = models.BooleanField(default=False)
+    ebay_category_id = models.CharField(max_length=100, null=True, blank=True)
+    ebay_offer_id = models.CharField(max_length=100, null=True, blank=True)
     mercari_listed = models.BooleanField(default=False)
     marketplace_listed = models.BooleanField(default=False)
     sold = models.BooleanField(default=False) 
@@ -96,13 +99,7 @@ class Part(models.Model):
             self.sold_date = None
 
         super().save(*args, **kwargs)
-    
-class PartImage(models.Model):
-    part = models.ForeignKey(Part, related_name='part_images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images/')
 
-    
-    
     @staticmethod
     def get_highest_stock_number():
         from django.db.models import Max
@@ -110,6 +107,13 @@ class PartImage(models.Model):
         if highest_stock_number is None:
             return 100500
         return int(highest_stock_number)
+    
+class PartImage(models.Model):
+    part = models.ForeignKey(Part, related_name='part_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+
+    
+
 
 class Order(models.Model):
     sku = models.CharField(max_length=36)

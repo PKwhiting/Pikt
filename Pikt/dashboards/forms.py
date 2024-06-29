@@ -174,11 +174,13 @@ class VehicleForm(forms.ModelForm):
 class EditPartForm(forms.ModelForm):
     class Meta:
         model = Part
-        fields = ['type', 'stock_number', 'direction','price', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold']
+        fields = ['type', 'stock_number', 'direction','price', 'brand', 'part_number', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold', 'weight', 'height', 'width', 'length']
         widgets = {
             'type': forms.TextInput(attrs={'placeholder': 'Type', 'class': 'text-field w-input'}),
             'stock_number': forms.TextInput(attrs={'placeholder': 'Stock Number', 'class': 'text-field w-input'}),
             'direction': forms.Select(attrs={'class': 'text-field w-input'} ),
+            'brand': forms.TextInput(attrs={'placeholder': 'Brand', 'class': 'text-field w-input'}),
+            'part_number': forms.TextInput(attrs={'placeholder': 'Part Number', 'class': 'text-field w-input'}),
             'price': forms.TextInput(attrs={'placeholder': 'Price', 'class': 'text-field w-input'}),
             'description': forms.TextInput(attrs={'placeholder': 'Description', 'class': 'text-field w-input'}),
             'location': forms.TextInput(attrs={'placeholder': 'Location', 'class': 'text-field w-input'}),
@@ -189,6 +191,10 @@ class EditPartForm(forms.ModelForm):
             'mercari_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
             'marketplace_listed': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
             'sold': forms.CheckboxInput(attrs={'class': 'text-field w-checkbox'}),
+            'weight': forms.TextInput(attrs={'placeholder': 'Weight (in lbs)', 'class': 'text-field w-input'}),
+            'height': forms.TextInput(attrs={'placeholder': 'Height (in inches)', 'class': 'text-field w-input'}),
+            'width': forms.TextInput(attrs={'placeholder': 'Width (in inches)', 'class': 'text-field w-input'}),
+            'length': forms.TextInput(attrs={'placeholder': 'Length (in inches)', 'class': 'text-field w-input'}),
         }
     
     def __init__(self, *args, **kwargs):
