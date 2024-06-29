@@ -1,0 +1,16 @@
+{% if item.part_images.all %}
+<div class="profile-details" style="display: flex; flex-direction: column;">
+    <div>
+        <div class="weight-500">Images</div>
+    </div>
+    <div class="image-gallery" style="display:flex; flex-wrap: wrap; max-width: 100%">
+        {% for image in item.part_images.all %}
+        <div class="image-container" style="display: inline-block;">
+            <img src="{{ image.image.url }}" alt="Part Image" class="part-image"
+                style="max-height:100px; margin: 5px" />
+            <!-- <button type="button" class="delete-image" data-image-id="{{ image.id }}">Delete</button> -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

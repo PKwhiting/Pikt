@@ -489,18 +489,43 @@ class edit_item(LoginRequiredMixin, View):
         return render(request, 'edit-item.html', context)
 
     def post(self, request, item_id):
-        # get the form from the request
         if 'vehicle' in request.build_absolute_uri():
             item_to_edit = get_object_or_404(Vehicle, id=item_id)
             form = EditVehicleForm(request.POST, request.FILES, instance=item_to_edit)
             redirect_url = '/dashboards/vehicles/'
+            if form.is_valid():
+                form.save()
         else:
             item_to_edit = get_object_or_404(Part, id=item_id)
             form = EditPartForm(request.POST, request.FILES, instance=item_to_edit)
             redirect_url = '/dashboards/parts/'
-        if form.is_valid():
-            form.save()
+            if form.is_valid() or 'images' in request.FILES:
+                if form.is_valid():
+                    form.save()
+                else:
+                    self.save_form_manually(item_to_edit, form.cleaned_data)
+                self.save_images(item_to_edit, request.FILES.getlist('images'))
+            else:
+                print(form.errors)
         return redirect(redirect_url)
+    
+    def save_form_manually(self, instance, cleaned_data):
+        for field, value in cleaned_data.items():
+            try:
+                setattr(instance, field, value)
+            except Exception as e:
+                print(f"Error setting field {field}: {e}")
+        try:
+            instance.save()
+        except Exception as e:
+            print(f"Error saving instance: {e}")
+
+
+    def save_images(self, part, images):
+        if images:
+            for image in images:
+                print("MAKING A PART IMAGE")
+                PartImage.objects.create(part=part, image=image)
     
 
 @login_required

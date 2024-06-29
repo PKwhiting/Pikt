@@ -2,6 +2,7 @@ from django import forms
 from .models import Part
 from .models import Vehicle, PartPreference, Customer
 from .const.const import PARTS_CONST, STATE_CHOICES
+from .widgets import CustomClearableFileInput
 
 
 
@@ -172,6 +173,7 @@ class VehicleForm(forms.ModelForm):
         fields = ['vin', 'year', 'make', 'model', 'trim']
 
 class EditPartForm(forms.ModelForm):
+    images = forms.FileField(widget=CustomClearableFileInput(attrs={'multiple': True}), required=False)
     class Meta:
         model = Part
         fields = ['type', 'stock_number', 'direction','price', 'brand', 'part_number', 'description', 'location', 'grade', 'interchange', 'part_number', 'ebay_listed', 'mercari_listed', 'marketplace_listed', 'sold', 'weight', 'height', 'width', 'length']
@@ -202,6 +204,7 @@ class EditPartForm(forms.ModelForm):
 
         self.fields['direction'].choices = [('', 'Select Direction')] + self.fields['direction'].choices[1:]
         self.fields['grade'].choices = [('', 'Select Grade')] + self.fields['grade'].choices[1:]
+        
 
 
 class EditVehicleForm(forms.ModelForm):

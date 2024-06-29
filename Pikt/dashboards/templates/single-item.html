@@ -5,6 +5,7 @@
 <div class="dashboard-container">
     <h1>{{ item.year }} {{ item.make }} {{ item.model }} {{ item.type }}</h1>
     <div id="w-node-_16eaae77-e4e7-5162-b306-e6410af62ec5-b47b752d" class="module">
+        {% include 'part-images.html' %}
         {% for field in item|model_fields %}
             <div class="profile-details">
                 <div class="weight-500">{{ field.name }}</div>

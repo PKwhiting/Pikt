@@ -3,18 +3,21 @@
 {% load static %}
 {% block content %}
 <div class="dashboard-container">
-    <form id="item-edit-form" method="POST" action="{% url item_edit_url item.pk %}">
+    <form id="item-edit-form" method="POST" action="{% url item_edit_url item.pk %}" enctype="multipart/form-data">
         <div style="display: flex; justify-content: space-between">
             <h1>{{ item.year }} {{ item.make }} {{ item.model }} {{ item.type }}</h1>
         </div>
         {% csrf_token %}
         <div id="w-node-_16eaae77-e4e7-5162-b306-e6410af62ec5-b47b752d" class="module">
+            {% include 'part-images.html' %}
             {% for field in form %}
                 <div class="profile-details">
                     <div class="weight-500">{{ field.label }}</div>
                     <div class="text-grey-3">{{ field }}</div>
                 </div>
+                
             {% endfor %}
+            <div class="small-text text-grey-3" style="text-align: right;">***Adding new images will remove all current images***</div>
         </div>
     </form>
     <div class="account-delete">
