@@ -10,12 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import logging
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 import sentry_sdk
 
 load_dotenv()
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,        # Capture info and above as breadcrumbs
+    event_level=logging.ERROR  # Send errors as events
+)
 
 
 
@@ -23,11 +32,13 @@ sentry_sdk.init(
     dsn="https://6e409d9b2a4a1485f29f5d7b5082d21c@o4506183471923200.ingest.sentry.io/4506596015800320",
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
+    integrations=[DjangoIntegration(), sentry_logging],
     traces_sample_rate=1.0,
     # Set profiles_sample_rate to 1.0 to profile 100%
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
+    send_default_pii=True
 )
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -71,7 +82,7 @@ INSTALLED_APPS = [
     'company',
     'invoicing',
     'ebay',
-    'parts'
+    'parts',
 ]
 os.getenv('DJANGO_SECRET_KEY')
 CLOUDINARY_STORAGE = {
@@ -190,3 +201,40 @@ EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'sentry': {
+            'class': 'sentry_sdk.integrations.logging.EventHandler',
+            'level': 'ERROR',  # Send error messages to Sentry
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'ebay': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
