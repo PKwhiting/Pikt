@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>Pikt</title>
@@ -7,6 +7,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Discover Pikt Parts: User-friendly, web-based inventory management software for automotive recycling yards. Efficient, reliable, and dedicated customer support.">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <!-- Meta Pixel Code -->
     <script>
@@ -29,62 +30,23 @@
 
 <body>
     <div class="presentation-hero-section wf-section">
+        <a href="{% url 'login' %}" class="button button-spacing w-button mobile-hidden" style="position: absolute; top:15px; right:15px">Login</a>
         <div class="container">
-            <div class="form"><img
+            <div class="form">
+                <img
                     src="{% static 'images/logo_transparent_large_white.png' %}"
-                    loading="lazy" style="opacity: 1; height: 30px; margin-bottom: 36px;" alt=""
+                    loading="lazy" style="opacity: 1; height: 30px; margin-bottom: 60px;" alt=""
                     class="logo-presentation">
                 <div>
                     <div>
-                        <h1 data-w-id="a854c0b2-01fc-e990-1029-182060e95531" style="opacity: 1;" class="display-heading-1">Say Goodbye to Old, Outdated Systems: Welcome to the Future of Automotive Recycling</h1>
-                        <div data-w-id="ed503702-153b-0192-1e6b-37d0374b7368" style="opacity: 1;" class="space-bottom">Elevate Efficiency, Integration, and Customer Service</div>
+                        <h1 data-w-id="a854c0b2-01fc-e990-1029-182060e95531" style="opacity: 1; margin-bottom: 48px" class="display-heading-1">Say goodbye to Old Systems</h1>
+                        <a href="{% url 'login' %}" class="space-bottom button button-large w-button desktop-hidden" style="margin-bottom: 24px;">Login</a>
+                        <a href="https://calendly.com/rhett-0gua/30min" class="space-bottom button button-large w-button">Request Demo</a>
                     </div>
-                    <!-- <div style="display: flex; justify-content: center;">
-                        <form method="post" id="funnel-form" style="max-width: 400px; box-shadow: 0 1px 1px 0 rgba(118, 135, 154, 0.24), 0 3px 8px 0 rgba(118, 135, 154, 0.08);">
-                            {% csrf_token %}
-                            <div class="form-row" style="display: flex;">
-                                <div class="form-group col-md-6" style="margin-right: 8px;">
-                                    {{ form.name }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    {{ form.email }}
-                                </div>
-                            </div>
-                            <select name="{{ form.yard_size.name }}" class="text-field w-input">
-                                {% for value, display in form.yard_size.field.choices %}
-                                    <option value="{{ value }}" {% if form.yard_size.value == value %}selected{% endif %}>{{ display }}</option>
-                                {% endfor %}
-                            </select>
-                            {{ form.company }}
-                            <div style="text-align: left; width: 100%">
-                                <h5>What is your biggest pain point right now?</h5>
-                                {% for choice in form.message.field.choices %}
-                                    <label style="font-weight: normal; font-size: 14px; color: #333333">
-                                        {% if choice.0 == 'other' %}
-                                            <div style="display: flex">
-                                                <input required type="radio" id="otherInputRadioButton" name="{{ form.message.name }}" value="{{ choice.0 }}">
-                                                <!-- {{ choice.1 }}   -->
-                                                <span style="margin-left: 5px;">Other</span>
-                                               
-                                            </div>
-                                        {% else %}
-                                            <input required type="radio" name="{{ form.message.name }}" value="{{ choice.0 }}">
-                                            {{ choice.1 }}
-                                        {% endif %}
-                                    </label>
-                                {% endfor %}
-                            </div>
-                            <div style="width: 100%; height: 0px">
-                                <input type="text" name="otherInput" id="otherInput" style="display: none; position: relative; top: -28px; left: 60px; width: 120px;">
-                            </div>
-                            <button type="submit" style="margin-top: 10px;" class="button button-large w-button remove-row">Join The Waitlist</button>
-                        </form>
-                    </div>  -->
                 </div>
                 <div data-w-id="0b116e1e-3c59-e38f-55f5-7b8592f9aec1" style="opacity: 1; margin-bottom: 120px"
                     class="presentation-buttons">
-                    <a href="{% url 'login' %}" class="button button-spacing w-button">Login</a><a href="#Presentation"
-                        class="button bg-white w-button w--current">Learn More</a>
+                    
                 </div>
                 </div>
             <img
@@ -97,8 +59,8 @@
     <div id="Presentation" class="presentation-section wf-section">
         <div class="container">
             <div class="presentation-category-wrapper">
-                <h1 class="display-heading-2">Unleash Efficiency in Your Automotive Recycling Biz with Our Not-So-Secret Weapon 🚗</h1>
-                <div>👾 Welcome to the Future: Where Your Software Actually Listens (And Cares!)</div>
+                <h1 class="display-heading-2">Unleash Efficiency in Your Automotive Recycling Biz with Our Not-So-Secret Weapon</h1>
+                <div>Experience the difference: Software that delivers (and actually cares!)</div>
             </div>
             <div class="w-layout-grid presentation-grid"><a 
                     class="presentation-module w-inline-block" style="opacity: 1;">
@@ -110,19 +72,19 @@
                             alt="" class="presentation-screen"></div>
                     <div class="presentation-module-bottom">
                         <h2 class="no-space-bottom">🌐 Inventory Goes Digital:</h2>
-                        <div class="caption-large">Step into the future with web-based inventory management. Your clipboard will miss you.</div>
+                        <div class="caption-large">STEP INTO THE FUTURE WITH WEB-BASED INVENTORY MANAGEMENT. NEVER WORRY ABOUT A SERVER AGAIN.</div>
                     </div>
                 </a><a class="presentation-module w-inline-block"
                     style="opacity: 1;">
                     <div class="presentation-module-top"><img
-                            src="{% static 'images/landing_page_img_2.jpg' %}"
+                            src="{% static 'images/landing_page_img_2.png' %}"
                             loading="lazy"
                             srcset="{% static 'images/landing_page_img_2.jpg' %} 500w, {% static 'images/landing_page_img_2.jpg' %} 800w, {% static 'images/landing_page_img_2.jpg' %} 1382w"
                             sizes="(max-width: 479px) 86vw, (max-width: 767px) 91vw, (max-width: 1279px) 43vw, 456px"
                             alt="" class="presentation-screen"></div>
                     <div class="presentation-module-bottom">
-                        <h2 class="no-space-bottom">🚀 So Long, Snail-Paced Systems: </h2>
-                        <div class="caption-large">Our interface is so user-friendly, even your grandma would call it "nifty".</div>
+                        <h2 class="no-space-bottom">User-Friendly Software everywhere you go:</h2>
+                        <div class="caption-large">Our interface is so user-friendly, even your grandma would call it "nifty". OUR INTERFACE IS SO USER-FRIENDLY, EVEN YOUR GRANDMA WOULD CALL IT "NIFTY". ACCESSIBLE THROUGH COMPUTER, PHONE, OR TABLET.</div>
                     </div>
                 </a><a  class="presentation-module w-inline-block"
                     style="opacity: 0;">
@@ -133,8 +95,8 @@
                             sizes="(max-width: 479px) 86vw, (max-width: 767px) 91vw, (max-width: 1279px) 43vw, 456px"
                             alt="" class="presentation-screen"></div>
                     <div class="presentation-module-bottom">
-                        <h2 class="no-space-bottom">📦 Custom Features on Demand:</h2>
-                        <div class="caption-large">You want it? You got it. Invoicing, order management, and more – served just the way you like.</div>
+                        <h2 class="no-space-bottom">Customer Support that actually cares:</h2>
+                        <div class="caption-large">WE’RE HERE FOR YOU. REAL SOLUTIONS, REAL PEOPLE, READY TO HELP WHENEVER YOU NEED IT.</div>
                     </div>
                 </a><a class="presentation-module w-inline-block" style="opacity: 0;">
                     <div class="presentation-module-top"><img
@@ -144,8 +106,8 @@
                             sizes="(max-width: 479px) 86vw, (max-width: 767px) 91vw, (max-width: 1279px) 43vw, 456px"
                             alt="" class="presentation-screen"></div>
                     <div class="presentation-module-bottom">
-                        <h2 class="no-space-bottom">💖 Fall in Love with Your Workflow Again</h2>
-                        <div class="caption-large">Reignite that spark with your operations; it's not just a fling, it's the real deal.</div>
+                        <h2 class="no-space-bottom">Work efficiently with our streamlined software</h2>
+                        <div class="caption-large">ENJOY A SMOOTHER WORKFLOW; OUR SOFTWARE IS DESIGNED FOR MAXIMUM EFFICIENCY.</div>
                     </div>
                 </a>
                 <!-- <a href="/user" class="presentation-module w-inline-block" style="opacity: 0;">
@@ -404,6 +366,17 @@
 </script>
     
 <style>
+    .desktop-hidden {
+        display: none;
+    }
+    @media screen and (max-width: 750px) {
+        .mobile-hidden {
+            display: none;
+        }
+        .desktop-hidden {
+            display: inline-block;
+        }
+    }
     .presentation-hero-section {
         padding-top: 32px;
     }
