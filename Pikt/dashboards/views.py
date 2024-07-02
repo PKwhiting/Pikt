@@ -101,7 +101,7 @@ from .models import PartImage
 
 class defaultDashboardView(LoginRequiredMixin,View):
     def get(self, request):
-        parts = Part.objects.filter(company=request.user.company)
+        parts = Part.objects.filter(company=request.user.company, sold=False)
         
         filter_form = PartFilterForm()
         unlisted_parts = parts.filter(

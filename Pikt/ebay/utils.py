@@ -141,7 +141,7 @@ def get_category_tree_id(user):
     marketplace_id = get_ebay_marketplace_id()
     ebay_marketplace = EbayMarketplace.objects.filter(marketplace=marketplace_id)
     if not ebay_marketplace:
-        ebay_marketplace = EbayMarketplace(marketplace=marketplace_id)
+        ebay_marketplace = EbayMarketplace(marketplace=marketplace_id).first()
         ebay_marketplace.tree_id, ebay_marketplace.tree_version = get_marketplace_details(user, marketplace_id)
         ebay_marketplace.expiration = timezone.now() + timedelta(days=100)
         ebay_marketplace.save()
