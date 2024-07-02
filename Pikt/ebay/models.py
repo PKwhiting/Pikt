@@ -2,7 +2,10 @@ from django.db import models
 import os
 from dotenv import load_dotenv
 import base64
-
+import requests
+from django.conf import settings
+from django.utils import timezone
+import json
 POLICY_TYPES = (
     ('Payment', 'Payment'),
     ('Shipping', 'Shipping'),
@@ -59,6 +62,27 @@ class EbayCredential(models.Model):
     def get_encoded_credentials():
         credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'
         return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+    
+    @staticmethod
+    def get_ebay_user_token(authorization_code, encoded_credentials):
+        load_dotenv()
+        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
+        data = {'grant_type': 'authorization_code','code': authorization_code, 'redirect_uri': os.environ.get("EBAY_RUNAME")}
+        return requests.post('https://api.ebay.com/identity/v1/oauth2/token', headers=headers, data=data)
+    
+    @staticmethod
+    def set_ebay_user_token(request, response):
+        response_data = response.json()
+        ebay_credentials, created = EbayCredential.objects.get_or_create(company_ref=request.user.company)
+        ebay_credentials.token = response_data['access_token']
+        ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
+        ebay_credentials.refresh_token = response_data['refresh_token']
+        ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
+        ebay_credentials.save()
+        request.user.company.ebay_credentials = ebay_credentials
+        request.user.company.save()
+        return ebay_credentials
+
 
     
 class EbayMarketplace(models.Model):
@@ -66,6 +90,10 @@ class EbayMarketplace(models.Model):
     tree_id = models.IntegerField(null=True, blank=True)
     tree_version = models.IntegerField(null=True, blank=True)
     expiration = models.DateTimeField(null=True, blank=True)
+
+    @staticmethod
+    def get_ebay_marketplace_id():
+        return 'EBAY_MOTORS_US'
 
 class Request(models.Model):
     user = models.ForeignKey('Authentication.User', on_delete=models.CASCADE)

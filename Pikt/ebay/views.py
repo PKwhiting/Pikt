@@ -86,9 +86,9 @@ class RedirectView(View):
         load_dotenv()
         authorization_code = request.GET.get('code')
         encoded_credentials = EbayCredential.get_encoded_credentials()
-        response = get_ebay_user_token(authorization_code, encoded_credentials)
+        response = EbayCredential.get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:
-            ebay_credentials = set_ebay_user_token(request, response)
+            ebay_credentials = EbayCredential.set_ebay_user_token(request, response)
             add_user_message(request, "Ebay integration complete")
         else:
             add_user_message(request, "Ebay consent failed")
