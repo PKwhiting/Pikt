@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 import os
 from dotenv import load_dotenv
@@ -6,6 +7,8 @@ import requests
 from django.conf import settings
 from django.utils import timezone
 import json
+from django.http import JsonResponse
+
 POLICY_TYPES = (
     ('Payment', 'Payment'),
     ('Shipping', 'Shipping'),
@@ -72,6 +75,7 @@ class EbayCredential(models.Model):
     
     @staticmethod
     def set_ebay_user_token(request, response):
+        
         response_data = response.json()
         ebay_credentials, created = EbayCredential.objects.get_or_create(company_ref=request.user.company)
         ebay_credentials.token = response_data['access_token']
@@ -82,6 +86,24 @@ class EbayCredential(models.Model):
         request.user.company.ebay_credentials = ebay_credentials
         request.user.company.save()
         return ebay_credentials
+    
+    @staticmethod
+    def get_credentials(user):
+        credentials = EbayCredential.objects.filter(company_ref=user.company).first()
+        if not credentials:
+            raise Exception("Ebay credentials not found")
+        return credentials
+    
+    @classmethod
+    def set_policies(cls, user, ebay_credentials):
+        try:
+            ebay_credentials.fulfillment_policy = get_first_fulfillment_policies(user)
+            ebay_credentials.payment_policy = get_first_payment_policies(user)
+            ebay_credentials.return_policy = get_first_return_policies(user)
+            ebay_credentials.save()
+            return JsonResponse({'success': True}, status=200)
+        except Exception as e:
+            return JsonResponse({'success': False}, status=400)
 
 
     
@@ -110,3 +132,73 @@ class Request(models.Model):
             return json.dumps(json.loads(self.body), indent=4)
         except:
             return self.body
+
+
+def get_first_fulfillment_policies(user):
+    marketplace_id = EbayMarketplace.get_ebay_marketplace_id()
+    url = f"https://api.ebay.com/sell/account/v1/fulfillment_policy?marketplace_id={marketplace_id}"
+    credentials = EbayCredential.get_credentials(user)
+    headers =  {
+            'Authorization': f'Bearer {credentials.token}',
+            'Accept-Encoding': 'gzip',
+            'Content-Type': 'application/json'
+        }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        json_data = response.json()
+        if json_data['fulfillmentPolicies']:
+            fulfillment_policy_id = json_data['fulfillmentPolicies'][0]['fulfillmentPolicyId']
+            fulfillment_policy_name = json_data['fulfillmentPolicies'][0]['name']
+            fulfillment_policy = EbayPolicy(company = user.company, policy_name=fulfillment_policy_name, policy_id=fulfillment_policy_id,  policy_type = POLICY_TYPES[1][0])
+            fulfillment_policy.save()
+            return fulfillment_policy
+        else:
+            raise Exception("Fulfillment policy was not found or does not exist.")
+    else:
+        raise Exception("Fulfillment policy was not found or does not exist.")
+    
+def get_first_payment_policies(user):
+    marketplace_id = EbayMarketplace.get_ebay_marketplace_id()
+    url = f"https://api.ebay.com/sell/account/v1/payment_policy?marketplace_id={marketplace_id}"
+    credentials = EbayCredential.get_credentials(user)
+    headers =  {
+            'Authorization': f'Bearer {credentials.token}',
+            'Accept-Encoding': 'gzip',
+            'Content-Type': 'application/json'
+        }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        json_data = response.json()
+        if json_data['paymentPolicies']:
+            payment_policy_id = json_data['paymentPolicies'][0]['paymentPolicyId']
+            payment_policy_name = json_data['paymentPolicies'][0]['name']
+            payment_policy = EbayPolicy(company = user.company, policy_name=payment_policy_name, policy_id=payment_policy_id,  policy_type = POLICY_TYPES[0][0])
+            payment_policy.save()
+            return payment_policy
+        else:
+            raise Exception("Payment policy was not found or does not exist.")
+    else:
+        raise Exception("Payment policy was not found or does not exist.")
+    
+def get_first_return_policies(user):
+    marketplace_id = EbayMarketplace.get_ebay_marketplace_id()
+    url = f"https://api.ebay.com/sell/account/v1/return_policy?marketplace_id={marketplace_id}"
+    credentials = EbayCredential.get_credentials(user)
+    headers =  {
+            'Authorization': f'Bearer {credentials.token}',
+            'Accept-Encoding': 'gzip',
+            'Content-Type': 'application/json'
+        }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        json_data = response.json()
+        if json_data['returnPolicies']:
+            return_policy_id = json_data['returnPolicies'][0]['returnPolicyId']
+            return_policy_name = json_data['returnPolicies'][0]['name']
+            return_policy = EbayPolicy(company = user.company, policy_name=return_policy_name, policy_id=return_policy_id,  policy_type = POLICY_TYPES[2][0])
+            return_policy.save()
+            return return_policy
+        else:
+            raise Exception("Return policy was not found or does not exist.")
+    else:
+        raise Exception("Return policy was not found or does not exist.")

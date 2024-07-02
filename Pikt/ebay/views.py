@@ -12,7 +12,7 @@ from .const import PRODUCT_COMBINED_FIELDS
 from dashboards.const.const import PARTS_CATEGORY_DICT
 import csv
 from django.http import HttpResponse
-from .utils import add_user_message, get_ebay_application_token, get_ebay_user_token, set_ebay_user_token
+from .utils import add_user_message, get_ebay_application_token
 from dotenv import load_dotenv
 import base64
 from django.contrib.auth import get_user_model
@@ -29,12 +29,14 @@ from django.utils import timezone
 import sentry_sdk
 from sentry_sdk import capture_exception
 from parts.models import PartEbayCategorySpecification
-from .utils import EbayAPIRequestView, refresh_user_token, get_get_headers, get_post_headers, get_category_tree_id, get_category_suggestions, get_location_id, get_first_fulfillment_policies, get_first_payment_policies, get_first_return_policies, delete_ebay_item_offer
+from .utils import EbayAPIRequestView, refresh_user_token, get_get_headers, get_post_headers, get_category_tree_id, get_category_suggestions, get_first_ebay_location_id, get_first_payment_policies, get_first_return_policies, delete_ebay_item_offer
 from .serializers import BulkEbayOfferDetailsWithKeysSerializer, BulkPublishOfferRequestSerializer
 import logging
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
+
+load_dotenv()
 
 class SaveEbayPoliciesView(LoginRequiredMixin, View):
     def post(self, request):
@@ -83,78 +85,36 @@ class EbayDataFeedView(LoginRequiredMixin, View):
     
 class RedirectView(View):
     def get(self, request):
-        load_dotenv()
         authorization_code = request.GET.get('code')
         encoded_credentials = EbayCredential.get_encoded_credentials()
         response = EbayCredential.get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:
             ebay_credentials = EbayCredential.set_ebay_user_token(request, response)
-            add_user_message(request, "Ebay integration complete")
+
         else:
-            add_user_message(request, "Ebay consent failed")
+            add_user_message(request, "Ebay consent failed.")
             return redirect('dashboard')
 
-        # create the ebay policies
-        try:
-            response = get_first_fulfillment_policies(request.user)
-            if response is not None:
-                fulfillment_policy_id, fulfillment_policy_name = response
-                shipping_policy, create = EbayPolicy.objects.get_or_create(
-                    company=request.user.company, 
-                    policy_type='Shipping',   
-                )
-                shipping_policy.policy_name=fulfillment_policy_name, 
-                shipping_policy.policy_id=fulfillment_policy_id
-                shipping_policy.save()
-                ebay_credentials.fulfillment_policy = shipping_policy
-                ebay_credentials.save()
-                
-            else:
-                add_user_message(request, "Ebay shipping policies not found")
-        except Exception as e:
-            capture_exception(e)
+        # Handle getting the ebay policies
+        response = EbayCredential.set_policies(request.user, ebay_credentials)
+        if response.status_code == 400:
+            add_user_message(request, "Ebay Policies not found. Please re-configure.")
+            ebay_credentials.delete()
+            return redirect('dashboard')
 
-        try:
-            response = get_first_payment_policies(request.user)
-            if response is not None:
-                payment_policy_id, payment_policy_name = response
-                payment_policy, create = EbayPolicy.objects.get_or_create(
-                    company=request.user.company, 
-                    policy_type='Payment',   
-                )
-                payment_policy.policy_name=payment_policy_name
-                payment_policy.policy_id=payment_policy_id
-                payment_policy.save()
-                ebay_credentials.payment_policy = payment_policy
-                ebay_credentials.save()
-            else:
-                add_user_message(request, "Ebay payment policies not found")
-        except Exception as e:
-            capture_exception(e)
 
-        try:
-            response = get_first_return_policies(request.user)
-            if response is not None:
-                return_policy_id, return_policy_name = response
-                return_policy, create = EbayPolicy.objects.get_or_create(
-                    company=request.user.company, 
-                    policy_type='Return',   
-                )
-                return_policy.policy_name=return_policy_name
-                return_policy.policy_id=return_policy_id
-                return_policy.save()
-                ebay_credentials.return_policy = return_policy
-                ebay_credentials.save()
-            else:
-                add_user_message(request, "Ebay return policies not found")
-        except Exception as e:
-            capture_exception(e)
-        
+        # Handle setting up the ebay location
         if not request.user.company.ebay_merchant_location_key:
-            location_id = get_location_id(request.user)
-            request.user.company.ebay_merchant_location_key = location_id
-            request.user.company.save()
+            location_id = get_first_ebay_location_id(request.user)
+            if location_id:
+                request.user.company.ebay_merchant_location_key = location_id
+                request.user.company.save()
+            else:
+                add_user_message(request, "Ebay location not found.")
+                ebay_credentials.delete()
+                return redirect('dashboard')
 
+        add_user_message(request, "Ebay integration complete.")
         return redirect('dashboard')
     
 

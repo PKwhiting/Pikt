@@ -23,7 +23,7 @@ def add_user_message(request, message):
     messages.append(message)
     request.user.messages = json.dumps(messages)
     request.user.save()
-    
+
 
 def get_ebay_application_token(authorization_code, encoded_credentials):
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': f'Basic {encoded_credentials}'}
@@ -153,7 +153,7 @@ def get_category_suggestions(user, query):
     first_category_id = json_data['categorySuggestions'][0]['category']['categoryId']
     return first_category_id
 
-def get_location_id(user):
+def getInventoryLocations(user):
     url = "https://api.ebay.com/sell/inventory/v1/location?0&1"
     credentials = get_credentials(user)
     headers =  {
@@ -161,32 +161,21 @@ def get_location_id(user):
             'Accept-Encoding': 'gzip',
             'Content-Type': 'application/json'
         }
-    response = requests.get(url, headers=headers)
-    json_data = response.json()
-    merchant_location_key = json_data["locations"][0]["merchantLocationKey"]
+    return requests.get(url, headers=headers)
 
-    ebay_request_object = Request(user=user, company=user.company, url=url, response=json_data)
-    ebay_request_object.save()
-
-    return merchant_location_key
-
-
-def get_first_fulfillment_policies(user):
-    url = f"https://api.ebay.com/sell/account/v1/fulfillment_policy?marketplace_id=EBAY_MOTORS_US"
-    credentials = get_credentials(user)
-    headers =  {
-            'Authorization': f'Bearer {credentials.token}',
-            'Accept-Encoding': 'gzip',
-            'Content-Type': 'application/json'
-        }
-    response = requests.get(url, headers=headers)
+def get_first_ebay_location_id(user):
+    response = getInventoryLocations(user)
     if response.status_code == 200:
         json_data = response.json()
-        fulfillment_policy_id = json_data['fulfillmentPolicies'][0]['fulfillmentPolicyId']
-        fulfillment_policy_name = json_data['fulfillmentPolicies'][0]['name']
-        return fulfillment_policy_id, fulfillment_policy_name
+        merchant_location_key = json_data["locations"][0]["merchantLocationKey"]
+        ebay_request_object = Request(user=user, company=user.company, url=url, response=json_data)
+        ebay_request_object.save()
+        return merchant_location_key
     else:
         return None
+
+
+
 
 def get_first_payment_policies(user):
     url = f"https://api.ebay.com/sell/account/v1/payment_policy?marketplace_id=EBAY_MOTORS_US"

@@ -218,7 +218,7 @@
                 </div>
             </div>
             <div data-w-tab="Integrations" class="w-tab-pane" id="w-tabs-0-data-w-pane-2" role="tabpanel"
-                aria-labelledby="w-tabs-0-data-w-tab-2" style="">
+                aria-labelledby="w-tabs-0-data-w-tab-2">
                 <div class="w-layout-grid main-grid">
                     {% if ebay_credentials_exist %}
                     <div class="module">
@@ -231,10 +231,18 @@
                     </div>
                     {% else %}
                     <div class="module">
-                        <div class="full-table-row" style="padding: 0;">
-                            <h4 class="no-space-bottom">Integrate Ebay</h4>
+                        <h3>Ebay Integration</h3>
+                        <div class="full-table-row" style="margin-bottom: 12px; padding: 0;">
+                            <div>Step 1: Setup Business Policies</div>
                             <div>
-                                <a href="{% url 'ebay_consent' %}" class="button button-small button-outline w-button" target="_blank">Setup</a>
+                                <a href="https://www.bizpolicy.ebay.com/businesspolicy/manage" class="button button-small button-outline w-button" target="_blank">Setup</a>
+
+                            </div>
+                        </div>
+                        <div class="full-table-row" style="margin-bottom: 12px; padding: 0;">
+                            <div>Step 2: Grant Access</div>
+                            <div>
+                                <a href="{% url 'ebay_consent' %}" class="button button-small button-outline w-button" target="_blank">Configure</a>
 
                             </div>
                         </div>
