@@ -50,7 +50,6 @@ class EbayMIPCredentials(models.Model):
 
 # make  a model that stores ebay credentials:
 class EbayCredential(models.Model):
-    company_ref = models.ForeignKey('company.Company', on_delete=models.CASCADE)
     token = models.CharField(max_length=5000, null=True, blank=True)
     token_expiration = models.DateTimeField(null=True, blank=True)
     refresh_token = models.CharField(max_length=5000, null=True, blank=True)
@@ -59,8 +58,6 @@ class EbayCredential(models.Model):
     payment_policy = models.ForeignKey(EbayPolicy, on_delete=models.CASCADE, null=True, blank=True, related_name='payment_policy')
     return_policy = models.ForeignKey(EbayPolicy, on_delete=models.CASCADE, null=True, blank=True, related_name='return_policy')
 
-    def __str__(self):
-        return str(self.company_ref.name)
     
     def get_encoded_credentials():
         credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'
@@ -86,12 +83,16 @@ class EbayCredential(models.Model):
     def create_ebay_credentials(request, authorization_code):
         user_token, refresh_token, expires_in, refresh_token_expires_in = EbayCredential.get_ebay_user_tokens(authorization_code)
         if user_token and refresh_token and expires_in and refresh_token_expires_in:
-            ebay_credentials, created = EbayCredential.objects.get_or_create(company_ref=request.user.company)
-            ebay_credentials.token = user_token
-            ebay_credentials.refresh_token = refresh_token
+            if not request.user.company.ebay_credentials:
+                ebay_credentials = EbayCredential(user_token=user_token, refresh_token=refresh_token)
+            else:
+                ebay_credentials = request.user.company.ebay_credentials
+                ebay_credentials.token = user_token
+                ebay_credentials.refresh_token = refresh_token
             ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=expires_in)
             ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=refresh_token_expires_in)
             ebay_credentials.save()
+
             return ebay_credentials
         else:
             return None
@@ -108,7 +109,7 @@ class EbayCredential(models.Model):
     
     @staticmethod
     def get_credentials(user):
-        credentials = EbayCredential.objects.filter(company_ref=user.company).first()
+        credentials = user.company.ebay_credentials
         if not credentials:
             raise Exception("Ebay credentials not found")
         return credentials

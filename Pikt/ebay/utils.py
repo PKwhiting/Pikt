@@ -53,24 +53,18 @@ def get_ebay_user_token_from_refresh_token(refresh_token, encoded_credentials):
     return requests.post("https://api.ebay.com/identity/v1/oauth2/token", headers=headers, data=data)
 
 def set_user_token(user, response):
-    ebay_credentials, create = EbayCredential.objects.get_or_create(company_ref=user.company)
+    if user.company.ebay_credentials:
+        ebay_credentials = user.company.ebay_credentials
+    else:
+        ebay_credentials = EbayCredential()
     response_data = response.json()
     ebay_credentials.token = response_data['access_token']
     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
     ebay_credentials.save()
 
-# def handle_user_success_response(user, response):
-#     ebay_credentials, create = EbayCredential.objects.get_or_create(company_ref=user.company)
-#     response_data = response.json()
-#     ebay_credentials.token = response_data['access_token']
-#     ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=response_data['expires_in'])
-#     ebay_credentials.refresh_token = response_data['refresh_token']
-#     ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=response_data['refresh_token_expires_in'])
-#     ebay_credentials.save()
-#     add_user_message(user, "Ebay integration complete")
 
 def get_credentials(user):
-        credentials = EbayCredential.objects.filter(company_ref=user.company).first()
+        credentials = user.company.ebay_credentials
         if not credentials:
             raise Exception("Ebay credentials not found")
         return credentials
@@ -236,7 +230,7 @@ class EbayAPIRequestView(APIView):
     request = None
 
     def get_credentials(self, user):
-        credentials = EbayCredential.objects.filter(company_ref=user.company).first()
+        credentials = user.company.ebay_credentials
         if not credentials:
             logger.error("Ebay credentials not found")
             raise Exception("Ebay credentials not found")
