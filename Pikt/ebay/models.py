@@ -86,7 +86,9 @@ class EbayCredential(models.Model):
     def create_ebay_credentials(request, authorization_code):
         user_token, refresh_token, expires_in, refresh_token_expires_in = EbayCredential.get_ebay_user_tokens(authorization_code)
         if user_token and refresh_token and expires_in and refresh_token_expires_in:
-            ebay_credentials, created = EbayCredential.objects.get_or_create(company_ref=request.user.company, token=user_token, refresh_token=refresh_token)
+            ebay_credentials, created = EbayCredential.objects.get_or_create(company_ref=request.user.company)
+            ebay_credentials.token = user_token
+            ebay_credentials.refresh_token = refresh_token
             ebay_credentials.token_expiration = timezone.now() + timedelta(seconds=expires_in)
             ebay_credentials.refresh_token_expiration = timezone.now() + timedelta(seconds=refresh_token_expires_in)
             ebay_credentials.save()
