@@ -161,15 +161,16 @@ def getInventoryLocations(user):
             'Accept-Encoding': 'gzip',
             'Content-Type': 'application/json'
         }
-    return requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers)
+    ebay_request_object = Request(user=user, company=user.company, url=url, response=response.json())
+    ebay_request_object.save()
+    return response
 
 def get_first_ebay_location_id(user):
     response = getInventoryLocations(user)
     if response.status_code == 200:
         json_data = response.json()
         merchant_location_key = json_data["locations"][0]["merchantLocationKey"]
-        ebay_request_object = Request(user=user, company=user.company, url=url, response=json_data)
-        ebay_request_object.save()
         return merchant_location_key
     else:
         return None
