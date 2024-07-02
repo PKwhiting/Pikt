@@ -63,7 +63,7 @@ def handle_user_token(user):
 
 def update_user_token(request):
     load_dotenv()
-    encoded_credentials = get_encoded_credentials()
+    encoded_credentials = EbayCredential.get_encoded_credentials()
     refresh_token = request.user.ebay_user_refresh_token
     response = get_ebay_user_token_from_refresh_token(refresh_token, encoded_credentials)
     if response.status_code == 200:

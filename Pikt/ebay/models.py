@@ -1,10 +1,15 @@
 from django.db import models
+import os
+from dotenv import load_dotenv
+import base64
 
 POLICY_TYPES = (
     ('Payment', 'Payment'),
     ('Shipping', 'Shipping'),
     ('Return', 'Return'),
 )
+
+load_dotenv()
 
 # Create your models here.
 class UploadTemplate(models.Model):
@@ -50,6 +55,11 @@ class EbayCredential(models.Model):
 
     def __str__(self):
         return str(self.company_ref.name)
+    
+    def get_encoded_credentials():
+        credentials = f'{os.environ.get("EBAY_CLIENT_ID")}:{os.environ.get("EBAY_CLIENT_SECRET")}'
+        return base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+
     
 class EbayMarketplace(models.Model):
     marketplace = models.CharField(max_length=100, null=True, blank=True)

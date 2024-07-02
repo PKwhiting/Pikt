@@ -12,7 +12,7 @@ from .const import PRODUCT_COMBINED_FIELDS
 from dashboards.const.const import PARTS_CATEGORY_DICT
 import csv
 from django.http import HttpResponse
-from .utils import add_user_message, get_ebay_application_token, get_ebay_user_token, set_ebay_user_token, get_encoded_credentials
+from .utils import add_user_message, get_ebay_application_token, get_ebay_user_token, set_ebay_user_token
 from dotenv import load_dotenv
 import base64
 from django.contrib.auth import get_user_model
@@ -85,7 +85,7 @@ class RedirectView(View):
     def get(self, request):
         load_dotenv()
         authorization_code = request.GET.get('code')
-        encoded_credentials = get_encoded_credentials()
+        encoded_credentials = EbayCredential.get_encoded_credentials()
         response = get_ebay_user_token(authorization_code, encoded_credentials)
         if response.status_code == 200:
             ebay_credentials = set_ebay_user_token(request, response)
