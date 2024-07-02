@@ -86,12 +86,9 @@ class EbayDataFeedView(LoginRequiredMixin, View):
 class RedirectView(View):
     def get(self, request):
         authorization_code = request.GET.get('code')
-        encoded_credentials = EbayCredential.get_encoded_credentials()
-        response = EbayCredential.get_ebay_user_token(authorization_code, encoded_credentials)
-        if response.status_code == 200:
-            ebay_credentials = EbayCredential.set_ebay_user_token(request, response)
+        ebay_credentials = EbayCredential.set_company_ebay_credentials(request, authorization_code)
 
-        else:
+        if not ebay_credentials:
             add_user_message(request, "Ebay consent failed.")
             return redirect('dashboard')
 
