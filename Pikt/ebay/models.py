@@ -84,7 +84,7 @@ class EbayCredential(models.Model):
         user_token, refresh_token, expires_in, refresh_token_expires_in = EbayCredential.get_ebay_user_tokens(authorization_code)
         if user_token and refresh_token and expires_in and refresh_token_expires_in:
             if not request.user.company.ebay_credentials:
-                ebay_credentials = EbayCredential(user_token=user_token, refresh_token=refresh_token)
+                ebay_credentials = EbayCredential(token=user_token, refresh_token=refresh_token)
             else:
                 ebay_credentials = request.user.company.ebay_credentials
                 ebay_credentials.token = user_token
